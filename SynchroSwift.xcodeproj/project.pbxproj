@@ -13,6 +13,24 @@
 		C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1711A33D71F00040A9D /* Images.xcassets */; };
 		C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */; };
 		C4AFA1811A33D71F00040A9D /* SynchroSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1801A33D71F00040A9D /* SynchroSwiftTests.swift */; };
+		C4AFA1971A33DE9100040A9D /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA18B1A33DE9100040A9D /* Binding.swift */; };
+		C4AFA1981A33DE9100040A9D /* BindingContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA18C1A33DE9100040A9D /* BindingContext.swift */; };
+		C4AFA1991A33DE9100040A9D /* DeviceMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA18D1A33DE9100040A9D /* DeviceMetrics.swift */; };
+		C4AFA19A1A33DE9100040A9D /* Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA18E1A33DE9100040A9D /* Json.swift */; };
+		C4AFA19B1A33DE9100040A9D /* JsonParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA18F1A33DE9100040A9D /* JsonParser.swift */; };
+		C4AFA19C1A33DE9100040A9D /* JsonWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1901A33DE9100040A9D /* JsonWriter.swift */; };
+		C4AFA19D1A33DE9100040A9D /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1911A33DE9100040A9D /* Logger.swift */; };
+		C4AFA19E1A33DE9100040A9D /* StateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1921A33DE9100040A9D /* StateManager.swift */; };
+		C4AFA19F1A33DE9100040A9D /* SynchroApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1931A33DE9100040A9D /* SynchroApp.swift */; };
+		C4AFA1A01A33DE9100040A9D /* Transport.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1941A33DE9100040A9D /* Transport.swift */; };
+		C4AFA1A11A33DE9100040A9D /* TransportHttp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1951A33DE9100040A9D /* TransportHttp.swift */; };
+		C4AFA1A21A33DE9100040A9D /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1961A33DE9100040A9D /* ViewModel.swift */; };
+		C4AFA1A51A33DE9E00040A9D /* ControlWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1A41A33DE9E00040A9D /* ControlWrapper.swift */; };
+		C4AFA1AB1A33DEAB00040A9D /* JsonParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */; };
+		C4AFA1AC1A33DEAB00040A9D /* JsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */; };
+		C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1A91A33DEAB00040A9D /* SynchroAppTests.swift */; };
+		C4AFA1AE1A33DEAB00040A9D /* TransportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1AA1A33DEAB00040A9D /* TransportTests.swift */; };
+		C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1AF1A33DF4C00040A9D /* seed.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +54,24 @@
 		C4AFA17A1A33D71F00040A9D /* SynchroSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SynchroSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AFA17F1A33D71F00040A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4AFA1801A33D71F00040A9D /* SynchroSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SynchroSwiftTests.swift; sourceTree = "<group>"; };
+		C4AFA18B1A33DE9100040A9D /* Binding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
+		C4AFA18C1A33DE9100040A9D /* BindingContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingContext.swift; sourceTree = "<group>"; };
+		C4AFA18D1A33DE9100040A9D /* DeviceMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceMetrics.swift; sourceTree = "<group>"; };
+		C4AFA18E1A33DE9100040A9D /* Json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Json.swift; sourceTree = "<group>"; };
+		C4AFA18F1A33DE9100040A9D /* JsonParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonParser.swift; sourceTree = "<group>"; };
+		C4AFA1901A33DE9100040A9D /* JsonWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonWriter.swift; sourceTree = "<group>"; };
+		C4AFA1911A33DE9100040A9D /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		C4AFA1921A33DE9100040A9D /* StateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateManager.swift; sourceTree = "<group>"; };
+		C4AFA1931A33DE9100040A9D /* SynchroApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroApp.swift; sourceTree = "<group>"; };
+		C4AFA1941A33DE9100040A9D /* Transport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transport.swift; sourceTree = "<group>"; };
+		C4AFA1951A33DE9100040A9D /* TransportHttp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportHttp.swift; sourceTree = "<group>"; };
+		C4AFA1961A33DE9100040A9D /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		C4AFA1A41A33DE9E00040A9D /* ControlWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlWrapper.swift; sourceTree = "<group>"; };
+		C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonParserTests.swift; sourceTree = "<group>"; };
+		C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonTests.swift; sourceTree = "<group>"; };
+		C4AFA1A91A33DEAB00040A9D /* SynchroAppTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroAppTests.swift; sourceTree = "<group>"; };
+		C4AFA1AA1A33DEAB00040A9D /* TransportTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportTests.swift; sourceTree = "<group>"; };
+		C4AFA1AF1A33DF4C00040A9D /* seed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = seed.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +113,8 @@
 		C4AFA1671A33D71F00040A9D /* SynchroSwift */ = {
 			isa = PBXGroup;
 			children = (
+				C4AFA1A31A33DE9E00040A9D /* Controls */,
+				C4AFA18A1A33DE9100040A9D /* Core */,
 				C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */,
 				C4AFA16C1A33D71F00040A9D /* ViewController.swift */,
 				C4AFA16E1A33D71F00040A9D /* Main.storyboard */,
@@ -90,6 +128,7 @@
 		C4AFA1681A33D71F00040A9D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C4AFA1AF1A33DF4C00040A9D /* seed.json */,
 				C4AFA1691A33D71F00040A9D /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -98,6 +137,7 @@
 		C4AFA17D1A33D71F00040A9D /* SynchroSwiftTests */ = {
 			isa = PBXGroup;
 			children = (
+				C4AFA1A61A33DEAB00040A9D /* Core */,
 				C4AFA1801A33D71F00040A9D /* SynchroSwiftTests.swift */,
 				C4AFA17E1A33D71F00040A9D /* Supporting Files */,
 			);
@@ -110,6 +150,44 @@
 				C4AFA17F1A33D71F00040A9D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C4AFA18A1A33DE9100040A9D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				C4AFA18B1A33DE9100040A9D /* Binding.swift */,
+				C4AFA18C1A33DE9100040A9D /* BindingContext.swift */,
+				C4AFA18D1A33DE9100040A9D /* DeviceMetrics.swift */,
+				C4AFA18E1A33DE9100040A9D /* Json.swift */,
+				C4AFA18F1A33DE9100040A9D /* JsonParser.swift */,
+				C4AFA1901A33DE9100040A9D /* JsonWriter.swift */,
+				C4AFA1911A33DE9100040A9D /* Logger.swift */,
+				C4AFA1921A33DE9100040A9D /* StateManager.swift */,
+				C4AFA1931A33DE9100040A9D /* SynchroApp.swift */,
+				C4AFA1941A33DE9100040A9D /* Transport.swift */,
+				C4AFA1951A33DE9100040A9D /* TransportHttp.swift */,
+				C4AFA1961A33DE9100040A9D /* ViewModel.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		C4AFA1A31A33DE9E00040A9D /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				C4AFA1A41A33DE9E00040A9D /* ControlWrapper.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		C4AFA1A61A33DEAB00040A9D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */,
+				C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */,
+				C4AFA1A91A33DEAB00040A9D /* SynchroAppTests.swift */,
+				C4AFA1AA1A33DEAB00040A9D /* TransportTests.swift */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,6 +272,7 @@
 			files = (
 				C4AFA1701A33D71F00040A9D /* Main.storyboard in Resources */,
 				C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */,
+				C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */,
 				C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,7 +292,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4AFA16D1A33D71F00040A9D /* ViewController.swift in Sources */,
+				C4AFA1991A33DE9100040A9D /* DeviceMetrics.swift in Sources */,
+				C4AFA19C1A33DE9100040A9D /* JsonWriter.swift in Sources */,
+				C4AFA1A11A33DE9100040A9D /* TransportHttp.swift in Sources */,
+				C4AFA19E1A33DE9100040A9D /* StateManager.swift in Sources */,
+				C4AFA1971A33DE9100040A9D /* Binding.swift in Sources */,
+				C4AFA1A51A33DE9E00040A9D /* ControlWrapper.swift in Sources */,
+				C4AFA1A21A33DE9100040A9D /* ViewModel.swift in Sources */,
+				C4AFA19F1A33DE9100040A9D /* SynchroApp.swift in Sources */,
+				C4AFA19D1A33DE9100040A9D /* Logger.swift in Sources */,
+				C4AFA1A01A33DE9100040A9D /* Transport.swift in Sources */,
+				C4AFA19A1A33DE9100040A9D /* Json.swift in Sources */,
 				C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */,
+				C4AFA19B1A33DE9100040A9D /* JsonParser.swift in Sources */,
+				C4AFA1981A33DE9100040A9D /* BindingContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,7 +313,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4AFA1AE1A33DEAB00040A9D /* TransportTests.swift in Sources */,
+				C4AFA1AB1A33DEAB00040A9D /* JsonParserTests.swift in Sources */,
 				C4AFA1811A33D71F00040A9D /* SynchroSwiftTests.swift in Sources */,
+				C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */,
+				C4AFA1AC1A33DEAB00040A9D /* JsonTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
