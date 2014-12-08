@@ -16,7 +16,7 @@ public typealias ProcessPageView = (pageView: JObject) -> Void;
 public typealias ProcessMessageBox = (messageBox: JObject, commandHandler: CommandHandler) -> Void;
 
 public typealias ResponseHandler = (response: JObject) -> Void;
-public typealias RequestFailureHandler = (request: JObject, exception: String) -> Void; // !!! No Exceptions on iOS
+public typealias RequestFailureHandler = (request: JObject, exception: NSError) -> Void;
 
 public class StateManager
 {

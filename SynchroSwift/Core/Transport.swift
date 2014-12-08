@@ -34,9 +34,6 @@ public class TransportBase
         _requestFailureHandler = requestFailureHandler;
     }
 
-    // !!! Do we need to pass the error details through in the event of an error?  It should be logged at the 
-    //     point of error, and it's not like there's anything you can do about it.
-    //
     func getAppDefinition(transport: Transport, onDefinition: (JObject?) -> Void)
     {
         var requestObject = JObject(
@@ -49,11 +46,11 @@ public class TransportBase
             nil,
             requestObject: requestObject,
             responseHandler:
-            { (responseAsJSON: JObject) -> Void in
+            { (responseAsJSON) in
                 onDefinition(responseAsJSON["App"] as? JObject);
             },
             requestFailureHandler:
-            { (request: JObject, error: String) in
+            { (request, error) in
                 // !!! Fail
                 onDefinition(nil);
             }

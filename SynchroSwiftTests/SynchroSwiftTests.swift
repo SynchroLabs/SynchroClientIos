@@ -25,6 +25,7 @@ class SynchroSwiftTests: XCTestCase {
         super.tearDown()
     }
     
+    /*
     func testExample()
     {
         // This is an example of a functional test case.
@@ -62,4 +63,5 @@ class SynchroSwiftTests: XCTestCase {
         println("Current device machine: \(currentDevice.machine)");
         println("Current device modelName: \(currentDevice.modelName!)");
     }
+    */
 }

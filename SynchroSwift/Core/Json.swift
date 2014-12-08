@@ -39,11 +39,13 @@ public class JToken: Equatable
     public func deepEquals(token: JToken?) -> Bool
     {
         assert(false, "This method must be overridden by the subclass");
+        return false; // Should never get hit, just to make command line compiler warning go away
     }
     
     public func deepClone() -> JToken
     {
         assert(false, "This method must be overridden by the subclass");
+        return JValue(); // Should never get hit, just to make command line compiler warning go away
     }
     
     var _parent: JToken?;

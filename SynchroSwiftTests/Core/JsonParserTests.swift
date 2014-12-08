@@ -23,6 +23,25 @@ class JsonParserTests: XCTestCase
         
         XCTAssert(token.deepEquals(expected));
     }
+
+    func testStringReader()
+    {
+        var reader = StringReader(str: "$\u{20ac}%\u{2665}X"); // dollar-sign, Euro, percent, heart
+        XCTAssert("$" == reader.peek());
+        XCTAssert("$" == reader.peek());
+        XCTAssert("$" == reader.read());
+        XCTAssert("\u{20ac}" == reader.read());
+        XCTAssert("%" == reader.peek());
+        XCTAssert("%" == reader.read());
+        XCTAssert("\u{2665}" == reader.peek());
+        XCTAssert("\u{2665}" == reader.peek());
+        XCTAssert("\u{2665}" == reader.read());
+        XCTAssert("X" == reader.read());
+        XCTAssert(nil == reader.peek());
+        XCTAssert(nil == reader.read());
+        XCTAssert(nil == reader.read());
+        XCTAssert(nil == reader.peek());
+    }
     
     func testParseSimple()
     {

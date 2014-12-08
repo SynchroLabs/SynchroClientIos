@@ -8,6 +8,8 @@
 
 import Foundation
 
+private var logger = Logger.getLogger("TransportHttp");
+
 public class TransportHttp : TransportBase, Transport
 {
     var _uri: NSURL;
@@ -16,6 +18,13 @@ public class TransportHttp : TransportBase, Transport
     {
         _uri = uri;
         super.init();
+    }
+    
+    private func isSuccessStatusCode(response: NSHTTPURLResponse) -> Bool
+    {
+        // This is what EnsureSuccessStatusCode does on .NET (for better or worse)
+        //
+        return response.statusCode >= 200 && response.statusCode < 300;
     }
     
     public func sendMessage(sessionId: String?, requestObject: JObject, responseHandler: ResponseHandler?, requestFailureHandler: RequestFailureHandler?)
@@ -28,7 +37,7 @@ public class TransportHttp : TransportBase, Transport
         request.HTTPMethod = "POST"
         request.HTTPBody = requestObject.toJson().dataUsingEncoding(NSUTF8StringEncoding);
 
-        println("Request: \(requestObject.toJson())");
+        logger.debug("Request: \(requestObject.toJson())");
         
         request.addValue("application/json", forHTTPHeaderField: "Content-Type");
         if sessionId != nil
@@ -38,18 +47,57 @@ public class TransportHttp : TransportBase, Transport
         
         let task = session.dataTaskWithRequest(request, completionHandler: { data, response, error -> Void in
             // completionHandler: (NSData!, NSUrlResponse!, NSError!)
-            println("Response: \(response)")
+            logger.debug("Response: \(response)");
             
-            // !!! Need some error/failure handling here...
-            
-            if let strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+            if let err = error
             {
-                println("Body: \(strData)")
-                var responseObject = JObject.parse(strData);
-                
-                if (theResponseHandler != nil)
+                if let failureHandler = theRequestFailureHandler
                 {
-                    theResponseHandler!(response: responseObject as JObject);
+                    failureHandler(request: requestObject, exception: error);
+                }
+            }
+            else if !self.isSuccessStatusCode(response as NSHTTPURLResponse)
+            {
+                // We consider non-2XX to be an error, even though from the HTTP standpoint they're really just
+                // fine.  So we create our own NSError and call the failure handler (if any) in this case.
+                //
+                var httpResponse = response as NSHTTPURLResponse;
+                var nonSuccessError = NSError(domain: NSURLErrorDomain, code: httpResponse.statusCode, userInfo: httpResponse.allHeaderFields);
+
+                if let failureHandler = theRequestFailureHandler
+                {
+                    failureHandler(request: requestObject, exception: nonSuccessError);
+                }
+            }
+            else
+            {
+                var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+                if strData == nil
+                {
+                    // In the event that the UTF8 decode fails, we'll go ahead and let the string encoder try to find an
+                    // encoding that it likes.  It has been observed in the wild that sometimes that UTF8 decode fails
+                    // when it shouldn't, and the code below correctly decodes (as USASCII, which is a subset of the UF8
+                    // that it failed on above - go figure).
+                    //
+                    // Asserting here so we can see if this happens again...
+                    //
+                    assert(false, "Failed to decode response date as UTF-8, release code will try harder");
+                    
+                    var convertedString: NSString?
+                    let encoding = NSString.stringEncodingForData(data, encodingOptions: nil, convertedString: &convertedString, usedLossyConversion: nil)
+                }
+                
+                if let actualStrData = strData
+                {
+                    logger.debug("Body: \(actualStrData)");
+                    
+                    // !!! Need to handle failed JSON parsing and call failure handler with appropriate NSError
+                    var responseObject = JObject.parse(actualStrData);
+                    
+                    if (theResponseHandler != nil)
+                    {
+                        theResponseHandler!(response: responseObject as JObject);
+                    }
                 }
             }
         })

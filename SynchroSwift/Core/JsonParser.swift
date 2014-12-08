@@ -50,24 +50,22 @@ public protocol TextReader
 
 public class StringReader : TextReader
 {
-    private var _pos = 0;
     private var _str: String;
-    private var _len: Int;
+    private var _currIndex: String.Index;
     
     public init(str: String)
     {
         _str = str;
-        _len = countElements(_str);
+        _currIndex = _str.startIndex;
     }
     
     public func peek() -> Character?
     {
-        if (_pos >= _len)
+        if (_currIndex >= _str.endIndex)
         {
             return nil;
         }
-        let idx = advance(_str.startIndex, _pos);
-        return _str[idx];
+        return _str[_currIndex];
     }
     
     public func read() -> Character?
@@ -75,7 +73,7 @@ public class StringReader : TextReader
         var chr = peek();
         if (chr != nil)
         {
-            _pos++;
+            _currIndex = advance(_currIndex, 1);
         }
         return chr;
      }
