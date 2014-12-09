@@ -29,11 +29,11 @@ public func ==(first: JToken, second: JToken) -> Bool
 
 public class JToken: Equatable
 {
-    public var Type: JTokenType = JTokenType.Undefined;
+    // Should be overrided by all derived classes...
+    public var Type: JTokenType { get { return JTokenType.Undefined; } }
     
-    private init(_ type: JTokenType)
+    private init()
     {
-        Type = type;
     }
     
     public func deepEquals(token: JToken?) -> Bool
@@ -358,9 +358,11 @@ public class JObject : JToken, SequenceType
     var _keys = Array<String>();
     var _tokens = Dictionary<String, JToken>();
     
-    public init()
+    public override var Type: JTokenType { get { return JTokenType.Object; } }
+
+    public override init()
     {
-        super.init(JTokenType.Object);
+        super.init();
     }
     
     public convenience init(_ attributes: Dictionary<String, JToken>)
@@ -476,9 +478,11 @@ public class JArray : JToken, SequenceType, CollectionType
 {
     var _tokens = Array<JToken>();
 
-    public init()
+    public override var Type: JTokenType { get { return JTokenType.Array; } }
+
+    public override init()
     {
-        super.init(JTokenType.Array);
+        super.init();
     }
     
     public convenience init(_ values: Array<JToken>)
@@ -579,81 +583,93 @@ public class JArray : JToken, SequenceType, CollectionType
     }
 }
 
+// This is how we do a union in Swift...
+//
+private enum ValueType: Equatable
+{
+    case ValueNull
+    case ValueBool(Bool)
+    case ValueInt(Int)
+    case ValueFloat(Double)
+    case ValueString(String)
+}
+
+private func ==(a: ValueType, b: ValueType) -> Bool
+{
+    switch (a, b)
+    {
+        case (.ValueNull, .ValueNull): return true
+        case (.ValueBool(let a), .ValueBool(let b)) where a == b: return true
+        case (.ValueInt(let a), .ValueInt(let b)) where a == b: return true
+        case (.ValueFloat(let a), .ValueFloat(let b)) where a == b: return true
+        case (.ValueString(let a), .ValueString(let b)) where a == b: return true
+        default: return false
+    }
+}
+
 public class JValue : JToken
 {
-    public var boolValue: Bool?;
-    public var intValue: Int?;
-    public var floatValue: Double?;
-    public var stringValue: String?;
+    private var valueOfType = ValueType.ValueNull;
     
-    private override init(_ type: JTokenType)
+    public override var Type: JTokenType
     {
-        super.init(type);
+        get
+        {
+            switch self.valueOfType
+            {
+                case .ValueNull:
+                    return JTokenType.Null;
+                case .ValueBool:
+                    return JTokenType.Boolean;
+                case .ValueInt:
+                    return JTokenType.Integer;
+                case .ValueFloat:
+                    return JTokenType.Float;
+                case .ValueString:
+                    return JTokenType.String;
+            }
+        }
+    }
+
+    public override init() // If called directly, creates default/Null value
+    {
+        super.init();
     }
     
     // Copy constructor
     public convenience init(_ value: JValue)
     {
-        self.init(value.Type);
-        switch (Type)
-        {
-            case JTokenType.Boolean:
-                boolValue = value.asBool()
-            case JTokenType.Integer:
-                intValue = value.asInt()
-            case JTokenType.Float:
-                floatValue = value.asDouble()
-            case JTokenType.String:
-                stringValue = value.asString()
-            default: ()
-        }
-    }
-    
-    // nil value only
-    public convenience init()
-    {
-        self.init(JTokenType.Null);
+        self.init();
+        self.valueOfType = value.valueOfType;
     }
     
     public convenience init(_ value: Bool)
     {
-        self.init(JTokenType.Boolean);
-        boolValue = value;
+        self.init();
+        self.valueOfType = ValueType.ValueBool(value);
     }
     
     public convenience init(_ value: Int)
     {
-        self.init(JTokenType.Integer);
-        intValue = value;
+        self.init();
+        self.valueOfType = ValueType.ValueInt(value);
     }
 
     public convenience init(_ value: Double)
     {
-        self.init(JTokenType.Float);
-        floatValue = value;
+        self.init();
+        self.valueOfType = ValueType.ValueFloat(value);
     }
     
     public convenience init(_ value: String)
     {
-        self.init(JTokenType.String);
-        stringValue = value;
+        self.init();
+        self.valueOfType = ValueType.ValueString(value);
     }
-
+    
     public func copyValueFrom(value: JValue)
     {
-        Type = value.Type;
-        switch (Type)
-        {
-            case JTokenType.Boolean:
-                boolValue = value.asBool()
-            case JTokenType.Integer:
-                intValue = value.asInt()
-            case JTokenType.Float:
-                floatValue = value.asDouble()
-            case JTokenType.String:
-                stringValue = value.asString()
-            default: ()
-        }
+        self.valueOfType = value.valueOfType;
     }
     
     public override func deepEquals(token: JToken?) -> Bool
@@ -665,32 +681,7 @@ public class JValue : JToken
                 // Same object
                 return true;
             }
-            
-            if (self.Type == other.Type)
-            {
-                switch (Type)
-                {
-                    case JTokenType.Null:
-                        return true;
-                    case JTokenType.Boolean:
-                        return self.asBool() == other.asBool()
-                    case JTokenType.Integer:
-                        return self.asInt() == other.asInt()
-                    case JTokenType.Float:
-                        return self.asDouble() == other.asDouble()
-                    case JTokenType.String:
-                        return self.asString() == other.asString()
-                    case JTokenType.Undefined:
-                        return false;
-                    default:
-                        return false;
-                }
-            }
-            else
-            {
-                // JToken Types do not match
-                return false;
-            }
+            return self.valueOfType == other.valueOfType;
         }
         else
         {
@@ -706,46 +697,47 @@ public class JValue : JToken
 
     public override func asBool() -> Bool?
     {
-        if (Type == JTokenType.Boolean)
+        switch valueOfType
         {
-            return boolValue;
+            case .ValueBool(let boolValue):
+                return boolValue;
+            default:
+                return nil;
         }
-        
-        return nil;
     }
 
     public override func asInt() -> Int?
     {
-        if (Type == JTokenType.Integer)
+        switch valueOfType
         {
-            return intValue;
+            case .ValueInt(let intValue):
+                return intValue;
+            default:
+                return nil;
         }
-        
-        return nil;
     }
 
     public override func asDouble() -> Double?
     {
-        if (Type == JTokenType.Float)
+        switch valueOfType
         {
-            return floatValue;
+            case .ValueFloat(let doubleValue):
+                return doubleValue;
+            case .ValueInt(let intValue):
+                return Double(intValue);
+            default:
+                return nil;
         }
-        else if (Type == JTokenType.Integer)
-        {
-            return Double(intValue!);
-        }
-        
-        return nil;
     }
 
     public override func asString() -> String?
     {
-        if (Type == JTokenType.String)
+        switch valueOfType
         {
-            return stringValue;
+            case .ValueString(let strValue):
+                return strValue;
+            default:
+                return nil;
         }
-        
-        return nil;
     }
-
 }
