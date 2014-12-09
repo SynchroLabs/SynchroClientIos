@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C42F3CFE1A370B950010AC55 /* BindingContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */; };
 		C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */; };
 		C4AFA16D1A33D71F00040A9D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16C1A33D71F00040A9D /* ViewController.swift */; };
 		C4AFA1701A33D71F00040A9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA16E1A33D71F00040A9D /* Main.storyboard */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingContextTests.swift; sourceTree = "<group>"; };
 		C4AFA1651A33D71F00040A9D /* SynchroSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynchroSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AFA1691A33D71F00040A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 		C4AFA1A61A33DEAB00040A9D /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */,
 				C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */,
 				C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */,
 				C4AFA1A91A33DEAB00040A9D /* SynchroAppTests.swift */,
@@ -318,6 +321,7 @@
 				C4AFA1811A33D71F00040A9D /* SynchroSwiftTests.swift in Sources */,
 				C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */,
 				C4AFA1AC1A33DEAB00040A9D /* JsonTests.swift in Sources */,
+				C42F3CFE1A370B950010AC55 /* BindingContextTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,6 +507,7 @@
 				C4AFA1861A33D71F00040A9D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C4AFA1871A33D71F00040A9D /* Build configuration list for PBXNativeTarget "SynchroSwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -511,6 +516,7 @@
 				C4AFA1891A33D71F00040A9D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
