@@ -238,8 +238,10 @@ public class JToken: Equatable
     {
         var bReplaced = false;
     
-        if (Parent != nil)
+        if ((Parent != nil) && (token != self))
         {
+            // Find ourself in our parent, and replace...
+            //
             if (Parent is JObject)
             {
                 var parentObject = Parent as JObject;
@@ -266,6 +268,33 @@ public class JToken: Equatable
         }
     
         return bReplaced;
+    }
+    
+    // Update a token to a new value, attempting to preserve the object graph to the extent possible
+    //
+    public class func updateTokenValue(inout currentToken: JToken, newToken: JToken) -> Bool
+    {
+        if (currentToken != newToken)
+        {
+            if ((currentToken is JValue) && (newToken is JValue))
+            {
+                // If the current token and the new token are both primitive values, then we just do a
+                // value assignment...
+                //
+                (currentToken as JValue).copyValueFrom(newToken as JValue);
+            }
+            else
+            {
+                // Otherwise we have to replace the current token with the new token in the current token's parent...
+                //
+                if (currentToken.replace(newToken))
+                {
+                    currentToken = newToken;
+                    return true; // Token change
+                }
+            }
+        }
+        return false; // Value-only change, or no change
     }
     
     public class func deepEquals(token1: JToken, token2: JToken) -> Bool
@@ -610,6 +639,23 @@ public class JValue : JToken
         stringValue = value;
     }
 
+    public func copyValueFrom(value: JValue)
+    {
+        Type = value.Type;
+        switch (Type)
+        {
+            case JTokenType.Boolean:
+                boolValue = value.asBool()
+            case JTokenType.Integer:
+                intValue = value.asInt()
+            case JTokenType.Float:
+                floatValue = value.asDouble()
+            case JTokenType.String:
+                stringValue = value.asString()
+            default: ()
+        }
+    }
+    
     public override func deepEquals(token: JToken?) -> Bool
     {
         if let other = token as? JValue

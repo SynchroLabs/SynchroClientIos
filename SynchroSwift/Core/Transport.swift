@@ -8,6 +8,9 @@
 
 import Foundation
 
+public typealias ResponseHandler = (response: JObject) -> Void;
+public typealias RequestFailureHandler = (request: JObject, exception: NSError) -> Void;
+
 public protocol Transport
 {
     func setDefaultHandlers(responseHandler: ResponseHandler, requestFailureHandler: RequestFailureHandler)
