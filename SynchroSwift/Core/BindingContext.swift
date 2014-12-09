@@ -51,7 +51,7 @@ public class BindingContext
     
     var _bindingTokensRE = NSRegularExpression(pattern: "[$]([^.]*)[.]?", options: nil, error: nil); // Token starts with $, separated by dot
     
-    func substituteMatches(regex: NSRegularExpression, string: String, substitution: (NSTextCheckingResult, UnsafeMutablePointer<ObjCBool>) -> String,
+    func substituteMatches(regex: NSRegularExpression, string: String, substitution: (String, [String], UnsafeMutablePointer<ObjCBool>) -> String,
         options:NSMatchingOptions = nil) -> String
     {
         let out = NSMutableString();
@@ -64,8 +64,14 @@ public class BindingContext
             (match: NSTextCheckingResult!, flags: NSMatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) in
             
             let matchRange = match.range
+            let matchString = String(target.substringWithRange(matchRange));
+            var matchStrings = Array<String>();
+            for index in 0...match.numberOfRanges-1
+            {
+                matchStrings.append(String(target.substringWithRange(match.rangeAtIndex(index))));
+            }
             out.appendString(target.substringWithRange(NSRange(location: pos, length: matchRange.location-pos)));
-            out.appendString(substitution(match, stop));
+            out.appendString(substitution(matchString, matchStrings, stop));
             pos = matchRange.location + matchRange.length;
         }
         
@@ -83,11 +89,27 @@ public class BindingContext
         //  $data
         //  $index
         //
+        //  The processing below might be overkill.  In practice, any $root path element should be at the beginning
+        //  of the token string.  Any $parent element (including more than one) should be at the beginning of the token
+        //  string.  Since these strings are literal and never programmatically constructed, it would be nonsensical to
+        //  navigate explicilty down some desendant path and then back up to the root or a parent.  Also, since $index
+        //  is just a flag (and will cause the bindingContext to find its most immediate array index), it will appear
+        //  by itself.  Likewise, $data is nonsensical other than when appearing by itself.
+        //
+        //  So realistically, the cases of bindingPath that need to be handled are:
+        //
+        //  $root.some.path ($root at beginning of binding path, no further specials in path)
+        //  $parent.$parent.some.path (one or more $parent elements at beginning of binding path, no further specials in path)
+        //  $index
+        //  $data
+        //
         var bindingPath = substituteMatches(_bindingTokensRE!, string: bindingPath, substitution:
         {
-            (pathElement: NSTextCheckingResult, stop: UnsafeMutablePointer<ObjCBool>) -> String in
+            (match: String, matchGroups: [String], stop: UnsafeMutablePointer<ObjCBool>) -> String in
 
-            logger.debug("Found binding path element: \(pathElement)");
+            let pathElement = matchGroups[1];
+            logger.info("Found binding path element: \(pathElement)");
+            
             if (pathElement == "root")
             {
                 parentPath = "";
@@ -131,6 +153,8 @@ public class BindingContext
         {
             bindingPath = parentPath;
         }
+        
+        logger.info("Resolved binding path is: \(bindingPath)");
         
         return bindingPath;
     }
