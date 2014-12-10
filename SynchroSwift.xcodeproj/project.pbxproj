@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C4FE1A38415E00FD789A /* BindingTests.swift */; };
 		C42F3CFE1A370B950010AC55 /* BindingContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */; };
 		C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */; };
 		C4AFA16D1A33D71F00040A9D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16C1A33D71F00040A9D /* ViewController.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C416C4FE1A38415E00FD789A /* BindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingTests.swift; sourceTree = "<group>"; };
 		C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingContextTests.swift; sourceTree = "<group>"; };
 		C4AFA1651A33D71F00040A9D /* SynchroSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynchroSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AFA1691A33D71F00040A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 		C4AFA1A61A33DEAB00040A9D /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				C416C4FE1A38415E00FD789A /* BindingTests.swift */,
 				C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */,
 				C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */,
 				C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */,
@@ -319,6 +322,7 @@
 				C4AFA1AE1A33DEAB00040A9D /* TransportTests.swift in Sources */,
 				C4AFA1AB1A33DEAB00040A9D /* JsonParserTests.swift in Sources */,
 				C4AFA1811A33D71F00040A9D /* SynchroSwiftTests.swift in Sources */,
+				C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */,
 				C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */,
 				C4AFA1AC1A33DEAB00040A9D /* JsonTests.swift in Sources */,
 				C42F3CFE1A370B950010AC55 /* BindingContextTests.swift in Sources */,
