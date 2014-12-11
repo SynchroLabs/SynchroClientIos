@@ -19,6 +19,17 @@ extension String
     {
         return self[Range(start: advance(startIndex, startCharIndex), end: endIndex)];
     }
+    
+    func lastIndexOf(find: Character) -> String.Index?
+    {
+        let findStr = String(find);
+        var nsRange = self.rangeOfString(findStr, options: NSStringCompareOptions.BackwardsSearch);
+        if let theRange = nsRange
+        {
+            return theRange.startIndex;
+        }
+        return nil;
+    }
 }
 
 public class Regex
@@ -33,7 +44,7 @@ public class Regex
         {
             // parseError is pretty useless (NSCocoaDomainError with a single kvp - "NSInvalidValue": pattern
             //
-            assert(false, "Failed to create regular expression"); // !!! Handle this in production somehow...
+            assert(false, "Failed to create regular expression"); // !!! Handle this in production somehow (this is only for internal use / static regexes in code)
         }
     }
 

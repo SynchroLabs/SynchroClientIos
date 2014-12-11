@@ -346,70 +346,70 @@ public class PropertyValue
         var expandedToken = PropertyValue.expand(tokenString, bindingContext: bindingContext);
         return TokenConverter.toString(expandedToken);
     }
-    
-    //
-    // Actual bindings: Property (one-way, composite) and Value (two-way, single value)
-    //
-    
-    public typealias SetViewValue = (JToken) -> (Void);
-    public typealias GetViewValue = () -> (JToken);
-    
-    // For one-way binding of any property (binding to a pattern string than can incorporate multiple bound values)
-    //
-    public class PropertyBinding
-    {
-        var _propertyValue: PropertyValue;
-        var _setViewValue: SetViewValue;
-        
-        public init(bindingContext: BindingContext, value: String, setViewValue: SetViewValue)
-        {
-            _propertyValue = PropertyValue(value, bindingContext: bindingContext);
-            _setViewValue = setViewValue;
-        }
-        
-        public func updateViewFromViewModel()
-        {
-            self._setViewValue(_propertyValue.expand());
-        }
-        
-        public var BindingContexts: [BindingContext] { get { return _propertyValue.BindingContexts; } }
-    }
-    
-    // For two-way binding (typically of primary "value" property) - binding to a single value only
-    //
-    public class ValueBinding
-    {
-        var _viewModel: ViewModel;
-        var _bindingContext: BindingContext;
-        var _getViewValue: GetViewValue;
-        var _setViewValue: SetViewValue?;
-        
-        public var isDirty: Bool;
-        
-        public init(viewModel: ViewModel, bindingContext: BindingContext, getViewValue: GetViewValue, setViewValue: SetViewValue)
-        {
-            _viewModel = viewModel;
-            _bindingContext = bindingContext;
-            _getViewValue = getViewValue;
-            _setViewValue = setViewValue;
-            isDirty = false;
-        }
-        
-        public func updateViewModelFromView()
-        {
-            // !!! IMPLEMENT
-            //_viewModel.updateViewModelFromView(_bindingContext, _getViewValue);
-        }
-        
-        public func updateViewFromViewModel()
-        {
-            if (_setViewValue != nil)
-            {
-                _setViewValue!(_bindingContext.getValue()!);
-            }
-        }
-        
-        public var bindingContext: BindingContext { get { return _bindingContext; } }
-    }
 }
+
+//
+// Actual bindings: Property (one-way, composite) and Value (two-way, single value)
+//
+
+public typealias SetViewValue = (JToken) -> (Void);
+public typealias GetViewValue = () -> (JToken);
+
+// For one-way binding of any property (binding to a pattern string than can incorporate multiple bound values)
+//
+public class PropertyBinding
+{
+    var _propertyValue: PropertyValue;
+    var _setViewValue: SetViewValue;
+    
+    public init(bindingContext: BindingContext, value: String, setViewValue: SetViewValue)
+    {
+        _propertyValue = PropertyValue(value, bindingContext: bindingContext);
+        _setViewValue = setViewValue;
+    }
+    
+    public func updateViewFromViewModel()
+    {
+        self._setViewValue(_propertyValue.expand());
+    }
+    
+    public var BindingContexts: [BindingContext] { get { return _propertyValue.BindingContexts; } }
+}
+
+// For two-way binding (typically of primary "value" property) - binding to a single value only
+//
+public class ValueBinding
+{
+    var _viewModel: ViewModel;
+    var _bindingContext: BindingContext;
+    var _getViewValue: GetViewValue;
+    var _setViewValue: SetViewValue?;
+    
+    public var isDirty: Bool;
+    
+    public init(viewModel: ViewModel, bindingContext: BindingContext, getViewValue: GetViewValue, setViewValue: SetViewValue)
+    {
+        _viewModel = viewModel;
+        _bindingContext = bindingContext;
+        _getViewValue = getViewValue;
+        _setViewValue = setViewValue;
+        isDirty = false;
+    }
+    
+    public func updateViewModelFromView()
+    {
+        _viewModel.updateViewModelFromView(_bindingContext, _getViewValue);
+    }
+    
+    public func updateViewFromViewModel()
+    {
+        if (_setViewValue != nil)
+        {
+            _setViewValue!(_bindingContext.getValue()!);
+        }
+    }
+    
+    public var bindingContext: BindingContext { get { return _bindingContext; } }
+}
+
 
