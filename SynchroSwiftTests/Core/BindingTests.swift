@@ -91,4 +91,24 @@ class BindingTests: XCTestCase
         XCTAssert(bindingSpec!.deepEquals(expectedBindingSpec));
     }
 
+    func testPropertyValue()
+    {
+        let viewModel = JObject(
+        [
+            "serial": JValue(0),
+            "title": JValue("Colors"),
+            "colors": JArray(
+            [
+                JObject(["name": JValue("Red"), "color": JValue("red"), "value": JValue("0xff0000")]),
+                JObject(["name": JValue("Green"), "color": JValue("green"), "value": JValue("0x00ff00")]),
+                JObject(["name": JValue("Blue"), "color": JValue("blue"), "value": JValue("0x0000ff")])
+            ])
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+
+        var propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {colors[2].name}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand().asString()!);
+    }
 }

@@ -42,6 +42,14 @@ public class TokenConverter
                 case JTokenType.Array:
                     let array = theToken as JArray;
                     result = "\(array.count)";
+                case JTokenType.String:
+                    result = theToken.asString()!;
+                case JTokenType.Integer:
+                    result = "\(theToken.asInt()!)";
+                case JTokenType.Float:
+                    result = "\(theToken.asDouble()!)";
+                case JTokenType.Boolean:
+                    result = theToken.asBool()! ? "true" : "false";
                 default:
                     result = theToken.asString() ?? defaultValue;
             }

@@ -27,9 +27,9 @@ class TokenConverterTests: XCTestCase
         XCTAssertEqual("", TokenConverter.toString(objVal));
         XCTAssertEqual("2", TokenConverter.toString(arrayVal));
         XCTAssertEqual("foo", TokenConverter.toString(stringVal));
-        XCTAssertEqual("", TokenConverter.toString(intVal));
-        XCTAssertEqual("", TokenConverter.toString(floatVal));
-        XCTAssertEqual("", TokenConverter.toString(boolVal));
+        XCTAssertEqual("13", TokenConverter.toString(intVal));
+        XCTAssertEqual("13.69", TokenConverter.toString(floatVal));
+        XCTAssertEqual("true", TokenConverter.toString(boolVal));
     }
     
     func testToBoolean()

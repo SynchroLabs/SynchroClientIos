@@ -49,37 +49,8 @@ public class BindingContext
         }
     }
     
-    var _bindingTokensRE = NSRegularExpression(pattern: "[$]([^.]*)[.]?", options: nil, error: nil); // Token starts with $, separated by dot
-    
-    func substituteMatches(regex: NSRegularExpression, string: String, substitution: (String, [String], UnsafeMutablePointer<ObjCBool>) -> String,
-        options:NSMatchingOptions = nil) -> String
-    {
-        let out = NSMutableString();
-        var pos = 0;
-        let target = string as NSString;
-        let targetRange = NSRange(location: 0, length: target.length);
+    var _bindingTokensRE = Regex("[$]([^.]*)[.]?"); // Token starts with $, separated by dot
         
-        regex.enumerateMatchesInString(string, options: options, range: targetRange)
-        {
-            (match: NSTextCheckingResult!, flags: NSMatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) in
-            
-            let matchRange = match.range
-            let matchString = String(target.substringWithRange(matchRange));
-            var matchStrings = Array<String>();
-            for index in 0...match.numberOfRanges-1
-            {
-                matchStrings.append(String(target.substringWithRange(match.rangeAtIndex(index))));
-            }
-            out.appendString(target.substringWithRange(NSRange(location: pos, length: matchRange.location-pos)));
-            out.appendString(substitution(matchString, matchStrings, stop));
-            pos = matchRange.location + matchRange.length;
-        }
-        
-        out.appendString(target.substringWithRange(NSRange(location: pos, length: targetRange.length-pos)))
-        
-        return String(out);
-    }
-    
     private func resolveBinding(var parentPath: String, bindingPath: String) -> String
     {
         // Process path elements:
@@ -103,9 +74,9 @@ public class BindingContext
         //  $index
         //  $data
         //
-        var bindingPath = substituteMatches(_bindingTokensRE!, string: bindingPath, substitution:
+        var bindingPath = _bindingTokensRE.substituteMatches(bindingPath, substitution:
         {
-            (match: String, matchGroups: [String], stop: UnsafeMutablePointer<ObjCBool>) -> String in
+            (match: String, matchGroups: [String]) -> String in
 
             let pathElement = matchGroups[1];
             logger.info("Found binding path element: \(pathElement)");
