@@ -21,6 +21,12 @@ class StateManagerTests: XCTestCase
     //
     func testStateManager()
     {
+        // Force fresh load of AppManager from the bundled seed...
+        //
+        var userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.removeObjectForKey("seed.json");
+        userDefaults.synchronize()
+
         var appManager = SynchroAppManager();
         
         var app = SynchroApp(
