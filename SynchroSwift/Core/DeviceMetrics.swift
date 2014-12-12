@@ -11,22 +11,52 @@ import UIKit
 
 public enum SynchroDeviceClass : Int
 {
-    case Phone = 0
-    case Phablet = 1
-    case MiniTablet = 2
-    case Tablet = 3
+    case Phone      = 0;
+    case Phablet    = 1;
+    case MiniTablet = 2;
+    case Tablet     = 3;
+    
+    var description : String
+    {
+        switch self
+        {
+            case .Phone:      return "Phone";
+            case .Phablet:    return "Phablet";
+            case .MiniTablet: return "MiniTablet";
+            case .Tablet:     return "Tablet";
+        }
+    }
 }
 
 public enum SynchroDeviceType : Int
 {
-    case Phone = 0  // SynchroDeviceClass.Phone
-    case Tablet = 3 // SynchroDeviceClass.Tablet
+    case Phone  = 0; // SynchroDeviceClass.Phone
+    case Tablet = 3; // SynchroDeviceClass.Tablet
+    
+    var description : String
+    {
+        switch self
+        {
+            case .Phone:  return "Phone";
+            case .Tablet: return "Tablet";
+        }
+    }
+
 }
 
 public enum SynchroOrientation
 {
-    case Portrait
-    case Landscape
+    case Portrait;
+    case Landscape;
+    
+    var description : String
+    {
+        switch self
+        {
+            case .Portrait:  return "Portrait";
+            case .Landscape: return "Landscape";
+        }
+    }
 }
 
 public class DeviceMetrics

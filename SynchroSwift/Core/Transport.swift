@@ -15,6 +15,7 @@ public protocol Transport
 {
     func setDefaultHandlers(responseHandler: ResponseHandler, requestFailureHandler: RequestFailureHandler)
     
+    func sendMessage(sessionId: String?, requestObject: JObject)
     func sendMessage(sessionId: String?, requestObject: JObject, responseHandler: ResponseHandler?, requestFailureHandler: RequestFailureHandler?)
     
     func getAppDefinition(onDefinition: (JObject?) -> Void)

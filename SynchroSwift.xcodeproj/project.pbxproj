@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C40D60571A3AD0F50048B5A0 /* StateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D60561A3AD0F50048B5A0 /* StateManagerTests.swift */; };
+		C40D60581A3AD3300048B5A0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16C1A33D71F00040A9D /* ViewController.swift */; };
 		C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C4FE1A38415E00FD789A /* BindingTests.swift */; };
 		C416C5011A38584300FD789A /* TokenConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C5001A38584300FD789A /* TokenConverter.swift */; };
 		C416C5031A38585500FD789A /* TokenConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C5021A38585500FD789A /* TokenConverterTests.swift */; };
@@ -51,6 +53,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C40D60561A3AD0F50048B5A0 /* StateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateManagerTests.swift; sourceTree = "<group>"; };
 		C416C4FE1A38415E00FD789A /* BindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingTests.swift; sourceTree = "<group>"; };
 		C416C5001A38584300FD789A /* TokenConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenConverter.swift; sourceTree = "<group>"; };
 		C416C5021A38585500FD789A /* TokenConverterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenConverterTests.swift; sourceTree = "<group>"; };
@@ -202,6 +205,7 @@
 				C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */,
 				C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */,
 				C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */,
+				C40D60561A3AD0F50048B5A0 /* StateManagerTests.swift */,
 				C4AFA1A91A33DEAB00040A9D /* SynchroAppTests.swift */,
 				C416C5021A38585500FD789A /* TokenConverterTests.swift */,
 				C4AFA1AA1A33DEAB00040A9D /* TransportTests.swift */,
@@ -342,8 +346,10 @@
 				C4AFA1AB1A33DEAB00040A9D /* JsonParserTests.swift in Sources */,
 				C4AFA1811A33D71F00040A9D /* SynchroSwiftTests.swift in Sources */,
 				C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */,
+				C40D60581A3AD3300048B5A0 /* ViewController.swift in Sources */,
 				C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */,
 				C4AFA1AC1A33DEAB00040A9D /* JsonTests.swift in Sources */,
+				C40D60571A3AD0F50048B5A0 /* StateManagerTests.swift in Sources */,
 				C4646AA21A392BC30043FB90 /* UtilTests.swift in Sources */,
 				C42F3CFE1A370B950010AC55 /* BindingContextTests.swift in Sources */,
 			);

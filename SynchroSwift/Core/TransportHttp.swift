@@ -105,6 +105,11 @@ public class TransportHttp : TransportBase, Transport
         task.resume()
     }
     
+    public func sendMessage(sessionId: String?, requestObject: JObject)
+    {
+        self.sendMessage(sessionId, requestObject: requestObject, nil, nil);
+    }
+    
     public func getAppDefinition(onDefinition: (JObject?) -> Void )
     {
         return super.getAppDefinition(self, onDefinition);
