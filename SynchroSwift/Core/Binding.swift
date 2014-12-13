@@ -387,7 +387,7 @@ public class ValueBinding
     
     public var isDirty: Bool;
     
-    public init(viewModel: ViewModel, bindingContext: BindingContext, getViewValue: GetViewValue, setViewValue: SetViewValue)
+    public init(viewModel: ViewModel, bindingContext: BindingContext, getViewValue: GetViewValue, setViewValue: SetViewValue? = nil)
     {
         _viewModel = viewModel;
         _bindingContext = bindingContext;

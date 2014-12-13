@@ -31,7 +31,7 @@ public class ViewModel
     
     public var rootObject: JObject { get { return _rootObject; } } // Only used by BindingContext - "internal"?
     
-    public func createAndRegisterValueBinding(bindingContext: BindingContext, getValue: GetViewValue, setValue: SetViewValue) -> ValueBinding
+    public func createAndRegisterValueBinding(bindingContext: BindingContext, getValue: GetViewValue, setValue: SetViewValue?) -> ValueBinding
     {
         var valueBinding = ValueBinding(viewModel: self, bindingContext: bindingContext, getValue, setValue);
         _valueBindings.append(valueBinding);

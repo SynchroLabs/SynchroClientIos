@@ -30,6 +30,16 @@ extension String
         }
         return nil;
     }
+
+    var length: Int { get { return countElements(self); } }
+}
+
+extension UInt32
+{
+    func getBytes() -> [Byte]
+    {
+        return[Byte((self & 0xFF000000) >> 24), Byte((self & 0x00FF0000) >> 16), Byte((self & 0x0000FF00) >> 8), Byte(self & 0x000000FF)];
+    }
 }
 
 public class Regex

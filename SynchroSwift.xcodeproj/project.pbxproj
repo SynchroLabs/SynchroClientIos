@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		C40D60571A3AD0F50048B5A0 /* StateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D60561A3AD0F50048B5A0 /* StateManagerTests.swift */; };
 		C40D60581A3AD3300048B5A0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16C1A33D71F00040A9D /* ViewController.swift */; };
+		C40D605A1A3C25C80048B5A0 /* CommandInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D60591A3C25C80048B5A0 /* CommandInstance.swift */; };
+		C40D605C1A3CC93C0048B5A0 /* ControlWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D605B1A3CC93C0048B5A0 /* ControlWrapper.swift */; };
+		C40D60601A3CC9F30048B5A0 /* ControlWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D605F1A3CC9F30048B5A0 /* ControlWrapperTests.swift */; };
+		C40D60621A3CCE0D0048B5A0 /* iOSControlWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D60611A3CCE0D0048B5A0 /* iOSControlWrapper.swift */; };
 		C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C4FE1A38415E00FD789A /* BindingTests.swift */; };
 		C416C5011A38584300FD789A /* TokenConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C5001A38584300FD789A /* TokenConverter.swift */; };
 		C416C5031A38585500FD789A /* TokenConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C5021A38585500FD789A /* TokenConverterTests.swift */; };
@@ -34,7 +38,6 @@
 		C4AFA1A01A33DE9100040A9D /* Transport.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1941A33DE9100040A9D /* Transport.swift */; };
 		C4AFA1A11A33DE9100040A9D /* TransportHttp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1951A33DE9100040A9D /* TransportHttp.swift */; };
 		C4AFA1A21A33DE9100040A9D /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1961A33DE9100040A9D /* ViewModel.swift */; };
-		C4AFA1A51A33DE9E00040A9D /* ControlWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1A41A33DE9E00040A9D /* ControlWrapper.swift */; };
 		C4AFA1AB1A33DEAB00040A9D /* JsonParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */; };
 		C4AFA1AC1A33DEAB00040A9D /* JsonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */; };
 		C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1A91A33DEAB00040A9D /* SynchroAppTests.swift */; };
@@ -54,6 +57,10 @@
 
 /* Begin PBXFileReference section */
 		C40D60561A3AD0F50048B5A0 /* StateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateManagerTests.swift; sourceTree = "<group>"; };
+		C40D60591A3C25C80048B5A0 /* CommandInstance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandInstance.swift; sourceTree = "<group>"; };
+		C40D605B1A3CC93C0048B5A0 /* ControlWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlWrapper.swift; sourceTree = "<group>"; };
+		C40D605F1A3CC9F30048B5A0 /* ControlWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlWrapperTests.swift; sourceTree = "<group>"; };
+		C40D60611A3CCE0D0048B5A0 /* iOSControlWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSControlWrapper.swift; sourceTree = "<group>"; };
 		C416C4FE1A38415E00FD789A /* BindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingTests.swift; sourceTree = "<group>"; };
 		C416C5001A38584300FD789A /* TokenConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenConverter.swift; sourceTree = "<group>"; };
 		C416C5021A38585500FD789A /* TokenConverterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenConverterTests.swift; sourceTree = "<group>"; };
@@ -83,7 +90,6 @@
 		C4AFA1941A33DE9100040A9D /* Transport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transport.swift; sourceTree = "<group>"; };
 		C4AFA1951A33DE9100040A9D /* TransportHttp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportHttp.swift; sourceTree = "<group>"; };
 		C4AFA1961A33DE9100040A9D /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		C4AFA1A41A33DE9E00040A9D /* ControlWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlWrapper.swift; sourceTree = "<group>"; };
 		C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonParserTests.swift; sourceTree = "<group>"; };
 		C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonTests.swift; sourceTree = "<group>"; };
 		C4AFA1A91A33DEAB00040A9D /* SynchroAppTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroAppTests.swift; sourceTree = "<group>"; };
@@ -174,6 +180,8 @@
 			children = (
 				C4AFA18B1A33DE9100040A9D /* Binding.swift */,
 				C4AFA18C1A33DE9100040A9D /* BindingContext.swift */,
+				C40D60591A3C25C80048B5A0 /* CommandInstance.swift */,
+				C40D605B1A3CC93C0048B5A0 /* ControlWrapper.swift */,
 				C4AFA18D1A33DE9100040A9D /* DeviceMetrics.swift */,
 				C4AFA18E1A33DE9100040A9D /* Json.swift */,
 				C4AFA18F1A33DE9100040A9D /* JsonParser.swift */,
@@ -193,7 +201,7 @@
 		C4AFA1A31A33DE9E00040A9D /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				C4AFA1A41A33DE9E00040A9D /* ControlWrapper.swift */,
+				C40D60611A3CCE0D0048B5A0 /* iOSControlWrapper.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -203,6 +211,7 @@
 			children = (
 				C416C4FE1A38415E00FD789A /* BindingTests.swift */,
 				C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */,
+				C40D605F1A3CC9F30048B5A0 /* ControlWrapperTests.swift */,
 				C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */,
 				C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */,
 				C40D60561A3AD0F50048B5A0 /* StateManagerTests.swift */,
@@ -318,16 +327,18 @@
 			files = (
 				C4AFA16D1A33D71F00040A9D /* ViewController.swift in Sources */,
 				C4AFA1991A33DE9100040A9D /* DeviceMetrics.swift in Sources */,
+				C40D60621A3CCE0D0048B5A0 /* iOSControlWrapper.swift in Sources */,
 				C4AFA19C1A33DE9100040A9D /* JsonWriter.swift in Sources */,
 				C4AFA1A11A33DE9100040A9D /* TransportHttp.swift in Sources */,
 				C4AFA19E1A33DE9100040A9D /* StateManager.swift in Sources */,
 				C4AFA1971A33DE9100040A9D /* Binding.swift in Sources */,
 				C4646AA01A391D150043FB90 /* Util.swift in Sources */,
-				C4AFA1A51A33DE9E00040A9D /* ControlWrapper.swift in Sources */,
+				C40D605A1A3C25C80048B5A0 /* CommandInstance.swift in Sources */,
 				C4AFA1A21A33DE9100040A9D /* ViewModel.swift in Sources */,
 				C416C5011A38584300FD789A /* TokenConverter.swift in Sources */,
 				C4AFA19F1A33DE9100040A9D /* SynchroApp.swift in Sources */,
 				C4AFA19D1A33DE9100040A9D /* Logger.swift in Sources */,
+				C40D605C1A3CC93C0048B5A0 /* ControlWrapper.swift in Sources */,
 				C4AFA1A01A33DE9100040A9D /* Transport.swift in Sources */,
 				C4AFA19A1A33DE9100040A9D /* Json.swift in Sources */,
 				C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */,
@@ -348,6 +359,7 @@
 				C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */,
 				C40D60581A3AD3300048B5A0 /* ViewController.swift in Sources */,
 				C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */,
+				C40D60601A3CC9F30048B5A0 /* ControlWrapperTests.swift in Sources */,
 				C4AFA1AC1A33DEAB00040A9D /* JsonTests.swift in Sources */,
 				C40D60571A3AD0F50048B5A0 /* StateManagerTests.swift in Sources */,
 				C4646AA21A392BC30043FB90 /* UtilTests.swift in Sources */,
