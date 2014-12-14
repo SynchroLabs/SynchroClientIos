@@ -13,10 +13,33 @@
 		C40D605C1A3CC93C0048B5A0 /* ControlWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D605B1A3CC93C0048B5A0 /* ControlWrapper.swift */; };
 		C40D60601A3CC9F30048B5A0 /* ControlWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D605F1A3CC9F30048B5A0 /* ControlWrapperTests.swift */; };
 		C40D60621A3CCE0D0048B5A0 /* iOSControlWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D60611A3CCE0D0048B5A0 /* iOSControlWrapper.swift */; };
+		C40D60641A3CDB910048B5A0 /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D60631A3CDB910048B5A0 /* PageView.swift */; };
 		C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C4FE1A38415E00FD789A /* BindingTests.swift */; };
 		C416C5011A38584300FD789A /* TokenConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C5001A38584300FD789A /* TokenConverter.swift */; };
 		C416C5031A38585500FD789A /* TokenConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C5021A38585500FD789A /* TokenConverterTests.swift */; };
 		C42F3CFE1A370B950010AC55 /* BindingContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */; };
+		C45611571A3D763900779139 /* iOSBorderWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611561A3D763900779139 /* iOSBorderWrapper.swift */; };
+		C45611591A3D764900779139 /* iOSButtonWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611581A3D764900779139 /* iOSButtonWrapper.swift */; };
+		C456115B1A3D765A00779139 /* iOSCanvasWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C456115A1A3D765A00779139 /* iOSCanvasWrapper.swift */; };
+		C456115D1A3D767200779139 /* iOSTextBoxWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C456115C1A3D767200779139 /* iOSTextBoxWrapper.swift */; };
+		C456115F1A3D768100779139 /* iOSGridViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C456115E1A3D768100779139 /* iOSGridViewWrapper.swift */; };
+		C45611611A3D769200779139 /* iOSImageWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611601A3D769200779139 /* iOSImageWrapper.swift */; };
+		C45611631A3D769F00779139 /* iOSListBoxWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611621A3D769F00779139 /* iOSListBoxWrapper.swift */; };
+		C45611651A3D76AF00779139 /* iOSListViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611641A3D76AF00779139 /* iOSListViewWrapper.swift */; };
+		C45611671A3D76BB00779139 /* iOSLocationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611661A3D76BB00779139 /* iOSLocationWrapper.swift */; };
+		C45611691A3D76D000779139 /* iOSToolBarWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611681A3D76D000779139 /* iOSToolBarWrapper.swift */; };
+		C456116B1A3D76DF00779139 /* iOSToolBarToggleWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C456116A1A3D76DF00779139 /* iOSToolBarToggleWrapper.swift */; };
+		C456116D1A3D76FA00779139 /* iOSPickerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C456116C1A3D76FA00779139 /* iOSPickerWrapper.swift */; };
+		C456116F1A3D771400779139 /* iOSProgressBarWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C456116E1A3D771400779139 /* iOSProgressBarWrapper.swift */; };
+		C45611711A3D772100779139 /* iOSProgressRingWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611701A3D772100779139 /* iOSProgressRingWrapper.swift */; };
+		C45611731A3D773200779139 /* iOSRectangleWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611721A3D773200779139 /* iOSRectangleWrapper.swift */; };
+		C45611751A3D774000779139 /* iOSScrollWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611741A3D774000779139 /* iOSScrollWrapper.swift */; };
+		C45611771A3D775000779139 /* iOSSliderWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611761A3D775000779139 /* iOSSliderWrapper.swift */; };
+		C45611791A3D775C00779139 /* iOSStackPanelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611781A3D775C00779139 /* iOSStackPanelWrapper.swift */; };
+		C456117B1A3D777600779139 /* iOSTextBlockWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C456117A1A3D777600779139 /* iOSTextBlockWrapper.swift */; };
+		C456117D1A3D778300779139 /* iOSToggleSwitchWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C456117C1A3D778300779139 /* iOSToggleSwitchWrapper.swift */; };
+		C456117F1A3D77CC00779139 /* iOSWebViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C456117E1A3D77CC00779139 /* iOSWebViewWrapper.swift */; };
+		C45611811A3D77DE00779139 /* iOSWrapPanelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611801A3D77DE00779139 /* iOSWrapPanelWrapper.swift */; };
 		C4646AA01A391D150043FB90 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646A9F1A391D150043FB90 /* Util.swift */; };
 		C4646AA21A392BC30043FB90 /* UtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646AA11A392BC30043FB90 /* UtilTests.swift */; };
 		C4646AA41A3A24EB0043FB90 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646AA31A3A24EB0043FB90 /* ViewModelTests.swift */; };
@@ -61,10 +84,33 @@
 		C40D605B1A3CC93C0048B5A0 /* ControlWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlWrapper.swift; sourceTree = "<group>"; };
 		C40D605F1A3CC9F30048B5A0 /* ControlWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlWrapperTests.swift; sourceTree = "<group>"; };
 		C40D60611A3CCE0D0048B5A0 /* iOSControlWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSControlWrapper.swift; sourceTree = "<group>"; };
+		C40D60631A3CDB910048B5A0 /* PageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
 		C416C4FE1A38415E00FD789A /* BindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingTests.swift; sourceTree = "<group>"; };
 		C416C5001A38584300FD789A /* TokenConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenConverter.swift; sourceTree = "<group>"; };
 		C416C5021A38585500FD789A /* TokenConverterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenConverterTests.swift; sourceTree = "<group>"; };
 		C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingContextTests.swift; sourceTree = "<group>"; };
+		C45611561A3D763900779139 /* iOSBorderWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSBorderWrapper.swift; sourceTree = "<group>"; };
+		C45611581A3D764900779139 /* iOSButtonWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSButtonWrapper.swift; sourceTree = "<group>"; };
+		C456115A1A3D765A00779139 /* iOSCanvasWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSCanvasWrapper.swift; sourceTree = "<group>"; };
+		C456115C1A3D767200779139 /* iOSTextBoxWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSTextBoxWrapper.swift; sourceTree = "<group>"; };
+		C456115E1A3D768100779139 /* iOSGridViewWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSGridViewWrapper.swift; sourceTree = "<group>"; };
+		C45611601A3D769200779139 /* iOSImageWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSImageWrapper.swift; sourceTree = "<group>"; };
+		C45611621A3D769F00779139 /* iOSListBoxWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSListBoxWrapper.swift; sourceTree = "<group>"; };
+		C45611641A3D76AF00779139 /* iOSListViewWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSListViewWrapper.swift; sourceTree = "<group>"; };
+		C45611661A3D76BB00779139 /* iOSLocationWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSLocationWrapper.swift; sourceTree = "<group>"; };
+		C45611681A3D76D000779139 /* iOSToolBarWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSToolBarWrapper.swift; sourceTree = "<group>"; };
+		C456116A1A3D76DF00779139 /* iOSToolBarToggleWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSToolBarToggleWrapper.swift; sourceTree = "<group>"; };
+		C456116C1A3D76FA00779139 /* iOSPickerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSPickerWrapper.swift; sourceTree = "<group>"; };
+		C456116E1A3D771400779139 /* iOSProgressBarWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSProgressBarWrapper.swift; sourceTree = "<group>"; };
+		C45611701A3D772100779139 /* iOSProgressRingWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSProgressRingWrapper.swift; sourceTree = "<group>"; };
+		C45611721A3D773200779139 /* iOSRectangleWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSRectangleWrapper.swift; sourceTree = "<group>"; };
+		C45611741A3D774000779139 /* iOSScrollWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSScrollWrapper.swift; sourceTree = "<group>"; };
+		C45611761A3D775000779139 /* iOSSliderWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSSliderWrapper.swift; sourceTree = "<group>"; };
+		C45611781A3D775C00779139 /* iOSStackPanelWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSStackPanelWrapper.swift; sourceTree = "<group>"; };
+		C456117A1A3D777600779139 /* iOSTextBlockWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSTextBlockWrapper.swift; sourceTree = "<group>"; };
+		C456117C1A3D778300779139 /* iOSToggleSwitchWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSToggleSwitchWrapper.swift; sourceTree = "<group>"; };
+		C456117E1A3D77CC00779139 /* iOSWebViewWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSWebViewWrapper.swift; sourceTree = "<group>"; };
+		C45611801A3D77DE00779139 /* iOSWrapPanelWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSWrapPanelWrapper.swift; sourceTree = "<group>"; };
 		C4646A9F1A391D150043FB90 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		C4646AA11A392BC30043FB90 /* UtilTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilTests.swift; sourceTree = "<group>"; };
 		C4646AA31A3A24EB0043FB90 /* ViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
@@ -187,6 +233,7 @@
 				C4AFA18F1A33DE9100040A9D /* JsonParser.swift */,
 				C4AFA1901A33DE9100040A9D /* JsonWriter.swift */,
 				C4AFA1911A33DE9100040A9D /* Logger.swift */,
+				C40D60631A3CDB910048B5A0 /* PageView.swift */,
 				C4AFA1921A33DE9100040A9D /* StateManager.swift */,
 				C4AFA1931A33DE9100040A9D /* SynchroApp.swift */,
 				C416C5001A38584300FD789A /* TokenConverter.swift */,
@@ -202,6 +249,28 @@
 			isa = PBXGroup;
 			children = (
 				C40D60611A3CCE0D0048B5A0 /* iOSControlWrapper.swift */,
+				C45611561A3D763900779139 /* iOSBorderWrapper.swift */,
+				C45611581A3D764900779139 /* iOSButtonWrapper.swift */,
+				C456115A1A3D765A00779139 /* iOSCanvasWrapper.swift */,
+				C456115C1A3D767200779139 /* iOSTextBoxWrapper.swift */,
+				C456115E1A3D768100779139 /* iOSGridViewWrapper.swift */,
+				C45611601A3D769200779139 /* iOSImageWrapper.swift */,
+				C45611621A3D769F00779139 /* iOSListBoxWrapper.swift */,
+				C45611641A3D76AF00779139 /* iOSListViewWrapper.swift */,
+				C45611661A3D76BB00779139 /* iOSLocationWrapper.swift */,
+				C45611681A3D76D000779139 /* iOSToolBarWrapper.swift */,
+				C456116A1A3D76DF00779139 /* iOSToolBarToggleWrapper.swift */,
+				C456116C1A3D76FA00779139 /* iOSPickerWrapper.swift */,
+				C456116E1A3D771400779139 /* iOSProgressBarWrapper.swift */,
+				C45611701A3D772100779139 /* iOSProgressRingWrapper.swift */,
+				C45611721A3D773200779139 /* iOSRectangleWrapper.swift */,
+				C45611741A3D774000779139 /* iOSScrollWrapper.swift */,
+				C45611761A3D775000779139 /* iOSSliderWrapper.swift */,
+				C45611781A3D775C00779139 /* iOSStackPanelWrapper.swift */,
+				C456117A1A3D777600779139 /* iOSTextBlockWrapper.swift */,
+				C456117C1A3D778300779139 /* iOSToggleSwitchWrapper.swift */,
+				C456117E1A3D77CC00779139 /* iOSWebViewWrapper.swift */,
+				C45611801A3D77DE00779139 /* iOSWrapPanelWrapper.swift */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
@@ -325,25 +394,48 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C456115B1A3D765A00779139 /* iOSCanvasWrapper.swift in Sources */,
 				C4AFA16D1A33D71F00040A9D /* ViewController.swift in Sources */,
+				C45611631A3D769F00779139 /* iOSListBoxWrapper.swift in Sources */,
+				C45611791A3D775C00779139 /* iOSStackPanelWrapper.swift in Sources */,
+				C45611771A3D775000779139 /* iOSSliderWrapper.swift in Sources */,
+				C45611691A3D76D000779139 /* iOSToolBarWrapper.swift in Sources */,
+				C45611711A3D772100779139 /* iOSProgressRingWrapper.swift in Sources */,
 				C4AFA1991A33DE9100040A9D /* DeviceMetrics.swift in Sources */,
+				C456117B1A3D777600779139 /* iOSTextBlockWrapper.swift in Sources */,
 				C40D60621A3CCE0D0048B5A0 /* iOSControlWrapper.swift in Sources */,
+				C456116B1A3D76DF00779139 /* iOSToolBarToggleWrapper.swift in Sources */,
+				C45611751A3D774000779139 /* iOSScrollWrapper.swift in Sources */,
+				C45611671A3D76BB00779139 /* iOSLocationWrapper.swift in Sources */,
+				C456115D1A3D767200779139 /* iOSTextBoxWrapper.swift in Sources */,
+				C456116F1A3D771400779139 /* iOSProgressBarWrapper.swift in Sources */,
 				C4AFA19C1A33DE9100040A9D /* JsonWriter.swift in Sources */,
 				C4AFA1A11A33DE9100040A9D /* TransportHttp.swift in Sources */,
+				C40D60641A3CDB910048B5A0 /* PageView.swift in Sources */,
+				C45611571A3D763900779139 /* iOSBorderWrapper.swift in Sources */,
+				C45611651A3D76AF00779139 /* iOSListViewWrapper.swift in Sources */,
 				C4AFA19E1A33DE9100040A9D /* StateManager.swift in Sources */,
 				C4AFA1971A33DE9100040A9D /* Binding.swift in Sources */,
 				C4646AA01A391D150043FB90 /* Util.swift in Sources */,
+				C456117D1A3D778300779139 /* iOSToggleSwitchWrapper.swift in Sources */,
+				C45611811A3D77DE00779139 /* iOSWrapPanelWrapper.swift in Sources */,
 				C40D605A1A3C25C80048B5A0 /* CommandInstance.swift in Sources */,
+				C45611591A3D764900779139 /* iOSButtonWrapper.swift in Sources */,
 				C4AFA1A21A33DE9100040A9D /* ViewModel.swift in Sources */,
+				C45611731A3D773200779139 /* iOSRectangleWrapper.swift in Sources */,
 				C416C5011A38584300FD789A /* TokenConverter.swift in Sources */,
 				C4AFA19F1A33DE9100040A9D /* SynchroApp.swift in Sources */,
+				C45611611A3D769200779139 /* iOSImageWrapper.swift in Sources */,
 				C4AFA19D1A33DE9100040A9D /* Logger.swift in Sources */,
 				C40D605C1A3CC93C0048B5A0 /* ControlWrapper.swift in Sources */,
 				C4AFA1A01A33DE9100040A9D /* Transport.swift in Sources */,
 				C4AFA19A1A33DE9100040A9D /* Json.swift in Sources */,
+				C456117F1A3D77CC00779139 /* iOSWebViewWrapper.swift in Sources */,
+				C456116D1A3D76FA00779139 /* iOSPickerWrapper.swift in Sources */,
 				C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */,
 				C4AFA19B1A33DE9100040A9D /* JsonParser.swift in Sources */,
 				C4AFA1981A33DE9100040A9D /* BindingContext.swift in Sources */,
+				C456115F1A3D768100779139 /* iOSGridViewWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -265,6 +265,10 @@ public class ControlWrapper
     
     public var bindingContext: BindingContext { get { return _bindingContext; } }
     public var childControls: [ControlWrapper] { get { return _childControls; } }
+    public func addChildControl(control: ControlWrapper)
+    {
+        _childControls.append(control);
+    }
     
     func setCommand(attribute: String, command: CommandInstance)
     {

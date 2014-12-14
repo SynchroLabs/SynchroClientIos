@@ -90,5 +90,11 @@ public class Regex
         
         return String(out);
     }
+    
+    public func isMatch(string: String) -> Bool
+    {
+        // !!!
+        return false;
+    }
 }
 
