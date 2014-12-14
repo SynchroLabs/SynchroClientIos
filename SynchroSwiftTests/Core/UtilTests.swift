@@ -27,4 +27,18 @@ class UtilTests: XCTestCase
 
         println(result)
     }
+    
+    func testRegexIsMatch()
+    {
+        var slope_italic = Regex("Italic");
+        var slope_oblique = Regex("Oblique|Incline");
+        var slope_cursive = Regex("Cursive|Kursiv");
+
+        XCTAssertTrue(slope_italic.isMatch("CourierBoldItalic"));
+        XCTAssertFalse(slope_italic.isMatch("CourierNew"));
+        XCTAssertTrue(slope_oblique.isMatch("InclineGaramond"));
+        XCTAssertFalse(slope_oblique.isMatch("CourierNew"));
+        XCTAssertTrue(slope_cursive.isMatch("FooCursiveBar"));
+        XCTAssertFalse(slope_cursive.isMatch("CourierNew"));
+    }
 }

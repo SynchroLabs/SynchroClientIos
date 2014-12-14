@@ -93,7 +93,13 @@ public class Regex
     
     public func isMatch(string: String) -> Bool
     {
-        // !!!
+        if let matches = _regex?.matchesInString(string, options: nil, range: NSRange(location: 0, length: countElements(string)))
+        {
+            if countElements(matches) > 0
+            {
+                return true;
+            }
+        }
         return false;
     }
 }
