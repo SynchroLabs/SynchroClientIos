@@ -146,7 +146,17 @@ public class BoundAndPossiblyResolvedToken
     // to produce the resolved value would be better.
     //
     var _negated = false;
-    var _formatSpec: String?;
+    
+    // !!! TODO
+    //
+    // At least on iOS, I think the best way to handle numeric formatting is the do it here (in token resolution below).
+    // 
+    //   Here is the list of .NET number format specifiers: http://msdn.microsoft.com/en-us/library/dwhawy9k(v=vs.110).aspx
+    //   Here is the string format specifiers supported on iOS: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Strings/Articles/formatSpecifiers.html
+    //
+    //   In pratice I think D, F, P, N, and X are what we should support.
+    //
+    var _formatSpec: String?; // If present, this is the .NET format specifier (whatever came after the colon)
     
     public init(_ bindingContext: BindingContext, oneTime: Bool, negated: Bool, formatSpec: String? = nil)
     {

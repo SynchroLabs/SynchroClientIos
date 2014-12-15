@@ -763,7 +763,7 @@ public class iOSControlWrapper : ControlWrapper
         }
         return nil;
     }
-    
+        
     func processThicknessProperty(thicknessAttributeValue: JToken?, thicknessSetter: ThicknessSetter)
     {
         if let token = thicknessAttributeValue
