@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension String
 {
@@ -40,6 +41,12 @@ extension UInt32
     {
         return[Byte((self & 0xFF000000) >> 24), Byte((self & 0x00FF0000) >> 16), Byte((self & 0x0000FF00) >> 8), Byte(self & 0x000000FF)];
     }
+}
+
+extension CGRect
+{
+    var x: CGFloat { get { return self.origin.x } }
+    var y: CGFloat { get { return self.origin.y } }
 }
 
 public class Regex
@@ -103,4 +110,14 @@ public class Regex
         return false;
     }
 }
+
+public class Util
+{
+    public class func isIOS7() -> Bool
+    {
+        let os = NSProcessInfo().operatingSystemVersion;
+        return os.majorVersion == 7;
+    }
+}
+
 

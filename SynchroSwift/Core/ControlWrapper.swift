@@ -269,6 +269,10 @@ public class ControlWrapper
     {
         _childControls.append(control);
     }
+    public func clearChildControls()
+    {
+        _childControls.removeAll(keepCapacity: false);
+    }
     
     func setCommand(attribute: String, command: CommandInstance)
     {

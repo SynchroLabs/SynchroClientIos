@@ -66,6 +66,7 @@
 		C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1A91A33DEAB00040A9D /* SynchroAppTests.swift */; };
 		C4AFA1AE1A33DEAB00040A9D /* TransportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1AA1A33DEAB00040A9D /* TransportTests.swift */; };
 		C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1AF1A33DF4C00040A9D /* seed.json */; };
+		C4B4FD251A3E6DC800328772 /* iOSPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD241A3E6DC800328772 /* iOSPageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +142,7 @@
 		C4AFA1A91A33DEAB00040A9D /* SynchroAppTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroAppTests.swift; sourceTree = "<group>"; };
 		C4AFA1AA1A33DEAB00040A9D /* TransportTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportTests.swift; sourceTree = "<group>"; };
 		C4AFA1AF1A33DF4C00040A9D /* seed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = seed.json; sourceTree = "<group>"; };
+		C4B4FD241A3E6DC800328772 /* iOSPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSPageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +236,7 @@
 				C4AFA1901A33DE9100040A9D /* JsonWriter.swift */,
 				C4AFA1911A33DE9100040A9D /* Logger.swift */,
 				C40D60631A3CDB910048B5A0 /* PageView.swift */,
+				C4B4FD241A3E6DC800328772 /* iOSPageView.swift */,
 				C4AFA1921A33DE9100040A9D /* StateManager.swift */,
 				C4AFA1931A33DE9100040A9D /* SynchroApp.swift */,
 				C416C5001A38584300FD789A /* TokenConverter.swift */,
@@ -434,6 +437,7 @@
 				C456116D1A3D76FA00779139 /* iOSPickerWrapper.swift in Sources */,
 				C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */,
 				C4AFA19B1A33DE9100040A9D /* JsonParser.swift in Sources */,
+				C4B4FD251A3E6DC800328772 /* iOSPageView.swift in Sources */,
 				C4AFA1981A33DE9100040A9D /* BindingContext.swift in Sources */,
 				C456115F1A3D768100779139 /* iOSGridViewWrapper.swift in Sources */,
 			);
