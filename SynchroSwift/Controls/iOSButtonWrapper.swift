@@ -23,12 +23,16 @@ public class iOSButtonWrapper : iOSControlWrapper
         var button = UIButton(); // !!! Was UIButton.fromType(UIButtonType.RoundedRect);
         self._control = button;
         
+        // !!! Was kind of hoping to inherit the default/theme button text color, but if we don't
+        //     set it explicitly here, it appears to be white/transparent (invisible at any rate).
+        //
+        button.setTitleColor(UIColor.blueColor(), forState: .Normal);
+        
         processElementDimensions(controlSpec);
         applyFrameworkElementDefaults(button);
         
         processElementProperty(controlSpec["caption"], { (value) in
-            var title = self.toString(value);
-            button.setTitle(self.toString(value), forState: UIControlState.Normal);
+            button.setTitle(self.toString(value), forState: .Normal);
             self.sizeToFit();
         });
         
@@ -39,7 +43,7 @@ public class iOSButtonWrapper : iOSControlWrapper
         
         if (getCommand(CommandName.OnClick) != nil)
         {
-            button.addTarget(self, action: "pressed:", forControlEvents: .TouchUpInside)
+            button.addTarget(self, action: "pressed:", forControlEvents: .TouchUpInside);
         }
     }
 

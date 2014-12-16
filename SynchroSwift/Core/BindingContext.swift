@@ -10,6 +10,8 @@ import Foundation
 
 private var logger = Logger.getLogger("BindingContext");
 
+private var _bindingTokensRE = Regex("[$]([^.]*)[.]?"); // Token starts with $, separated by dot
+
 // Corresponds to a specific location in a JSON oject (which may or may not exist at the time the BindingContext is created).
 //
 public class BindingContext
@@ -49,8 +51,6 @@ public class BindingContext
         }
     }
     
-    var _bindingTokensRE = Regex("[$]([^.]*)[.]?"); // Token starts with $, separated by dot
-        
     private func resolveBinding(var parentPath: String, bindingPath: String) -> String
     {
         // Process path elements:
@@ -74,12 +74,12 @@ public class BindingContext
         //  $index
         //  $data
         //
-        var bindingPath = _bindingTokensRE.substituteMatches(bindingPath, substitution:
+        var processedBindingPath = _bindingTokensRE.substituteMatches(bindingPath, substitution:
         {
             (match: String, matchGroups: [String]) -> String in
 
             let pathElement = matchGroups[1];
-            logger.info("Found binding path element: \(pathElement)");
+            logger.debug("Found binding path element: \(pathElement)");
             
             if (pathElement == "root")
             {
@@ -116,18 +116,19 @@ public class BindingContext
             return ""; // Removing the path elements as they are processed
         });
         
-        if ((!parentPath.isEmpty) && (!_bindingPath.isEmpty))
+        var finalBindingPath = processedBindingPath;
+        if ((!parentPath.isEmpty) && (!processedBindingPath.isEmpty))
         {
-            bindingPath = parentPath + "." + bindingPath;
+            finalBindingPath = parentPath + "." + processedBindingPath;
         }
         else if (!parentPath.isEmpty)
         {
-            bindingPath = parentPath;
+            finalBindingPath = parentPath;
         }
         
-        logger.info("Resolved binding path is: \(bindingPath)");
+        logger.info("Resolved binding path is: \(finalBindingPath)");
         
-        return bindingPath;
+        return finalBindingPath;
     }
     
     private init(_ context: BindingContext, bindingPath: String)
