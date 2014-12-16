@@ -232,7 +232,7 @@ private var colorNames: Dictionary<String, UInt32> =
 ];
 
 
-public class ControlWrapper
+public class ControlWrapper: NSObject
 {
     var _stateManager: StateManager;
     var _viewModel: ViewModel;
@@ -251,6 +251,7 @@ public class ControlWrapper
         _stateManager = stateManager;
         _viewModel = viewModel;
         _bindingContext = bindingContext;
+        super.init();
     }
     
     public init(parent: ControlWrapper, bindingContext: BindingContext)
@@ -258,6 +259,7 @@ public class ControlWrapper
         _stateManager = parent.stateManager;
         _viewModel = parent.viewModel;
         _bindingContext = bindingContext;
+        super.init();
     }
     
     public var stateManager: StateManager { get { return _stateManager; } }
@@ -538,11 +540,11 @@ public class ControlWrapper
     
     // Process a value binding on an element.  If a value is supplied, a value binding to that binding context will be created.
     //
-    func processElementBoundValue(attributeName: String, value: String?, getValue: GetViewValue, setValue: SetViewValue? = nil) -> Bool
+    func processElementBoundValue(attributeName: String, attributeValue: JToken?, getValue: GetViewValue, setValue: SetViewValue? = nil) -> Bool
     {
-        if (value != nil)
+        if let value = attributeValue?.asString()
         {
-            var valueBindingContext = self.bindingContext.select(value!);
+            var valueBindingContext = self.bindingContext.select(value);
             var binding = viewModel.createAndRegisterValueBinding(valueBindingContext, getValue, setValue);
             setValueBinding(attributeName, valueBinding: binding);
             

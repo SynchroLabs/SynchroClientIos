@@ -17,9 +17,9 @@ public class PaddedView : UIView
     
     public override init()
     {
-        super.init();
+        super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     }
-
+    
     required public init(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented");
@@ -295,7 +295,10 @@ public class iOSBorderWrapper : iOSControlWrapper
         if let contentsArray = controlSpec["contents"]? as? JArray
         {
             createControls(contentsArray, { (childControlSpec, childControlWrapper) in
-                border.addSubview(childControlWrapper.control!);
+                if let control = childControlWrapper.control
+                {
+                    border.addSubview(control);
+                }
             });
         }        
     }

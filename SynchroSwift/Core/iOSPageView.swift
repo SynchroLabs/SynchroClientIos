@@ -115,7 +115,7 @@ public class iOSPageView : PageView
     var _toolBar: UIToolbar?;
     var _toolBarButtons = [UIBarButtonItem]();
     
-    public init(stateManager: StateManager, viewModel: ViewModel, viewController: UIViewController, panel: UIView, doBackToMenu: (() -> Void))
+    public init(stateManager: StateManager, viewModel: ViewModel, viewController: UIViewController, panel: UIView, doBackToMenu: (() -> Void)?)
     {
         _viewController = viewController;
         super.init(stateManager: stateManager, viewModel: viewModel, doBackToMenu);
@@ -346,7 +346,9 @@ public class iOSPageView : PageView
             // Create the nav bar, add a back control as appropriate...
             //
             _navBar = UINavigationBar();
-            _navBar!.delegate = SynchroNavigationBarDelegate(pageView: self);
+            
+            // Creas
+            //_navBar!.delegate = SynchroNavigationBarDelegate(pageView: self);
             iOSPageView.sizeNavBar(_navBar!);
             
             if (self.hasBackCommand)

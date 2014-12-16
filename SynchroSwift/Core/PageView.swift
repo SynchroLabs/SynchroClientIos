@@ -17,7 +17,7 @@ public class PageView
     
     var _stateManager: StateManager;
     var _viewModel: ViewModel;
-    var _doBackToMenu: (() -> Void);
+    var _doBackToMenu: (() -> Void)?;
     
     // This is the top level container of controls for a page.  If the page specifies a single top level
     // element, then this represents that element.  If not, then this is a container control that we
@@ -32,7 +32,7 @@ public class PageView
     
     var onBackCommand: String?;
     
-    public init(stateManager: StateManager, viewModel: ViewModel, doBackToMenu: (() -> Void))
+    public init(stateManager: StateManager, viewModel: ViewModel, doBackToMenu: (() -> Void)?)
     {
         _stateManager = stateManager;
         _viewModel = viewModel;
@@ -72,7 +72,7 @@ public class PageView
         {
             logger.debug("Back navigation - returning to menu");
             _rootContainerControlWrapper!.unregister();
-            _doBackToMenu();
+            _doBackToMenu!();
             return true;
         }
         else

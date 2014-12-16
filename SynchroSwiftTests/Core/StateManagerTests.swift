@@ -39,7 +39,7 @@ class StateManagerTests: XCTestCase
         
         var transport = TransportHttp(uri: NSURL(string: "http://\(app.endpoint)")!);
         
-        let v = ViewController();
+        let v = UIViewController();
         
         var stateManager = StateManager(appManager: appManager, app: app, transport: transport, deviceMetrics: DeviceMetrics(controller: v));
         

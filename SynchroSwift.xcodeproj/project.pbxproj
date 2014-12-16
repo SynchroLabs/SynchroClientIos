@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C40D60571A3AD0F50048B5A0 /* StateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D60561A3AD0F50048B5A0 /* StateManagerTests.swift */; };
-		C40D60581A3AD3300048B5A0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16C1A33D71F00040A9D /* ViewController.swift */; };
 		C40D605A1A3C25C80048B5A0 /* CommandInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D60591A3C25C80048B5A0 /* CommandInstance.swift */; };
 		C40D605C1A3CC93C0048B5A0 /* ControlWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D605B1A3CC93C0048B5A0 /* ControlWrapper.swift */; };
 		C40D60601A3CC9F30048B5A0 /* ControlWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40D605F1A3CC9F30048B5A0 /* ControlWrapperTests.swift */; };
@@ -44,7 +43,6 @@
 		C4646AA21A392BC30043FB90 /* UtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646AA11A392BC30043FB90 /* UtilTests.swift */; };
 		C4646AA41A3A24EB0043FB90 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646AA31A3A24EB0043FB90 /* ViewModelTests.swift */; };
 		C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */; };
-		C4AFA16D1A33D71F00040A9D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16C1A33D71F00040A9D /* ViewController.swift */; };
 		C4AFA1701A33D71F00040A9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA16E1A33D71F00040A9D /* Main.storyboard */; };
 		C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1711A33D71F00040A9D /* Images.xcassets */; };
 		C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */; };
@@ -67,6 +65,8 @@
 		C4AFA1AE1A33DEAB00040A9D /* TransportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1AA1A33DEAB00040A9D /* TransportTests.swift */; };
 		C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1AF1A33DF4C00040A9D /* seed.json */; };
 		C4B4FD251A3E6DC800328772 /* iOSPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD241A3E6DC800328772 /* iOSPageView.swift */; };
+		C4B4FD271A3FA5BF00328772 /* SynchroPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */; };
+		C4C202D61A3FCD71008EE2EE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16C1A33D71F00040A9D /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +143,7 @@
 		C4AFA1AA1A33DEAB00040A9D /* TransportTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportTests.swift; sourceTree = "<group>"; };
 		C4AFA1AF1A33DF4C00040A9D /* seed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = seed.json; sourceTree = "<group>"; };
 		C4B4FD241A3E6DC800328772 /* iOSPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSPageView.swift; sourceTree = "<group>"; };
+		C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroPageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +193,7 @@
 				C4AFA1711A33D71F00040A9D /* Images.xcassets */,
 				C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */,
 				C4AFA1681A33D71F00040A9D /* Supporting Files */,
+				C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */,
 			);
 			path = SynchroSwift;
 			sourceTree = "<group>";
@@ -398,7 +400,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C456115B1A3D765A00779139 /* iOSCanvasWrapper.swift in Sources */,
-				C4AFA16D1A33D71F00040A9D /* ViewController.swift in Sources */,
 				C45611631A3D769F00779139 /* iOSListBoxWrapper.swift in Sources */,
 				C45611791A3D775C00779139 /* iOSStackPanelWrapper.swift in Sources */,
 				C45611771A3D775000779139 /* iOSSliderWrapper.swift in Sources */,
@@ -424,7 +425,9 @@
 				C45611811A3D77DE00779139 /* iOSWrapPanelWrapper.swift in Sources */,
 				C40D605A1A3C25C80048B5A0 /* CommandInstance.swift in Sources */,
 				C45611591A3D764900779139 /* iOSButtonWrapper.swift in Sources */,
+				C4C202D61A3FCD71008EE2EE /* ViewController.swift in Sources */,
 				C4AFA1A21A33DE9100040A9D /* ViewModel.swift in Sources */,
+				C4B4FD271A3FA5BF00328772 /* SynchroPageViewController.swift in Sources */,
 				C45611731A3D773200779139 /* iOSRectangleWrapper.swift in Sources */,
 				C416C5011A38584300FD789A /* TokenConverter.swift in Sources */,
 				C4AFA19F1A33DE9100040A9D /* SynchroApp.swift in Sources */,
@@ -453,7 +456,6 @@
 				C4AFA1AB1A33DEAB00040A9D /* JsonParserTests.swift in Sources */,
 				C4AFA1811A33D71F00040A9D /* SynchroSwiftTests.swift in Sources */,
 				C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */,
-				C40D60581A3AD3300048B5A0 /* ViewController.swift in Sources */,
 				C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */,
 				C40D60601A3CC9F30048B5A0 /* ControlWrapperTests.swift in Sources */,
 				C4AFA1AC1A33DEAB00040A9D /* JsonTests.swift in Sources */,
