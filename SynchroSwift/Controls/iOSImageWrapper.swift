@@ -45,11 +45,23 @@ public class iOSImageWrapper : iOSControlWrapper
             }
             else
             {
-                // !!! This really needs to be async, and it needs to verify that the NSURL was propertly formed, and it needs to 
-                //     handle errors...
-                //
-                var imageData: NSData = NSData(contentsOfURL: NSURL(string: self.toString(value))!, options: NSDataReadingOptions.DataReadingMappedIfSafe, error: nil)!;
-                image.image = UIImage(data:imageData);
+                var url = NSURL(string: self.toString(value));
+                if let validUrl = url
+                {
+                    var request: NSURLRequest = NSURLRequest(URL: validUrl);
+                    NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+                        if let err = error
+                        {
+                            logger.error("Failed to load image, reason: \(err.description)");
+                        }
+                        else
+                        {
+                            var loadedImage = UIImage(data: data)
+                            image.image = loadedImage;
+                        }
+                    })
+
+                }
             }
         });
     }
