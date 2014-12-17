@@ -123,7 +123,7 @@ class StackPanelView : PaddedView
     
     internal override func layoutSubviews()
     {
-        // logger.debug("StackPanelView - Layout subviews");
+        logger.debug("StackPanelView - Layout subviews");
         
         super.layoutSubviews();
         
@@ -389,7 +389,10 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         if let contentsArray = controlSpec["contents"]? as? JArray
         {
             createControls(contentsArray, { (childControlSpec, childControlWrapper) in
-                stackPanel.addSubview(childControlWrapper.control!);
+                if let childControl = childControlWrapper.control
+                {
+                    stackPanel.addSubview(childControl);
+                }
             });
         }
         

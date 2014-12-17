@@ -134,7 +134,7 @@ public class Util
     public class func isIOS7() -> Bool
     {
         let os = NSProcessInfo().operatingSystemVersion;
-        return os.majorVersion == 7;
+        return os.majorVersion >= 7;
     }
 }
 

@@ -58,7 +58,10 @@ public class TransportHttp : TransportBase, Transport
             {
                 if let failureHandler = theRequestFailureHandler
                 {
-                    failureHandler(request: requestObject, exception: error);
+                    dispatch_async(dispatch_get_main_queue(),
+                    {
+                        failureHandler(request: requestObject, exception: error);
+                    });
                 }
             }
             else if !self.isSuccessStatusCode(response as NSHTTPURLResponse)
@@ -71,7 +74,10 @@ public class TransportHttp : TransportBase, Transport
 
                 if let failureHandler = theRequestFailureHandler
                 {
-                    failureHandler(request: requestObject, exception: nonSuccessError);
+                    dispatch_async(dispatch_get_main_queue(),
+                    {
+                        failureHandler(request: requestObject, exception: nonSuccessError);
+                    });
                 }
             }
             else
@@ -101,7 +107,10 @@ public class TransportHttp : TransportBase, Transport
                     
                     if (theResponseHandler != nil)
                     {
-                        theResponseHandler!(response: responseObject as JObject);
+                        dispatch_async(dispatch_get_main_queue(),
+                        {
+                            theResponseHandler!(response: responseObject as JObject);
+                        });
                     }
                 }
             }

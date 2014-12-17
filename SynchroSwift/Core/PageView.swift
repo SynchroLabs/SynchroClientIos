@@ -10,7 +10,7 @@ import Foundation
 
 private var logger = Logger.getLogger("PageView");
 
-public class PageView
+public class PageView : NSObject
 {
     public var setPageTitle: ((String) -> Void)?;
     public var setBackEnabled: ((Bool) -> Void)?; // Optional - set if you care about back enablement
@@ -37,6 +37,7 @@ public class PageView
         _stateManager = stateManager;
         _viewModel = viewModel;
         _doBackToMenu = doBackToMenu;
+        super.init();
     }
     
     public var hasBackCommand: Bool
@@ -118,7 +119,7 @@ public class PageView
                 [
                     "control": JValue("stackpanel"),
                     "orientation": JValue("vertical"),
-                    "contents": elements
+                    "contents": elements.deepClone() // !!! Alternatively, we could just unparent elements here...
                 ]);
                 
                 _rootContainerControlWrapper = createRootContainerControl(controlSpec);

@@ -71,11 +71,10 @@ public class CommandInstance
             var value = parameterValue;
             if (parameterValue.Type == JTokenType.String)
             {
-                var expanded = PropertyValue.expand(parameterValue.asString()!, bindingContext: bindingContext);
-                value = expanded.deepClone();
+                value = PropertyValue.expand(parameterValue.asString()!, bindingContext: bindingContext);
             }
                 
-            obj[parameterKey] = value;
+            obj[parameterKey] = value.deepClone();
         }
         return obj;
     }

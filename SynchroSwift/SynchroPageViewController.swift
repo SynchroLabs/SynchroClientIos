@@ -23,7 +23,6 @@ public class SynchroPageViewController : UIViewController
     {
         _appManager = appManager;
         _app = app;
-        //super.init();
         super.init(nibName: nil, bundle: nil);
     }
 
@@ -74,6 +73,8 @@ public class SynchroPageViewController : UIViewController
         
         _stateManager.setProcessingHandlers(_pageView.processPageView, _pageView.processMessageBox);
         _stateManager.startApplicationAsync();
+        
+        logger.debug("Completed viewDidLoad");
     }
     
     private func normalizeOrientation(orientation: UIInterfaceOrientation) -> UIInterfaceOrientation

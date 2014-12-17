@@ -11,32 +11,6 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSPageView");
 
-class SynchroNavigationBarDelegate : NSObject, UINavigationBarDelegate
-{
-    var _pageView: iOSPageView;
-    
-    internal init(pageView: iOSPageView)
-    {
-        _pageView = pageView;
-    }
-    
-    // Per several recommendations, especially this one: http://blog.falafel.com/ios-7-bars-with-xamarinios/
-    //
-    // !!! This is supposed to fix the Navbar positioning on iOS7, but doesn't do anything for us...
-    //
-    internal func getPositionForBar(barPositioning: UIBarPositioning) -> UIBarPosition
-    {
-        return UIBarPosition.TopAttached;
-    }
-    
-    internal func shouldPopItem(navigationBar: UINavigationBar, item: UINavigationItem) -> Bool
-    {
-        logger.debug("Should pop item got called!");
-        _pageView.goBack();
-        return false;
-    }
-}
-
 class PageContentScrollView : UIScrollView
 {
     var _content: iOSControlWrapper?;
@@ -101,7 +75,7 @@ class PageContentScrollView : UIScrollView
     }
 }
 
-public class iOSPageView : PageView
+public class iOSPageView : PageView, UINavigationBarDelegate
 {
     var _pageTitle = "";
     
@@ -127,10 +101,13 @@ public class iOSPageView : PageView
         // http://stackoverflow.com/questions/24097831/how-to-move-content-of-uiviewcontroller-upwards-as-keypad-appears-using-swift
         // http://stackoverflow.com/questions/24007650/selector-in-swift
         //
+        /* !!! Cause crashing on tap gesture anywhere on screen...
+         *
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onKeyboardShown:"), name: UIKeyboardDidShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onKeyboardHidden:"), name: UIKeyboardDidHideNotification, object: nil);
 
         DismissKeyboardOnBackgroundTap();
+        */
     }
 
     deinit
@@ -265,7 +242,11 @@ public class iOSPageView : PageView
 
     public func updateLayout()
     {
+        logger.debug("updateLayout starting...");
+
         // Equivalent in concept to LayoutSubviews (but renamed to avoid confusion, since PageView isn't a UIView)
+        //
+        // This is currently only called on orientation change
         //
         if let panel: UIView = _rootControlWrapper!.control
         {
@@ -289,10 +270,13 @@ public class iOSPageView : PageView
                 scrollView.frame = contentRect;
             }
         }
+        logger.debug("updateLayout finished");
     }
 
     public override func clearContent()
     {
+        logger.debug("clearing content");
+        
         _navBar = nil;
         _navBarButton = nil;
         
@@ -337,8 +321,28 @@ public class iOSPageView : PageView
         _toolBarButtons.append(button);
     }
 
+    // UINavigationBarDelegate
+    public func positionForBar(barPositioning: UIBarPositioning) -> UIBarPosition
+    {
+        // Per several recommendations, especially this one: http://blog.falafel.com/ios-7-bars-with-xamarinios/
+        //
+        // !!! This is supposed to fix the Navbar positioning on iOS7, but doesn't do anything for us...
+        //
+        return UIBarPosition.TopAttached;
+    }
+    
+    // UINavigationBarDelegate
+    public func navigationBar(navigationBar: UINavigationBar, shouldPopItem: UINavigationItem) -> Bool
+    {
+        logger.debug("Should pop item got called!");
+        self.goBack();
+        return false;
+    }
+
     public override func setContent(content: ControlWrapper?)
     {
+        logger.debug("Setting content");
+        
         if let panel: UIView = _rootControlWrapper!.control
         {
             var contentRect = CGRect(x: 0, y: iOSPageView.contentTop, width: panel.frame.width, height: panel.frame.height - iOSPageView.contentTop);
@@ -346,9 +350,7 @@ public class iOSPageView : PageView
             // Create the nav bar, add a back control as appropriate...
             //
             _navBar = UINavigationBar();
-            
-            // Creas
-            //_navBar!.delegate = SynchroNavigationBarDelegate(pageView: self);
+            _navBar!.delegate = self;
             iOSPageView.sizeNavBar(_navBar!);
             
             if (self.hasBackCommand)
@@ -410,6 +412,8 @@ public class iOSPageView : PageView
                 _rootControlWrapper!.addChildControl(content!);
             }
         }
+        
+        logger.debug("Done setting content");
     }
 
     //

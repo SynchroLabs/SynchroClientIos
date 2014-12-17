@@ -16,6 +16,8 @@
 		C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C4FE1A38415E00FD789A /* BindingTests.swift */; };
 		C416C5011A38584300FD789A /* TokenConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C5001A38584300FD789A /* TokenConverter.swift */; };
 		C416C5031A38585500FD789A /* TokenConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416C5021A38585500FD789A /* TokenConverterTests.swift */; };
+		C42323791A412B520032FFB5 /* LauncherView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C42323781A412B520032FFB5 /* LauncherView.xib */; };
+		C423237B1A412BCF0032FFB5 /* LauncherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C423237A1A412BCF0032FFB5 /* LauncherViewController.swift */; };
 		C42F3CFE1A370B950010AC55 /* BindingContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */; };
 		C45611571A3D763900779139 /* iOSBorderWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611561A3D763900779139 /* iOSBorderWrapper.swift */; };
 		C45611591A3D764900779139 /* iOSButtonWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45611581A3D764900779139 /* iOSButtonWrapper.swift */; };
@@ -43,7 +45,6 @@
 		C4646AA21A392BC30043FB90 /* UtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646AA11A392BC30043FB90 /* UtilTests.swift */; };
 		C4646AA41A3A24EB0043FB90 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646AA31A3A24EB0043FB90 /* ViewModelTests.swift */; };
 		C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */; };
-		C4AFA1701A33D71F00040A9D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA16E1A33D71F00040A9D /* Main.storyboard */; };
 		C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1711A33D71F00040A9D /* Images.xcassets */; };
 		C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */; };
 		C4AFA1811A33D71F00040A9D /* SynchroSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA1801A33D71F00040A9D /* SynchroSwiftTests.swift */; };
@@ -66,7 +67,6 @@
 		C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1AF1A33DF4C00040A9D /* seed.json */; };
 		C4B4FD251A3E6DC800328772 /* iOSPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD241A3E6DC800328772 /* iOSPageView.swift */; };
 		C4B4FD271A3FA5BF00328772 /* SynchroPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */; };
-		C4C202D61A3FCD71008EE2EE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16C1A33D71F00040A9D /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +89,8 @@
 		C416C4FE1A38415E00FD789A /* BindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingTests.swift; sourceTree = "<group>"; };
 		C416C5001A38584300FD789A /* TokenConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenConverter.swift; sourceTree = "<group>"; };
 		C416C5021A38585500FD789A /* TokenConverterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenConverterTests.swift; sourceTree = "<group>"; };
+		C42323781A412B520032FFB5 /* LauncherView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LauncherView.xib; sourceTree = "<group>"; };
+		C423237A1A412BCF0032FFB5 /* LauncherViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LauncherViewController.swift; sourceTree = "<group>"; };
 		C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingContextTests.swift; sourceTree = "<group>"; };
 		C45611561A3D763900779139 /* iOSBorderWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSBorderWrapper.swift; sourceTree = "<group>"; };
 		C45611581A3D764900779139 /* iOSButtonWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSButtonWrapper.swift; sourceTree = "<group>"; };
@@ -118,8 +120,6 @@
 		C4AFA1651A33D71F00040A9D /* SynchroSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynchroSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AFA1691A33D71F00040A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C4AFA16C1A33D71F00040A9D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		C4AFA16F1A33D71F00040A9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C4AFA1711A33D71F00040A9D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C4AFA1741A33D71F00040A9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		C4AFA17A1A33D71F00040A9D /* SynchroSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SynchroSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,12 +188,12 @@
 				C4AFA1A31A33DE9E00040A9D /* Controls */,
 				C4AFA18A1A33DE9100040A9D /* Core */,
 				C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */,
-				C4AFA16C1A33D71F00040A9D /* ViewController.swift */,
-				C4AFA16E1A33D71F00040A9D /* Main.storyboard */,
 				C4AFA1711A33D71F00040A9D /* Images.xcassets */,
 				C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */,
 				C4AFA1681A33D71F00040A9D /* Supporting Files */,
 				C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */,
+				C42323781A412B520032FFB5 /* LauncherView.xib */,
+				C423237A1A412BCF0032FFB5 /* LauncherViewController.swift */,
 			);
 			path = SynchroSwift;
 			sourceTree = "<group>";
@@ -378,8 +378,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4AFA1701A33D71F00040A9D /* Main.storyboard in Resources */,
 				C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */,
+				C42323791A412B520032FFB5 /* LauncherView.xib in Resources */,
 				C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */,
 				C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */,
 			);
@@ -400,6 +400,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C456115B1A3D765A00779139 /* iOSCanvasWrapper.swift in Sources */,
+				C423237B1A412BCF0032FFB5 /* LauncherViewController.swift in Sources */,
 				C45611631A3D769F00779139 /* iOSListBoxWrapper.swift in Sources */,
 				C45611791A3D775C00779139 /* iOSStackPanelWrapper.swift in Sources */,
 				C45611771A3D775000779139 /* iOSSliderWrapper.swift in Sources */,
@@ -425,7 +426,6 @@
 				C45611811A3D77DE00779139 /* iOSWrapPanelWrapper.swift in Sources */,
 				C40D605A1A3C25C80048B5A0 /* CommandInstance.swift in Sources */,
 				C45611591A3D764900779139 /* iOSButtonWrapper.swift in Sources */,
-				C4C202D61A3FCD71008EE2EE /* ViewController.swift in Sources */,
 				C4AFA1A21A33DE9100040A9D /* ViewModel.swift in Sources */,
 				C4B4FD271A3FA5BF00328772 /* SynchroPageViewController.swift in Sources */,
 				C45611731A3D773200779139 /* iOSRectangleWrapper.swift in Sources */,
@@ -476,14 +476,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		C4AFA16E1A33D71F00040A9D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C4AFA16F1A33D71F00040A9D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
