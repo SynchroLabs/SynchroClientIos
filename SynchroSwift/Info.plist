@@ -43,5 +43,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationUsageDescription</key>
+	<string>Synchro would like to access location services</string>
 </dict>
 </plist>

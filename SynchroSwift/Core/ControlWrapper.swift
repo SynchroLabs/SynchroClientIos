@@ -358,17 +358,17 @@ public class ControlWrapper: NSObject
     // Basic token conversions
     //
     
-    public func toString(token: JToken, defaultValue: String = "") -> String
+    public func toString(token: JToken?, defaultValue: String = "") -> String
     {
         return TokenConverter.toString(token, defaultValue: defaultValue);
     }
     
-    public func toBoolean(token: JToken, defaultValue: Bool = false) -> Bool
+    public func toBoolean(token: JToken?, defaultValue: Bool = false) -> Bool
     {
         return TokenConverter.toBoolean(token, defaultValue: defaultValue);
     }
     
-    public func toDouble(value: JToken, defaultValue: Double = 0) -> Double
+    public func toDouble(value: JToken?, defaultValue: Double = 0) -> Double
     {
         return TokenConverter.toDouble(value, defaultValue: defaultValue);
     }
