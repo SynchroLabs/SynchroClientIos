@@ -7,17 +7,67 @@
 //
 
 import Foundation
+import UIKit
 
 private var logger = Logger.getLogger("iOSRectangleWrapper");
+
+class RectangleView : UIView
+{
+    var _color: UIColor? = UIColor.clearColor();
+    
+    override init()
+    {
+        super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
+    }
+
+    required init(coder aDecoder: NSCoder)
+    {
+        fatalError("init(coder:) has not been implemented");
+    }
+    
+    var color: UIColor?
+    {
+        get { return _color; }
+        set(value)
+        {
+            _color = value;
+            self.setNeedsDisplay();
+        }
+    }
+    
+    override func drawRect(rect: CGRect)
+    {
+        super.drawRect(rect);
+        
+        if let context = UIGraphicsGetCurrentContext()
+        {
+            if let color = _color?.CGColor
+            {
+                CGContextSetFillColorWithColor(context, color);
+            }
+            CGContextFillRect(context, rect);
+        }
+    }
+}
 
 public class iOSRectangleWrapper : iOSControlWrapper
 {
     public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating rectangle element");
-        
-        // !!! Implement
-        
         super.init(parent: parent, bindingContext: bindingContext);
+        
+        var rect = RectangleView();
+        self._control = rect;
+        
+        rect.layer.masksToBounds = true; // So that fill color will stay inside of border (if any)
+        
+        processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);
+        applyFrameworkElementDefaults(rect);
+        
+        processElementProperty(controlSpec["border"], { (value) in rect.layer.borderColor = self.toColor(value)?.CGColor });
+        processElementProperty(controlSpec["borderThickness"], { (value) in rect.layer.borderWidth = CGFloat(self.toDeviceUnits(value)) });
+        processElementProperty(controlSpec["cornerRadius"], { (value) in rect.layer.cornerRadius = CGFloat(self.toDeviceUnits(value)) });
+        processElementProperty(controlSpec["fill"], { (value) in rect.color = self.toColor(value) });
     }
 }

@@ -45,6 +45,9 @@ extension UInt32
 
 extension CGRect
 {
+    // These property adapters are all to make porting easier (Xamarin provides these properties in this way, and that's
+    // how we use them in the Xamarin iOS project).  They're also just a little cleaner.
+    //
     var x: CGFloat
     {
         get { return self.origin.x }
@@ -64,6 +67,22 @@ extension CGRect
     {
         get { return self.size.height }
         set(value) { self.size.height = value }
+    }
+    var left: CGFloat
+    {
+        get { return self.origin.x }
+    }
+    var top: CGFloat
+    {
+        get { return self.origin.y }
+    }
+    var right: CGFloat
+    {
+        get { return self.origin.x + self.size.width }
+    }
+    var bottom: CGFloat
+    {
+        get { return self.origin.y + self.size.height }
     }
 }
 
