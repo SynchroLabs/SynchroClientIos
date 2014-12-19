@@ -66,8 +66,18 @@ public class iOSRectangleWrapper : iOSControlWrapper
         applyFrameworkElementDefaults(rect);
         
         processElementProperty(controlSpec["border"], { (value) in rect.layer.borderColor = self.toColor(value)?.CGColor });
-        processElementProperty(controlSpec["borderThickness"], { (value) in rect.layer.borderWidth = CGFloat(self.toDeviceUnits(value)) });
-        processElementProperty(controlSpec["cornerRadius"], { (value) in rect.layer.cornerRadius = CGFloat(self.toDeviceUnits(value)) });
+        processElementProperty(controlSpec["borderThickness"], { (value) in
+            if let theValue = value
+            {
+                rect.layer.borderWidth = CGFloat(self.toDeviceUnits(theValue));
+            }
+        });
+        processElementProperty(controlSpec["cornerRadius"], { (value) in
+            if let theValue = value
+            {
+                rect.layer.cornerRadius = CGFloat(self.toDeviceUnits(theValue));
+            }
+        });
         processElementProperty(controlSpec["fill"], { (value) in rect.color = self.toColor(value) });
     }
 }

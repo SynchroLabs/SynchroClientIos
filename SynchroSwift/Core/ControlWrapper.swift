@@ -496,7 +496,7 @@ public class ControlWrapper: NSObject
                 processElementProperty(fontObject["face"],
                 { (value) in
                     var faceType = FontFaceType.FONT_DEFAULT;
-                    var faceTypeString = value.asString();
+                    var faceTypeString = value?.asString();
                     if faceTypeString == "Serif"
                     {
                         faceType = FontFaceType.FONT_SERIF;
@@ -514,7 +514,10 @@ public class ControlWrapper: NSObject
                 
                 processElementProperty(fontObject["size"],
                 { (value) in
-                    fontSetter.setSize(self.toDeviceUnitsFromTypographicPoints(value));
+                    if let theValue = value
+                    {
+                        fontSetter.setSize(self.toDeviceUnitsFromTypographicPoints(theValue));
+                    }
                 });
                 
                 processElementProperty(fontObject["bold"],
@@ -534,7 +537,10 @@ public class ControlWrapper: NSObject
         //
         processElementProperty(controlSpec["fontsize"],
         { (value) in
-            fontSetter.setSize(self.toDeviceUnitsFromTypographicPoints(value));
+            if let theValue = value
+            {
+                fontSetter.setSize(self.toDeviceUnitsFromTypographicPoints(theValue));
+            }
         });
     }
     

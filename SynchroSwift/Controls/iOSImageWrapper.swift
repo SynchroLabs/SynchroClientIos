@@ -39,7 +39,7 @@ public class iOSImageWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);
         applyFrameworkElementDefaults(image);
         processElementProperty(controlSpec["resource"], { (value) in
-            if (value.asString() == "")
+            if ((value == nil) || (value!.asString() == ""))
             {
                 image.image = nil;
             }

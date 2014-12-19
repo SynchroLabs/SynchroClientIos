@@ -142,8 +142,24 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
     
     public func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!)
     {
-        logger.info("Location manager failed: \(error)");
-        _status = LocationStatus.Failed;
+        _location = nil;
+        
+        if CLError.LocationUnknown == CLError(rawValue: error.code)
+        {
+            // "Location unknown" is not really an error.  It just indicates that the location couldn't be determined
+            // immediately (it's going to keep trying), per...
+            //
+            // https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManagerDelegate_Protocol/index.html#//apple_ref/occ/intfm/CLLocationManagerDelegate/locationManager:didFailWithError:
+            //
+            logger.info("Location manager could not immediately determine location, still trying");
+            _status = LocationStatus.Available;
+        }
+        else
+        {
+            logger.info("Location manager failed: \(error)");
+            _status = LocationStatus.Failed;
+            
+        }
         
         // Update the viewModel, and the server (if update on change specified)
         //

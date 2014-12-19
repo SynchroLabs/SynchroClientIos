@@ -68,13 +68,20 @@ public class CommandInstance
         var obj = JObject();
         for (parameterKey, parameterValue) in _parameters
         {
-            var value = parameterValue;
+            var value: JToken? = parameterValue;
             if (parameterValue.Type == JTokenType.String)
             {
                 value = PropertyValue.expand(parameterValue.asString()!, bindingContext: bindingContext);
             }
-                
-            obj[parameterKey] = value.deepClone();
+            
+            if let theValue = value
+            {
+                obj[parameterKey] = value!.deepClone();
+            }
+            else
+            {
+                obj[parameterKey] = JValue();
+            }
         }
         return obj;
     }

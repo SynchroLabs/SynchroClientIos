@@ -109,7 +109,7 @@ class BindingTests: XCTestCase
 
         var propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {colors[2].name}", bindingContext: bindingCtx);
         
-        XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand().asString()!);
+        XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand()!.asString()!);
     }
     
     func testPropertyValueModelUpdate()
@@ -130,7 +130,7 @@ class BindingTests: XCTestCase
         
         var propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {colors[2].name}", bindingContext: bindingCtx);
         
-        XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand().asString()!);
+        XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand()!.asString()!);
         
         (viewModel["colors"] as JArray)[1] = JObject(["name": JValue("Greenish"), "color": JValue("green"), "value": JValue("0x00ff00")]);
         for bindingContext in propVal.BindingContexts
@@ -138,7 +138,7 @@ class BindingTests: XCTestCase
             bindingContext.rebind();
         }
 
-        XCTAssertEqual("The Colors are Red, Greenish, and Blue", propVal.expand().asString()!);
+        XCTAssertEqual("The Colors are Red, Greenish, and Blue", propVal.expand()!.asString()!);
     }
 
     func testPropertyValueModelUpdateOneTimeToken()
@@ -159,7 +159,7 @@ class BindingTests: XCTestCase
         
         var propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {^colors[2].name}", bindingContext: bindingCtx);
         
-        XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand().asString()!);
+        XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand()!.asString()!);
         
         (viewModel["colors"] as JArray)[1] = JObject(["name": JValue("Greenish"), "color": JValue("green"), "value": JValue("0x00ff00")]);
         (viewModel["colors"] as JArray)[2] = JObject(["name": JValue("Blueish"), "color": JValue("blue"), "value": JValue("0x0000ff")]);
@@ -168,7 +168,7 @@ class BindingTests: XCTestCase
             bindingContext.rebind();
         }
         
-        XCTAssertEqual("The Colors are Red, Greenish, and Blue", propVal.expand().asString()!);
+        XCTAssertEqual("The Colors are Red, Greenish, and Blue", propVal.expand()!.asString()!);
     }
 
     func testPropertyValueIntToken()
@@ -181,7 +181,7 @@ class BindingTests: XCTestCase
         let bindingCtx = BindingContext(viewModel);
         
         var propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand();
+        var expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.Integer, expandedPropValToken.Type);
         XCTAssertEqual(420, expandedPropValToken.asInt()!);
@@ -197,7 +197,7 @@ class BindingTests: XCTestCase
         let bindingCtx = BindingContext(viewModel);
         
         var propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand();
+        var expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.Float, expandedPropValToken.Type);
         XCTAssertEqual(13.69, expandedPropValToken.asDouble()!);
@@ -213,7 +213,7 @@ class BindingTests: XCTestCase
         let bindingCtx = BindingContext(viewModel);
         
         var propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand();
+        var expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.Boolean, expandedPropValToken.Type);
         XCTAssertEqual(true, expandedPropValToken.asBool()!);
@@ -229,7 +229,7 @@ class BindingTests: XCTestCase
         let bindingCtx = BindingContext(viewModel);
         
         var propVal = PropertyValue("{!serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand();
+        var expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.Boolean, expandedPropValToken.Type);
         XCTAssertEqual(false, expandedPropValToken.asBool()!);
@@ -245,7 +245,7 @@ class BindingTests: XCTestCase
         let bindingCtx = BindingContext(viewModel);
         
         var propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand();
+        var expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.String, expandedPropValToken.Type);
         XCTAssertEqual("foo", expandedPropValToken.asString()!);
@@ -261,7 +261,7 @@ class BindingTests: XCTestCase
         let bindingCtx = BindingContext(viewModel);
         
         var propVal = PropertyValue("{!serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand();
+        var expandedPropValToken = propVal.expand()!;
         
         // When we negate a string, the type is coerced (converted) to bool, the inverted...
         XCTAssertEqual(JTokenType.Boolean, expandedPropValToken.Type);

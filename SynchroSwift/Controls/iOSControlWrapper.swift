@@ -699,10 +699,10 @@ public class iOSControlWrapper : ControlWrapper
         super.init(parent: parent, bindingContext: bindingContext);
     }
     
-    public func toOrientation(value: JToken, defaultOrientation: Orientation = Orientation.Horizontal) -> Orientation
+    public func toOrientation(value: JToken?, defaultOrientation: Orientation = Orientation.Horizontal) -> Orientation
     {
         var orientation = defaultOrientation;
-        var orientationValue = value.asString();
+        var orientationValue = value?.asString();
         if (orientationValue == "Horizontal")
         {
             orientation = Orientation.Horizontal;
@@ -714,10 +714,10 @@ public class iOSControlWrapper : ControlWrapper
         return orientation;
     }
     
-    public func toHorizontalAlignment(value: JToken, defaultAlignment: HorizontalAlignment = HorizontalAlignment.Left) -> HorizontalAlignment
+    public func toHorizontalAlignment(value: JToken?, defaultAlignment: HorizontalAlignment = HorizontalAlignment.Left) -> HorizontalAlignment
     {
         var alignment = defaultAlignment;
-        var alignmentValue = value.asString();
+        var alignmentValue = value?.asString();
         if (alignmentValue == "Left")
         {
             alignment = HorizontalAlignment.Left;
@@ -733,10 +733,10 @@ public class iOSControlWrapper : ControlWrapper
         return alignment;
     }
     
-    public func toVerticalAlignment(value: JToken, defaultAlignment: VerticalAlignment = VerticalAlignment.Top) -> VerticalAlignment
+    public func toVerticalAlignment(value: JToken?, defaultAlignment: VerticalAlignment = VerticalAlignment.Top) -> VerticalAlignment
     {
         var alignment = defaultAlignment;
-        var alignmentValue = value.asString();
+        var alignmentValue = value?.asString();
         if (alignmentValue == "Top")
         {
             alignment = VerticalAlignment.Top;
@@ -752,9 +752,9 @@ public class iOSControlWrapper : ControlWrapper
         return alignment;
     }
     
-    func toColor(value: JToken) -> UIColor?
+    func toColor(value: JToken?) -> UIColor?
     {
-        if let colorString = value.asString()
+        if let colorString = value?.asString()
         {
             if let color = ControlWrapper.getColor(colorString)
             {
@@ -772,7 +772,10 @@ public class iOSControlWrapper : ControlWrapper
             {
                 processElementProperty(token,
                 { (value) in
-                    thicknessSetter.setThickness(self.toDeviceUnits(value));
+                    if let theValue = value
+                    {
+                        thicknessSetter.setThickness(self.toDeviceUnits(theValue));
+                    }
                 });
             }
             else if (token is JObject)
@@ -781,19 +784,31 @@ public class iOSControlWrapper : ControlWrapper
                 
                 processElementProperty(marginObject["left"],
                 { (value) in
-                    thicknessSetter.setThicknessLeft(self.toDeviceUnits(value));
+                    if let theValue = value
+                    {
+                        thicknessSetter.setThicknessLeft(self.toDeviceUnits(theValue));
+                    }
                 });
                 processElementProperty(marginObject["top"],
                 { (value) in
-                    thicknessSetter.setThicknessTop(self.toDeviceUnits(value));
+                    if let theValue = value
+                    {
+                        thicknessSetter.setThicknessTop(self.toDeviceUnits(theValue));
+                    }
                 });
                 processElementProperty(marginObject["right"],
                 { (value) in
-                    thicknessSetter.setThicknessRight(self.toDeviceUnits(value));
+                    if let theValue = value
+                    {
+                        thicknessSetter.setThicknessRight(self.toDeviceUnits(theValue));
+                    }
                 });
                 processElementProperty(marginObject["bottom"],
                 { (value) in
-                    thicknessSetter.setThicknessBottom(self.toDeviceUnits(value));
+                    if let theValue = value
+                    {
+                        thicknessSetter.setThicknessBottom(self.toDeviceUnits(theValue));
+                    }
                 });
             }
         }
@@ -908,16 +923,19 @@ public class iOSControlWrapper : ControlWrapper
                 }
                 processElementProperty(controlSpec["height"],
                 { (value) in
-                    var frame = control.frame;
-                    var size = frame.size;
-                    size.height = CGFloat(self.toDeviceUnits(value));
-                    frame.size = size;
-                    control.frame = frame;
-                    if (control.superview != nil)
+                    if let theValue = value
                     {
-                        control.superview!.setNeedsLayout();
+                        var frame = control.frame;
+                        var size = frame.size;
+                        size.height = CGFloat(self.toDeviceUnits(theValue));
+                        frame.size = size;
+                        control.frame = frame;
+                        if (control.superview != nil)
+                        {
+                            control.superview!.setNeedsLayout();
+                        }
+                        //this.SizeToFit();
                     }
-                    //this.SizeToFit();
                 });
             }
             
@@ -935,16 +953,19 @@ public class iOSControlWrapper : ControlWrapper
                 }
                 processElementProperty(controlSpec["width"],
                 { (value) in
-                    var frame = control.frame;
-                    var size = frame.size;
-                    size.width = CGFloat(self.toDeviceUnits(value));
-                    frame.size = size;
-                    control.frame = frame;
-                    if (control.superview != nil)
+                    if let theValue = value
                     {
-                        control.superview!.setNeedsLayout();
+                        var frame = control.frame;
+                        var size = frame.size;
+                        size.width = CGFloat(self.toDeviceUnits(theValue));
+                        frame.size = size;
+                        control.frame = frame;
+                        if (control.superview != nil)
+                        {
+                            control.superview!.setNeedsLayout();
+                        }
+                        //this.SizeToFit();
                     }
-                    //this.SizeToFit();
                 });
             }
         }

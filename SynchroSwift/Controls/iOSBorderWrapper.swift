@@ -286,8 +286,18 @@ public class iOSBorderWrapper : iOSControlWrapper
         // If border thickness or padding change, need to resize view to child...
         //
         processElementProperty(controlSpec["border"], { (value) in border.layer.borderColor = self.toColor(value)?.CGColor });
-        processElementProperty(controlSpec["borderThickness"], { (value) in border.borderWidth = CGFloat(self.toDeviceUnits(value)) });
-        processElementProperty(controlSpec["cornerRadius"], { (value) in border.layer.cornerRadius = CGFloat(self.toDeviceUnits(value)) });
+        processElementProperty(controlSpec["borderThickness"], { (value) in
+            if let theValue = value
+            {
+                border.borderWidth = CGFloat(self.toDeviceUnits(theValue));
+            }
+        });
+        processElementProperty(controlSpec["cornerRadius"], { (value) in
+            if let theValue = value
+            {
+                border.layer.cornerRadius = CGFloat(self.toDeviceUnits(theValue));
+            }
+        });
         processThicknessProperty(controlSpec["padding"], thicknessSetter: PaddedViewThicknessSetter(paddedView: border));
         
         // "background" color handled by base class

@@ -40,7 +40,7 @@ class ViewModelTests: XCTestCase
         {
             (valueToken) in
             
-            serialString = valueToken.asString()!;
+            serialString = valueToken!.asString()!;
         });
 
         var serialValue = -1;
@@ -49,7 +49,7 @@ class ViewModelTests: XCTestCase
                 return JValue(serialValue);
             },
             setValue: { (valueToken) in
-                serialValue = valueToken.asInt()!;
+                serialValue = valueToken!.asInt()!;
             }
         );
 
@@ -73,7 +73,7 @@ class ViewModelTests: XCTestCase
         {
             (valueToken) in
             
-            serialString = valueToken.asString()!;
+            serialString = valueToken!.asString()!;
         });
 
         var titleString = "";
@@ -81,7 +81,7 @@ class ViewModelTests: XCTestCase
         {
             (valueToken) in
             
-            titleString = valueToken.asString()!;
+            titleString = valueToken!.asString()!;
             if (bindingsInitialized)
             {
                 XCTAssert(false, "Property binding setter for title should not be called after initialization (since its token wasn't impacted by the value binding change)");
@@ -94,7 +94,7 @@ class ViewModelTests: XCTestCase
                 return JValue(serialValue);
             },
             setValue: { (valueToken) in
-                serialValue = valueToken.asInt()!;
+                serialValue = valueToken!.asInt()!;
                 if (bindingsInitialized)
                 {
                     XCTAssert(false, "Value bining setter should not be called after initialization (its change shouldn't update itself)");
@@ -144,7 +144,7 @@ class ViewModelTests: XCTestCase
         {
             (valueToken) in
             
-            serialString = valueToken.asString()!;
+            serialString = valueToken!.asString()!;
         });
         
         var titleString = "";
@@ -152,7 +152,7 @@ class ViewModelTests: XCTestCase
         {
             (valueToken) in
             
-            titleString = valueToken.asString()!;
+            titleString = valueToken!.asString()!;
             if (bindingsInitialized)
             {
                 XCTAssert(false, "Property binding setter for title should not be called after initialization (since its token wasn't impacted by the deltas)");
@@ -165,7 +165,7 @@ class ViewModelTests: XCTestCase
                 return JValue(serialValue);
             },
             setValue: { (valueToken) in
-                serialValue = valueToken.asInt()!;
+                serialValue = valueToken!.asInt()!;
             }
         );
         

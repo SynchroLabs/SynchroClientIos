@@ -181,7 +181,7 @@ public class BoundAndPossiblyResolvedToken
     
     public var resolved: Bool { get { return _resolvedValue != nil; } }
     
-    public var resolvedValue: JToken
+    public var resolvedValue: JToken?
     {
         get
         {
@@ -191,7 +191,7 @@ public class BoundAndPossiblyResolvedToken
             }
             else
             {
-                var resolvedValue = _bindingContext.getValue()!;
+                var resolvedValue = _bindingContext.getValue();
                 if (_negated)
                 {
                     resolvedValue = JValue(!TokenConverter.toBoolean(resolvedValue));
@@ -315,7 +315,7 @@ public class PropertyValue
         });
     }
 
-    public func expand() -> JToken
+    public func expand() -> JToken?
     {
         if (_formatString == "%1$@")
         {
@@ -345,7 +345,7 @@ public class PropertyValue
         return value.contains("{");
     }
 
-    public class func expand(tokenString: String, bindingContext: BindingContext) -> JToken
+    public class func expand(tokenString: String, bindingContext: BindingContext) -> JToken?
     {
         var propertyValue = PropertyValue(tokenString, bindingContext: bindingContext);
         return propertyValue.expand();
@@ -362,7 +362,7 @@ public class PropertyValue
 // Actual bindings: Property (one-way, composite) and Value (two-way, single value)
 //
 
-public typealias SetViewValue = (JToken) -> (Void);
+public typealias SetViewValue = (JToken?) -> (Void);
 public typealias GetViewValue = () -> (JToken);
 
 // For one-way binding of any property (binding to a pattern string than can incorporate multiple bound values)
