@@ -111,4 +111,26 @@ class JsonTests: XCTestCase
         
         XCTAssert(((stuff["e"] as JArray)[0] as JObject)["f"] === stuff.selectToken("e[0].f"));
     }
+    
+    func testUpdate()
+    {
+        // This test reproduced a crashing (internal assert) failure, so just not crashing is considered a success...
+        //
+        var stuff = JObject();
+        
+        stuff["a"] = JValue();
+        stuff["b"] = JValue();
+
+        var vmItemValue = stuff.selectToken("a");
+        var rebindRequired = JToken.updateTokenValue(&vmItemValue!, newToken: JObject(["baz": JValue("Fraz")]));
+        
+        var expected = JObject(
+        [
+            "a": JObject(["baz": JValue("Fraz")]),
+            "b": JValue()
+        ]);
+        
+        XCTAssert(rebindRequired);
+        XCTAssert(expected.deepEquals(stuff));
+    }
 }

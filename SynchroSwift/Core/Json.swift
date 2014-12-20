@@ -465,7 +465,7 @@ public class JObject : JToken, SequenceType
     {
         for (key, val) in _tokens
         {
-            if (val == value)
+            if (val === value)
             {
                 return key;
             }

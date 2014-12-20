@@ -585,8 +585,8 @@ public class iOSControlWrapper : ControlWrapper
     var _control: UIView?;
     public var control: UIView? { get { return _control; } }
     
-    var _pageView: PageView;
-    public var pageView: PageView { get { return _pageView; } }
+    var _pageView: iOSPageView;
+    public var pageView: iOSPageView { get { return _pageView; } }
 
     var _margin = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
 
@@ -685,7 +685,7 @@ public class iOSControlWrapper : ControlWrapper
         }
     }
 
-    public init(pageView: PageView, stateManager: StateManager, viewModel: ViewModel, bindingContext: BindingContext, control: UIView)
+    public init(pageView: iOSPageView, stateManager: StateManager, viewModel: ViewModel, bindingContext: BindingContext, control: UIView)
     {
         _pageView = pageView;
         _control = control;
@@ -1026,7 +1026,7 @@ public class iOSControlWrapper : ControlWrapper
         return nil;
     }
     
-    public class func wrapControl(pageView: PageView, stateManager: StateManager, viewModel: ViewModel, bindingContext: BindingContext, control: UIView) -> iOSControlWrapper
+    public class func wrapControl(pageView: iOSPageView, stateManager: StateManager, viewModel: ViewModel, bindingContext: BindingContext, control: UIView) -> iOSControlWrapper
     {
         return iOSControlWrapper(pageView: pageView, stateManager: stateManager, viewModel: viewModel, bindingContext: bindingContext, control: control);
     }

@@ -210,6 +210,7 @@ public class ViewModel
             {
                 var viewModelDelta = element as JObject;
                 var path = (viewModelDelta as JObject)["path"]!.asString()!;
+                var value = viewModelDelta["value"]!.deepClone();
                 var changeType = (viewModelDelta as JObject)["change"]!.asString()!;
     
                 logger.debug("View model item change (\(changeType)) for path: {\(path)}");
@@ -226,10 +227,9 @@ public class ViewModel
                     var vmItemValue = _rootObject.selectToken(path);
                     if (vmItemValue != nil)
                     {
-                        let value = viewModelDelta["value"];
                         logger.debug("Updating view model item for path: \(path) to value: \(value)");
     
-                        var rebindRequired = JToken.updateTokenValue(&vmItemValue!, newToken: viewModelDelta["value"]!);
+                        var rebindRequired = JToken.updateTokenValue(&vmItemValue!, newToken: value);
                         bindingUpdates.append(BindingUpdate(bindingPath: path, rebindRequired: rebindRequired));
                     }
                     else
@@ -239,7 +239,6 @@ public class ViewModel
                 }
                 else if (changeType == "add")
                 {
-                    let value = viewModelDelta["value"];
                     logger.debug("Adding bound item for path:\(path) with value: \(value)");
                     bindingUpdates.append(BindingUpdate(bindingPath: path, rebindRequired: true));
     
@@ -255,7 +254,7 @@ public class ViewModel
                             var parentToken = _rootObject.selectToken(parentPath);
                             if ((parentToken != nil) && (parentToken is JArray))
                             {
-                                (parentToken as JArray).append(viewModelDelta["value"]!);
+                                (parentToken as JArray).append(value);
                             }
                             else
                             {
@@ -271,7 +270,7 @@ public class ViewModel
                             var parentToken = _rootObject.selectToken(parentPath);
                             if ((parentToken != nil) && (parentToken is JObject))
                             {
-                                (parentToken as JObject)[attributeName] = viewModelDelta["value"];
+                                (parentToken as JObject)[attributeName] = value;
                             }
                             else
                             {
@@ -281,7 +280,7 @@ public class ViewModel
                         else
                         {
                             // This is a root property...
-                            _rootObject[path] = viewModelDelta["value"];
+                            _rootObject[path] = value;
                         }
                     }
                     else

@@ -67,6 +67,7 @@
 		C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1AF1A33DF4C00040A9D /* seed.json */; };
 		C4B4FD251A3E6DC800328772 /* iOSPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD241A3E6DC800328772 /* iOSPageView.swift */; };
 		C4B4FD271A3FA5BF00328772 /* SynchroPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */; };
+		C4F0DC0E1A45603600C4BB42 /* Res in Resources */ = {isa = PBXBuildFile; fileRef = C4F0DC0D1A45603600C4BB42 /* Res */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +145,7 @@
 		C4AFA1AF1A33DF4C00040A9D /* seed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = seed.json; sourceTree = "<group>"; };
 		C4B4FD241A3E6DC800328772 /* iOSPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSPageView.swift; sourceTree = "<group>"; };
 		C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroPageViewController.swift; sourceTree = "<group>"; };
+		C4F0DC0D1A45603600C4BB42 /* Res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Res; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +187,7 @@
 		C4AFA1671A33D71F00040A9D /* SynchroSwift */ = {
 			isa = PBXGroup;
 			children = (
+				C4F0DC0D1A45603600C4BB42 /* Res */,
 				C4AFA1A31A33DE9E00040A9D /* Controls */,
 				C4AFA18A1A33DE9100040A9D /* Core */,
 				C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */,
@@ -379,6 +382,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */,
+				C4F0DC0E1A45603600C4BB42 /* Res in Resources */,
 				C42323791A412B520032FFB5 /* LauncherView.xib in Resources */,
 				C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */,
 				C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */,
