@@ -391,10 +391,10 @@ public class ControlWrapper: NSObject
         return toDeviceUnits(self.stateManager.deviceMetrics.TypographicPointsToMaaasUnits(toDouble(value)));
     }
     
-    public func toListSelectionMode(value: JToken, defaultSelectionMode: ListSelectionMode = ListSelectionMode.Single) -> ListSelectionMode
+    public func toListSelectionMode(value: JToken?, defaultSelectionMode: ListSelectionMode = ListSelectionMode.Single) -> ListSelectionMode
     {
         var selectionMode = defaultSelectionMode;
-        var selectionModeValue = toString(value);
+        var selectionModeValue = value?.asString();
         if (selectionModeValue == "None")
         {
             selectionMode = ListSelectionMode.None;

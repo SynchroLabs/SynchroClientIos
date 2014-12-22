@@ -133,4 +133,19 @@ class JsonTests: XCTestCase
         XCTAssert(rebindRequired);
         XCTAssert(expected.deepEquals(stuff));
     }
+    
+    func testArrayRemoveByObjectNotValue()
+    {
+        var red = JValue("Red");
+        var green1 = JValue("Green");
+        var green2 = JValue("Green");
+        
+        var arr = JArray([red, green1, green2]);
+        
+        arr.remove(green2);
+        
+        XCTAssertEqual(2, arr.count);
+        XCTAssert(red === arr[0]);
+        XCTAssert(green1 === arr[1]);
+    }
 }

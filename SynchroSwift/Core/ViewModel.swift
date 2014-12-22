@@ -210,7 +210,7 @@ public class ViewModel
             {
                 var viewModelDelta = element as JObject;
                 var path = (viewModelDelta as JObject)["path"]!.asString()!;
-                var value = viewModelDelta["value"]!.deepClone();
+                var value = viewModelDelta["value"]?.deepClone();
                 var changeType = (viewModelDelta as JObject)["change"]!.asString()!;
     
                 logger.debug("View model item change (\(changeType)) for path: {\(path)}");
@@ -224,63 +224,77 @@ public class ViewModel
                 }
                 else if (changeType == "update")
                 {
-                    var vmItemValue = _rootObject.selectToken(path);
-                    if (vmItemValue != nil)
+                    if (value != nil)
                     {
-                        logger.debug("Updating view model item for path: \(path) to value: \(value)");
-    
-                        var rebindRequired = JToken.updateTokenValue(&vmItemValue!, newToken: value);
-                        bindingUpdates.append(BindingUpdate(bindingPath: path, rebindRequired: rebindRequired));
+                        var vmItemValue = _rootObject.selectToken(path);
+                        if (vmItemValue != nil)
+                        {
+                            logger.debug("Updating view model item for path: \(path) to value: \(value!)");
+        
+                            var rebindRequired = JToken.updateTokenValue(&vmItemValue!, newToken: value!);
+                            bindingUpdates.append(BindingUpdate(bindingPath: path, rebindRequired: rebindRequired));
+                        }
+                        else
+                        {
+                            logger.error("VIEW MODEL SYNC WARNING: Unable to find existing value when processing update, something went wrong, path: \(path)");
+                        }
                     }
                     else
                     {
-                        logger.error("VIEW MODEL SYNC WARNING: Unable to find existing value when processing update, something went wrong, path: \(path)");
+                        logger.error("VIEW MODEL SYNC WARNING: Update change had no 'value' attribute, path: \(path)");
                     }
                 }
                 else if (changeType == "add")
                 {
                     logger.debug("Adding bound item for path:\(path) with value: \(value)");
                     bindingUpdates.append(BindingUpdate(bindingPath: path, rebindRequired: true));
-    
-                    // First, double check to make sure the path doesn't actually exist
-                    var vmItemValue = _rootObject.selectToken(path, errorWhenNoMatch: false);
-                    if (vmItemValue == nil)
+
+                    if (value != nil)
                     {
-                        if (path.hasSuffix("]"))
+                        // First, double check to make sure the path doesn't actually exist
+                        var vmItemValue = _rootObject.selectToken(path, errorWhenNoMatch: false);
+                        if (vmItemValue == nil)
                         {
-                            // This is an array element...
-                            var parenPos = path.lastIndexOf("[");
-                            var parentPath = path.substringToIndex(parenPos!);
-                            var parentToken = _rootObject.selectToken(parentPath);
-                            if ((parentToken != nil) && (parentToken is JArray))
+                            if (path.hasSuffix("]"))
                             {
-                                (parentToken as JArray).append(value);
+                                // This is an array element...
+                                var parenPos = path.lastIndexOf("[");
+                                var parentPath = path.substringToIndex(parenPos!);
+                                var parentToken = _rootObject.selectToken(parentPath);
+                                if ((parentToken != nil) && (parentToken is JArray))
+                                {
+                                    (parentToken as JArray).append(value!);
+                                }
+                                else
+                                {
+                                    logger.error("VIEW MODEL SYNC WARNING: Attempt to add array member, but parent didn't exist or was not an array, parent path: \(parentPath)");
+                                }
+                            }
+                            else if (path.contains("."))
+                            {
+                                // This is an object property...
+                                var dotPos = path.lastIndexOf(".");
+                                var parentPath = path.substringToIndex(dotPos!);
+                                var attributeName = path.substringFromIndex(advance(dotPos!, 1));
+                                var parentToken = _rootObject.selectToken(parentPath);
+                                if ((parentToken != nil) && (parentToken is JObject))
+                                {
+                                    (parentToken as JObject)[attributeName] = value;
+                                }
+                                else
+                                {
+                                    logger.error("VIEW MODEL SYNC WARNING: Attempt to add object property, but parent didn't exist or was not an object, parent path: \(parentPath)");
+                                }
                             }
                             else
                             {
-                                logger.error("VIEW MODEL SYNC WARNING: Attempt to add array member, but parent didn't exist or was not an array, parent path: \(parentPath)");
-                            }
-                        }
-                        else if (path.contains("."))
-                        {
-                            // This is an object property...
-                            var dotPos = path.lastIndexOf(".");
-                            var parentPath = path.substringToIndex(dotPos!);
-                            var attributeName = path.substringFromIndex(advance(dotPos!, 1));
-                            var parentToken = _rootObject.selectToken(parentPath);
-                            if ((parentToken != nil) && (parentToken is JObject))
-                            {
-                                (parentToken as JObject)[attributeName] = value;
-                            }
-                            else
-                            {
-                                logger.error("VIEW MODEL SYNC WARNING: Attempt to add object property, but parent didn't exist or was not an object, parent path: \(parentPath)");
+                                // This is a root property...
+                                _rootObject[path] = value;
                             }
                         }
                         else
                         {
-                            // This is a root property...
-                            _rootObject[path] = value;
+                            logger.error("VIEW MODEL SYNC WARNING: Add change had no 'value' attribute, path: \(path)");
                         }
                     }
                     else

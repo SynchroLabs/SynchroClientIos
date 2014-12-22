@@ -119,7 +119,7 @@ public class JToken: Equatable
                 else if (parent is JArray)
                 {
                     var parentArray = parent as JArray;
-                    var pos = find(parentArray, self);
+                    var pos = parentArray.findChildIndex(self);
                     if (useDotNotation)
                     {
                         if (!path.isEmpty)
@@ -255,7 +255,7 @@ public class JToken: Equatable
             else if (Parent is JArray)
             {
                 var parentArray = Parent as JArray;
-                var pos = find(parentArray, self);
+                var pos = parentArray.findChildIndex(self);
                 parentArray[pos!] = token;
                 bReplaced = true;
             }
@@ -297,9 +297,16 @@ public class JToken: Equatable
         return false; // Value-only change, or no change
     }
     
-    public class func deepEquals(token1: JToken, token2: JToken) -> Bool
+    public class func deepEquals(token1: JToken?, token2: JToken?) -> Bool
     {
-        return ((token1 === token2) || token1.deepEquals(token2));
+        if (token1 == nil)
+        {
+            return token2 == nil;
+        }
+        else
+        {
+            return ((token1 === token2) || token1!.deepEquals(token2));
+        }
     }
     
     public func asBool() -> Bool?
@@ -545,6 +552,19 @@ public class JArray : JToken, SequenceType, CollectionType
     
     public var count: Int { get { return _tokens.count; } }
     
+    public func findChildIndex(child: JToken) -> Int?
+    {
+        for i in 0..._tokens.count
+        {
+            if (_tokens[i] === child)
+            {
+                return i
+            }
+        }
+        
+        return nil;
+    }
+
     public func generate() -> IndexingGenerator<Array<JToken>>
     {
         return _tokens.generate()
@@ -573,7 +593,7 @@ public class JArray : JToken, SequenceType, CollectionType
     
     public func remove(object: JToken) -> Bool
     {
-        if let index = find(_tokens, object)
+        if let index = findChildIndex(object)
         {
             var oldValue = _tokens.removeAtIndex(index)
             oldValue.Parent = nil;
