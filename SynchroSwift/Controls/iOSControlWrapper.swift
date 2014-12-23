@@ -1105,7 +1105,7 @@ public class iOSControlWrapper : ControlWrapper
         return controlWrapper;
     }
     
-    public func createControls(controlList: JArray, onCreateControl: ((JObject, iOSControlWrapper) -> (Void))? = nil)
+    public func createControls(#controlList: JArray, onCreateControl: ((JObject, iOSControlWrapper) -> (Void))? = nil)
     {
         super.createControls(self.bindingContext, controlList: controlList,
         { (controlContext, controlSpec) in

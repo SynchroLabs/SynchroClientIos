@@ -415,7 +415,7 @@ public class ValueBinding
     {
         if (_setViewValue != nil)
         {
-            _setViewValue!(_bindingContext.getValue()!);
+            _setViewValue!(_bindingContext.getValue());
         }
     }
     

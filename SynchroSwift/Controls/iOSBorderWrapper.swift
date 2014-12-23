@@ -304,7 +304,7 @@ public class iOSBorderWrapper : iOSControlWrapper
         
         if let contentsArray = controlSpec["contents"]? as? JArray
         {
-            createControls(contentsArray, { (childControlSpec, childControlWrapper) in
+            createControls(controlList: contentsArray, { (childControlSpec, childControlWrapper) in
                 if let control = childControlWrapper.control
                 {
                     border.addSubview(control);

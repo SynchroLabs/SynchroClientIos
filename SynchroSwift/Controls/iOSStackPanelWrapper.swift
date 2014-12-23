@@ -388,7 +388,7 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         
         if let contentsArray = controlSpec["contents"]? as? JArray
         {
-            createControls(contentsArray, { (childControlSpec, childControlWrapper) in
+            createControls(controlList: contentsArray, { (childControlSpec, childControlWrapper) in
                 if let childControl = childControlWrapper.control
                 {
                     stackPanel.addSubview(childControl);
