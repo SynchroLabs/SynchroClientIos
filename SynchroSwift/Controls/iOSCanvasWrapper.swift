@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 private var logger = Logger.getLogger("iOSCanvasWrapper");
 
@@ -15,9 +16,39 @@ public class iOSCanvasWrapper : iOSControlWrapper
     public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating canvas element");
-        
-        // !!! Implement
-        
         super.init(parent: parent, bindingContext: bindingContext);
+        
+        var canvas = UIView();
+        self._control = canvas;
+        
+        processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 50);
+        applyFrameworkElementDefaults(canvas);
+        
+        if let contents = controlSpec["contents"] as? JArray
+        {
+            createControls(controlList: contents, { (childControlSpec, childControlWrapper) in
+                childControlWrapper.processElementProperty(childControlSpec["left"], { (value) in
+                    if let theValue = value
+                    {
+                        var childFrame = childControlWrapper.control!.frame;
+                        childFrame.x = CGFloat(self.toDeviceUnits(theValue));
+                        childControlWrapper.control!.frame = childFrame;
+                        // !!! Resize canvas to contain control
+                    }
+                });
+                childControlWrapper.processElementProperty(childControlSpec["top"], { (value) in
+                    if let theValue = value
+                    {
+                        var childFrame = childControlWrapper.control!.frame;
+                        childFrame.y = CGFloat(self.toDeviceUnits(theValue));
+                        childControlWrapper.control!.frame = childFrame;
+                        // !!! Resize canvas to contain control
+                    }
+                });
+                
+                canvas.addSubview(childControlWrapper.control!);
+            });
+        }
+
     }
 }

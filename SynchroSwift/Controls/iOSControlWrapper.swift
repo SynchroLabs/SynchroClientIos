@@ -758,7 +758,7 @@ public class iOSControlWrapper : ControlWrapper
         {
             if let color = ControlWrapper.getColor(colorString)
             {
-                return UIColor(red: CGFloat(color.r/255), green: CGFloat(color.g/255), blue: CGFloat(color.b/255), alpha: CGFloat(color.a/255));
+                return UIColor(red: CGFloat(color.r)/255.0, green: CGFloat(color.g)/255.0, blue: CGFloat(color.b)/255.0, alpha: CGFloat(color.a)/255.0);
             }
         }
         return nil;

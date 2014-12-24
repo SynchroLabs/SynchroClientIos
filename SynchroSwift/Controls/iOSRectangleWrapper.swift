@@ -41,9 +41,9 @@ class RectangleView : UIView
         
         if let context = UIGraphicsGetCurrentContext()
         {
-            if let color = _color?.CGColor
+            if let theColor = _color?.CGColor
             {
-                CGContextSetFillColorWithColor(context, color);
+                CGContextSetFillColorWithColor(context, theColor);
             }
             CGContextFillRect(context, rect);
         }

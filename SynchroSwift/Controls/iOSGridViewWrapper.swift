@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 private var logger = Logger.getLogger("iOSGridViewWrapper");
 
@@ -15,9 +16,15 @@ public class iOSGridViewWrapper : iOSControlWrapper
     public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating grid view element");
-        
-        // !!! Implement
-        
         super.init(parent: parent, bindingContext: bindingContext);
+        
+        var gridViewLaout = UICollectionViewFlowLayout();
+        var gridView = UICollectionView(frame: CGRect(), collectionViewLayout: gridViewLaout);
+        self._control = gridView;
+        
+        processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 50);
+        applyFrameworkElementDefaults(gridView);
+        
+        // !!! TODO - iOS Grid View
     }
 }
