@@ -29,9 +29,11 @@ public class WrapPanelCell : UICollectionViewCell
         // BackgroundView = new UIView { BackgroundColor = UIColor.Orange };
         // SelectedBackgroundView = new UIView { BackgroundColor = UIColor.Green };
         //
-        contentView.layer.borderColor = UIColor.lightGrayColor().CGColor;
-        contentView.layer.borderWidth = 2.0;
-        contentView.backgroundColor = UIColor.whiteColor();
+        // Useful for layout debug:
+        //
+        // contentView.layer.borderColor = UIColor.lightGrayColor().CGColor;
+        // contentView.layer.borderWidth = 2.0;
+        // contentView.backgroundColor = UIColor.whiteColor();
     }
 
     required public init(coder aDecoder: NSCoder)
@@ -49,7 +51,7 @@ public class WrapPanelCell : UICollectionViewCell
     }
 }
 
-public class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSource
+public class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 {
     var controlWrappers = [iOSControlWrapper]();
 
@@ -93,24 +95,13 @@ public class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSourc
     {
         return false;
     }
-
-    // Not sure I exactly understand the magic of this particular trainwrec, but see:
-    //
-    //    http://forums.xamarin.com/discussion/531/how-can-i-provide-uicollectionviewdelegate-getsizeforitem-in-uicollectionviewcontroller
-    //    https://bugzilla.xamarin.com/show_bug.cgi?id=8716
-    //
-    /*
-    [Export("collectionView:layout:sizeForItemAtIndexPath:")]
-    public virtual SizeF SizeForItemAtIndexPath(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
-    {
-        return this.SizeForItemAtIndexPath(indexPath);
-    }
-    */
     
-    public func sizeForItemAtIndexPath(collectionView: UICollectionView, layout: UICollectionViewLayout, indexPath: NSIndexPath) -> CGSize
+    // UICollectionViewDelegateFlowLayout
+    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
     {
         return self.sizeForItemAtIndexPath(indexPath);
     }
+
     
     public func sizeForItemAtIndexPath(indexPath: NSIndexPath) -> CGSize
     {
@@ -468,6 +459,7 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
         var source = WrapPanelCollectionViewSource();
         var layout = WrapPanelCollectionViewLayout(source: source);
         var view = WrapPanelCollectionView(controlWrapper: self, layout: layout);
+        view.delegate = source;
         
         self._control = view;
         
