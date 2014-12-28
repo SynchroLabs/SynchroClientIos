@@ -32,6 +32,11 @@ extension String
         return nil;
     }
 
+    subscript (i: Int) -> String
+    {
+        return String(Array(self)[i])
+    }
+    
     var length: Int { get { return countElements(self); } }
 }
 

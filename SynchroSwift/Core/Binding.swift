@@ -207,14 +207,162 @@ public class BoundAndPossiblyResolvedToken
         {
             if let formatSpec = _formatSpec
             {
-                // !!! Apply formatSpec to format numbers...
+                // This is where we apply formatSpec to format numbers...
                 //
                 // This is what we have for formatting on iOS: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Strings/Articles/formatSpecifiers.html
                 //
-                // And we'll support some defined subset of: http://msdn.microsoft.com/en-us/library/dwhawy9k(v=vs.110).aspx
+                // And we support some defined subset of: http://msdn.microsoft.com/en-us/library/dwhawy9k(v=vs.110).aspx
                 //
                 // If formatting succeeds, return formatted, else fall through to general (non-formatted) result
                 //
+                if let numericValue = _bindingContext.getValue()?.asDouble()
+                {
+                    var formatSpecifier = formatSpec[0];
+                    var formatPrecision: Int? = nil;
+                    if formatSpec.length > 1
+                    {
+                        formatPrecision = formatSpec.substring(1).toInt();
+                        if (formatPrecision == nil)
+                        {
+                            logger.error("Format precision was provided, but was not an integer, was: \"\(formatSpec.substring(1))\"");
+                        }
+                    }
+                    
+                    switch formatSpecifier
+                    {
+                        case "C", "c": // Currency
+                            logger.error("Currency formatting not supported");
+                        
+                        case "D", "d": // Decimal
+                            var intVal = Int(numericValue);
+                            var formatter = NSNumberFormatter();
+                            formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
+                            formatter.usesGroupingSeparator = false;
+                            formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
+                            formatter.roundingIncrement = 0;
+                            if (formatPrecision != nil)
+                            {
+                                formatter.minimumIntegerDigits = formatPrecision!
+                            }
+                            if let result = formatter.stringFromNumber(intVal)
+                            {
+                                return result;
+                            }
+                            else
+                            {
+                                logger.error("Decimal formatting failed");
+                            }
+                        
+                        case "E", "e": // Exponential
+                            var formatter = NSNumberFormatter();
+                            formatter.numberStyle = NSNumberFormatterStyle.ScientificStyle;
+                            formatter.maximumSignificantDigits = formatPrecision ?? 6; // 6 is the default on .NET (all locales)
+                            formatter.maximumSignificantDigits++; // Apparently, on .NET this is the number of digits after the decimal point, so we correct for that
+                            formatter.exponentSymbol = formatSpecifier;
+                            if let result = formatter.stringFromNumber(numericValue)
+                            {
+                                return result;
+                            }
+                            else
+                            {
+                                logger.error("Fixed-point formatting failed");
+                        }
+                        
+                        case "F", "f": // Fixed-point
+                            let decimalPlaces = formatPrecision ?? 2;  // 2 digits is the en_US locale default on .NET
+                            var formatter = NSNumberFormatter();
+                            formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
+                            formatter.usesGroupingSeparator = false;
+                            formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
+                            formatter.minimumFractionDigits = decimalPlaces;
+                            formatter.maximumFractionDigits = decimalPlaces;
+                            if let result = formatter.stringFromNumber(numericValue)
+                            {
+                                return result;
+                            }
+                            else
+                            {
+                                logger.error("Fixed-point formatting failed");
+                            }
+                        
+                        case "G", "g": // General
+                            logger.error("General formatting not supported");
+                        
+                        case "N", "n": // Number
+                            var formatter = NSNumberFormatter();
+                            formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
+                            formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
+                            if (formatPrecision != nil)
+                            {
+                                formatter.minimumFractionDigits = formatPrecision!;
+                                formatter.maximumFractionDigits = formatPrecision!;
+                            }
+                            if let result = formatter.stringFromNumber(numericValue)
+                            {
+                                return result;
+                            }
+                            else
+                            {
+                                logger.error("Number formatting failed");
+                            }
+                        
+                        case "P", "p": // Percent
+                            let decimalPlaces = formatPrecision ?? 0;
+                            var formatter = NSNumberFormatter();
+                            formatter.numberStyle = NSNumberFormatterStyle.PercentStyle;
+                            formatter.usesGroupingSeparator = false;
+                            formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
+                            formatter.maximumFractionDigits = decimalPlaces;
+                            if let result = formatter.stringFromNumber(numericValue)
+                            {
+                                return result;
+                            }
+                            else
+                            {
+                                logger.error("Percentage formatting failed");
+                            }
+
+                        case "R", "r": // Round-trip
+                            logger.error("Round-trip formatting not supported");
+
+                        case "X":
+                            if  (numericValue >= 0)
+                            {
+                                if formatPrecision != nil
+                                {
+                                    return String(format: "%0*X", formatPrecision!, UInt(numericValue));
+                                }
+                                else
+                                {
+                                    return String(format: "%X", UInt(numericValue));
+                                }
+                            }
+                            else
+                            {
+                                logger.error("Hex formatting not support on negative values like: \(numericValue)");
+                            }
+                        
+                        case "x": // Hex
+                            if  (numericValue >= 0)
+                            {
+                                if formatPrecision != nil
+                                {
+                                    return String(format: "%0*x", formatPrecision!, UInt(numericValue));
+                                }
+                                else
+                                {
+                                    return String(format: "%x", UInt(numericValue));
+                                }
+                            }
+                            else
+                            {
+                                logger.error("Hex formatting not support on negative values like: \(numericValue)");
+                            }
+                        
+                        default:
+                            logger.error("Unknown numeric format specification: \"\(formatSpecifier)\"");
+                    }
+                }
             }
             
             return TokenConverter.toString(self.resolvedValue);
@@ -237,7 +385,7 @@ public class BoundAndPossiblyResolvedToken
 //
 // The token is a one-time binding that will resolve to a number and then be formatted as a percentage with two decimal places:
 //
-//    "The scaling factor is 140.00 %"
+//    "The scaling factor is 140.00%"
 //
 private var _braceContentsRE = Regex("[{]([^}]*)[}]");
 

@@ -268,4 +268,129 @@ class BindingTests: XCTestCase
         XCTAssertEqual(false, expandedPropValToken.asBool()!);
     }
 
+    func testNumericFormattingIntNoSpec()
+    {
+        let viewModel = JObject(
+        [
+            "serial": JValue(69),
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The number is: {serial}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The number is: 69", propVal.expand()!.asString()!);
+    }
+
+    func testNumericFormattingFloatNoSpec()
+    {
+        let viewModel = JObject(
+        [
+            "serial": JValue(13.69),
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The number is: {serial}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The number is: 13.69", propVal.expand()!.asString()!);
+    }
+
+    func testNumericFormattingAsPercentage()
+    {
+        let viewModel = JObject(
+        [
+            "intVal": JValue(13),
+            "doubleVal": JValue(0.69139876),
+            "strVal": JValue("threeve"),
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The int percentage is {intVal:P}, the double is: {doubleVal:P2}, and the str is {strVal:P2}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The int percentage is 1300%, the double is: 69.14%, and the str is threeve", propVal.expand()!.asString()!);
+    }
+
+    func testNumericFormattingAsDecimal()
+    {
+        let viewModel = JObject(
+        [
+            "intVal": JValue(-13420),
+            "doubleVal": JValue(69.139876),
+            "strVal": JValue("threeve"),
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The int val is {intVal:D}, the double val is: {doubleVal:D4}, and the str val is {strVal:D2}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The int val is -13420, the double val is: 0069, and the str val is threeve", propVal.expand()!.asString()!);
+    }
+
+    func testNumericFormattingAsNumber()
+    {
+        let viewModel = JObject(
+        [
+            "intVal": JValue(-13420),
+            "doubleVal": JValue(69.139876),
+            "strVal": JValue("threeve"),
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The int val is {intVal:N}, the double val is: {doubleVal:N4}, and the str val is {strVal:N2}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The int val is -13,420, the double val is: 69.1399, and the str val is threeve", propVal.expand()!.asString()!);
+    }
+
+    func testNumericFormattingAsHex()
+    {
+        let viewModel = JObject(
+        [
+            "intVal": JValue(254),
+            "doubleVal": JValue(254.139876),
+            "strVal": JValue("threeve"),
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The int val is {intVal:x}, the double val is: {doubleVal:X4}, and the str val is {strVal:X2}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The int val is fe, the double val is: 00FE, and the str val is threeve", propVal.expand()!.asString()!);
+    }
+
+    func testNumericFormattingAsFixedPoint()
+    {
+        let viewModel = JObject(
+        [
+            "intVal": JValue(-13420),
+            "doubleVal": JValue(254.139876),
+            "strVal": JValue("threeve"),
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The int val is {intVal:F2}, the double val is: {doubleVal:F4}, and the str val is {strVal:F2}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The int val is -13420.00, the double val is: 254.1399, and the str val is threeve", propVal.expand()!.asString()!);
+    }
+
+    func testNumericFormattingAsExponential()
+    {
+        let viewModel = JObject(
+        [
+            "intVal": JValue(-69),
+            "doubleVal": JValue(69.123456789),
+            "strVal": JValue("threeve"),
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The int val is {intVal:E2}, the double val is: {doubleVal:e4}, and the str val is {strVal:e2}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The int val is -6.9E1, the double val is: 6.9123e1, and the str val is threeve", propVal.expand()!.asString()!);
+    }
+
+
 }
