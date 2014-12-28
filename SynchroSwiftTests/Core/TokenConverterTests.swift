@@ -66,14 +66,16 @@ class TokenConverterTests: XCTestCase
         var arrayVal = JArray([JValue("foo"), JValue("bar")]);
         var arrayValEmpty = JArray();
         var stringVal = JValue("12.34");
+        var stringNotNum = JValue("threeve");
         var intVal = JValue(13);
         var floatVal = JValue(13.69);
     
-        XCTAssertEqual(2, TokenConverter.toDouble(arrayVal));
-        XCTAssertEqual(0, TokenConverter.toDouble(arrayValEmpty));
-        XCTAssertEqual(12.34, TokenConverter.toDouble(stringVal));
-        XCTAssertEqual(13, TokenConverter.toDouble(intVal));
-        XCTAssertEqual(13.69, TokenConverter.toDouble(floatVal));
+        XCTAssertEqual(2, TokenConverter.toDouble(arrayVal)!);
+        XCTAssertEqual(0, TokenConverter.toDouble(arrayValEmpty)!);
+        XCTAssertEqual(12.34, TokenConverter.toDouble(stringVal)!);
+        XCTAssert(nil == TokenConverter.toDouble(stringNotNum));
+        XCTAssertEqual(13, TokenConverter.toDouble(intVal)!);
+        XCTAssertEqual(13.69, TokenConverter.toDouble(floatVal)!);
     }
 
 }

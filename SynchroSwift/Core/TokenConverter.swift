@@ -87,7 +87,7 @@ public class TokenConverter
         return result;
     }
     
-    public class func toDouble(token: JToken?, defaultValue: Double = 0) -> Double
+    public class func toDouble(token: JToken?, defaultValue: Double? = nil) -> Double?
     {
         var result = defaultValue;
     
@@ -96,8 +96,13 @@ public class TokenConverter
             switch (theToken.Type)
             {
                 case JTokenType.String:
+                    var scannedResult: Double = 0;
                     let scanner = NSScanner(string: theToken.asString()!);
-                    scanner.scanDouble(&result);
+                    if (scanner.scanDouble(&scannedResult))
+                    {
+                        result = scannedResult;
+                    }
+                
                 case JTokenType.Float, JTokenType.Integer:
                     result = theToken.asDouble()!;
                 case JTokenType.Array:

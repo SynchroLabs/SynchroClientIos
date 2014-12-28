@@ -392,5 +392,19 @@ class BindingTests: XCTestCase
         XCTAssertEqual("The int val is -6.9E1, the double val is: 6.9123e1, and the str val is threeve", propVal.expand()!.asString()!);
     }
 
+    func testNumericFormattingParsesStringAsNumber()
+    {
+        let viewModel = JObject(
+        [
+            "strVal": JValue("13"),
+        ]);
+    
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The numeric value is {strVal:F2}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The numeric value is 13.00", propVal.expand()!.asString()!);
+    }
+
 
 }

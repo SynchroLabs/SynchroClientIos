@@ -368,9 +368,13 @@ public class ControlWrapper: NSObject
         return TokenConverter.toBoolean(token, defaultValue: defaultValue);
     }
     
+    // !!! TokenConverter returns an optional (which will be nil in the case that the value could not be
+    //     coerced to a double.  This method should probably also return an optional, and everyone who calls
+    //     it should be checking to make sure it was a number (unless they passed in a default value).
+    //
     public func toDouble(value: JToken?, defaultValue: Double = 0) -> Double
     {
-        return TokenConverter.toDouble(value, defaultValue: defaultValue);
+        return TokenConverter.toDouble(value, defaultValue: defaultValue) ?? defaultValue;
     }
     
     // Conversion functions to go from Maaas units or typographic points to device units
