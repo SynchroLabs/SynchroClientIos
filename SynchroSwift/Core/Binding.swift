@@ -258,6 +258,7 @@ public class BoundAndPossiblyResolvedToken
                             formatter.numberStyle = NSNumberFormatterStyle.ScientificStyle;
                             formatter.maximumSignificantDigits = formatPrecision ?? 6; // 6 is the default on .NET (all locales)
                             formatter.maximumSignificantDigits++; // Apparently, on .NET this is the number of digits after the decimal point, so we correct for that
+                            formatter.minimumSignificantDigits = formatter.maximumSignificantDigits;
                             formatter.exponentSymbol = formatSpecifier;
                             if let result = formatter.stringFromNumber(numericValue)
                             {
@@ -289,14 +290,12 @@ public class BoundAndPossiblyResolvedToken
                             logger.error("General formatting not supported");
                         
                         case "N", "n": // Number
+                            let decimalPlaces = formatPrecision ?? 2;  // 2 digits is the en_US locale default on .NET
                             var formatter = NSNumberFormatter();
                             formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
                             formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
-                            if (formatPrecision != nil)
-                            {
-                                formatter.minimumFractionDigits = formatPrecision!;
-                                formatter.maximumFractionDigits = formatPrecision!;
-                            }
+                            formatter.minimumFractionDigits = decimalPlaces;
+                            formatter.maximumFractionDigits = decimalPlaces;
                             if let result = formatter.stringFromNumber(numericValue)
                             {
                                 return result;
@@ -307,12 +306,12 @@ public class BoundAndPossiblyResolvedToken
                             }
                         
                         case "P", "p": // Percent
-                            let decimalPlaces = formatPrecision ?? 0;
+                            let decimalPlaces = formatPrecision ?? 2; // 2 digits is the en_US locale default on .NET
                             var formatter = NSNumberFormatter();
                             formatter.numberStyle = NSNumberFormatterStyle.PercentStyle;
-                            formatter.usesGroupingSeparator = false;
                             formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
                             formatter.maximumFractionDigits = decimalPlaces;
+                            formatter.minimumFractionDigits = decimalPlaces;
                             if let result = formatter.stringFromNumber(numericValue)
                             {
                                 return result;
