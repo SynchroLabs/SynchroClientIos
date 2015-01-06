@@ -194,8 +194,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     
     public func getPickerContents(picker: UIPickerView) -> JToken
     {
-        logger.debug("Getting picker contents - NOOP");
-        assert(false, "Get picker contents not implemented");
+        fatalError("getPickerContents not implemented");
     }
     
     public func setPickerContents(picker: UIPickerView, bindingContext: BindingContext, itemContent: String)

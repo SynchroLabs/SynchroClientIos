@@ -38,14 +38,12 @@ public class JToken: Equatable
     
     public func deepEquals(token: JToken?) -> Bool
     {
-        assert(false, "This method must be overridden by the subclass");
-        return false; // Should never get hit, just to make command line compiler warning go away
+        fatalError("This method must be overridden by the subclass");
     }
     
     public func deepClone() -> JToken
     {
-        assert(false, "This method must be overridden by the subclass");
-        return JValue(); // Should never get hit, just to make command line compiler warning go away
+        fatalError("This method must be overridden by the subclass");
     }
     
     var _parent: JToken?;
@@ -88,54 +86,58 @@ public class JToken: Equatable
         }
     }
     
-    public var Path: String
+    private func getPath(useDotNotation: Bool = false) -> String
     {
-        get
+        var path = "";
+        
+        var parent = Parent;
+        if (parent != nil)
         {
-            var useDotNotation = false;
-            var path = "";
-    
-            var parent = Parent;
-            if (parent != nil)
+            path += Parent!.getPath(useDotNotation: useDotNotation);
+        
+            if (parent is JObject)
             {
-                path += Parent!.Path;
-    
-                if (parent is JObject)
+                var parentObject = parent as JObject;
+                for key in parentObject
                 {
-                    var parentObject = parent as JObject;
-                    for key in parentObject
-                    {
-                        if (parentObject[key]! == self)
-                        {
-                            if (!path.isEmpty)
-                            {
-                                path += ".";
-                            }
-                            path += key;
-                            break;
-                        }
-                    }
-                }
-                else if (parent is JArray)
-                {
-                    var parentArray = parent as JArray;
-                    var pos = parentArray.findChildIndex(self);
-                    if (useDotNotation)
+                    if (parentObject[key]! == self)
                     {
                         if (!path.isEmpty)
                         {
                             path += ".";
                         }
-                        path += String(pos!);
-                    }
-                    else
-                    {
-                        path += "[" + String(pos!) + "]";
+                        path += key;
+                        break;
                     }
                 }
             }
+            else if (parent is JArray)
+            {
+                var parentArray = parent as JArray;
+                var pos = parentArray.findChildIndex(self);
+                if (useDotNotation)
+                {
+                    if (!path.isEmpty)
+                    {
+                        path += ".";
+                    }
+                    path += String(pos!);
+                }
+                else
+                {
+                    path += "[" + String(pos!) + "]";
+                }
+            }
+        }
+        
+        return path;
+    }
     
-            return path;
+    public var Path: String
+    {
+        get
+        {
+            return getPath();
         }
     }
 

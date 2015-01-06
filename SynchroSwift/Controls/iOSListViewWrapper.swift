@@ -237,7 +237,7 @@ public class TableContainerView : UIView
     
     public func updateSize()
     {
-        assert(false, "This method must be overridden by the subclass");
+        fatalError("This method must be overridden by the subclass");
     }
     
     public override func layoutSubviews()
@@ -471,8 +471,7 @@ public class iOSListViewWrapper : iOSControlWrapper
     
     public func getListViewContents(tableView: UITableView) -> JToken
     {
-        logger.debug("Get listview contents - NOOP");
-        assert(false, "getListViewContents not implemented");
+        fatalError("getListViewContents not implemented");
     }
     
     public func setListViewContents(tableView: UITableView, bindingContext: BindingContext)

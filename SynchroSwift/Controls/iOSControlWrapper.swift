@@ -478,7 +478,7 @@ public class iOSFontSetter : FontSetter
     public func setFont(font: UIFont)
     {
         // abstract
-        assert(false, "Must override");
+        fatalError("Must override");
     }
     
     func createAndSetFont()

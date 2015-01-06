@@ -390,8 +390,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
     
     public func getListboxContents(tableView: UITableView) -> JToken
     {
-        logger.debug("Get listbox contents - NOOP");
-        assert(false, "getListboxContents not implemented");
+        fatalError("getListboxContents not implemented");
     }
     
     public func setListboxContents(tableView: UITableView, bindingContext: BindingContext, itemContent: String)

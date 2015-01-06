@@ -68,7 +68,7 @@ class ToggleSwitchView : PaddedView
         else
         {
             // We're the only ones who call this, so this should never happen...
-            assert(false, "Can only add UILabel or UISwitch");
+            fatalError("Can only add UILabel or UISwitch");
         }
         
         super.addSubview(view);

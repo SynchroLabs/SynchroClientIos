@@ -106,7 +106,7 @@ public class JsonWriter
             case JTokenType.Boolean:
                 WriteBoolean(writer, b: value.asBool()!);
             default:
-                assert(false, "Unknown object type \(value.Type)");
+                fatalError("Unknown object type \(value.Type)");
         }
     }
 

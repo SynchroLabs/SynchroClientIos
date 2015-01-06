@@ -135,22 +135,22 @@ public class PageView : NSObject
     
     public func createRootContainerControl(controlSpec: JObject) -> ControlWrapper?
     {
-        assert(false, "Must be overridden in derived class");
+        fatalError("Must be overridden in derived class");
     }
     
     public func clearContent()
     {
-        assert(false, "Must be overridden in derived class");
+        fatalError("Must be overridden in derived class");
     }
     
     public func setContent(content: ControlWrapper)
     {
-        assert(false, "Must be overridden in derived class");
+        fatalError("Must be overridden in derived class");
     }
     
     
     public func processMessageBox(messageBox: JObject, onCommand: CommandHandler)
     {
-        assert(false, "Must be overridden in derived class");
+        fatalError("Must be overridden in derived class");
     }
 }
