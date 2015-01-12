@@ -2,10 +2,12 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LauncherViewController" customModule="SynchroSwift">
             <connections>
+                <outlet property="tableView" destination="k0H-Xd-6BC" id="EZg-ef-xAG"/>
                 <outlet property="view" destination="iN0-l3-epB" id="lMJ-tU-Gy0"/>
             </connections>
         </placeholder>
@@ -14,17 +16,38 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqa-On-ULd">
-                    <rect key="frame" x="226" y="285" width="148" height="30"/>
-                    <state key="normal" title="Launch Local Sample">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a Synchro Application..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zNP-JI-ADf">
+                    <rect key="frame" x="10" y="73" width="236" height="34"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="236" id="egl-Jv-fpn"/>
+                        <constraint firstAttribute="height" constant="34" id="ga4-Pz-Btw"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="k0H-Xd-6BC" userLabel="AppListTableView">
+                    <rect key="frame" x="0.0" y="107" width="590" height="493"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <variation key="widthClass=compact" misplaced="YES">
+                        <rect key="frame" x="10" y="102" width="380" height="477"/>
+                    </variation>
                     <connections>
-                        <action selector="onRunSynchro:" destination="-1" eventType="touchUpInside" id="Jjr-5V-UtL"/>
+                        <outlet property="dataSource" destination="-1" id="2R2-1M-5cK"/>
+                        <outlet property="delegate" destination="-1" id="y97-hj-glv"/>
                     </connections>
-                </button>
+                </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="zNP-JI-ADf" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="0pR-YO-Nay"/>
+                <constraint firstItem="k0H-Xd-6BC" firstAttribute="top" secondItem="zNP-JI-ADf" secondAttribute="bottom" id="Nja-lj-OXZ"/>
+                <constraint firstAttribute="trailing" secondItem="k0H-Xd-6BC" secondAttribute="trailing" constant="10" id="hzk-NO-ilc"/>
+                <constraint firstItem="k0H-Xd-6BC" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="i4x-RP-dfq"/>
+                <constraint firstAttribute="bottom" secondItem="k0H-Xd-6BC" secondAttribute="bottom" id="rcv-37-ZrG"/>
+                <constraint firstItem="zNP-JI-ADf" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="topMargin" constant="65" id="vQW-Vo-upR"/>
+            </constraints>
+            <point key="canvasLocation" x="197" y="66"/>
         </view>
     </objects>
 </document>

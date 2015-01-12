@@ -67,6 +67,8 @@
 		C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1AF1A33DF4C00040A9D /* seed.json */; };
 		C4B4FD251A3E6DC800328772 /* iOSPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD241A3E6DC800328772 /* iOSPageView.swift */; };
 		C4B4FD271A3FA5BF00328772 /* SynchroPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */; };
+		C4B6418D1A63A3580038EFC3 /* AppDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B6418B1A63A3570038EFC3 /* AppDetailViewController.swift */; };
+		C4B6418E1A63A3580038EFC3 /* AppDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4B6418C1A63A3570038EFC3 /* AppDetailView.xib */; };
 		C4F0DC0E1A45603600C4BB42 /* Res in Resources */ = {isa = PBXBuildFile; fileRef = C4F0DC0D1A45603600C4BB42 /* Res */; };
 /* End PBXBuildFile section */
 
@@ -145,6 +147,8 @@
 		C4AFA1AF1A33DF4C00040A9D /* seed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = seed.json; sourceTree = "<group>"; };
 		C4B4FD241A3E6DC800328772 /* iOSPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSPageView.swift; sourceTree = "<group>"; };
 		C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroPageViewController.swift; sourceTree = "<group>"; };
+		C4B6418B1A63A3570038EFC3 /* AppDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDetailViewController.swift; path = ../AppDetailViewController.swift; sourceTree = "<group>"; };
+		C4B6418C1A63A3570038EFC3 /* AppDetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AppDetailView.xib; path = ../AppDetailView.xib; sourceTree = "<group>"; };
 		C4F0DC0D1A45603600C4BB42 /* Res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Res; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -194,9 +198,11 @@
 				C4AFA1711A33D71F00040A9D /* Images.xcassets */,
 				C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */,
 				C4AFA1681A33D71F00040A9D /* Supporting Files */,
-				C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */,
+				C4B6418C1A63A3570038EFC3 /* AppDetailView.xib */,
+				C4B6418B1A63A3570038EFC3 /* AppDetailViewController.swift */,
 				C42323781A412B520032FFB5 /* LauncherView.xib */,
 				C423237A1A412BCF0032FFB5 /* LauncherViewController.swift */,
+				C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */,
 			);
 			path = SynchroSwift;
 			sourceTree = "<group>";
@@ -386,6 +392,7 @@
 				C42323791A412B520032FFB5 /* LauncherView.xib in Resources */,
 				C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */,
 				C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */,
+				C4B6418E1A63A3580038EFC3 /* AppDetailView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +446,7 @@
 				C4AFA19D1A33DE9100040A9D /* Logger.swift in Sources */,
 				C40D605C1A3CC93C0048B5A0 /* ControlWrapper.swift in Sources */,
 				C4AFA1A01A33DE9100040A9D /* Transport.swift in Sources */,
+				C4B6418D1A63A3580038EFC3 /* AppDetailViewController.swift in Sources */,
 				C4AFA19A1A33DE9100040A9D /* Json.swift in Sources */,
 				C456117F1A3D77CC00779139 /* iOSWebViewWrapper.swift in Sources */,
 				C456116D1A3D76FA00779139 /* iOSPickerWrapper.swift in Sources */,
