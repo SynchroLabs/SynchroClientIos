@@ -84,6 +84,8 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
     func addClicked(sender: UIBarButtonItem)
     {
         logger.info("Add clicked...");
+        var appDetailVC = AppDetailViewController(appManager: _appManager);
+        self.navigationController?.pushViewController(appDetailVC, animated: true);
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
@@ -119,14 +121,11 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         if (editingStyle == UITableViewCellEditingStyle.Delete)
         {
             logger.info("Items deleted at row #\(indexPath.row)!");
-
-            // handle delete (by removing the data from your array and updating the tableview)
-            // !!! TODO
-            if let tv=tableView
+            if let tv = tableView
             {
-                /*
-                items.removeAtIndex(indexPath!.row)
-                */
+                var app = _appManager.apps[indexPath.row];
+                _appManager.remove(app);
+                _appManager.saveState();
                 tv.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             }
         }

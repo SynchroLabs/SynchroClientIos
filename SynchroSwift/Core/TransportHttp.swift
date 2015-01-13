@@ -20,9 +20,9 @@ public class TransportHttp : TransportBase, Transport
         super.init();
     }
     
-    public class func uriFromHostString(host: String, scheme: String = "http") -> NSURL
+    public class func uriFromHostString(host: String, scheme: String = "http") -> NSURL?
     {
-        return  NSURL(string: "\(scheme)://\(host)")!;
+        return NSURL(string: "\(scheme)://\(host)");
     }
     
     private func isSuccessStatusCode(response: NSHTTPURLResponse) -> Bool

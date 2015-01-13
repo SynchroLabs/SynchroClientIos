@@ -50,8 +50,7 @@ public class SynchroPageViewController : UIViewController
         // When using WebSocket transport:
         // Transport transport = new iOSTransportWs(this, _maaasApp.Endpoint);
         //
-        _app.endpoint = "localhost:1337/api/samples"; // !!! Shithammer for testing
-        var transport = TransportHttp(uri: TransportHttp.uriFromHostString(_app.endpoint));
+        var transport = TransportHttp(uri: TransportHttp.uriFromHostString(_app.endpoint)!);
         
         var backToMenu:(() -> Void)? = nil;
         if ((_appManager.appSeed == nil) && (self.navigationController != nil))

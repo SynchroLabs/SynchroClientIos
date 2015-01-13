@@ -95,6 +95,25 @@ public class SynchroAppManager
         _apps.append(app);
     }
     
+    public func remove(app: SynchroApp) -> Bool
+    {
+        var index: Int?;
+        for (idx, currApp) in enumerate(_apps)
+        {
+            if (app === currApp)
+            {
+                index = idx;
+            }
+        }
+        
+        if (index != nil)
+        {
+            self._apps.removeAtIndex(index!)
+            return true
+        }
+        return false;
+    }
+    
     public func updateApp(app: SynchroApp)
     {
         if _appSeed?.endpoint == app.endpoint
