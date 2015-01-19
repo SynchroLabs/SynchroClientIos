@@ -75,7 +75,7 @@ class PageContentScrollView : UIScrollView
     }
 }
 
-public class iOSPageView : PageView, UINavigationBarDelegate
+public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognizerDelegate
 {
     var _pageTitle = "";
     
@@ -98,16 +98,13 @@ public class iOSPageView : PageView, UINavigationBarDelegate
 
         self.setPageTitle = {(title) in self._pageTitle = title };
     
-        // http://stackoverflow.com/questions/24097831/how-to-move-content-of-uiviewcontroller-upwards-as-keypad-appears-using-swift
-        // http://stackoverflow.com/questions/24007650/selector-in-swift
-        //
-        /* !!! Cause crashing on tap gesture anywhere on screen...
-         *
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onKeyboardShown:"), name: UIKeyboardDidShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onKeyboardHidden:"), name: UIKeyboardDidHideNotification, object: nil);
 
-        DismissKeyboardOnBackgroundTap();
-        */
+        var tap = UITapGestureRecognizer(target: self, action: Selector("handleTap:"));
+        tap.delegate = self;
+        tap.cancelsTouchesInView = false;
+        _rootControlWrapper!.control!.addGestureRecognizer(tap);
     }
 
     deinit
@@ -115,29 +112,11 @@ public class iOSPageView : PageView, UINavigationBarDelegate
         NSNotificationCenter.defaultCenter().removeObserver(self);
     }
     
-    func DismissKeyboardOnBackgroundTap()
+    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool
     {
-        class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDelegate
-        {
-            override init()
-            {
-                super.init();
-            }
-            
-            func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool
-            {
-                return !(touch.view is UIButton)
-            }
-        }
-
-        // Add gesture recognizer to hide keyboard on tap
-        var tap = UITapGestureRecognizer(target: self, action: Selector("handleTap:"));
-        tap.delegate = GestureRecognizerDelegate();
-        tap.cancelsTouchesInView = false;
-        tap.addTarget(self, action: Selector("handleTap:"));
-        _rootControlWrapper!.control!.addGestureRecognizer(tap);
+        return !(touch.view is UIButton)
     }
-    
+
     @objc func handleTap(recognizer: UITapGestureRecognizer)
     {
         _rootControlWrapper!.control!.endEditing(true);
