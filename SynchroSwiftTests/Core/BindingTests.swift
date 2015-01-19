@@ -274,8 +274,16 @@ class BindingTests: XCTestCase
         let bindingCtx = BindingContext(viewModel);
         
         var propVal = PropertyValue("This is how you indicate a token: {{serial}}", bindingContext: bindingCtx);
-        
         XCTAssertEqual("This is how you indicate a token: {serial}", propVal.expand()!.asString()!);
+
+        propVal = PropertyValue("Open {{ only", bindingContext: bindingCtx);
+        XCTAssertEqual("Open { only", propVal.expand()!.asString()!);
+
+        propVal = PropertyValue("Close }} only", bindingContext: bindingCtx);
+        XCTAssertEqual("Close } only", propVal.expand()!.asString()!);
+
+        propVal = PropertyValue("{{{{Double}}}}", bindingContext: bindingCtx);
+        XCTAssertEqual("{{Double}}", propVal.expand()!.asString()!);
     }
 
     func testContainsBindingToken()
