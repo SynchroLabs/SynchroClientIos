@@ -494,7 +494,7 @@ public class PropertyValue
 
     public class func containsBindingTokens(value: String) -> Bool
     {
-        return value.contains("{");
+        return _braceContentsRE.isMatch(value);
     }
 
     public class func expand(tokenString: String, bindingContext: BindingContext) -> JToken?

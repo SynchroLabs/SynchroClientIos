@@ -278,6 +278,16 @@ class BindingTests: XCTestCase
         XCTAssertEqual("This is how you indicate a token: {serial}", propVal.expand()!.asString()!);
     }
 
+    func testContainsBindingToken()
+    {
+        XCTAssertFalse(PropertyValue.containsBindingTokens(""));
+        XCTAssertFalse(PropertyValue.containsBindingTokens("{{foo}}"));
+        XCTAssertFalse(PropertyValue.containsBindingTokens("Foo {{bar}} baz"));
+        XCTAssertTrue(PropertyValue.containsBindingTokens("{bar}"));
+        XCTAssertTrue(PropertyValue.containsBindingTokens("Foo {bar} baz"));
+        XCTAssertTrue(PropertyValue.containsBindingTokens("Foo {bar} {baz}"));
+    }
+    
     func testNumericFormattingIntNoSpec()
     {
         let viewModel = JObject(
