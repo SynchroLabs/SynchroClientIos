@@ -268,6 +268,16 @@ class BindingTests: XCTestCase
         XCTAssertEqual(false, expandedPropValToken.asBool()!);
     }
 
+    func testEscapedCurlyBrackets()
+    {
+        let viewModel = JObject();
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("This is how you indicate a token: {{serial}}", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("This is how you indicate a token: {serial}", propVal.expand()!.asString()!);
+    }
+
     func testNumericFormattingIntNoSpec()
     {
         let viewModel = JObject(
@@ -406,5 +416,20 @@ class BindingTests: XCTestCase
         XCTAssertEqual("The numeric value is 13.00", propVal.expand()!.asString()!);
     }
 
-
+    // This is an implementation detail, but internally to the formatter on iOS it use NSString formatString, in which "%" is a special
+    // character and must be escaped (which we do internally, and this test just verifies).
+    //
+    func testFormattingWithPercent()
+    {
+        let viewModel = JObject(
+        [
+            "strVal": JValue("13"),
+        ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        var propVal = PropertyValue("The numeric value is {strVal:F2}%", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("The numeric value is 13.00%", propVal.expand()!.asString()!);
+    }
 }

@@ -153,6 +153,42 @@ public class Regex
     }
 }
 
+extension Array
+{
+    func contains<T:AnyObject>(item:T) -> Bool
+    {
+        for element in self
+        {
+            if item === element as? T
+            {
+                return true
+            }
+        }
+        return false
+    }
+    
+    mutating func removeObject<T:AnyObject>(item:T) -> Bool
+    {
+        var index: Int?;
+        
+        for (idx, currApp) in enumerate(self)
+        {
+            if (item === currApp as? T)
+            {
+                index = idx;
+            }
+        }
+        
+        if (index != nil)
+        {
+            self.removeAtIndex(index!)
+            return true
+        }
+        return false;
+    }
+
+}
+
 public class Util
 {
     public class func isIOS7() -> Bool

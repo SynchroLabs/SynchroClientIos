@@ -275,8 +275,6 @@ public class iOSBorderWrapper : iOSControlWrapper
         logger.debug("Creating border element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        logger.debug("Creating border element");
-        
         var border = BorderView(controlWrapper: self);
         self._control = border;
         

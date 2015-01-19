@@ -84,11 +84,10 @@ public class SynchroAppManager
         return nil;
     }
 
-    // !!! Apparently when you hand back objects via property getters in Swift, the objected returned is a copy and immutable.
-    //     This means you can't just expose the app list via the "apps" property and let consumers add/remove apps.  The best
-    //     practice for this scenatio seems to be adding your own collection methods to the containing object.  Below is append,
-    //     which was need in testing.  When we get to the point where we're building the part of the UX that can find/add/remove
-    //     apps, we're going to need some more.
+    // When you hand back objects via property getters in Swift, the objected returned is a copy and immutable.
+    // This means you can't just expose the app list via the "apps" property and let consumers add/remove apps.
+    // The best practice for this scenatio seems to be adding your own collection methods to the containing object,
+    // as we have done with append and remove below.
     //
     public func append(app: SynchroApp)
     {
@@ -97,21 +96,7 @@ public class SynchroAppManager
     
     public func remove(app: SynchroApp) -> Bool
     {
-        var index: Int?;
-        for (idx, currApp) in enumerate(_apps)
-        {
-            if (app === currApp)
-            {
-                index = idx;
-            }
-        }
-        
-        if (index != nil)
-        {
-            self._apps.removeAtIndex(index!)
-            return true
-        }
-        return false;
+        return _apps.removeObject(app);
     }
     
     public func updateApp(app: SynchroApp)

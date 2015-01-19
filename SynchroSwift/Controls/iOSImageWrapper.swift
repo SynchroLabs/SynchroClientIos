@@ -13,15 +13,6 @@ private var logger = Logger.getLogger("iOSImageWrapper");
 
 public class iOSImageWrapper : iOSControlWrapper
 {
-    /*
-     * !!! This didn't really port.  Not sure we need it, but should verify...
-     *
-    private class func createNSUrl(uri: Uri) -> NSUrl
-    {
-        return NSUrl(uri.GetComponents(UriComponents.HttpRequestUrl, UriFormat.UriEscaped));
-    }
-    */
-
     public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating image element");
@@ -48,19 +39,29 @@ public class iOSImageWrapper : iOSControlWrapper
                 var url = NSURL(string: self.toString(value));
                 if let validUrl = url
                 {
+                    logger.info("Loading image for URL: \(validUrl)");
                     var request: NSURLRequest = NSURLRequest(URL: validUrl);
                     NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+                        let httpResponse = response as NSHTTPURLResponse;
                         if let err = error
                         {
                             logger.error("Failed to load image, reason: \(err.description)");
                         }
-                        else
+                        else if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300)
                         {
+                            logger.info("Image loaded from URL: \(validUrl)");
                             var loadedImage = UIImage(data: data)
                             image.image = loadedImage;
                         }
+                        else
+                        {
+                            logger.info("Image load failed with http status: \(httpResponse.statusCode) from URL: \(validUrl)");
+                        }
                     })
-
+                }
+                else
+                {
+                    logger.error("Invalid URL for image: \(url)");
                 }
             }
         });

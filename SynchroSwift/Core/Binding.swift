@@ -147,15 +147,6 @@ public class BoundAndPossiblyResolvedToken
     //
     var _negated = false;
     
-    // !!! TODO
-    //
-    // At least on iOS, I think the best way to handle numeric formatting is the do it here (in token resolution below).
-    // 
-    //   Here is the list of .NET number format specifiers: http://msdn.microsoft.com/en-us/library/dwhawy9k(v=vs.110).aspx
-    //   Here is the string format specifiers supported on iOS: https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Strings/Articles/formatSpecifiers.html
-    //
-    //   In pratice I think D, F, P, N, and X are what we should support.
-    //
     var _formatSpec: String?; // If present, this is the .NET format specifier (whatever came after the colon)
     
     public init(_ bindingContext: BindingContext, oneTime: Bool, negated: Bool, formatSpec: String? = nil)
@@ -386,7 +377,14 @@ public class BoundAndPossiblyResolvedToken
 //
 //    "The scaling factor is 140.00%"
 //
-private var _braceContentsRE = Regex("[{]([^}]*)[}]");
+
+// To deal with "escaped" braces (double open braces), our brace contents regex checks around our potential open brace
+// to see if another one precedes or follows is using:
+//
+//     Negative lookbehind (zero length assertion to make sure brace not preceded by brace) = (?!<[}])
+//     Negative lookahead (zero length assertion to make sure brace not followed by brace) = {?![}])
+//
+private var _braceContentsRE = Regex("(?<![{])[{](?![{])([^}]*)[}]");
 
 public class PropertyValue
 {
@@ -418,9 +416,11 @@ public class PropertyValue
         self._boundTokens = [BoundAndPossiblyResolvedToken]();
         var tokenIndex = 0;
         
-        // !!! Escape any %
-        
-        _formatString = _braceContentsRE.substituteMatches(tokenString, substitution:
+        // Escape any % to %% (format string will unescape them for us when called later)
+        //
+        let escapedString = tokenString.stringByReplacingOccurrencesOfString("%", withString: "%%", options: NSStringCompareOptions.LiteralSearch, range: nil)
+
+        _formatString = _braceContentsRE.substituteMatches(escapedString, substitution:
         {
             (match: String, matchGroups: [String]) -> String in
             
@@ -460,6 +460,11 @@ public class PropertyValue
 
             return "%\(++tokenIndex)$@";
         });
+        
+        // De-escape any escaped braces...
+        //
+        _formatString = _formatString.stringByReplacingOccurrencesOfString("{{", withString: "{", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        _formatString = _formatString.stringByReplacingOccurrencesOfString("}}", withString: "}", options: NSStringCompareOptions.LiteralSearch, range: nil)
     }
 
     public func expand() -> JToken?

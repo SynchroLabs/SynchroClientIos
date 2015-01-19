@@ -40,8 +40,7 @@ public class ViewModel
     
     public func unregisterValueBinding(valueBinding: ValueBinding)
     {
-        // !!!
-        // _valueBindings.Remove(valueBinding);
+        _valueBindings.removeObject(valueBinding);
     }
     
     public func createAndRegisterPropertyBinding(bindingContext: BindingContext, value: String, setValue: SetViewValue) -> PropertyBinding
@@ -53,8 +52,7 @@ public class ViewModel
     
     public func unregisterPropertyBinding(propertyBinding: PropertyBinding)
     {
-        // !!!
-        // _propertyBindings.Remove(propertyBinding);
+        _propertyBindings.removeObject(propertyBinding);
     }
     
     // Tokens in the view model have a "ViewModel." prefix (as the view model itself is a child node of a larger
@@ -75,12 +73,6 @@ public class ViewModel
     
     public func initializeViewModelData(viewModel: JObject)
     {
-        /* !!! Should viewModel be optional?
-        if (viewModel == nil)
-        {
-            viewModel = JObject();
-        }
-        */
         _rootObject = viewModel;
         _valueBindings.removeAll();
         _propertyBindings.removeAll();
