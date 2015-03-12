@@ -192,7 +192,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
             //
             return LocationStatus.PendingApproval;
         }
-        else if ((status == CLAuthorizationStatus.Authorized) || (status == CLAuthorizationStatus.AuthorizedWhenInUse))
+        else if ((status == CLAuthorizationStatus.AuthorizedAlways) || (status == CLAuthorizationStatus.AuthorizedWhenInUse))
         {
             return LocationStatus.Available;
         }
