@@ -61,7 +61,7 @@ public class StateManager
         {
             if let appDefinition = _appDefinition
             {
-                return (path == appDefinition["mainPage"]!.asString()!);
+                return (path == appDefinition["main"]!.asString()!);
             }
         }
         return false;
@@ -415,7 +415,7 @@ public class StateManager
     
     private func sendAppStartPageRequestAsync()
     {
-        self._path = _appDefinition!["mainPage"]!.asString()!;
+        self._path = _appDefinition!["main"]!.asString()!;
         
         logger.info("Request app start page at path: '\(self._path!)'");
         

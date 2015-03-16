@@ -29,10 +29,23 @@ class TransportTests: XCTestCase
             "name": JValue("synchro-samples"),
             "version": JValue("0.0.0"),
             "description": JValue("Synchro API Samples"),
-            "mainPage": JValue("menu"),
+            "main": JValue("menu"),
             "author": JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)")
         ])
     
+        // Apparently having SIX dictionary entries in an initializer blows up the Swift compiler
+        //
+        // http://stackoverflow.com/questions/26550775/if-condition-failing-with-expression-too-complex
+        // http://stackoverflow.com/questions/25810625/xcode-beta-6-1-and-xcode-6-gm-stuck-indexing-for-weird-reason/25813625#25813625
+        //
+        // So we work around by adding these values after the initializer...
+        //
+        expected["private"] = JValue(true);
+        expected["engines"] = JObject(
+            [
+                "synchro": JValue("*")
+            ]);
+
         var transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
         
         transport.getAppDefinition(
