@@ -122,7 +122,7 @@ public class SynchroPageViewController : UIViewController
     public override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval)
     {
         // this.InterfaceOrientation == UIInterfaceOrientation.
-        self.willAnimateRotationToInterfaceOrientation(toInterfaceOrientation, duration: duration);
+        super.willAnimateRotationToInterfaceOrientation(toInterfaceOrientation, duration: duration);
         
         // Do our own rotation handling here
         if (normalizeOrientation(toInterfaceOrientation) == UIInterfaceOrientation.Portrait)

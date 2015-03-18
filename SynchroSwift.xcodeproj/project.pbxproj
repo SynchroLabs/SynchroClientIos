@@ -356,9 +356,11 @@
 				TargetAttributes = {
 					C4AFA1641A33D71F00040A9D = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = LJNF82AZ4G;
 					};
 					C4AFA1791A33D71F00040A9D = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = LJNF82AZ4G;
 						TestTargetID = C4AFA1641A33D71F00040A9D;
 					};
 				};
@@ -602,6 +604,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -613,6 +617,7 @@
 				INFOPLIST_FILE = SynchroSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SynchroSwift.app/SynchroSwift";
 			};
 			name = Debug;
@@ -621,6 +626,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -628,6 +635,7 @@
 				INFOPLIST_FILE = SynchroSwiftTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SynchroSwift.app/SynchroSwift";
 			};
 			name = Release;
