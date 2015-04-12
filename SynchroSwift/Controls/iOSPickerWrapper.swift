@@ -160,8 +160,8 @@ public class iOSPickerWrapper : iOSControlWrapper
                 processElementBoundValue(
                     "items",
                     attributeValue: items,
-                    { () in self.getPickerContents(self._picker) },
-                    { (value) in self.setPickerContents(self._picker, bindingContext: self.getValueBinding("items")!.bindingContext, itemContent: theItemContent) }
+                    getValue: { () in self.getPickerContents(self._picker) },
+                    setValue: { (value) in self.setPickerContents(self._picker, bindingContext: self.getValueBinding("items")!.bindingContext, itemContent: theItemContent) }
                 );
             }
             
@@ -172,8 +172,8 @@ public class iOSPickerWrapper : iOSControlWrapper
                 processElementBoundValue(
                     "selection",
                     attributeValue: selection,
-                    { () in self.getPickerSelection(self._picker, selectionItem: theSelectionItem) },
-                    { (value) in self.setPickerSelection(self._picker, selectionItem: theSelectionItem, selection: value!) }
+                    getValue: { () in self.getPickerSelection(self._picker, selectionItem: theSelectionItem) },
+                    setValue: { (value) in self.setPickerSelection(self._picker, selectionItem: theSelectionItem, selection: value!) }
                 );
             }
         }
@@ -183,7 +183,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     {
         if (_textBox.isFirstResponder())
         {
-            var model = _picker.dataSource as BindingContextPickerModel;
+            var model = _picker.dataSource as! BindingContextPickerModel;
 
             var row = _picker.selectedRowInComponent(0);
             _textBox.text = model.pickerView(_picker, titleForRow: row, forComponent: 0);
@@ -203,7 +203,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     
         _selectionChangingProgramatically = true;
         
-        var model = picker.dataSource as BindingContextPickerModel;
+        var model = picker.dataSource as! BindingContextPickerModel;
         model.setContents(bindingContext, itemContent: itemContent);
         
         if let selectionBinding = getValueBinding("selection")
@@ -223,7 +223,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     
     public func getPickerSelection(picker: UIPickerView, selectionItem: String) -> JToken
     {
-        var model = picker.dataSource as BindingContextPickerModel;
+        var model = picker.dataSource as! BindingContextPickerModel;
         
         if (picker.selectedRowInComponent(0) >= 0)
         {
@@ -236,7 +236,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     {
         _selectionChangingProgramatically = true;
 
-        var model = picker.dataSource as BindingContextPickerModel;
+        var model = picker.dataSource as! BindingContextPickerModel;
     
         for (var i = 0; i < model.pickerView(picker, numberOfRowsInComponent: 0); i++)
         {
@@ -275,7 +275,7 @@ public class iOSPickerWrapper : iOSControlWrapper
                 
                 // The item click command handler resolves its tokens relative to the item clicked (not the list view).
                 //
-                var model = picker.dataSource as BindingContextPickerModel;
+                var model = picker.dataSource as! BindingContextPickerModel;
                 stateManager.sendCommandRequestAsync(command.Command, parameters: command.getResolvedParameters(model.getBindingContext(row)));
             }
         }

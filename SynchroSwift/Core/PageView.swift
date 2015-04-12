@@ -103,13 +103,13 @@ public class PageView : NSObject
             setPageTitle!(pageTitle!);
         }
         
-        if let elements = pageView["elements"]? as? JArray
+        if let elements = pageView["elements"] as? JArray
         {
             if (elements.count == 1)
             {
                 // The only element is the container of all page elements, so make it the root element, and populate it...
                 //
-                _rootContainerControlWrapper = createRootContainerControl(elements[0] as JObject);
+                _rootContainerControlWrapper = createRootContainerControl(elements[0] as! JObject);
             }
             else if (elements.count > 1)
             {

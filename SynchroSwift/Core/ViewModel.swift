@@ -33,7 +33,7 @@ public class ViewModel
     
     public func createAndRegisterValueBinding(bindingContext: BindingContext, getValue: GetViewValue, setValue: SetViewValue?) -> ValueBinding
     {
-        var valueBinding = ValueBinding(viewModel: self, bindingContext: bindingContext, getValue, setValue);
+        var valueBinding = ValueBinding(viewModel: self, bindingContext: bindingContext, getViewValue: getValue, setViewValue: setValue);
         _valueBindings.append(valueBinding);
         return valueBinding;
     }
@@ -45,7 +45,7 @@ public class ViewModel
     
     public func createAndRegisterPropertyBinding(bindingContext: BindingContext, value: String, setValue: SetViewValue) -> PropertyBinding
     {
-        var propertyBinding = PropertyBinding(bindingContext: bindingContext, value: value, setValue);
+        var propertyBinding = PropertyBinding(bindingContext: bindingContext, value: value, setViewValue: setValue);
         _propertyBindings.append(propertyBinding);
         return propertyBinding;
     }
@@ -65,7 +65,7 @@ public class ViewModel
     
         if (path.hasPrefix("ViewModel."))
         {
-            path = path.substring(countElements("ViewModel."));
+            path = path.substring(count("ViewModel."));
         }
     
         return path;
@@ -198,9 +198,9 @@ public class ViewModel
             //
             var removals = [JToken]();
     
-            for element in viewModelDeltas as JArray
+            for element in viewModelDeltas as! JArray
             {
-                var viewModelDelta = element as JObject;
+                var viewModelDelta = element as! JObject;
                 var path = (viewModelDelta as JObject)["path"]!.asString()!;
                 var value = viewModelDelta["value"]?.deepClone();
                 var changeType = (viewModelDelta as JObject)["change"]!.asString()!;
@@ -255,7 +255,7 @@ public class ViewModel
                                 var parentToken = _rootObject.selectToken(parentPath);
                                 if ((parentToken != nil) && (parentToken is JArray))
                                 {
-                                    (parentToken as JArray).append(value!);
+                                    (parentToken as! JArray).append(value!);
                                 }
                                 else
                                 {
@@ -271,7 +271,7 @@ public class ViewModel
                                 var parentToken = _rootObject.selectToken(parentPath);
                                 if ((parentToken != nil) && (parentToken is JObject))
                                 {
-                                    (parentToken as JObject)[attributeName] = value;
+                                    (parentToken as! JObject)[attributeName] = value;
                                 }
                                 else
                                 {

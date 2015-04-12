@@ -25,8 +25,8 @@ public class iOSWebViewWrapper : iOSControlWrapper
         applyFrameworkElementDefaults(webView);
         
         // !!! TODO - iOS Web View
-        processElementProperty(controlSpec["contents"], { (value) in webView.loadHTMLString(self.toString(value), baseURL: nil); });
-        processElementProperty(controlSpec["url"], { (value) in
+        processElementProperty(controlSpec["contents"], setValue: { (value) in webView.loadHTMLString(self.toString(value), baseURL: nil); });
+        processElementProperty(controlSpec["url"], setValue: { (value) in
             if let url = NSURL(string: self.toString(value))
             {
                 webView.loadRequest(NSURLRequest(URL: url));

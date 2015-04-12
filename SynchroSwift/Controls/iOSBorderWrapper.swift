@@ -15,7 +15,7 @@ public class PaddedView : UIView
 {
     var _padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
     
-    public override init()
+    public init()
     {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     }
@@ -283,14 +283,14 @@ public class iOSBorderWrapper : iOSControlWrapper
         
         // If border thickness or padding change, need to resize view to child...
         //
-        processElementProperty(controlSpec["border"], { (value) in border.layer.borderColor = self.toColor(value)?.CGColor });
-        processElementProperty(controlSpec["borderThickness"], { (value) in
+        processElementProperty(controlSpec["border"], setValue: { (value) in border.layer.borderColor = self.toColor(value)?.CGColor });
+        processElementProperty(controlSpec["borderThickness"], setValue: { (value) in
             if let theValue = value
             {
                 border.borderWidth = CGFloat(self.toDeviceUnits(theValue));
             }
         });
-        processElementProperty(controlSpec["cornerRadius"], { (value) in
+        processElementProperty(controlSpec["cornerRadius"], setValue: { (value) in
             if let theValue = value
             {
                 border.layer.cornerRadius = CGFloat(self.toDeviceUnits(theValue));
@@ -300,9 +300,9 @@ public class iOSBorderWrapper : iOSControlWrapper
         
         // "background" color handled by base class
         
-        if let contentsArray = controlSpec["contents"]? as? JArray
+        if let contentsArray = controlSpec["contents"] as? JArray
         {
-            createControls(controlList: contentsArray, { (childControlSpec, childControlWrapper) in
+            createControls(controlList: contentsArray, onCreateControl: { (childControlSpec, childControlWrapper) in
                 if let control = childControlWrapper.control
                 {
                     border.addSubview(control);

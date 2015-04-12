@@ -40,7 +40,7 @@ public class TokenConverter
             switch (theToken.Type)
             {
                 case JTokenType.Array:
-                    let array = theToken as JArray;
+                    let array = theToken as! JArray;
                     result = "\(array.count)";
                 case JTokenType.String:
                     result = theToken.asString()!;
@@ -70,13 +70,13 @@ public class TokenConverter
                     result = theToken.asBool()!;
                 case JTokenType.String:
                     let str = theToken.asString()!;
-                    result = countElements(str) > 0;
+                    result = count(str) > 0;
                 case JTokenType.Float:
                     result = theToken.asDouble()! != 0;
                 case JTokenType.Integer:
                     result = theToken.asInt() != 0;
                 case JTokenType.Array:
-                    let array = theToken as JArray;
+                    let array = theToken as! JArray;
                     result = array.count > 0;
                 case JTokenType.Object:
                     result = true;
@@ -106,7 +106,7 @@ public class TokenConverter
                 case JTokenType.Float, JTokenType.Integer:
                     result = theToken.asDouble()!;
                 case JTokenType.Array:
-                    let array = theToken as JArray;
+                    let array = theToken as! JArray
                     result = Double(array.count);
                 default: ()
             }

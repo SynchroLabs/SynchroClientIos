@@ -115,8 +115,8 @@ public class SynchroAppManager
     class func appFromJson(json: JObject) -> SynchroApp
     {
         var endpoint = json["endpoint"]!.asString()!;
-        var appDefinition = json["definition"]!.deepClone() as JObject;
-        var sessionId = json["sessionId"]?.asString()?;
+        var appDefinition = json["definition"]!.deepClone() as! JObject;
+        var sessionId = json["sessionId"]?.asString();
     
         return SynchroApp(endpoint: endpoint, appDefinition: appDefinition, sessionId: sessionId);
     }
@@ -198,7 +198,7 @@ public class SynchroAppManager
     public func loadState() -> Bool
     {
         var bundledState = loadBundledState()!;
-        var parsedBundledState = JToken.parse(bundledState) as JObject;
+        var parsedBundledState = JToken.parse(bundledState) as! JObject;
         
         if let seed = parsedBundledState["seed"] as? JObject
         {
@@ -219,7 +219,7 @@ public class SynchroAppManager
                 localState = bundledState;
                 saveLocalState(localState!);
             }
-            var parsedLocalState = JToken.parse(localState!) as JObject;
+            var parsedLocalState = JToken.parse(localState!) as! JObject;
             serializeFromJson(parsedLocalState);
         }
     

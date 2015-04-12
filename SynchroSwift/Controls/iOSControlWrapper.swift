@@ -303,7 +303,7 @@ public class FontMetrics
         
         if (weight != _weight)
         {
-            var weightDifference = Float(abs(weight.rawValue - _weight.rawValue));
+            var weightDifference = Float(abs(Int(weight.rawValue) - Int(_weight.rawValue)));
             // Max weight difference is 800 - We want to scale match from 1.0 (exact match) to 0.5 (opposite, or 800 difference)
             matchQuality *= (1.0 - (weightDifference / 1600));
         }
@@ -694,7 +694,7 @@ public class iOSControlWrapper : ControlWrapper
     
     public init(parent: ControlWrapper, bindingContext: BindingContext, control: UIView? = nil)
     {
-        _pageView = (parent as iOSControlWrapper).pageView;
+        _pageView = (parent as! iOSControlWrapper).pageView;
         _control = control;
         super.init(parent: parent, bindingContext: bindingContext);
     }
@@ -771,7 +771,7 @@ public class iOSControlWrapper : ControlWrapper
             if (token is JValue)
             {
                 processElementProperty(token,
-                { (value) in
+                setValue: { (value) in
                     if let theValue = value
                     {
                         thicknessSetter.setThickness(self.toDeviceUnits(theValue));
@@ -780,31 +780,31 @@ public class iOSControlWrapper : ControlWrapper
             }
             else if (token is JObject)
             {
-                var marginObject = token as JObject;
+                var marginObject = token as! JObject;
                 
                 processElementProperty(marginObject["left"],
-                { (value) in
+                setValue: { (value) in
                     if let theValue = value
                     {
                         thicknessSetter.setThicknessLeft(self.toDeviceUnits(theValue));
                     }
                 });
                 processElementProperty(marginObject["top"],
-                { (value) in
+                setValue: { (value) in
                     if let theValue = value
                     {
                         thicknessSetter.setThicknessTop(self.toDeviceUnits(theValue));
                     }
                 });
                 processElementProperty(marginObject["right"],
-                { (value) in
+                setValue: { (value) in
                     if let theValue = value
                     {
                         thicknessSetter.setThicknessRight(self.toDeviceUnits(theValue));
                     }
                 });
                 processElementProperty(marginObject["bottom"],
-                { (value) in
+                setValue: { (value) in
                     if let theValue = value
                     {
                         thicknessSetter.setThicknessBottom(self.toDeviceUnits(theValue));
@@ -922,7 +922,7 @@ public class iOSControlWrapper : ControlWrapper
                     self.frameProperties.heightSpec = SizeSpec.Explicit;
                 }
                 processElementProperty(controlSpec["height"],
-                { (value) in
+                setValue: { (value) in
                     if let theValue = value
                     {
                         var frame = control.frame;
@@ -952,7 +952,7 @@ public class iOSControlWrapper : ControlWrapper
                     self.frameProperties.widthSpec = SizeSpec.Explicit;
                 }
                 processElementProperty(controlSpec["width"],
-                { (value) in
+                setValue: { (value) in
                     if let theValue = value
                     {
                         var frame = control.frame;
@@ -982,14 +982,14 @@ public class iOSControlWrapper : ControlWrapper
         // name, minHeight, minWidth, maxHeight, maxWidth -- when/if supported
         //
         
-        processElementProperty(controlSpec["horizontalAlignment"], { (value) in self.horizontalAlignment = self.toHorizontalAlignment(value) });
-        processElementProperty(controlSpec["verticalAlignment"], { (value) in self.verticalAlignment = self.toVerticalAlignment(value) });
+        processElementProperty(controlSpec["horizontalAlignment"], setValue: { (value) in self.horizontalAlignment = self.toHorizontalAlignment(value) });
+        processElementProperty(controlSpec["verticalAlignment"], setValue: { (value) in self.verticalAlignment = self.toVerticalAlignment(value) });
         
-        processElementProperty(controlSpec["opacity"], { (value) in self.control!.layer.opacity = Float(self.toDouble(value)) });
+        processElementProperty(controlSpec["opacity"], setValue: { (value) in self.control!.layer.opacity = Float(self.toDouble(value)) });
         
-        processElementProperty(controlSpec["background"], { (value) in self.control!.backgroundColor = self.toColor(value) });
+        processElementProperty(controlSpec["background"], setValue: { (value) in self.control!.backgroundColor = self.toColor(value) });
         processElementProperty(controlSpec["visibility"],
-        { (value) in
+        setValue: { (value) in
             self.control!.hidden = !self.toBoolean(value);
             if (self.control?.superview != nil)
             {
@@ -999,11 +999,11 @@ public class iOSControlWrapper : ControlWrapper
         
         if let uiControl = self.control as? UIControl
         {
-            processElementProperty(controlSpec["enabled"], { (value) in uiControl.enabled = self.toBoolean(value) });
+            processElementProperty(controlSpec["enabled"], setValue: { (value) in uiControl.enabled = self.toBoolean(value) });
         }
         else
         {
-            processElementProperty(controlSpec["enabled"], { (value) in self.control!.userInteractionEnabled = self.toBoolean(value) });
+            processElementProperty(controlSpec["enabled"], setValue: { (value) in self.control!.userInteractionEnabled = self.toBoolean(value) });
         }
         
         processThicknessProperty(controlSpec["margin"], thicknessSetter: MarginThicknessSetter(controlWrapper: self));
@@ -1108,7 +1108,7 @@ public class iOSControlWrapper : ControlWrapper
     public func createControls(#controlList: JArray, onCreateControl: ((JObject, iOSControlWrapper) -> (Void))? = nil)
     {
         super.createControls(self.bindingContext, controlList: controlList,
-        { (controlContext, controlSpec) in
+        onCreateControl: { (controlContext, controlSpec) in
             var controlWrapper = iOSControlWrapper.createControl(self, bindingContext: controlContext, controlSpec: controlSpec);
             if (controlWrapper == nil)
             {

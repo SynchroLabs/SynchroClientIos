@@ -70,7 +70,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
         {
             processCommands(bindingSpec, commands: commands);
             
-            processElementBoundValue("value", attributeValue: bindingSpec["value"], { () in
+            processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in
                 var obj = JObject(
                 [
                     "available": JValue((self._status == LocationStatus.Available) || (self._status == LocationStatus.Active)),

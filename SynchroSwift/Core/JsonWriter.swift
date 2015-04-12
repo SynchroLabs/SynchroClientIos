@@ -94,9 +94,9 @@ public class JsonWriter
             case JTokenType.Null:
                 WriteNull(writer);
             case JTokenType.Object:
-                WriteObject(writer, obj: value as JObject);
+                WriteObject(writer, obj: value as! JObject);
             case JTokenType.Array:
-                WriteArray(writer, array: value as JArray);
+                WriteArray(writer, array: value as! JArray);
             case JTokenType.String:
                 WriteString(writer, str: value.asString()!);
             case JTokenType.Integer:

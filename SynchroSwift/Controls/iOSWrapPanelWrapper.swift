@@ -81,7 +81,7 @@ public class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSourc
     // UICollectionViewDataSource method
     public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell
     {
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier(wrapPanelCellID, forIndexPath: indexPath) as WrapPanelCell;
+        var cell = collectionView.dequeueReusableCellWithReuseIdentifier(wrapPanelCellID, forIndexPath: indexPath) as! WrapPanelCell;
     
         // logger.Info("Updating cell {0} with frame: {1}", indexPath.Item, cell.Frame);
     
@@ -260,7 +260,7 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
     public override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? // [UICollectionViewLayoutAttributes]
     {
         logger.debug("LayoutAttributesForElementsInRect: \(rect)");
-        var attributesArray = super.layoutAttributesForElementsInRect(rect) as [UICollectionViewLayoutAttributes];
+        var attributesArray = super.layoutAttributesForElementsInRect(rect) as! [UICollectionViewLayoutAttributes];
         
         var lineContents = [UICollectionViewLayoutAttributes]();
         
@@ -410,7 +410,7 @@ public class WrapPanelCollectionView : UICollectionView
         
         if let layout = self.collectionViewLayout as? WrapPanelCollectionViewLayout
         {
-            var viewSource = self.dataSource as WrapPanelCollectionViewSource;
+            var viewSource = self.dataSource as! WrapPanelCollectionViewSource;
             
             var frameSize = self.frame.size;
             
@@ -470,7 +470,7 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
         layout.minimumInteritemSpacing = 0;
         layout.minimumLineSpacing = 0;
         
-        processElementProperty(controlSpec["orientation"], { (value) in
+        processElementProperty(controlSpec["orientation"], setValue: { (value) in
             var orientation = self.toOrientation(value, defaultOrientation: Orientation.Horizontal);
             if (orientation == Orientation.Horizontal)
             {
@@ -484,13 +484,13 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
         
         // Need support for fixed item height/width - has implications to item positioning within fixed dimension
         //
-        processElementProperty(controlSpec["itemHeight"], { (value) in
+        processElementProperty(controlSpec["itemHeight"], setValue: { (value) in
             if let theValue = value
             {
                 layout.itemHeight = CGFloat(self.toDeviceUnits(theValue));
             }
         });
-        processElementProperty(controlSpec["itemWidth"], { (value) in
+        processElementProperty(controlSpec["itemWidth"], setValue: { (value) in
             if let theValue = value
             {
                 layout.itemWidth = CGFloat(self.toDeviceUnits(theValue));
@@ -501,7 +501,7 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
         
         if let contents = controlSpec["contents"] as? JArray
         {
-            createControls(controlList: contents, { (childControlSpec, childControlWrapper) in
+            createControls(controlList: contents, onCreateControl: { (childControlSpec, childControlWrapper) in
                 source.controlWrappers.append(childControlWrapper);
             });
         }

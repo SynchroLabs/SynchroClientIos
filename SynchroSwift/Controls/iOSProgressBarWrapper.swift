@@ -42,9 +42,9 @@ public class iOSProgressBarWrapper : iOSControlWrapper
         
         applyFrameworkElementDefaults(progress);
         
-        processElementProperty(controlSpec["value"], { (value) in progress.progress = Float(self.getProgress(self.toDouble(value))) });
-        processElementProperty(controlSpec["minimum"], { (value) in self._min = self.toDouble(value) });
-        processElementProperty(controlSpec["maximum"], { (value) in self._max = self.toDouble(value) });
+        processElementProperty(controlSpec["value"], setValue: { (value) in progress.progress = Float(self.getProgress(self.toDouble(value))) });
+        processElementProperty(controlSpec["minimum"], setValue: { (value) in self._min = self.toDouble(value) });
+        processElementProperty(controlSpec["maximum"], setValue: { (value) in self._max = self.toDouble(value) });
 
     }
 }

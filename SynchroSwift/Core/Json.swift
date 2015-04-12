@@ -97,7 +97,7 @@ public class JToken: Equatable
         
             if (parent is JObject)
             {
-                var parentObject = parent as JObject;
+                var parentObject = parent as! JObject;
                 for key in parentObject
                 {
                     if (parentObject[key]! == self)
@@ -113,7 +113,7 @@ public class JToken: Equatable
             }
             else if (parent is JArray)
             {
-                var parentArray = parent as JArray;
+                var parentArray = parent as! JArray;
                 var pos = parentArray.findChildIndex(self);
                 if (useDotNotation)
                 {
@@ -210,7 +210,7 @@ public class JToken: Equatable
         {
             if (Parent is JObject)
             {
-                var parentObject = Parent as JObject;
+                var parentObject = Parent as! JObject;
                 var key = parentObject.keyForValue(self);
                 if (key != nil)
                 {
@@ -220,7 +220,7 @@ public class JToken: Equatable
             }
             else if (Parent is JArray)
             {
-                var parentArray = Parent as JArray;
+                var parentArray = Parent as! JArray;
                 bRemoved = parentArray.remove(self);
             }
     
@@ -246,7 +246,7 @@ public class JToken: Equatable
             //
             if (Parent is JObject)
             {
-                var parentObject = Parent as JObject;
+                var parentObject = Parent as! JObject;
                 var key = parentObject.keyForValue(self);
                 if (key != nil)
                 {
@@ -256,7 +256,7 @@ public class JToken: Equatable
             }
             else if (Parent is JArray)
             {
-                var parentArray = Parent as JArray;
+                var parentArray = Parent as! JArray;
                 var pos = parentArray.findChildIndex(self);
                 parentArray[pos!] = token;
                 bReplaced = true;
@@ -283,7 +283,7 @@ public class JToken: Equatable
                 // If the current token and the new token are both primitive values, then we just do a
                 // value assignment...
                 //
-                (currentToken as JValue).copyValueFrom(newToken as JValue);
+                (currentToken as! JValue).copyValueFrom(newToken as! JValue);
             }
             else
             {

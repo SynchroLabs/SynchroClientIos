@@ -113,9 +113,9 @@ public class iOSScrollWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 50);
         applyFrameworkElementDefaults(scroller);
         
-        if let contentsArray = controlSpec["contents"]? as? JArray
+        if let contentsArray = controlSpec["contents"] as? JArray
         {
-            createControls(controlList: contentsArray, { (childControlSpec, childControlWrapper) in
+            createControls(controlList: contentsArray, onCreateControl: { (childControlSpec, childControlWrapper) in
                 if let control = childControlWrapper.control
                 {
                     scroller.addSubview(control);

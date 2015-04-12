@@ -37,14 +37,14 @@ extension String
         return String(Array(self)[i])
     }
     
-    var length: Int { get { return countElements(self); } }
+    var length: Int { get { return count(self); } }
 }
 
 extension UInt32
 {
-    func getBytes() -> [Byte]
+    func getBytes() -> [UInt8]
     {
-        return[Byte((self & 0xFF000000) >> 24), Byte((self & 0x00FF0000) >> 16), Byte((self & 0x0000FF00) >> 8), Byte(self & 0x000000FF)];
+        return[UInt8((self & 0xFF000000) >> 24), UInt8((self & 0x00FF0000) >> 16), UInt8((self & 0x0000FF00) >> 8), UInt8(self & 0x000000FF)];
     }
 }
 
@@ -142,9 +142,9 @@ public class Regex
     
     public func isMatch(string: String) -> Bool
     {
-        if let matches = _regex?.matchesInString(string, options: nil, range: NSRange(location: 0, length: countElements(string)))
+        if let matches = _regex?.matchesInString(string, options: nil, range: NSRange(location: 0, length: count(string)))
         {
-            if countElements(matches) > 0
+            if count(matches) > 0
             {
                 return true;
             }

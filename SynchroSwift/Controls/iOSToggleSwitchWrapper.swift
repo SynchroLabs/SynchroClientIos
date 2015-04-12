@@ -220,9 +220,9 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
             
             // Switch
             //
-            if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], { () in return JValue(toggleSwitch.on); }, { (value) in toggleSwitch.on = self.toBoolean(value) }))
+            if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(toggleSwitch.on); }, setValue: { (value) in toggleSwitch.on = self.toBoolean(value) }))
             {
-                processElementProperty(controlSpec["value"], { (value) in toggleSwitch.on = self.toBoolean(value) });
+                processElementProperty(controlSpec["value"], setValue: { (value) in toggleSwitch.on = self.toBoolean(value) });
             }
         }
         
@@ -235,10 +235,10 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
         
         // Label
         //
-        processElementProperty(controlSpec["caption"], { (value) in label.text = self.toString(value) });
+        processElementProperty(controlSpec["caption"], setValue: { (value) in label.text = self.toString(value) });
         
-        processElementProperty(controlSpec["foreground"], { (value) in
-            label.textColor = self.toColor(value)?;
+        processElementProperty(controlSpec["foreground"], setValue: { (value) in
+            label.textColor = self.toColor(value);
         });
         
         processFontAttribute(controlSpec, fontSetter: ToggleLabelFontSetter(label: label));

@@ -15,7 +15,7 @@ class RectangleView : UIView
 {
     var _color: UIColor? = UIColor.clearColor();
     
-    override init()
+    init()
     {
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     }
@@ -65,19 +65,19 @@ public class iOSRectangleWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);
         applyFrameworkElementDefaults(rect);
         
-        processElementProperty(controlSpec["border"], { (value) in rect.layer.borderColor = self.toColor(value)?.CGColor });
-        processElementProperty(controlSpec["borderThickness"], { (value) in
+        processElementProperty(controlSpec["border"], setValue: { (value) in rect.layer.borderColor = self.toColor(value)?.CGColor });
+        processElementProperty(controlSpec["borderThickness"], setValue: { (value) in
             if let theValue = value
             {
                 rect.layer.borderWidth = CGFloat(self.toDeviceUnits(theValue));
             }
         });
-        processElementProperty(controlSpec["cornerRadius"], { (value) in
+        processElementProperty(controlSpec["cornerRadius"], setValue: { (value) in
             if let theValue = value
             {
                 rect.layer.cornerRadius = CGFloat(self.toDeviceUnits(theValue));
             }
         });
-        processElementProperty(controlSpec["fill"], { (value) in rect.color = self.toColor(value) });
+        processElementProperty(controlSpec["fill"], setValue: { (value) in rect.color = self.toColor(value) });
     }
 }

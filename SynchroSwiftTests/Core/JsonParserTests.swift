@@ -47,7 +47,7 @@ class JsonParserTests: XCTestCase
     {
         var jsonStr = "{\"foo\":true}";
         
-        var token = JToken.parse(jsonStr) as JObject;
+        var token = JToken.parse(jsonStr) as! JObject;
         
         if let foo = token["foo"]
         {

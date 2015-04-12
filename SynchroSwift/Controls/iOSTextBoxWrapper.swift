@@ -38,9 +38,9 @@ public class iOSTextBoxWrapper : iOSControlWrapper
         
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "value")
         {
-            if (!self.processElementBoundValue("value", attributeValue: bindingSpec["value"], { () in return JValue(self._textBox.text) }, { (value) in self._textBox.text = self.toString(value) }))
+            if (!self.processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(self._textBox.text) }, setValue: { (value) in self._textBox.text = self.toString(value) }))
             {
-                processElementProperty(controlSpec["value"], { (value) in self._textBox.text = self.toString(value) });
+                processElementProperty(controlSpec["value"], setValue: { (value) in self._textBox.text = self.toString(value) });
                 _textBox.sizeToFit();
             }
             
@@ -50,7 +50,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper
             }
         }
         
-        processElementProperty(controlSpec["placeholder"], { (value) in self._textBox.placeholder = self.toString(value) });
+        processElementProperty(controlSpec["placeholder"], setValue: { (value) in self._textBox.placeholder = self.toString(value) });
         
         _textBox.addTarget(self, action: "editingChanged:", forControlEvents: .EditingChanged);
     }

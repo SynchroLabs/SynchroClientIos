@@ -26,8 +26,8 @@ public class iOSCanvasWrapper : iOSControlWrapper
         
         if let contents = controlSpec["contents"] as? JArray
         {
-            createControls(controlList: contents, { (childControlSpec, childControlWrapper) in
-                childControlWrapper.processElementProperty(childControlSpec["left"], { (value) in
+            createControls(controlList: contents, onCreateControl: { (childControlSpec, childControlWrapper) in
+                childControlWrapper.processElementProperty(childControlSpec["left"], setValue: { (value) in
                     if let theValue = value
                     {
                         var childFrame = childControlWrapper.control!.frame;
@@ -36,7 +36,7 @@ public class iOSCanvasWrapper : iOSControlWrapper
                         // !!! Resize canvas to contain control
                     }
                 });
-                childControlWrapper.processElementProperty(childControlSpec["top"], { (value) in
+                childControlWrapper.processElementProperty(childControlSpec["top"], setValue: { (value) in
                     if let theValue = value
                     {
                         var childFrame = childControlWrapper.control!.frame;

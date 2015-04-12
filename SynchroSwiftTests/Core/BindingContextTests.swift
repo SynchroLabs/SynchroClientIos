@@ -89,8 +89,8 @@ class BindingContextTests: XCTestCase
     
     func testSetValue()
     {
-        var testViewModel: JObject = self.viewModel.deepClone() as JObject;
-        (testViewModel["colors"] as JArray)[1] = JObject(["name": JValue("Greenish"), "color": JValue("green"), "value": JValue("0x00ff00")]);
+        var testViewModel: JObject = self.viewModel.deepClone() as! JObject;
+        (testViewModel["colors"] as! JArray)[1] = JObject(["name": JValue("Greenish"), "color": JValue("green"), "value": JValue("0x00ff00")]);
         XCTAssertFalse(testViewModel.deepEquals(self.viewModel));
         
         let bindingCtx = BindingContext(testViewModel);
@@ -102,12 +102,12 @@ class BindingContextTests: XCTestCase
     
     func testRebind()
     {
-        var testViewModel: JObject = self.viewModel.deepClone() as JObject;
+        var testViewModel: JObject = self.viewModel.deepClone() as! JObject;
 
         let bindingCtx = BindingContext(testViewModel);
         let colorNameCtx = bindingCtx.select("colors[1].name");
         
-        (testViewModel["colors"] as JArray)[1] = JObject(["name": JValue("Purple"), "color": JValue("purp"), "value": JValue("0x696969")]);
+        (testViewModel["colors"] as! JArray)[1] = JObject(["name": JValue("Purple"), "color": JValue("purp"), "value": JValue("0x696969")]);
 
         XCTAssertEqual("Green", colorNameCtx.getValue()!.asString()!);
         colorNameCtx.rebind();

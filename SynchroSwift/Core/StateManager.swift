@@ -47,7 +47,7 @@ public class StateManager
         _app = app;
         _deviceMetrics = deviceMetrics;
         _transport = transport;
-        _transport.setDefaultHandlers(self.processResponseAsync, self.processRequestFailure);
+        _transport.setDefaultHandlers(self.processResponseAsync, requestFailureHandler: self.processRequestFailure);
     }
     
     public func isBackSupported() -> Bool
@@ -188,7 +188,7 @@ public class StateManager
     
         if (responseAsJSON["Error"] != nil)
         {
-            var jsonError = responseAsJSON["Error"] as JObject;
+            var jsonError = responseAsJSON["Error"] as! JObject;
             var errorMessage = jsonError["message"]!.asString()!;
             logger.warn("Response contained error: \(errorMessage)");
             if (errorMessage == "SyncError")
@@ -266,7 +266,7 @@ public class StateManager
             self._instanceId = responseAsJSON["InstanceId"]!.asInt()!;
             self._instanceVersion = responseAsJSON["InstanceVersion"]!.asInt()!;
             
-            var jsonViewModel = responseAsJSON["ViewModel"] as JObject;
+            var jsonViewModel = responseAsJSON["ViewModel"] as! JObject;
             
             self._viewModel.initializeViewModelData(jsonViewModel);
             
@@ -280,7 +280,7 @@ public class StateManager
 
                 self._isBackSupported = responseAsJSON["Back"]?.asBool() ?? false;
                 
-                var jsonPageView = responseAsJSON["View"] as JObject;
+                var jsonPageView = responseAsJSON["View"] as! JObject;
                 _onProcessPageView!(pageView: jsonPageView);
                 
                 // If the view model is dirty after rendering the page, then the changes are going to have been
@@ -341,7 +341,7 @@ public class StateManager
                         // Render the new page and bind/update it
                         //
                         self._path = responseAsJSON["Path"]!.asString()!;
-                        var jsonPageView = responseAsJSON["View"] as JObject;
+                        var jsonPageView = responseAsJSON["View"] as! JObject;
                         _onProcessPageView!(pageView: jsonPageView);
                         updateRequired = self._viewModel.isDirty();
                     }
@@ -372,7 +372,7 @@ public class StateManager
         if (responseAsJSON["MessageBox"] != nil)
         {
             logger.info("Launching message box...");
-            var jsonMessageBox = responseAsJSON["MessageBox"] as JObject;
+            var jsonMessageBox = responseAsJSON["MessageBox"] as! JObject;
             _onProcessMessageBox!(messageBox: jsonMessageBox, commandHandler:
             {
                 (command) in
@@ -385,7 +385,7 @@ public class StateManager
         if (responseAsJSON["NextRequest"] != nil)
         {
             logger.debug("Got NextRequest, composing and sending it now...");
-            var requestObject = responseAsJSON["NextRequest"]!.deepClone() as JObject;
+            var requestObject = responseAsJSON["NextRequest"]!.deepClone() as! JObject;
             
             if (updateRequired)
             {

@@ -132,7 +132,7 @@ class BindingTests: XCTestCase
         
         XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand()!.asString()!);
         
-        (viewModel["colors"] as JArray)[1] = JObject(["name": JValue("Greenish"), "color": JValue("green"), "value": JValue("0x00ff00")]);
+        (viewModel["colors"] as! JArray)[1] = JObject(["name": JValue("Greenish"), "color": JValue("green"), "value": JValue("0x00ff00")]);
         for bindingContext in propVal.BindingContexts
         {
             bindingContext.rebind();
@@ -161,8 +161,8 @@ class BindingTests: XCTestCase
         
         XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand()!.asString()!);
         
-        (viewModel["colors"] as JArray)[1] = JObject(["name": JValue("Greenish"), "color": JValue("green"), "value": JValue("0x00ff00")]);
-        (viewModel["colors"] as JArray)[2] = JObject(["name": JValue("Blueish"), "color": JValue("blue"), "value": JValue("0x0000ff")]);
+        (viewModel["colors"] as! JArray)[1] = JObject(["name": JValue("Greenish"), "color": JValue("green"), "value": JValue("0x00ff00")]);
+        (viewModel["colors"] as! JArray)[2] = JObject(["name": JValue("Blueish"), "color": JValue("blue"), "value": JValue("0x0000ff")]);
         for bindingContext in propVal.BindingContexts
         {
             bindingContext.rebind();

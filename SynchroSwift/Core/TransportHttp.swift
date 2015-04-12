@@ -64,12 +64,12 @@ public class TransportHttp : TransportBase, Transport
                     });
                 }
             }
-            else if !self.isSuccessStatusCode(response as NSHTTPURLResponse)
+            else if !self.isSuccessStatusCode(response as! NSHTTPURLResponse)
             {
                 // We consider non-2XX to be an error, even though from the HTTP standpoint they're really just
                 // fine.  So we create our own NSError and call the failure handler (if any) in this case.
                 //
-                var httpResponse = response as NSHTTPURLResponse;
+                var httpResponse = response as! NSHTTPURLResponse;
                 var nonSuccessError = NSError(domain: NSURLErrorDomain, code: httpResponse.statusCode, userInfo: httpResponse.allHeaderFields);
 
                 if let failureHandler = theRequestFailureHandler
@@ -103,13 +103,13 @@ public class TransportHttp : TransportBase, Transport
                     logger.debug("Body: \(actualStrData)");
                     
                     // !!! Need to handle failed JSON parsing and call failure handler with appropriate NSError
-                    var responseObject = JObject.parse(actualStrData);
+                    var responseObject = JObject.parse(actualStrData as String);
                     
                     if (theResponseHandler != nil)
                     {
                         dispatch_async(dispatch_get_main_queue(),
                         {
-                            theResponseHandler!(response: responseObject as JObject);
+                            theResponseHandler!(response: responseObject as! JObject);
                         });
                     }
                 }
@@ -121,11 +121,11 @@ public class TransportHttp : TransportBase, Transport
     
     public func sendMessage(sessionId: String?, requestObject: JObject)
     {
-        self.sendMessage(sessionId, requestObject: requestObject, nil, nil);
+        self.sendMessage(sessionId, requestObject: requestObject, responseHandler: nil, requestFailureHandler: nil);
     }
     
     public func getAppDefinition(onDefinition: (JObject?) -> Void )
     {
-        return super.getAppDefinition(self, onDefinition);
+        return super.getAppDefinition(self, onDefinition: onDefinition);
     }
 }

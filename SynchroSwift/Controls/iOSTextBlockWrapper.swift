@@ -128,17 +128,17 @@ public class iOSTextBlockWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 0, defaultHeight: 0);
         applyFrameworkElementDefaults(textBlock);
         
-        processElementProperty(controlSpec["foreground"], { (value) in
-            textBlock.textColor = self.toColor(value)?;
+        processElementProperty(controlSpec["foreground"], setValue: { (value) in
+            textBlock.textColor = self.toColor(value);
         });
         
         processFontAttribute(controlSpec, fontSetter: TextBlockFontSetter(label: textBlock));
         
-        processElementProperty(controlSpec["value"], { (value) in
+        processElementProperty(controlSpec["value"], setValue: { (value) in
             textBlock.text = self.toString(value);
         });
         
-        processElementProperty(controlSpec["ellipsize"], { (value) in
+        processElementProperty(controlSpec["ellipsize"], setValue: { (value) in
             // Other trimming options:
             //
             //   UILineBreakMode.HeadTruncation;
@@ -155,7 +155,7 @@ public class iOSTextBlockWrapper : iOSControlWrapper
             }
         });
         
-        processElementProperty(controlSpec["textAlignment"],{ (value) in
+        processElementProperty(controlSpec["textAlignment"],setValue: { (value) in
             var alignString = self.toString(value);
             if (alignString == "Left")
             {

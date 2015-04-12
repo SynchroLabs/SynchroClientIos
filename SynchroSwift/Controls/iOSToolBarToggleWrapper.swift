@@ -125,23 +125,23 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
 
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: CommandName.OnClick.Attribute, commandAttributes: commands)
         {
-            if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], { () in return JValue(self.isChecked); }, { (value) in self.isChecked = self.toBoolean(value) }))
+            if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(self.isChecked); }, setValue: { (value) in self.isChecked = self.toBoolean(value) }))
             {
-                processElementProperty(controlSpec["value"], { (value) in self.isChecked = self.toBoolean(value) });
+                processElementProperty(controlSpec["value"], setValue: { (value) in self.isChecked = self.toBoolean(value) });
             }
 
             processCommands(bindingSpec, commands: commands);
         }
         
-        processElementProperty(controlSpec["text"], { (value) in self._buttonItem.title = self.toString(value) });
-        processElementProperty(controlSpec["icon"], { (value) in self._buttonItem.image = iOSToolBarWrapper.loadIconImage(self.toString(value)) });
+        processElementProperty(controlSpec["text"], setValue: { (value) in self._buttonItem.title = self.toString(value) });
+        processElementProperty(controlSpec["icon"], setValue: { (value) in self._buttonItem.image = iOSToolBarWrapper.loadIconImage(self.toString(value)) });
         
-        processElementProperty(controlSpec["uncheckedtext"], { (value) in self.uncheckedText = self.toString(value) });
-        processElementProperty(controlSpec["checkedtext"], { (value) in self.checkedText = self.toString(value) });
-        processElementProperty(controlSpec["uncheckedicon"], { (value) in self.uncheckedIcon = self.toString(value) });
-        processElementProperty(controlSpec["checkedicon"], { (value) in self.checkedIcon = self.toString(value) });
+        processElementProperty(controlSpec["uncheckedtext"], setValue: { (value) in self.uncheckedText = self.toString(value) });
+        processElementProperty(controlSpec["checkedtext"], setValue: { (value) in self.checkedText = self.toString(value) });
+        processElementProperty(controlSpec["uncheckedicon"], setValue: { (value) in self.uncheckedIcon = self.toString(value) });
+        processElementProperty(controlSpec["checkedicon"], setValue: { (value) in self.checkedIcon = self.toString(value) });
         
-        processElementProperty(controlSpec["enabled"], { (value) in self._buttonItem.enabled = self.toBoolean(value) });
+        processElementProperty(controlSpec["enabled"], setValue: { (value) in self._buttonItem.enabled = self.toBoolean(value) });
         
         if (controlSpec["control"]?.asString() == "navBar.toggle")
         {

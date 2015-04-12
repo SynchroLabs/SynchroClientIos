@@ -115,11 +115,11 @@ public class iOSToolBarWrapper : iOSControlWrapper
             // Custom items, can specify text, icon, or both
             //
             buttonItem = UIBarButtonItem(image: nil, style: .Plain, target: self, action: "barButtonItemClicked:")
-            processElementProperty(controlSpec["text"], { (value) in buttonItem.title = self.toString(value) });
-            processElementProperty(controlSpec["icon"], { (value) in buttonItem.image = iOSToolBarWrapper.loadIconImage(self.toString(value)) });
+            processElementProperty(controlSpec["text"], setValue: { (value) in buttonItem.title = self.toString(value) });
+            processElementProperty(controlSpec["icon"], setValue: { (value) in buttonItem.image = iOSToolBarWrapper.loadIconImage(self.toString(value)) });
         }
         
-        processElementProperty(controlSpec["enabled"], { (value) in buttonItem.enabled = self.toBoolean(value) });
+        processElementProperty(controlSpec["enabled"], setValue: { (value) in buttonItem.enabled = self.toBoolean(value) });
         
         if (controlSpec["control"]?.asString() == "navBar.button")
         {

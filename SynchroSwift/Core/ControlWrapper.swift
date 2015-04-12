@@ -416,12 +416,12 @@ public class ControlWrapper: NSObject
     
     public class ColorARGB
     {
-        var _a: Byte;
-        var _r: Byte;
-        var _g: Byte;
-        var _b: Byte;
+        var _a: UInt8;
+        var _r: UInt8;
+        var _g: UInt8;
+        var _b: UInt8;
         
-        public init(a: Byte, r: Byte, g: Byte, b: Byte)
+        public init(a: UInt8, r: UInt8, g: UInt8, b: UInt8)
         {
             _a = a;
             _r = r;
@@ -438,15 +438,15 @@ public class ControlWrapper: NSObject
             _b = bytes[3];
         }
         
-        public var a: Byte { get { return _a; } }
-        public var r: Byte { get { return _r; } }
-        public var g: Byte { get { return _g; } }
-        public var b: Byte { get { return _b; } }
+        public var a: UInt8 { get { return _a; } }
+        public var r: UInt8 { get { return _r; } }
+        public var g: UInt8 { get { return _g; } }
+        public var b: UInt8 { get { return _b; } }
     }
     
     public class func getColor(colorValue: String) -> ColorARGB?
     {
-        var len = countElements(colorValue);
+        var len = count(colorValue);
         
         if (colorValue.hasPrefix("#"))
         {
@@ -498,7 +498,7 @@ public class ControlWrapper: NSObject
             if let fontObject = fontAttributeValue as? JObject
             {
                 processElementProperty(fontObject["face"],
-                { (value) in
+                setValue: { (value) in
                     var faceType = FontFaceType.FONT_DEFAULT;
                     var faceTypeString = value?.asString();
                     if faceTypeString == "Serif"
@@ -517,7 +517,7 @@ public class ControlWrapper: NSObject
                 });
                 
                 processElementProperty(fontObject["size"],
-                { (value) in
+                setValue: { (value) in
                     if let theValue = value
                     {
                         fontSetter.setSize(self.toDeviceUnitsFromTypographicPoints(theValue));
@@ -525,12 +525,12 @@ public class ControlWrapper: NSObject
                 });
                 
                 processElementProperty(fontObject["bold"],
-                { (value) in
+                setValue: { (value) in
                     fontSetter.setBold(self.toBoolean(value));
                 });
                 
                 processElementProperty(fontObject["italic"],
-                { (value) in
+                setValue: { (value) in
                     fontSetter.setItalic(self.toBoolean(value));
                 });
             }
@@ -540,7 +540,7 @@ public class ControlWrapper: NSObject
         // very often used by itself, so we'll support this alternate syntax).
         //
         processElementProperty(controlSpec["fontsize"],
-        { (value) in
+        setValue: { (value) in
             if let theValue = value
             {
                 fontSetter.setSize(self.toDeviceUnitsFromTypographicPoints(theValue));
@@ -555,7 +555,7 @@ public class ControlWrapper: NSObject
         if let value = attributeValue?.asString()
         {
             var valueBindingContext = self.bindingContext.select(value);
-            var binding = viewModel.createAndRegisterValueBinding(valueBindingContext, getValue, setValue);
+            var binding = viewModel.createAndRegisterValueBinding(valueBindingContext, getValue: getValue, setValue: setValue);
             setValueBinding(attributeName, valueBinding: binding);
             
             // Immediate content update during configuration.
@@ -580,7 +580,7 @@ public class ControlWrapper: NSObject
             if ((token.Type == JTokenType.String) && PropertyValue.containsBindingTokens(token.asString()!))
             {
                 // If value contains a binding, create a Binding and add it to metadata
-                var binding = viewModel.createAndRegisterPropertyBinding(self.bindingContext, value: token.asString()!, setValue);
+                var binding = viewModel.createAndRegisterPropertyBinding(self.bindingContext, value: token.asString()!, setValue: setValue);
                 _propertyBindings.append(binding);
                 
                 // Immediate content update during configuration.
@@ -667,7 +667,7 @@ public class ControlWrapper: NSObject
                 if ((element["binding"] != nil) && (element["binding"]!.Type == JTokenType.Object))
                 {
                     logger.debug("Found binding object");
-                    var bindingSpec = element["binding"] as JObject;
+                    var bindingSpec = element["binding"] as! JObject;
                     if (bindingSpec["foreach"] != nil)
                     {
                         // First we create a BindingContext for the "foreach" path (a context to the elements to be iterated)

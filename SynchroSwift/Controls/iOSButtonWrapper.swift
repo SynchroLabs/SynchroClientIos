@@ -31,7 +31,7 @@ public class iOSButtonWrapper : iOSControlWrapper
         processElementDimensions(controlSpec);
         applyFrameworkElementDefaults(button);
         
-        processElementProperty(controlSpec["caption"], { (value) in
+        processElementProperty(controlSpec["caption"], setValue: { (value) in
             button.setTitle(self.toString(value), forState: .Normal);
             self.sizeToFit();
         });

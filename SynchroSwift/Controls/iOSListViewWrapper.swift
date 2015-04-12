@@ -135,7 +135,7 @@ public class BindingContextTableSourceItem : TableSourceItem
     //
     public func bindCell(tableView: UITableView, cell: UITableViewCell)
     {
-        var tableViewCell = cell as BindingContextTableViewCell;
+        var tableViewCell = cell as! BindingContextTableViewCell;
     
         // Now that we have the actual cell width, we're going to let the content control have a chance to set
         // its width and layout its children (assuming it's fill width and the width provided is different from
@@ -173,7 +173,7 @@ public class CheckableBindingContextTableSource : CheckableTableSource
     {
         _parentControl = parentControl;
         _itemTemplate = itemTemplate;
-        super.init(selectionMode: selectionMode, onSelectionChanged, onItemClicked);
+        super.init(selectionMode: selectionMode, onSelectionChanged: onSelectionChanged, onItemClicked: onItemClicked);
     }
     
     public func setContents(bindingContext: BindingContext, itemSelector: String)
@@ -422,7 +422,7 @@ public class iOSListViewWrapper : iOSControlWrapper
         
         var selectionMode = toListSelectionMode(controlSpec["select"]);
         
-        _dataSource = CheckableBindingContextTableSource(parentControl: self, itemTemplate: controlSpec["itemTemplate"] as JObject, selectionMode: selectionMode, listview_SelectionChanged, listview_ItemClicked);
+        _dataSource = CheckableBindingContextTableSource(parentControl: self, itemTemplate: controlSpec["itemTemplate"] as! JObject, selectionMode: selectionMode, onSelectionChanged: listview_SelectionChanged, onItemClicked: listview_ItemClicked);
         table.dataSource = _dataSource;
         table.delegate = _dataSource;
         
@@ -452,8 +452,8 @@ public class iOSListViewWrapper : iOSControlWrapper
                 processElementBoundValue(
                     "items",
                     attributeValue: bindingSpec["items"],
-                    { () in self.getListViewContents(table) },
-                    { (value) in self.setListViewContents(table, bindingContext: self.getValueBinding("items")!.bindingContext) });
+                    getValue: { () in self.getListViewContents(table) },
+                    setValue: { (value) in self.setListViewContents(table, bindingContext: self.getValueBinding("items")!.bindingContext) });
             }
             
             if (bindingSpec["selection"] != nil)
@@ -463,8 +463,8 @@ public class iOSListViewWrapper : iOSControlWrapper
                 processElementBoundValue(
                     "selection",
                     attributeValue: bindingSpec["selection"],
-                    { () in self.getListViewSelection(table, selectionItem: selectionItem) },
-                    { (value) in self.setListViewSelection(table, selectionItem: selectionItem, selection: value) });
+                    getValue: { () in self.getListViewSelection(table, selectionItem: selectionItem) },
+                    setValue: { (value) in self.setListViewSelection(table, selectionItem: selectionItem, selection: value) });
             }
         }
     }
@@ -480,7 +480,7 @@ public class iOSListViewWrapper : iOSControlWrapper
     
         _selectionChangingProgramatically = true;
     
-        var tableSource = tableView.dataSource! as CheckableBindingContextTableSource;
+        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
     
         var oldCount = tableSource.allItems.count;
         tableSource.setContents(bindingContext, itemSelector: "$data");
@@ -579,7 +579,7 @@ public class iOSListViewWrapper : iOSControlWrapper
     
     public func getListViewSelection(tableView: UITableView, selectionItem: String) -> JToken
     {
-        var tableSource = tableView.dataSource! as CheckableBindingContextTableSource;
+        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
         var checkedItems = tableSource.checkedItems;
         
@@ -623,14 +623,14 @@ public class iOSListViewWrapper : iOSControlWrapper
     {
         _selectionChangingProgramatically = true;
         
-        var tableSource = tableView.dataSource! as CheckableBindingContextTableSource;
+        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
         // Go through all values and check as appropriate
         //
         for checkableItem in tableSource.allItems
         {
             var isChecked = false;
-            var bindingItem = checkableItem.tableSourceItem as BindingContextTableSourceItem;
+            var bindingItem = checkableItem.tableSourceItem as! BindingContextTableSourceItem;
             var boundValue = bindingItem.bindingContext.select(selectionItem).getValue();
             
             if let array = selection as? JArray
@@ -662,8 +662,8 @@ public class iOSListViewWrapper : iOSControlWrapper
     {
         logger.debug("Listview item clicked: \(itemClicked)");
     
-        var tableView: UITableView = self.control as UITableView;
-        var tableSource = tableView.dataSource! as CheckableBindingContextTableSource;
+        var tableView: UITableView = self.control as! UITableView;
+        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
         if (tableSource.selectionMode == ListSelectionMode.None)
         {
@@ -685,8 +685,8 @@ public class iOSListViewWrapper : iOSControlWrapper
     {
         logger.debug("Listview selection changed");
     
-        var tableView: UITableView = self.control as UITableView;
-        var tableSource = tableView.dataSource! as CheckableBindingContextTableSource;
+        var tableView: UITableView = self.control as! UITableView;
+        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
         if let selectionBinding = getValueBinding("selection")
         {

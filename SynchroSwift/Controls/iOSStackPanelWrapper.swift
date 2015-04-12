@@ -381,14 +381,14 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         }
         else
         {
-            processElementProperty(controlSpec["orientation"], { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.Vertical) });
+            processElementProperty(controlSpec["orientation"], setValue: { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.Vertical) });
         }
         
         processThicknessProperty(controlSpec["padding"], thicknessSetter: PaddedViewThicknessSetter(paddedView: stackPanel));
         
-        if let contentsArray = controlSpec["contents"]? as? JArray
+        if let contentsArray = controlSpec["contents"] as? JArray
         {
-            createControls(controlList: contentsArray, { (childControlSpec, childControlWrapper) in
+            createControls(controlList: contentsArray, onCreateControl: { (childControlSpec, childControlWrapper) in
                 if let childControl = childControlWrapper.control
                 {
                     stackPanel.addSubview(childControl);

@@ -27,14 +27,14 @@ public class iOSSliderWrapper : iOSControlWrapper
         
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "value")
         {
-            if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], { () in return JValue(Double(slider.value)); }, { (value) in self.setValue(Float(self.toDouble(value))) }))
+            if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(Double(slider.value)); }, setValue: { (value) in self.setValue(Float(self.toDouble(value))) }))
             {
-                processElementProperty(controlSpec["value"], { (value) in self.setValue(Float(self.toDouble(value))) });
+                processElementProperty(controlSpec["value"], setValue: { (value) in self.setValue(Float(self.toDouble(value))) });
             }
         }
         
-        processElementProperty(controlSpec["minimum"], { (value) in self.setMin(Float(self.toDouble(value))) });
-        processElementProperty(controlSpec["maximum"], { (value) in self.setMax(Float(self.toDouble(value))) });
+        processElementProperty(controlSpec["minimum"], setValue: { (value) in self.setMin(Float(self.toDouble(value))) });
+        processElementProperty(controlSpec["maximum"], setValue: { (value) in self.setMax(Float(self.toDouble(value))) });
         
         slider.addTarget(self, action: "valueChanged:", forControlEvents: .ValueChanged);
     }
@@ -53,7 +53,7 @@ public class iOSSliderWrapper : iOSControlWrapper
     
     func setMin(min: Float)
     {
-        var slider = self._control as UISlider;
+        var slider = self._control as! UISlider;
         var needsValueUpdate = _value < slider.minimumValue;
         slider.minimumValue = min;
         if (needsValueUpdate)
@@ -64,7 +64,7 @@ public class iOSSliderWrapper : iOSControlWrapper
     
     func setMax(max: Float)
     {
-        var slider = self._control as UISlider;
+        var slider = self._control as! UISlider;
         var needsValueUpdate = _value > slider.maximumValue;
         slider.maximumValue = max;
         if (needsValueUpdate)
@@ -75,7 +75,7 @@ public class iOSSliderWrapper : iOSControlWrapper
     
     func setValue(value: Float)
     {
-        var slider = self._control as UISlider;
+        var slider = self._control as! UISlider;
         _value = value;
         slider.value = value;
     }

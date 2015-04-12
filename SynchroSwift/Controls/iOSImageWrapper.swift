@@ -29,7 +29,7 @@ public class iOSImageWrapper : iOSControlWrapper
         
         processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);
         applyFrameworkElementDefaults(image);
-        processElementProperty(controlSpec["resource"], { (value) in
+        processElementProperty(controlSpec["resource"], setValue: { (value) in
             if ((value == nil) || (value!.asString() == ""))
             {
                 image.image = nil;
@@ -42,7 +42,7 @@ public class iOSImageWrapper : iOSControlWrapper
                     logger.info("Loading image for URL: \(validUrl)");
                     var request: NSURLRequest = NSURLRequest(URL: validUrl);
                     NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-                        let httpResponse = response as NSHTTPURLResponse;
+                        let httpResponse = response as! NSHTTPURLResponse;
                         if let err = error
                         {
                             logger.error("Failed to load image, reason: \(err.description)");

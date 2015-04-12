@@ -39,8 +39,8 @@ class JsonTests: XCTestCase
     
         stuff["baz"] = JArray([ JValue(8), JValue("dog") ]);
     
-        XCTAssertEqual(8, ((stuff["baz"] as JArray)[0] as JValue).asInt()!);
-        XCTAssertEqual("dog", ((stuff["baz"] as JArray)[1] as JValue).asString()!);
+        XCTAssertEqual(8, ((stuff["baz"] as! JArray)[0] as! JValue).asInt()!);
+        XCTAssertEqual("dog", ((stuff["baz"] as! JArray)[1] as! JValue).asString()!);
     }
     
     func testDeepClone()
@@ -109,7 +109,7 @@ class JsonTests: XCTestCase
             ])
         ]);
         
-        XCTAssert(((stuff["e"] as JArray)[0] as JObject)["f"] === stuff.selectToken("e[0].f"));
+        XCTAssert(((stuff["e"] as! JArray)[0] as! JObject)["f"] === stuff.selectToken("e[0].f"));
     }
     
     func testUpdate()

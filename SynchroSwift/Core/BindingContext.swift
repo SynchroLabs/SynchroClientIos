@@ -184,7 +184,7 @@ public class BindingContext
         if (JTokenType.Array == _boundToken?.Type)
         {
             var index = 0;
-            for arrayElement in _boundToken as JArray
+            for arrayElement in _boundToken as! JArray
             {
                 bindingContexts.append(BindingContext(self, index: index, bindingPath: bindingPath));
                 index++;

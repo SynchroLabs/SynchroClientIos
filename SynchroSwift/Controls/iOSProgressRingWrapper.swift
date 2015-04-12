@@ -27,7 +27,7 @@ public class iOSProgressRingWrapper : iOSControlWrapper
         
         applyFrameworkElementDefaults(progress);
         
-        processElementProperty(controlSpec["value"], { (value) in
+        processElementProperty(controlSpec["value"], setValue: { (value) in
             var animate = self.toBoolean(value);
             var isAnimating = progress.isAnimating();
             if (animate && !isAnimating)

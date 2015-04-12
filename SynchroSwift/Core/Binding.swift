@@ -111,7 +111,7 @@ public class BindingHelper
                     {
                         // If attribute value is simple value type, promote "attributeValue" to { command: "attributeValue" }
                         //
-                        bindingObject![commandAttribute] = JObject(["command": JValue(bindingObject![commandAttribute] as JValue)]);
+                        bindingObject![commandAttribute] = JObject(["command": JValue(bindingObject![commandAttribute] as! JValue)]);
                     }
                 }
             }
@@ -560,7 +560,7 @@ public class ValueBinding
     
     public func updateViewModelFromView()
     {
-        _viewModel.updateViewModelFromView(_bindingContext, _getViewValue);
+        _viewModel.updateViewModelFromView(_bindingContext, getValue: _getViewValue);
     }
     
     public func updateViewFromViewModel()

@@ -92,7 +92,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
     public init(stateManager: StateManager, viewModel: ViewModel, viewController: UIViewController, panel: UIView, doBackToMenu: (() -> Void)?)
     {
         _viewController = viewController;
-        super.init(stateManager: stateManager, viewModel: viewModel, doBackToMenu);
+        super.init(stateManager: stateManager, viewModel: viewModel, doBackToMenu: doBackToMenu);
 
         _rootControlWrapper = iOSControlWrapper(pageView: self, stateManager: _stateManager, viewModel: _viewModel, bindingContext: _viewModel.rootBindingContext, control: panel);
 
@@ -126,7 +126,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
     {
         // May want animate this at some point - see: https://gist.github.com/redent/7263276
         //
-        let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue();
+        let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue();
         logger.debug("Keyboard shown - frame: \(keyboardFrame)");
 
         if let scrollView = _contentScrollView
@@ -416,7 +416,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
             //
             var alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
             
-            if let options = messageBox["options"]? as? JArray
+            if let options = messageBox["options"] as? JArray
             {
                 for option in options
                 {
@@ -454,7 +454,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
             
             var buttonCommands = [String?]();
             
-            if let options = messageBox["options"]? as? JArray
+            if let options = messageBox["options"] as? JArray
             {
                 for option in options
                 {
