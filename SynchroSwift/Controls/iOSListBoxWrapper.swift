@@ -590,7 +590,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
                     {
                         // The selection change command handler resolves its tokens relative to the item selected when in single select mode.
                         //
-                        stateManager.sendCommandRequestAsync(command.Command, parameters: command.getResolvedParameters(self.bindingContext));
+                        stateManager.sendCommandRequestAsync(command.Command, parameters: command.getResolvedParameters(listItem.bindingContext));
                     }
                 }
                 else if (tableSource.selectionMode == ListSelectionMode.Multiple)
