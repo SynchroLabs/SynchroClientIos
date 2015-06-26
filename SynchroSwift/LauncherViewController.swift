@@ -23,7 +23,7 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         _appManager = appManager;
         super.init(nibName: "LauncherView", bundle: nil);
         
-        self.title = "Synchro";
+        self.title = "Synchro Explorer";
     }
 
     required init(coder aDecoder: NSCoder)
@@ -37,7 +37,9 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
 
         _appManager = SynchroAppManager();
         _appManager.loadState();
-        
+
+        logger.info("viewDidLoad - number of apps: \(_appManager.apps.count)");
+
         var addButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addClicked:")
         self.navigationItem.rightBarButtonItem = addButton;
     }
@@ -47,8 +49,10 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         // We hide the navigation controller when navigating to the Synchro page view, so we need
         // so show it here (in case we're navigating back to here)...
         //
-        logger.info("viewDidLoad - showing navigation bar");
+        logger.info("viewWillAppear - showing navigation bar");
         self.navigationController?.setNavigationBarHidden(false, animated: false);
+        
+        self.tableView.reloadData();
     }
     
     override func didReceiveMemoryWarning()
@@ -73,10 +77,12 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         cell!.detailTextLabel?.text = _appManager.apps[indexPath.row].endpoint;
         cell!.accessoryType = UITableViewCellAccessoryType.DetailDisclosureButton;
         
+        logger.info("Rendering cell at position: \(indexPath.row) with value: \(_appManager.apps[indexPath.row].name)");
+        
         return cell!
     }
 
-    func tableView(tableView: UITableView!, canEditRowAtIndexPath indexPath: NSIndexPath!) -> Bool
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool
     {
         return true
     }
@@ -116,18 +122,15 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         self.navigationController?.pushViewController(appDetailVC, animated: true);
     }
     
-    func tableView(tableView: UITableView!, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath!)
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
     {
         if (editingStyle == UITableViewCellEditingStyle.Delete)
         {
             logger.info("Items deleted at row #\(indexPath.row)!");
-            if let tv = tableView
-            {
-                var app = _appManager.apps[indexPath.row];
-                _appManager.remove(app);
-                _appManager.saveState();
-                tv.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            }
+            var app = _appManager.apps[indexPath.row];
+            _appManager.remove(app);
+            _appManager.saveState();
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
 }

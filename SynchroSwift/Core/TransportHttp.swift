@@ -10,6 +10,8 @@ import Foundation
 
 private var logger = Logger.getLogger("TransportHttp");
 
+private var _schemeRegex = Regex("^https?://.*");
+
 public class TransportHttp : TransportBase, Transport
 {
     var _uri: NSURL;
@@ -22,7 +24,13 @@ public class TransportHttp : TransportBase, Transport
     
     public class func uriFromHostString(host: String, scheme: String = "http") -> NSURL?
     {
-        return NSURL(string: "\(scheme)://\(host)");
+        var uri = host;
+        if (!_schemeRegex.isMatch(host))
+        {
+            uri = scheme + "://" + host;
+        }
+        
+        return NSURL(string: uri);
     }
     
     private func isSuccessStatusCode(response: NSHTTPURLResponse) -> Bool

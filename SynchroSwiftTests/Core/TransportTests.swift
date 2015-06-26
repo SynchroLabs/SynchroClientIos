@@ -191,5 +191,11 @@ class TransportTests: XCTestCase
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
-
+    
+    func testUriFromHostString()
+    {
+        XCTAssertEqual(TransportHttp.uriFromHostString("foo/app")!.absoluteString!, "http://foo/app");
+        XCTAssertEqual(TransportHttp.uriFromHostString("http://foo/app")!.absoluteString!, "http://foo/app");
+        XCTAssertEqual(TransportHttp.uriFromHostString("https://foo/app")!.absoluteString!, "https://foo/app");
+    }
 }
