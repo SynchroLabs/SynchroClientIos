@@ -2,14 +2,14 @@
     /*
     "seed":
     {
-        "endpoint": "api.synchro.io/api/samples",
+        "endpoint": "https://api.synchro.io/api/samples",
         "definition": { "name": "synchro-samples", "description": "Synchro API Samples" }
     }
     */
     "apps":
     [
         {
-            "endpoint": "api.synchro.io/api/samples",
+            "endpoint": "https://api.synchro.io/api/samples",
             "definition": { "name": "synchro-samples", "description": "Synchro API Samples" }
         }
     ]
