@@ -34,7 +34,7 @@ class SynchroAppTests: XCTestCase
                 
         XCTAssertEqual("synchro-samples", app.name);
         XCTAssertEqual("Synchro API Samples", app.description);
-        XCTAssertEqual("api.synchro.io/api/samples", app.endpoint);
+        XCTAssertEqual("https://api.synchro.io/api/samples", app.endpoint);
         
         var expected = JObject(
         [
