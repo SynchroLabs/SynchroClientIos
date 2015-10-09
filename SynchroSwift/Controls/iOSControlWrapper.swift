@@ -303,7 +303,7 @@ public class FontMetrics
         
         if (weight != _weight)
         {
-            var weightDifference = Float(abs(Int(weight.rawValue) - Int(_weight.rawValue)));
+            let weightDifference = Float(abs(Int(weight.rawValue) - Int(_weight.rawValue)));
             // Max weight difference is 800 - We want to scale match from 1.0 (exact match) to 0.5 (opposite, or 800 difference)
             matchQuality *= (1.0 - (weightDifference / 1600));
         }
@@ -335,13 +335,10 @@ public class FontFamilyFromName : FontFamily
     {
         _familyName = familyName;
         var fonts = [FontMetrics]();
-        var fontNames: Array = UIFont.fontNamesForFamilyName(_familyName);
-        for (index, value : AnyObject) in enumerate(fontNames)
+        let fontNames: Array = UIFont.fontNamesForFamilyName(_familyName);
+        for (_, value) in fontNames.enumerate()
         {
-            if let fontName = value as? String
-            {
-                fonts.append(FontMetrics(faceName: fontName));
-            }
+            fonts.append(FontMetrics(faceName: value));
         }
         
         _plainFont = FontFamilyFromName.getBestMatch(fonts, slope: FontSlope.Roman, weight: FontWeight.Normal, width: FontWidth.Normal)!;
@@ -357,7 +354,7 @@ public class FontFamilyFromName : FontFamily
         
         for fontMetrics in fonts
         {
-            var matchScore = fontMetrics.matchQuality(slope, weight: weight, width: width);
+            let matchScore = fontMetrics.matchQuality(slope, weight: weight, width: width);
             if (matchScore > bestMatchScore)
             {
                 bestMatch = fontMetrics;
@@ -402,11 +399,11 @@ public class SystemFontFamily : FontFamily
     
     public class func isSystemFont(font: UIFont) -> Bool
     {
-        var currSize = font.pointSize;
+        let currSize = font.pointSize;
         
-        var systemFont = UIFont.systemFontOfSize(currSize);
-        var systemBoldFont = UIFont.boldSystemFontOfSize(currSize);
-        var systemItalicFont = UIFont.italicSystemFontOfSize(currSize);
+        let systemFont = UIFont.systemFontOfSize(currSize);
+        let systemBoldFont = UIFont.boldSystemFontOfSize(currSize);
+        let systemItalicFont = UIFont.italicSystemFontOfSize(currSize);
         
         return ((font == systemFont) || (font == systemBoldFont) || (font == systemItalicFont));
     }
@@ -427,8 +424,8 @@ public class SystemFontFamily : FontFamily
             //
             //   ".HelveticaNeueUI-BoldItalic" - Works
             //
-            var boldFont = UIFont.boldSystemFontOfSize(size);
-            var boldItalicFont = UIFont(name: boldFont.fontName + "Italic", size: size);
+            let boldFont = UIFont.boldSystemFontOfSize(size);
+            let boldItalicFont = UIFont(name: boldFont.fontName + "Italic", size: size);
             if (boldItalicFont != nil)
             {
                 return boldItalicFont;
@@ -702,7 +699,7 @@ public class iOSControlWrapper : ControlWrapper
     public func toOrientation(value: JToken?, defaultOrientation: Orientation = Orientation.Horizontal) -> Orientation
     {
         var orientation = defaultOrientation;
-        var orientationValue = value?.asString();
+        let orientationValue = value?.asString();
         if (orientationValue == "Horizontal")
         {
             orientation = Orientation.Horizontal;
@@ -717,7 +714,7 @@ public class iOSControlWrapper : ControlWrapper
     public func toHorizontalAlignment(value: JToken?, defaultAlignment: HorizontalAlignment = HorizontalAlignment.Left) -> HorizontalAlignment
     {
         var alignment = defaultAlignment;
-        var alignmentValue = value?.asString();
+        let alignmentValue = value?.asString();
         if (alignmentValue == "Left")
         {
             alignment = HorizontalAlignment.Left;
@@ -736,7 +733,7 @@ public class iOSControlWrapper : ControlWrapper
     public func toVerticalAlignment(value: JToken?, defaultAlignment: VerticalAlignment = VerticalAlignment.Top) -> VerticalAlignment
     {
         var alignment = defaultAlignment;
-        var alignmentValue = value?.asString();
+        let alignmentValue = value?.asString();
         if (alignmentValue == "Top")
         {
             alignment = VerticalAlignment.Top;
@@ -780,7 +777,7 @@ public class iOSControlWrapper : ControlWrapper
             }
             else if (token is JObject)
             {
-                var marginObject = token as! JObject;
+                let marginObject = token as! JObject;
                 
                 processElementProperty(marginObject["left"],
                 setValue: { (value) in
@@ -874,7 +871,7 @@ public class iOSControlWrapper : ControlWrapper
     {
         if let control = _control
         {
-            var size = self.sizeThatFits(CGSize(width: 0, height: 0));
+            let size = self.sizeThatFits(CGSize(width: 0, height: 0));
             var frame = control.frame;
             frame.size = size;
             control.frame = frame;
@@ -909,7 +906,7 @@ public class iOSControlWrapper : ControlWrapper
             
             // Process star sizing...
             //
-            var heightStarCount = ControlWrapper.getStarCount(controlSpec["height"]?.asString());
+            let heightStarCount = ControlWrapper.getStarCount(controlSpec["height"]?.asString());
             if (heightStarCount > 0)
             {
                 self.frameProperties.heightSpec = SizeSpec.FillParent;
@@ -939,7 +936,7 @@ public class iOSControlWrapper : ControlWrapper
                 });
             }
             
-            var widthStarCount = ControlWrapper.getStarCount(controlSpec["width"]?.asString());
+            let widthStarCount = ControlWrapper.getStarCount(controlSpec["width"]?.asString());
             if (widthStarCount > 0)
             {
                 self.frameProperties.widthSpec = SizeSpec.FillParent;
@@ -1105,11 +1102,11 @@ public class iOSControlWrapper : ControlWrapper
         return controlWrapper;
     }
     
-    public func createControls(#controlList: JArray, onCreateControl: ((JObject, iOSControlWrapper) -> (Void))? = nil)
+    public func createControls(controlList controlList: JArray, onCreateControl: ((JObject, iOSControlWrapper) -> (Void))? = nil)
     {
         super.createControls(self.bindingContext, controlList: controlList,
         onCreateControl: { (controlContext, controlSpec) in
-            var controlWrapper = iOSControlWrapper.createControl(self, bindingContext: controlContext, controlSpec: controlSpec);
+            let controlWrapper = iOSControlWrapper.createControl(self, bindingContext: controlContext, controlSpec: controlSpec);
             if (controlWrapper == nil)
             {
                 let controlType = controlSpec["control"];

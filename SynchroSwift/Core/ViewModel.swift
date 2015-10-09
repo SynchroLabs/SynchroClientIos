@@ -33,7 +33,7 @@ public class ViewModel
     
     public func createAndRegisterValueBinding(bindingContext: BindingContext, getValue: GetViewValue, setValue: SetViewValue?) -> ValueBinding
     {
-        var valueBinding = ValueBinding(viewModel: self, bindingContext: bindingContext, getViewValue: getValue, setViewValue: setValue);
+        let valueBinding = ValueBinding(viewModel: self, bindingContext: bindingContext, getViewValue: getValue, setViewValue: setValue);
         _valueBindings.append(valueBinding);
         return valueBinding;
     }
@@ -45,7 +45,7 @@ public class ViewModel
     
     public func createAndRegisterPropertyBinding(bindingContext: BindingContext, value: String, setValue: SetViewValue) -> PropertyBinding
     {
-        var propertyBinding = PropertyBinding(bindingContext: bindingContext, value: value, setViewValue: setValue);
+        let propertyBinding = PropertyBinding(bindingContext: bindingContext, value: value, setViewValue: setValue);
         _propertyBindings.append(propertyBinding);
         return propertyBinding;
     }
@@ -65,7 +65,7 @@ public class ViewModel
     
         if (path.hasPrefix("ViewModel."))
         {
-            path = path.substring(count("ViewModel."));
+            path = path.substring("ViewModel.".characters.count);
         }
     
         return path;
@@ -200,10 +200,10 @@ public class ViewModel
     
             for element in viewModelDeltas as! JArray
             {
-                var viewModelDelta = element as! JObject;
-                var path = (viewModelDelta as JObject)["path"]!.asString()!;
-                var value = viewModelDelta["value"]?.deepClone();
-                var changeType = (viewModelDelta as JObject)["change"]!.asString()!;
+                let viewModelDelta = element as! JObject;
+                let path = (viewModelDelta as JObject)["path"]!.asString()!;
+                let value = viewModelDelta["value"]?.deepClone();
+                let changeType = (viewModelDelta as JObject)["change"]!.asString()!;
     
                 logger.debug("View model item change (\(changeType)) for path: {\(path)}");
                 if (changeType == "object")
@@ -223,7 +223,7 @@ public class ViewModel
                         {
                             logger.debug("Updating view model item for path: \(path) to value: \(value!)");
         
-                            var rebindRequired = JToken.updateTokenValue(&vmItemValue!, newToken: value!);
+                            let rebindRequired = JToken.updateTokenValue(&vmItemValue!, newToken: value!);
                             bindingUpdates.append(BindingUpdate(bindingPath: path, rebindRequired: rebindRequired));
                         }
                         else
@@ -244,15 +244,15 @@ public class ViewModel
                     if (value != nil)
                     {
                         // First, double check to make sure the path doesn't actually exist
-                        var vmItemValue = _rootObject.selectToken(path, errorWhenNoMatch: false);
+                        let vmItemValue = _rootObject.selectToken(path, errorWhenNoMatch: false);
                         if (vmItemValue == nil)
                         {
                             if (path.hasSuffix("]"))
                             {
                                 // This is an array element...
-                                var parenPos = path.lastIndexOf("[");
-                                var parentPath = path.substringToIndex(parenPos!);
-                                var parentToken = _rootObject.selectToken(parentPath);
+                                let parenPos = path.lastIndexOf("[");
+                                let parentPath = path.substringToIndex(parenPos!);
+                                let parentToken = _rootObject.selectToken(parentPath);
                                 if ((parentToken != nil) && (parentToken is JArray))
                                 {
                                     (parentToken as! JArray).append(value!);
@@ -265,10 +265,10 @@ public class ViewModel
                             else if (path.contains("."))
                             {
                                 // This is an object property...
-                                var dotPos = path.lastIndexOf(".");
-                                var parentPath = path.substringToIndex(dotPos!);
-                                var attributeName = path.substringFromIndex(advance(dotPos!, 1));
-                                var parentToken = _rootObject.selectToken(parentPath);
+                                let dotPos = path.lastIndexOf(".");
+                                let parentPath = path.substringToIndex(dotPos!);
+                                let attributeName = path.substringFromIndex((dotPos!).advancedBy(1));
+                                let parentToken = _rootObject.selectToken(parentPath);
                                 if ((parentToken != nil) && (parentToken is JObject))
                                 {
                                     (parentToken as! JObject)[attributeName] = value;
@@ -299,7 +299,7 @@ public class ViewModel
                     logger.debug("Removing bound item for path: \(path)");
                     bindingUpdates.append(BindingUpdate(bindingPath: path, rebindRequired: true));
     
-                    var vmItemValue = _rootObject.selectToken(path);
+                    let vmItemValue = _rootObject.selectToken(path);
                     if (vmItemValue != nil)
                     {
                         logger.debug("Removing bound item for path: \(vmItemValue!.Path)");
@@ -324,7 +324,7 @@ public class ViewModel
     
         if (updateView)
         {
-            updateViewFromViewModel(bindingUpdates: bindingUpdates);
+            updateViewFromViewModel(bindingUpdates);
         }
     }
     
@@ -346,8 +346,8 @@ public class ViewModel
             return;
         }
     
-        var newValue = getValue();
-        var currentValue = bindingContext.getValue();
+        let newValue = getValue();
+        let currentValue = bindingContext.getValue();
         if (newValue == currentValue)
         {
             // Only record changes and update dependant UX objects for actual value changes - some programmatic
@@ -359,7 +359,7 @@ public class ViewModel
     
         // Update the view model
         //
-        var rebindRequired = bindingContext.setValue(newValue);
+        let rebindRequired = bindingContext.setValue(newValue);
     
         // Find the ValueBinding that triggered this update and mark it as dirty...
         //
@@ -376,7 +376,7 @@ public class ViewModel
         //
         var bindingUpdates = [BindingUpdate]();
         bindingUpdates.append(BindingUpdate(bindingPath: bindingContext.BindingPath, rebindRequired: rebindRequired));
-        updateViewFromViewModel(bindingUpdates: bindingUpdates, sourceBinding: bindingContext);
+        updateViewFromViewModel(bindingUpdates, sourceBinding: bindingContext);
     }
     
     public func isDirty() -> Bool
@@ -399,8 +399,8 @@ public class ViewModel
         {
             if (valueBinding.isDirty)
             {
-                var path = valueBinding.bindingContext.BindingPath;
-                var value: JToken = valueBinding.bindingContext.getValue()!;
+                let path = valueBinding.bindingContext.BindingPath;
+                let value: JToken = valueBinding.bindingContext.getValue()!;
                 logger.debug("Changed view model item - path: \(path) - value: \(value)");
                 vmDeltas[path] = value;
                 valueBinding.isDirty = false;

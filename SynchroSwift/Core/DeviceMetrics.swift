@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+private var logger = Logger.getLogger("DeviceMetrics");
+
 public enum SynchroDeviceClass : Int
 {
     case Phone      = 0;
@@ -61,6 +63,9 @@ public enum SynchroOrientation
 
 public class DeviceMetrics
 {
+    private var _clientName = NSBundle.mainBundle().infoDictionary?["Bundle name"] as! String;
+    private var _clientVersion = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as! String;
+    
     private var _deviceClass = SynchroDeviceClass.Phone;
     
     private var _naturalOrientation = SynchroOrientation.Portrait;
@@ -69,7 +74,7 @@ public class DeviceMetrics
     private var _osName = "Unknown";
     // !!! OS version would be nice
     
-    private var _deviceName = "Unknown";
+    private var _deviceName: String;// = "Unknown";
     
     private var _widthInches: Double = 0;
     private var _heightInches: Double = 0;
@@ -79,6 +84,11 @@ public class DeviceMetrics
     private var _deviceScalingFactor: Double = 1;
     
     private var _scalingFactor: Double = 1;
+    
+    // Client details
+    //
+    public var ClientName: String { get { return _clientName; } }
+    public var ClientVersion: String { get { return _clientVersion; } }
     
     // Device details
     //
@@ -187,22 +197,6 @@ public class DeviceMetrics
     
     // iOS - Specific logic
     
-    private class func iPadMini(device: UIDevice) -> Bool
-    {
-        // http://theiphonewiki.com/wiki/Models
-        //
-        let iPadMiniNames =
-        [
-            "iPad2,5", // Mini
-            "iPad2,6", //
-            "iPad2,7", //
-            "iPad4,4", // Retina Mini
-            "iPad4,5"  //
-        ];
-        
-        return contains(iPadMiniNames, device.machine);
-    }
-    
     private var _controller: UIViewController;
     
     public init (controller: UIViewController)
@@ -211,67 +205,84 @@ public class DeviceMetrics
         _os = "iOS";
         _osName = "iOS";
         
+        let currentDevice = UIDevice.currentDevice();
+        let mainScreen = UIScreen.mainScreen();
+        
+        // The reason we use nativeBounds below is that it is not dependent on the current device orientation (it is always
+        // based on "portrait up" orientation).  Because it is in pixels instead of points, we have to divide by scale.
+        //
+        if (_naturalOrientation == SynchroOrientation.Portrait)
+        {
+            _widthDeviceUnits = Double(mainScreen.nativeBounds.size.width/mainScreen.scale);
+            _heightDeviceUnits = Double(mainScreen.nativeBounds.size.height/mainScreen.scale);
+        }
+        else
+        {
+            _heightDeviceUnits = Double(mainScreen.nativeBounds.size.width/mainScreen.scale);
+            _widthDeviceUnits = Double(mainScreen.nativeBounds.size.height/mainScreen.scale);
+        }
+        
         // Device         Screen size  Logical resolution  Logical ppi  Width (in)  Height (in)
         // =============  ===========  ==================  ===========  ==========  ===========
         // iPhone / iPod     3.5"           320 x 480           163       1.963       2.944
         // iPhone / iPod     4.0"           320 x 568           163       1.963       3.485
+        // iPhone / iPod     4.7"           375 x 667           164.25    2.283       4.094
+        // iPhone / iPod     5.5"           414 x 736           153.56    2.696       4.794
         // iPad              9.7"           768 x 1024          132       5.818       7.758
         // iPad Mini         7.85"          768 x 1024          163       4.712       6.282
         
         // Screen size in inches is logical resolution divided by logical ppi
         // Physical ppi is logical ppi times scale
         
-        var currentDevice = UIDevice.currentDevice();
-        
-        var mainScreen = UIScreen.mainScreen();
-        
-        if (currentDevice.userInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+        if (currentDevice.userInterfaceIdiom == UIUserInterfaceIdiom.Phone)  // iPhone or iPod devices
         {
-            _deviceName = "iPhone/iPod";
+            _deviceName = currentDevice.modelName ?? "iPhone/iPod";
             _deviceClass = SynchroDeviceClass.Phone;
             _naturalOrientation = SynchroOrientation.Portrait;
             
+            let pointsHeight = Int(round(_heightDeviceUnits));
+            
             _widthInches = 1.963;
-            if (mainScreen.bounds.size.height == 568)
+            _heightInches = 2.944;
+            
+            if (pointsHeight == 568)
             {
                 _heightInches = 3.485;
             }
-            else
+            else if (pointsHeight == 667)
             {
-                _heightInches = 2.944;
+                _widthInches = 2.283;
+                _heightInches = 4.094;
+            }
+            else if (pointsHeight == 736)
+            {
+                _widthInches = 2.696;
+                _heightInches = 4.794;
             }
         }
-        else if (DeviceMetrics.iPadMini(currentDevice))
+        else // iPad devices (including mini)
         {
-            _deviceName = "iPad Mini";
-            _deviceClass = SynchroDeviceClass.MiniTablet;
+            _deviceName = currentDevice.modelName ?? "iPad";
             _naturalOrientation = SynchroOrientation.Landscape;
             
-            _widthInches = 6.282;
-            _heightInches = 4.712;
-        }
-        else
-        {
-            _deviceName = "iPad";
-            _deviceClass = SynchroDeviceClass.Tablet;
-            _naturalOrientation = SynchroOrientation.Landscape;
-            
-            _widthInches = 7.758;
-            _heightInches = 5.818;
-        }
-        
-        if (_naturalOrientation == SynchroOrientation.Portrait)
-        {
-            // MainScreen.Bounds assumes portrait layout
-            _widthDeviceUnits = Double(mainScreen.bounds.size.width);
-            _heightDeviceUnits = Double(mainScreen.bounds.size.height);
-        }
-        else
-        {
-            _heightDeviceUnits = Double(mainScreen.bounds.size.width);
-            _widthDeviceUnits = Double(mainScreen.bounds.size.height);
+            if (_deviceName.hasPrefix("iPad Mini"))
+            {
+                _deviceClass = SynchroDeviceClass.MiniTablet;
+                
+                _widthInches = 6.282;
+                _heightInches = 4.712;
+            }
+            else
+            {
+                _deviceClass = SynchroDeviceClass.Tablet;
+                
+                _widthInches = 7.758;
+                _heightInches = 5.818;
+            }
         }
         
+        logger.info("Current device \(currentDevice.machine) - name: \(_deviceName)");
+
         _deviceScalingFactor = Double(mainScreen.scale);
         
         self.updateScalingFactor();
@@ -282,54 +293,22 @@ public class DeviceMetrics
     {
         get
         {
-            if ((_controller.interfaceOrientation == UIInterfaceOrientation.LandscapeLeft) ||
-                (_controller.interfaceOrientation == UIInterfaceOrientation.LandscapeRight))
+            if (UIScreen.mainScreen().bounds.width < UIScreen.mainScreen().bounds.height)
             {
-                return SynchroOrientation.Landscape;
+                return SynchroOrientation.Portrait;
             }
             else
             {
-                return SynchroOrientation.Portrait;
+                return SynchroOrientation.Landscape;
             }
         }
     }
 }
 
-// Did I mention no class/static vars in Swift?
-//
-private let _deviceList =
-[
-    "i386":         "Simulator",
-    "x86_64":       "Simulator",
-    "iPod1,1":      "iPod Touch",       // (Original)
-    "iPod2,1":      "iPod Touch 2",     // (Second Generation)
-    "iPod3,1":      "iPod Touch 3",     // (Third Generation)
-    "iPod4,1":      "iPod Touch 4",     // (Fourth Generation)
-    "iPhone1,1":    "iPhone 1",         // (Original)
-    "iPhone1,2":    "iPhone 3G",        // (3G)
-    "iPhone2,1":    "iPhone 3GS",       // (3GS)
-    "iPad1,1":      "iPad 1",           // (Original)
-    "iPad2,1":      "iPad 2",           //
-    "iPad3,1":      "iPad 3",           // (3rd Generation)
-    "iPhone3,1":    "iPhone 4",         //
-    "iPhone4,1":    "iPhone 4S",        //
-    "iPhone5,1":    "iPhone 5",         // (model A1428, AT&T/Canada)
-    "iPhone5,2":    "iPhone 5",         // (model A1429, everything else)
-    "iPad3,4":      "iPad 4",           // (4th Generation)
-    "iPad2,5":      "iPad Mini 1",      // (Original)
-    "iPhone5,3":    "iPhone 5c",        // (model A1456, A1532 | GSM)
-    "iPhone5,4":    "iPhone 5c",        // (model A1507, A1516, A1526 (China), A1529 | Global)
-    "iPhone6,1":    "iPhone 5s",        // (model A1433, A1533 | GSM)
-    "iPhone6,2":    "iPhone 5s",        // (model A1457, A1518, A1528 (China), A1530 | Global)
-    "iPad4,1":      "iPad Air 1",       // 5th Generation iPad (iPad Air) - Wifi
-    "iPad4,2":      "iPad Air 2",       // 5th Generation iPad (iPad Air) - Cellular
-    "iPad4,4":      "iPad Mini 2",      // (2nd Generation iPad Mini - Wifi)
-    "iPad4,5":      "iPad Mini 2",      // (2nd Generation iPad Mini - Cellular)
-    "iPhone7,1":    "iPhone 6 Plus",    // All iPhone 6 Plus's
-    "iPhone7,2":    "iPhone 6"          // All iPhone 6's
-]
-
 // Machine name is not really supported in Swift, so this is how you do it...
+//
+// http://stackoverflow.com/questions/26028918/ios-how-to-determine-iphone-model-in-swift
+// https://github.com/dennisweissmann/Basics/blob/master/Device.swift
 //
 public extension UIDevice {
     var machine: String {
@@ -341,17 +320,43 @@ public extension UIDevice {
         )
         uname(&systemInfo)
         
-        let machine = systemInfo.machine
-        var identifier = ""
-        let mirror = reflect(machine)
-        for i in 0..<reflect(machine).count {
-            if mirror[i].1.value as! Int8 == 0 {
-                break
-            }
-            identifier.append(UnicodeScalar(UInt8(mirror[i].1.value as! Int8)))
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8 where value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
         }
         return identifier
     }
     
-    var modelName: String? { get { return _deviceList[machine] } };
+    var modelName: String?
+    {
+        get
+        {
+            switch machine
+            {
+                case "iPod5,1":                                  return "iPod Touch 5"
+                case "iPod7,1":                                  return "iPod Touch 6"
+                case "iPhone3,1", "iPhone3,2", "iPhone3,3":      return "iPhone 4"
+                case "iPhone4,1":                                return "iPhone 4s"
+                case "iPhone5,1", "iPhone5,2":                   return "iPhone 5"
+                case "iPhone5,3", "iPhone5,4":                   return "iPhone 5c"
+                case "iPhone6,1", "iPhone6,2":                   return "iPhone 5s"
+                case "iPhone7,2":                                return "iPhone 6"
+                case "iPhone7,1":                                return "iPhone 6 Plus"
+                case "iPhone8,1":                                return "iPhone 6s"
+                case "iPhone8,2":                                return "iPhone 6s Plus"
+                case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4": return "iPad 2"
+                case "iPad3,1", "iPad3,2", "iPad3,3":            return "iPad 3"
+                case "iPad3,4", "iPad3,5", "iPad3,6":            return "iPad 4"
+                case "iPad4,1", "iPad4,2", "iPad4,3":            return "iPad Air"
+                case "iPad5,1", "iPad5,3", "iPad5,4":            return "iPad Air 2"
+                case "iPad2,5", "iPad2,6", "iPad2,7":            return "iPad Mini"
+                case "iPad4,4", "iPad4,5", "iPad4,6":            return "iPad Mini 2"
+                case "iPad4,7", "iPad4,8", "iPad4,9":            return "iPad Mini 3"
+                case "iPad5,1", "iPad5,2":                       return "iPad Mini 4"
+                case "i386", "x86_64":                           return self.model.contains("Sim") ? self.model : self.model + " (Simulator)";
+                default:                                         return nil
+            }
+        }
+    }
 }

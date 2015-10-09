@@ -51,7 +51,7 @@ public class BindingContextTableViewCell : UITableViewCell
         super.init(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
     }
 
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
@@ -135,7 +135,7 @@ public class BindingContextTableSourceItem : TableSourceItem
     //
     public func bindCell(tableView: UITableView, cell: UITableViewCell)
     {
-        var tableViewCell = cell as! BindingContextTableViewCell;
+        let tableViewCell = cell as! BindingContextTableViewCell;
     
         // Now that we have the actual cell width, we're going to let the content control have a chance to set
         // its width and layout its children (assuming it's fill width and the width provided is different from
@@ -181,14 +181,14 @@ public class CheckableBindingContextTableSource : CheckableTableSource
         _tableItems.removeAll();
         for itemBindingContext in bindingContext.selectEach(itemSelector)
         {
-            var item = BindingContextTableSourceItem(parentControl: _parentControl, itemTemplate: _itemTemplate, bindingContext: itemBindingContext);
+            let item = BindingContextTableSourceItem(parentControl: _parentControl, itemTemplate: _itemTemplate, bindingContext: itemBindingContext);
             _tableItems.append(CheckableTableSourceItem(tableSourceItem: item, indexPath: NSIndexPath(forRow: _tableItems.count, inSection: 0)));
         }
     }
     
     public func addItem(bindingContext: BindingContext, isChecked: Bool = false)
     {
-        var item = BindingContextTableSourceItem(parentControl: _parentControl, itemTemplate: _itemTemplate, bindingContext: bindingContext);
+        let item = BindingContextTableSourceItem(parentControl: _parentControl, itemTemplate: _itemTemplate, bindingContext: bindingContext);
         _tableItems.append(CheckableTableSourceItem(tableSourceItem: item, indexPath: NSIndexPath(forRow: _tableItems.count, inSection: 0)));
     }
 }
@@ -209,7 +209,7 @@ public class TableContainerView : UIView
         // For explicit (static) child dimensions - size parent UIView to fit...
         //
         var panelSize = self.frame.size;
-        var margin = _controlWrapper.margin;
+        let margin = _controlWrapper.margin;
         
         if (_controlWrapper.frameProperties.widthSpec == SizeSpec.Explicit)
         {
@@ -230,7 +230,7 @@ public class TableContainerView : UIView
         self.layoutSubviews();
     }
 
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
@@ -246,7 +246,7 @@ public class TableContainerView : UIView
         
         var panelSize = self.frame.size;
     
-        var childView = _controlWrapper.control!;
+        let childView = _controlWrapper.control!;
         if (childView.hidden)
         {
             panelSize.height = 0;
@@ -254,7 +254,7 @@ public class TableContainerView : UIView
         else
         {
             var childFrame = childView.frame;
-            var margin = _controlWrapper.margin;
+            let margin = _controlWrapper.margin;
     
             if (_controlWrapper.frameProperties.widthSpec == SizeSpec.WrapContent)
             {
@@ -357,7 +357,7 @@ public class TableHeaderView : TableContainerView
         super.init(tableView: tableView, controlWrapper: controlWrapper);
     }
 
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
@@ -382,7 +382,7 @@ public class TableFooterView : TableContainerView
         super.init(tableView: tableView, controlWrapper: controlWrapper);
     }
 
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
@@ -409,7 +409,7 @@ public class iOSListViewWrapper : iOSControlWrapper
         
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var table = UITableView();
+        let table = UITableView();
         self._control = table;
         
         // This is better performance, but only works if all the rows are the same height and you know the height ahead of time...
@@ -420,7 +420,7 @@ public class iOSListViewWrapper : iOSControlWrapper
         //
         // table.RegisterClassForCellReuse(typeof(TableCell), TableCell.CellIdentifier);
         
-        var selectionMode = toListSelectionMode(controlSpec["select"]);
+        let selectionMode = toListSelectionMode(controlSpec["select"]);
         
         _dataSource = CheckableBindingContextTableSource(parentControl: self, itemTemplate: controlSpec["itemTemplate"] as! JObject, selectionMode: selectionMode, onSelectionChanged: listview_SelectionChanged, onItemClicked: listview_ItemClicked);
         table.dataSource = _dataSource;
@@ -458,7 +458,7 @@ public class iOSListViewWrapper : iOSControlWrapper
             
             if (bindingSpec["selection"] != nil)
             {
-                var selectionItem = bindingSpec["selectionItem"]?.asString() ?? "$data";
+                let selectionItem = bindingSpec["selectionItem"]?.asString() ?? "$data";
                 
                 processElementBoundValue(
                     "selection",
@@ -480,20 +480,20 @@ public class iOSListViewWrapper : iOSControlWrapper
     
         _selectionChangingProgramatically = true;
     
-        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
+        let tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
     
-        var oldCount = tableSource.allItems.count;
+        let oldCount = tableSource.allItems.count;
         tableSource.setContents(bindingContext, itemSelector: "$data");
-        var newCount = tableSource.allItems.count;
+        let newCount = tableSource.allItems.count;
         
         var reloadRows = [NSIndexPath]();
         var insertRows = [NSIndexPath]();
         var deleteRows = [NSIndexPath]();
         
-        var maxCount = max(newCount, oldCount);
+        let maxCount = max(newCount, oldCount);
         for (var i = 0; i < maxCount; i++)
         {
-            var row = NSIndexPath(forRow: i, inSection: 0);
+            let row = NSIndexPath(forRow: i, inSection: 0);
             if (i < min(newCount, oldCount))
             {
                 reloadRows.append(row);
@@ -579,13 +579,13 @@ public class iOSListViewWrapper : iOSControlWrapper
     
     public func getListViewSelection(tableView: UITableView, selectionItem: String) -> JToken
     {
-        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
+        let tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
         var checkedItems = tableSource.checkedItems;
         
         if (tableSource.selectionMode == ListSelectionMode.Multiple)
         {
-            var array = JArray();
+            let array = JArray();
             for item in checkedItems
             {
                 if let theItem = item.tableSourceItem as? BindingContextTableSourceItem
@@ -623,15 +623,15 @@ public class iOSListViewWrapper : iOSControlWrapper
     {
         _selectionChangingProgramatically = true;
         
-        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
+        let tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
         // Go through all values and check as appropriate
         //
         for checkableItem in tableSource.allItems
         {
             var isChecked = false;
-            var bindingItem = checkableItem.tableSourceItem as! BindingContextTableSourceItem;
-            var boundValue = bindingItem.bindingContext.select(selectionItem).getValue();
+            let bindingItem = checkableItem.tableSourceItem as! BindingContextTableSourceItem;
+            let boundValue = bindingItem.bindingContext.select(selectionItem).getValue();
             
             if let array = selection as? JArray
             {
@@ -662,8 +662,8 @@ public class iOSListViewWrapper : iOSControlWrapper
     {
         logger.debug("Listview item clicked: \(itemClicked)");
     
-        var tableView: UITableView = self.control as! UITableView;
-        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
+        let tableView: UITableView = self.control as! UITableView;
+        let tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
         if (tableSource.selectionMode == ListSelectionMode.None)
         {
@@ -685,10 +685,10 @@ public class iOSListViewWrapper : iOSControlWrapper
     {
         logger.debug("Listview selection changed");
     
-        var tableView: UITableView = self.control as! UITableView;
-        var tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
+        let tableView: UITableView = self.control as! UITableView;
+        let tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
-        if let selectionBinding = getValueBinding("selection")
+        if (getValueBinding("selection") != nil)
         {
             updateValueBindingForAttribute("selection");
         }

@@ -18,7 +18,7 @@ public class iOSSliderWrapper : iOSControlWrapper
         logger.debug("Creating slider element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var slider = UISlider();
+        let slider = UISlider();
         self._control = slider;
         
         processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 50);
@@ -53,8 +53,8 @@ public class iOSSliderWrapper : iOSControlWrapper
     
     func setMin(min: Float)
     {
-        var slider = self._control as! UISlider;
-        var needsValueUpdate = _value < slider.minimumValue;
+        let slider = self._control as! UISlider;
+        let needsValueUpdate = _value < slider.minimumValue;
         slider.minimumValue = min;
         if (needsValueUpdate)
         {
@@ -64,8 +64,8 @@ public class iOSSliderWrapper : iOSControlWrapper
     
     func setMax(max: Float)
     {
-        var slider = self._control as! UISlider;
-        var needsValueUpdate = _value > slider.maximumValue;
+        let slider = self._control as! UISlider;
+        let needsValueUpdate = _value > slider.maximumValue;
         slider.maximumValue = max;
         if (needsValueUpdate)
         {
@@ -75,7 +75,7 @@ public class iOSSliderWrapper : iOSControlWrapper
     
     func setValue(value: Float)
     {
-        var slider = self._control as! UISlider;
+        let slider = self._control as! UISlider;
         _value = value;
         slider.value = value;
     }

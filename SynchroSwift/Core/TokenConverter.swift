@@ -70,7 +70,7 @@ public class TokenConverter
                     result = theToken.asBool()!;
                 case JTokenType.String:
                     let str = theToken.asString()!;
-                    result = count(str) > 0;
+                    result = str.characters.count > 0;
                 case JTokenType.Float:
                     result = theToken.asDouble()! != 0;
                 case JTokenType.Integer:

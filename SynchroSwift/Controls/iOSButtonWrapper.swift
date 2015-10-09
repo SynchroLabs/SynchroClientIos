@@ -20,7 +20,7 @@ public class iOSButtonWrapper : iOSControlWrapper
         logger.debug("Creating button element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var button = UIButton(); // !!! Was UIButton.fromType(UIButtonType.RoundedRect);
+        let button = UIButton(); // !!! Was UIButton.fromType(UIButtonType.RoundedRect);
         self._control = button;
         
         // !!! Was kind of hoping to inherit the default/theme button text color, but if we don't

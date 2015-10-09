@@ -51,11 +51,11 @@ class StateManagerTests: XCTestCase
         func processPageView(pageView: JObject) -> Void
         {
             responseNumber++;
-            println("processPageView response: \(responseNumber)");
+            print("processPageView response: \(responseNumber)");
             
             if responseNumber == 1
             {
-                XCTAssertEqual("Synchro.io Menu", pageView["title"]!.asString()!);
+                XCTAssertEqual("Synchro Samples", pageView["title"]!.asString()!);
                 expectationMenu.fulfill();
                 stateManager.sendCommandRequestAsync("goToView", parameters: JObject(["view": JValue("hello")]));
             }

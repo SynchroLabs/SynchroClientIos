@@ -81,6 +81,8 @@ public class StateManager
     {
         return JObject(
         [
+            "clientName": JValue(self.deviceMetrics.ClientName),
+            "clientVersion": JValue(self.deviceMetrics.ClientVersion),
             "os": JValue(self.deviceMetrics.OS),
             "osName": JValue(self.deviceMetrics.OSName),
             "deviceName": JValue(self.deviceMetrics.DeviceName),
@@ -126,7 +128,7 @@ public class StateManager
     
     func messageBox(title: String, message: String, buttonLabel: String, buttonCommand: String, onCommand: CommandHandler)
     {
-        var messageBox = JObject(
+        let messageBox = JObject(
         [
             "title": JValue(title),
             "message": JValue(message),
@@ -167,7 +169,7 @@ public class StateManager
         
         if (responseAsJSON["NewSessionId"] != nil)
         {
-            var newSessionId = responseAsJSON["NewSessionId"]!.asString()!;
+            let newSessionId = responseAsJSON["NewSessionId"]!.asString()!;
             if (_app.sessionId != nil)
             {
                 // Existing client SessionId was replaced by server.  Do we care?  Should we do something (maybe clear any
@@ -188,8 +190,8 @@ public class StateManager
     
         if (responseAsJSON["Error"] != nil)
         {
-            var jsonError = responseAsJSON["Error"] as! JObject;
-            var errorMessage = jsonError["message"]!.asString()!;
+            let jsonError = responseAsJSON["Error"] as! JObject;
+            let errorMessage = jsonError["message"]!.asString()!;
             logger.warn("Response contained error: \(errorMessage)");
             if (errorMessage == "SyncError")
             {
@@ -255,8 +257,8 @@ public class StateManager
             // !!! Do we want to update our stored app defintion (in MaaasApp, via the AppManager)?  Maybe only if changed?
             //
             _appDefinition = responseAsJSON["App"] as? JObject;
-            var appName = _appDefinition!["name"]!.asString()!;
-            var appDefinition = _appDefinition!["description"]!.asString()!;
+            let appName = _appDefinition!["name"]!.asString()!;
+            let appDefinition = _appDefinition!["description"]!.asString()!;
             logger.info("Got app definition for: \(appName) - \(appDefinition)");
             self.sendAppStartPageRequestAsync();
             return;
@@ -266,7 +268,7 @@ public class StateManager
             self._instanceId = responseAsJSON["InstanceId"]!.asInt()!;
             self._instanceVersion = responseAsJSON["InstanceVersion"]!.asInt()!;
             
-            var jsonViewModel = responseAsJSON["ViewModel"] as! JObject;
+            let jsonViewModel = responseAsJSON["ViewModel"] as! JObject;
             
             self._viewModel.initializeViewModelData(jsonViewModel);
             
@@ -280,7 +282,7 @@ public class StateManager
 
                 self._isBackSupported = responseAsJSON["Back"]?.asBool() ?? false;
                 
-                var jsonPageView = responseAsJSON["View"] as! JObject;
+                let jsonPageView = responseAsJSON["View"] as! JObject;
                 _onProcessPageView!(pageView: jsonPageView);
                 
                 // If the view model is dirty after rendering the page, then the changes are going to have been
@@ -297,15 +299,15 @@ public class StateManager
         }
         else // Updating existing page/screen
         {
-            var responseInstanceId = responseAsJSON["InstanceId"]?.asInt();
+            let responseInstanceId = responseAsJSON["InstanceId"]?.asInt();
             if (responseInstanceId == self._instanceId)
             {
-                var responseInstanceVersion = responseAsJSON["InstanceVersion"]?.asInt();
+                let responseInstanceVersion = responseAsJSON["InstanceVersion"]?.asInt();
                 
                 // You can get a new view on a view model update if the view is dynamic and was updated
                 // based on the previous command/update.
                 //
-                var viewUpdatePresent = (responseAsJSON["View"] != nil);
+                let viewUpdatePresent = (responseAsJSON["View"] != nil);
             
                 if (responseAsJSON["ViewModelDeltas"] != nil)
                 {
@@ -315,7 +317,7 @@ public class StateManager
                     {
                         self._instanceVersion!++;
                         
-                        var jsonViewModelDeltas = responseAsJSON["ViewModelDeltas"]!;
+                        let jsonViewModelDeltas = responseAsJSON["ViewModelDeltas"]!;
                         // logger.Debug("ViewModel deltas: {0}", jsonViewModelDeltas);
                         
                         // If we don't have a new View, we'll update the current view as part of applying
@@ -341,7 +343,7 @@ public class StateManager
                         // Render the new page and bind/update it
                         //
                         self._path = responseAsJSON["Path"]!.asString()!;
-                        var jsonPageView = responseAsJSON["View"] as! JObject;
+                        let jsonPageView = responseAsJSON["View"] as! JObject;
                         _onProcessPageView!(pageView: jsonPageView);
                         updateRequired = self._viewModel.isDirty();
                     }
@@ -372,7 +374,7 @@ public class StateManager
         if (responseAsJSON["MessageBox"] != nil)
         {
             logger.info("Launching message box...");
-            var jsonMessageBox = responseAsJSON["MessageBox"] as! JObject;
+            let jsonMessageBox = responseAsJSON["MessageBox"] as! JObject;
             _onProcessMessageBox!(messageBox: jsonMessageBox, commandHandler:
             {
                 (command) in
@@ -385,7 +387,7 @@ public class StateManager
         if (responseAsJSON["NextRequest"] != nil)
         {
             logger.debug("Got NextRequest, composing and sending it now...");
-            var requestObject = responseAsJSON["NextRequest"]!.deepClone() as! JObject;
+            let requestObject = responseAsJSON["NextRequest"]!.deepClone() as! JObject;
             
             if (updateRequired)
             {
@@ -405,7 +407,7 @@ public class StateManager
     public func startApplicationAsync()
     {
         logger.info("Loading Synchro application definition for app at: \(_app.endpoint)");
-        var requestObject = JObject(
+        let requestObject = JObject(
         [
             "Mode": JValue("AppDefinition"),
             "TransactionId": JValue(0)
@@ -419,7 +421,7 @@ public class StateManager
         
         logger.info("Request app start page at path: '\(self._path!)'");
         
-        var requestObject = JObject(
+        let requestObject = JObject(
         [
             "Mode": JValue("Page"),
             "Path": JValue(self._path!),
@@ -435,7 +437,7 @@ public class StateManager
     {
         logger.info("Sending resync for path: '\(self._path)'");
         
-        var requestObject = JObject(
+        let requestObject = JObject(
         [
             "Mode": JValue("Resync"),
             "Path": JValue(self._path!),
@@ -449,10 +451,10 @@ public class StateManager
     
     private func addDeltasToRequestObject(requestObject: JObject) -> Bool
     {
-        var vmDeltas = self._viewModel.collectChangedValues();
+        let vmDeltas = self._viewModel.collectChangedValues();
         if (vmDeltas.count > 0)
         {
-            var deltas = JArray();
+            let deltas = JArray();
             for (deltaKey, deltaValue) in vmDeltas
             {
                 deltas.append(JObject(
@@ -478,7 +480,7 @@ public class StateManager
         //
         if (self._viewModel.isDirty())
         {
-            var requestObject = JObject(
+            let requestObject = JObject(
             [
                 "Mode": JValue("Update"),
                 "Path": JValue(self._path!),
@@ -499,7 +501,7 @@ public class StateManager
     {
         logger.info("Sending command: '\(command)' for path: '\(self._path!)'");
         
-        var requestObject = JObject(
+        let requestObject = JObject(
         [
             "Mode": JValue("Command"),
             "Path": JValue(self._path!),
@@ -523,7 +525,7 @@ public class StateManager
     {
         logger.info("Sending 'back' for path: '\(self._path)'");
         
-        var requestObject = JObject(
+        let requestObject = JObject(
         [
             "Mode": JValue("Back"),
             "Path": JValue(self._path!),
@@ -540,7 +542,7 @@ public class StateManager
         logger.info("Sending ViewUpdate for path: '\(self._path)'");
         
         // Send the updated view metrics
-        var requestObject = JObject(
+        let requestObject = JObject(
         [
             "Mode": JValue("ViewUpdate"),
             "Path": JValue(self._path!),

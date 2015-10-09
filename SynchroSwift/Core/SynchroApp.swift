@@ -107,16 +107,16 @@ public class SynchroAppManager
         }
         else
         {
-            _apps.filter { $0.endpoint != app.endpoint };
+            _apps = _apps.filter { $0.endpoint != app.endpoint };
             _apps.append(app);
         }
     }
     
     class func appFromJson(json: JObject) -> SynchroApp
     {
-        var endpoint = json["endpoint"]!.asString()!;
-        var appDefinition = json["definition"]!.deepClone() as! JObject;
-        var sessionId = json["sessionId"]?.asString();
+        let endpoint = json["endpoint"]!.asString()!;
+        let appDefinition = json["definition"]!.deepClone() as! JObject;
+        let sessionId = json["sessionId"]?.asString();
     
         return SynchroApp(endpoint: endpoint, appDefinition: appDefinition, sessionId: sessionId);
     }
@@ -152,7 +152,7 @@ public class SynchroAppManager
     
     public func serializeToJson() -> JObject
     {
-        var obj = JObject();
+        let obj = JObject();
     
         if let seed = _appSeed
         {
@@ -161,7 +161,7 @@ public class SynchroAppManager
     
         if (_apps.count > 0)
         {
-            var array = JArray();
+            let array = JArray();
             for app in _apps
             {
                 array.append(SynchroAppManager.appToJson(app));
@@ -176,7 +176,7 @@ public class SynchroAppManager
     {
         if let path = NSBundle.mainBundle().pathForResource("seed", ofType: "json")
         {
-            return String(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil)
+            return try? String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
         }
 
         return nil;
@@ -184,23 +184,23 @@ public class SynchroAppManager
 
     func loadLocalState() -> String?
     {
-        var userDefaults = NSUserDefaults.standardUserDefaults();
+        let userDefaults = NSUserDefaults.standardUserDefaults();
         return userDefaults.stringForKey("seed.json");
     }
     
     func saveLocalState(contents: String) -> Bool
     {
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setValue(contents, forKey: "seed.json")
         return userDefaults.synchronize()
     }
     
     public func loadState() -> Bool
     {
-        var bundledState = loadBundledState()!;
-        var parsedBundledState = JToken.parse(bundledState) as! JObject;
+        let bundledState = loadBundledState()!;
+        let parsedBundledState = JToken.parse(bundledState) as! JObject;
         
-        if let seed = parsedBundledState["seed"] as? JObject
+        if (parsedBundledState["seed"] != nil)
         {
             // If the bundled state contains a "seed", then we're just going to use that as the
             // app state (we'll launch the app inidicated by the seed and suppress the launcher).
@@ -219,7 +219,7 @@ public class SynchroAppManager
                 localState = bundledState;
                 saveLocalState(localState!);
             }
-            var parsedLocalState = JToken.parse(localState!) as! JObject;
+            let parsedLocalState = JToken.parse(localState!) as! JObject;
             serializeFromJson(parsedLocalState);
         }
     
@@ -228,7 +228,7 @@ public class SynchroAppManager
     
     public func saveState() -> Bool
     {
-        var json = serializeToJson();
+        let json = serializeToJson();
         return saveLocalState(json.toJson());
     }
 }

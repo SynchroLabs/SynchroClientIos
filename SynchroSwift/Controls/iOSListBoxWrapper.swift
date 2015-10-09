@@ -69,7 +69,7 @@ public class CheckableTableSourceItem
     public func getCell(tableView: UITableView) -> UITableViewCell
     {
         logger.debug("Getting cell for: \(_indexPath)");
-        var cell = tableView.dequeueReusableCellWithIdentifier(_tableSourceItem.cellIdentifier) as? UITableViewCell;
+        var cell = tableView.dequeueReusableCellWithIdentifier(_tableSourceItem.cellIdentifier);
         if (cell == nil)
         {
             cell = _tableSourceItem.createCell(tableView);
@@ -144,8 +144,8 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
     public func getCell(tableView: UITableView, indexPath: NSIndexPath) -> UITableViewCell
     {
         logger.debug("Getting cell for path: \(indexPath)");
-        var item = _tableItems[indexPath.row];
-        var cell = item.getCell(tableView);
+        let item = _tableItems[indexPath.row];
+        let cell = item.getCell(tableView);
         if ((_selectionMode == ListSelectionMode.None) && (_onItemClicked != nil))
         {
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator;
@@ -175,7 +175,7 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
     public func getHeightForRow(tableView: UITableView, indexPath: NSIndexPath) -> CGFloat
     {
         logger.debug("Getting row height for: \(indexPath)");
-        var item = _tableItems[indexPath.row];
+        let item = _tableItems[indexPath.row];
         return item.getHeightForRow(tableView);
     }
     
@@ -192,7 +192,7 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
     
         tableView.deselectRowAtIndexPath(indexPath, animated: true); // normal iOS behaviour is to remove the blue highlight
     
-        var selectedItem = _tableItems[indexPath.row];
+        let selectedItem = _tableItems[indexPath.row];
     
         if ((_selectionMode == ListSelectionMode.Multiple) || ((_selectionMode == ListSelectionMode.Single) && !selectedItem.checked))
         {
@@ -326,7 +326,7 @@ public class BindingContextAsCheckableStringTableSource : CheckableTableSource
     
     public func addItem(bindingContext: BindingContext, itemContent: String, isChecked: Bool = false)
     {
-        var item = BindingContextAsStringTableSourceItem(bindingContext: bindingContext, itemContent: itemContent);
+        let item = BindingContextAsStringTableSourceItem(bindingContext: bindingContext, itemContent: itemContent);
         _tableItems.append(CheckableTableSourceItem(tableSourceItem: item, indexPath: NSIndexPath(forRow: _tableItems.count, inSection: 0)));
     }
 }
@@ -344,14 +344,14 @@ public class iOSListBoxWrapper : iOSControlWrapper
         logger.debug("Creating listbox element");
         super.init(parent: parent, bindingContext: bindingContext);
 
-        var table = UITableView();
+        let table = UITableView();
         self._control = table;
         
         // The "new style" reuse model doesn't seem to work with custom table cell implementations
         //
         // table.RegisterClassForCellReuse(typeof(TableCell), TableCell.CellIdentifier);
         
-        var selectionMode = self.toListSelectionMode(controlSpec["select"]);
+        let selectionMode = self.toListSelectionMode(controlSpec["select"]);
         
         _dataSource = BindingContextAsCheckableStringTableSource(selectionMode: selectionMode, onSelectionChanged: listbox_SelectionChanged, onItemClicked: listbox_ItemClicked);
         table.dataSource = _dataSource;
@@ -366,7 +366,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
         
             if (bindingSpec["items"] != nil)
             {
-                var itemContent = bindingSpec["itemContent"]?.asString() ?? "{$data}";
+                let itemContent = bindingSpec["itemContent"]?.asString() ?? "{$data}";
                 
                 processElementBoundValue(
                     "items",
@@ -377,7 +377,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
             
             if (bindingSpec["selection"] != nil)
             {
-                var selectionItem = bindingSpec["selectionItem"]?.asString() ?? "$data";
+                let selectionItem = bindingSpec["selectionItem"]?.asString() ?? "$data";
                 
                 processElementBoundValue(
                     "selection",
@@ -399,27 +399,27 @@ public class iOSListBoxWrapper : iOSControlWrapper
     
         _selectionChangingProgramatically = true;
     
-        var tableSource = tableView.dataSource! as! BindingContextAsCheckableStringTableSource;
+        let tableSource = tableView.dataSource! as! BindingContextAsCheckableStringTableSource;
     
-        var oldCount = tableSource.allItems.count;
+        let oldCount = tableSource.allItems.count;
         tableSource.clearAllItems();
     
-        var itemContexts = bindingContext.selectEach("$data");
+        let itemContexts = bindingContext.selectEach("$data");
         for itemContext in itemContexts
         {
             tableSource.addItem(itemContext, itemContent: itemContent);
         }
     
-        var newCount = tableSource.allItems.count;
+        let newCount = tableSource.allItems.count;
     
         var reloadRows = [NSIndexPath]();
         var insertRows = [NSIndexPath]();
         var deleteRows = [NSIndexPath]();
     
-        var maxCount = max(newCount, oldCount);
+        let maxCount = max(newCount, oldCount);
         for (var i = 0; i < maxCount; i++)
         {
-            var row = NSIndexPath(forRow: i, inSection: 0);
+            let row = NSIndexPath(forRow: i, inSection: 0);
             if (i < min(newCount, oldCount))
             {
                 reloadRows.append(row);
@@ -466,13 +466,13 @@ public class iOSListBoxWrapper : iOSControlWrapper
     
     public func getListboxSelection(tableView: UITableView, selectionItem: String) -> JToken
     {
-        var tableSource = tableView.dataSource as! BindingContextAsCheckableStringTableSource;
+        let tableSource = tableView.dataSource as! BindingContextAsCheckableStringTableSource;
     
         var checkedItems = tableSource.checkedItems;
     
         if (tableSource.selectionMode == ListSelectionMode.Multiple)
         {
-            var array = JArray();
+            let array = JArray();
             for item in checkedItems
             {
                 if let theItem = item.tableSourceItem as? BindingContextAsStringTableSourceItem
@@ -499,13 +499,13 @@ public class iOSListBoxWrapper : iOSControlWrapper
     {
         _selectionChangingProgramatically = true;
     
-        var tableSource = tableView.dataSource! as! BindingContextAsCheckableStringTableSource;
+        let tableSource = tableView.dataSource! as! BindingContextAsCheckableStringTableSource;
     
         // Go through all values and check as appropriate
         //
         for tableSourceItem in tableSource.allItems
         {
-            var listItem = tableSourceItem.tableSourceItem as! BindingContextAsStringTableSourceItem;
+            let listItem = tableSourceItem.tableSourceItem as! BindingContextAsStringTableSourceItem;
     
             var itemChecked = false;
     
@@ -543,8 +543,8 @@ public class iOSListBoxWrapper : iOSControlWrapper
     {
         logger.debug("Listbox item clicked");
     
-        var tableView: UITableView = self.control as! UITableView;
-        var tableSource = tableView.dataSource! as! BindingContextAsCheckableStringTableSource;
+        let tableView: UITableView = self.control as! UITableView;
+        let tableSource = tableView.dataSource! as! BindingContextAsCheckableStringTableSource;
     
         if (tableSource.selectionMode == ListSelectionMode.None)
         {
@@ -566,10 +566,10 @@ public class iOSListBoxWrapper : iOSControlWrapper
     {
         logger.debug("Listbox selection changed");
     
-        var tableView: UITableView = self.control as! UITableView;
-        var tableSource = tableView.dataSource! as! BindingContextAsCheckableStringTableSource;
+        let tableView: UITableView = self.control as! UITableView;
+        let tableSource = tableView.dataSource! as! BindingContextAsCheckableStringTableSource;
     
-        if let selectionBinding = getValueBinding("selection")
+        if (getValueBinding("selection") != nil)
         {
             updateValueBindingForAttribute("selection");
         }

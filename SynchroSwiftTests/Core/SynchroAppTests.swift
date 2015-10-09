@@ -19,24 +19,24 @@ class SynchroAppTests: XCTestCase
     {
         // Force fresh load from the bundled seed...
         //
-        var userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.removeObjectForKey("seed.json");
         userDefaults.synchronize()
 
-        var appManager = SynchroAppManager();
+        let appManager = SynchroAppManager();
         
         appManager.loadState();
         
         XCTAssertNil(appManager.appSeed);
         XCTAssertEqual(1, appManager.apps.count);
         
-        var app = appManager.apps[0];
+        let app = appManager.apps[0];
                 
         XCTAssertEqual("synchro-samples", app.name);
         XCTAssertEqual("Synchro API Samples", app.description);
         XCTAssertEqual("https://api.synchro.io/api/samples", app.endpoint);
         
-        var expected = JObject(
+        let expected = JObject(
         [
             "name": JValue("synchro-samples"),
             "description": JValue("Synchro API Samples")

@@ -17,7 +17,7 @@ class JsonTests: XCTestCase
 {    
     func testInteger()
     {
-        var stuff = JObject();
+        let stuff = JObject();
     
         stuff["foo"] = JValue(7);
         
@@ -26,7 +26,7 @@ class JsonTests: XCTestCase
 
     func testString()
     {
-        var stuff = JObject();
+        let stuff = JObject();
     
         stuff["bar"] = JValue("kitty");
     
@@ -35,7 +35,7 @@ class JsonTests: XCTestCase
     
     func testArray()
     {
-        var stuff = JObject();
+        let stuff = JObject();
     
         stuff["baz"] = JArray([ JValue(8), JValue("dog") ]);
     
@@ -45,7 +45,7 @@ class JsonTests: XCTestCase
     
     func testDeepClone()
     {
-        var stuff = JObject(
+        let stuff = JObject(
         [
             "a": JObject(
             [
@@ -60,7 +60,7 @@ class JsonTests: XCTestCase
             ])
         ]);
 
-        var duplicateStuff = JObject(
+        let duplicateStuff = JObject(
         [
             "a": JObject(
             [
@@ -75,7 +75,7 @@ class JsonTests: XCTestCase
             ])
         ]);
 
-        var cloneStuff = stuff.deepClone();
+        let cloneStuff = stuff.deepClone();
         
         XCTAssert(stuff.deepEquals(duplicateStuff));
         XCTAssert(stuff.deepEquals(cloneStuff));
@@ -94,7 +94,7 @@ class JsonTests: XCTestCase
     
     func testPath()
     {
-        var stuff = JObject(
+        let stuff = JObject(
         [
             "a": JObject(
             [
@@ -116,15 +116,15 @@ class JsonTests: XCTestCase
     {
         // This test reproduced a crashing (internal assert) failure, so just not crashing is considered a success...
         //
-        var stuff = JObject();
+        let stuff = JObject();
         
         stuff["a"] = JValue();
         stuff["b"] = JValue();
 
         var vmItemValue = stuff.selectToken("a");
-        var rebindRequired = JToken.updateTokenValue(&vmItemValue!, newToken: JObject(["baz": JValue("Fraz")]));
+        let rebindRequired = JToken.updateTokenValue(&vmItemValue!, newToken: JObject(["baz": JValue("Fraz")]));
         
-        var expected = JObject(
+        let expected = JObject(
         [
             "a": JObject(["baz": JValue("Fraz")]),
             "b": JValue()
@@ -136,11 +136,11 @@ class JsonTests: XCTestCase
     
     func testArrayRemoveByObjectNotValue()
     {
-        var red = JValue("Red");
-        var green1 = JValue("Green");
-        var green2 = JValue("Green");
+        let red = JValue("Red");
+        let green1 = JValue("Green");
+        let green2 = JValue("Green");
         
-        var arr = JArray([red, green1, green2]);
+        let arr = JArray([red, green1, green2]);
         
         arr.remove(green2);
         

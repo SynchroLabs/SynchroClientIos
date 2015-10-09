@@ -74,7 +74,7 @@ public class BindingContext
         //  $index
         //  $data
         //
-        var processedBindingPath = _bindingTokensRE.substituteMatches(bindingPath, substitution:
+        let processedBindingPath = _bindingTokensRE.substituteMatches(bindingPath, substitution:
         {
             (match: String, matchGroups: [String]) -> String in
 
@@ -100,7 +100,7 @@ public class BindingContext
                     {
                         // Remove the last (rightmost) path segment
                         pathComponents.removeLast();
-                        parentPath = ".".join(pathComponents);
+                        parentPath = pathComponents.joinWithSeparator(".");
                     }
                 }
             }
@@ -184,7 +184,7 @@ public class BindingContext
         if (JTokenType.Array == _boundToken?.Type)
         {
             var index = 0;
-            for arrayElement in _boundToken as! JArray
+            for _ in _boundToken as! JArray
             {
                 bindingContexts.append(BindingContext(self, index: index, bindingPath: bindingPath));
                 index++;
@@ -212,7 +212,7 @@ public class BindingContext
                 {
                     if let parentArray = parent as? JArray
                     {
-                        var pos = find(parentArray, child!);
+                        let pos = parentArray.indexOf(child!);
                         return JValue(pos! as Int);
                     }
                     else

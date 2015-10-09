@@ -283,7 +283,7 @@ public class ControlWrapper: NSObject
     
     public func getCommand(commandName: CommandName) -> CommandInstance?
     {
-        if (contains(_commands.keys, commandName.Attribute))
+        if (_commands.keys.contains(commandName.Attribute))
         {
             return _commands[commandName.Attribute];
         }
@@ -297,7 +297,7 @@ public class ControlWrapper: NSObject
     
     public func getValueBinding(attribute: String) -> ValueBinding?
     {
-        if (contains(_valueBindings.keys, attribute))
+        if (_valueBindings.keys.contains(attribute))
         {
             return _valueBindings[attribute];
         }
@@ -345,10 +345,10 @@ public class ControlWrapper: NSObject
         if ((starString != nil) && (starString!.hasSuffix("*")))
         {
             starCnt = 1;
-            let valueString = starString!.stringByReplacingOccurrencesOfString("*", withString: "", options: nil, range: nil);
+            let valueString = starString!.stringByReplacingOccurrencesOfString("*", withString: "", options: [], range: nil);
             if (valueString.length > 0)
             {
-                starCnt = valueString.toInt() ?? starCnt;
+                starCnt = Int(valueString) ?? starCnt;
             }
         }
         
@@ -398,7 +398,7 @@ public class ControlWrapper: NSObject
     public func toListSelectionMode(value: JToken?, defaultSelectionMode: ListSelectionMode = ListSelectionMode.Single) -> ListSelectionMode
     {
         var selectionMode = defaultSelectionMode;
-        var selectionModeValue = value?.asString();
+        let selectionModeValue = value?.asString();
         if (selectionModeValue == "None")
         {
             selectionMode = ListSelectionMode.None;
@@ -446,12 +446,12 @@ public class ControlWrapper: NSObject
     
     public class func getColor(colorValue: String) -> ColorARGB?
     {
-        var len = count(colorValue);
+        var len = colorValue.characters.count;
         
         if (colorValue.hasPrefix("#"))
         {
             len--;
-            var hexColor = colorValue.substringFromIndex(advance(colorValue.startIndex, 1));
+            let hexColor = colorValue.substringFromIndex(colorValue.startIndex.advancedBy(1));
             var rgbValue:UInt32 = 0
             NSScanner(string: hexColor).scanHexInt(&rgbValue)
             
@@ -476,7 +476,7 @@ public class ControlWrapper: NSObject
         }
         else if (len > 0)
         {
-            if (contains(colorNames.keys, colorValue))
+            if (colorNames.keys.contains(colorValue))
             {
                 return ColorARGB(color: colorNames[colorValue]!);
             }
@@ -492,7 +492,7 @@ public class ControlWrapper: NSObject
     
     func processFontAttribute(controlSpec: JObject, fontSetter: FontSetter)
     {
-        var fontAttributeValue = controlSpec["font"];
+        let fontAttributeValue = controlSpec["font"];
         if (fontAttributeValue is JObject)
         {
             if let fontObject = fontAttributeValue as? JObject
@@ -500,7 +500,7 @@ public class ControlWrapper: NSObject
                 processElementProperty(fontObject["face"],
                 setValue: { (value) in
                     var faceType = FontFaceType.FONT_DEFAULT;
-                    var faceTypeString = value?.asString();
+                    let faceTypeString = value?.asString();
                     if faceTypeString == "Serif"
                     {
                         faceType = FontFaceType.FONT_SERIF;
@@ -554,8 +554,8 @@ public class ControlWrapper: NSObject
     {
         if let value = attributeValue?.asString()
         {
-            var valueBindingContext = self.bindingContext.select(value);
-            var binding = viewModel.createAndRegisterValueBinding(valueBindingContext, getValue: getValue, setValue: setValue);
+            let valueBindingContext = self.bindingContext.select(value);
+            let binding = viewModel.createAndRegisterValueBinding(valueBindingContext, getValue: getValue, setValue: setValue);
             setValueBinding(attributeName, valueBinding: binding);
             
             // Immediate content update during configuration.
@@ -580,7 +580,7 @@ public class ControlWrapper: NSObject
             if ((token.Type == JTokenType.String) && PropertyValue.containsBindingTokens(token.asString()!))
             {
                 // If value contains a binding, create a Binding and add it to metadata
-                var binding = viewModel.createAndRegisterPropertyBinding(self.bindingContext, value: token.asString()!, setValue: setValue);
+                let binding = viewModel.createAndRegisterPropertyBinding(self.bindingContext, value: token.asString()!, setValue: setValue);
                 _propertyBindings.append(binding);
                 
                 // Immediate content update during configuration.
@@ -598,7 +598,7 @@ public class ControlWrapper: NSObject
     //
     func updateValueBindingForAttribute(attributeName: String)
     {
-        var binding = getValueBinding(attributeName);
+        let binding = getValueBinding(attributeName);
         if (binding != nil)
         {
             // Update the local ViewModel from the element/control
@@ -616,7 +616,7 @@ public class ControlWrapper: NSObject
             {
                 // A command spec contains an attribute called "command".  All other attributes are considered parameters.
                 //
-                var commandInstance = CommandInstance(command: commandSpec["command"]!.asString()!);
+                let commandInstance = CommandInstance(command: commandSpec["command"]!.asString()!);
                 for propertyKey in commandSpec
                 {
                     if (propertyKey != "command")
@@ -667,13 +667,13 @@ public class ControlWrapper: NSObject
                 if ((element["binding"] != nil) && (element["binding"]!.Type == JTokenType.Object))
                 {
                     logger.debug("Found binding object");
-                    var bindingSpec = element["binding"] as! JObject;
+                    let bindingSpec = element["binding"] as! JObject;
                     if (bindingSpec["foreach"] != nil)
                     {
                         // First we create a BindingContext for the "foreach" path (a context to the elements to be iterated)
-                        var bindingPath = bindingSpec["foreach"]!.asString()!;
+                        let bindingPath = bindingSpec["foreach"]!.asString()!;
                         logger.debug("Found 'foreach' binding with path: \(bindingPath)");
-                        var forEachBindingContext = bindingContext.select(bindingPath);
+                        let forEachBindingContext = bindingContext.select(bindingPath);
                         
                         // Then we determine the bindingPath to use on each element
                         var withPath = "$data";
@@ -687,7 +687,7 @@ public class ControlWrapper: NSObject
                         }
                         
                         // Then we get each element at the foreach binding, apply the element path, and create the controls
-                        var bindingContexts = forEachBindingContext.selectEach(withPath);
+                        let bindingContexts = forEachBindingContext.selectEach(withPath);
                         for elementBindingContext in bindingContexts
                         {
                             logger.debug("foreach - creating control with binding context: \(elementBindingContext.BindingPath)");
@@ -697,7 +697,7 @@ public class ControlWrapper: NSObject
                     }
                     else if (bindingSpec["with"] != nil)
                     {
-                        var withBindingPath = bindingSpec["with"]!.asString()!;
+                        let withBindingPath = bindingSpec["with"]!.asString()!;
                         logger.debug("Found 'with' binding with path: \(withBindingPath)");
                         controlBindingContext = bindingContext.select(withBindingPath);
                     }

@@ -23,11 +23,11 @@ class TransportTests: XCTestCase
 {
     func testGetAppDefinition()
     {
-        var expectation = self.expectationWithDescription("got definition")
-        var expected = JObject(
+        let expectation = self.expectationWithDescription("got definition")
+        let expected = JObject(
         [
             "name": JValue("synchro-samples"),
-            "version": JValue("0.0.0"),
+            "version": JValue("0.0.1"),
             "description": JValue("Synchro API Samples"),
             "main": JValue("menu"),
             "author": JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)")
@@ -46,7 +46,7 @@ class TransportTests: XCTestCase
                 "synchro": JValue("*")
             ]);
 
-        var transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
+        let transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
         
         transport.getAppDefinition(
         { (definition) in
@@ -59,9 +59,9 @@ class TransportTests: XCTestCase
     
     func testGetFirstPage()
     {
-        var expectation = self.expectationWithDescription("got response")
+        let expectation = self.expectationWithDescription("got response")
         
-        var transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
+        let transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
 
         transport.sendMessage(
             nil,
@@ -85,9 +85,9 @@ class TransportTests: XCTestCase
     
     func testNavigateToPageViaCommand()
     {
-        var expectation = self.expectationWithDescription("got response")
+        let expectation = self.expectationWithDescription("got response")
         
-        var transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
+        let transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
         
         transport.sendMessage(
             nil,
@@ -142,9 +142,9 @@ class TransportTests: XCTestCase
 
     func testHttp404Failure()
     {
-        var expectation = self.expectationWithDescription("got response")
+        let expectation = self.expectationWithDescription("got response")
         
-        var transport = TransportHttp(uri: NSURL(string: "http://localhost:1337")!);
+        let transport = TransportHttp(uri: NSURL(string: "http://localhost:1337")!);
         
         transport.sendMessage(
             nil,
@@ -168,9 +168,9 @@ class TransportTests: XCTestCase
     
     func testNetworkFailure()
     {
-        var expectation = self.expectationWithDescription("got response")
+        let expectation = self.expectationWithDescription("got response")
         
-        var transport = TransportHttp(uri: NSURL(string: "http://nohostcanbefoundhere")!);
+        let transport = TransportHttp(uri: NSURL(string: "http://nohostcanbefoundhere")!);
         
         transport.sendMessage(
             nil,
@@ -194,8 +194,8 @@ class TransportTests: XCTestCase
     
     func testUriFromHostString()
     {
-        XCTAssertEqual(TransportHttp.uriFromHostString("foo/app")!.absoluteString!, "http://foo/app");
-        XCTAssertEqual(TransportHttp.uriFromHostString("http://foo/app")!.absoluteString!, "http://foo/app");
-        XCTAssertEqual(TransportHttp.uriFromHostString("https://foo/app")!.absoluteString!, "https://foo/app");
+        XCTAssertEqual(TransportHttp.uriFromHostString("foo/app")!.absoluteString, "http://foo/app");
+        XCTAssertEqual(TransportHttp.uriFromHostString("http://foo/app")!.absoluteString, "http://foo/app");
+        XCTAssertEqual(TransportHttp.uriFromHostString("https://foo/app")!.absoluteString, "https://foo/app");
     }
 }

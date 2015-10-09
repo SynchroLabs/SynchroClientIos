@@ -37,15 +37,15 @@ public class BindingContextPickerModel : NSObject, UIPickerViewDataSource, UIPic
     // UIPickerViewDataSource
     public func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
     {
-        var rows = (_bindingContexts != nil) ? _bindingContexts.count : 0;
+        let rows = (_bindingContexts != nil) ? _bindingContexts.count : 0;
         logger.debug("Returning number of rows in component \(component): \(rows)");
         return rows;
     }
     
     // UIPickerViewDelegate
-    public func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String!
+    public func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
     {
-        var title = PropertyValue.expandAsString(_itemContent, bindingContext: _bindingContexts[row]);
+        let title = PropertyValue.expandAsString(_itemContent, bindingContext: _bindingContexts[row]);
         logger.debug("returning title for row \(row): \(title)");
         return title;
     }
@@ -88,7 +88,7 @@ public class PickerTextField : UITextField
     //
     public override func caretRectForPosition(position: UITextPosition) -> CGRect
     {
-        return CGRect.nullRect;
+        return CGRect.null;
     }
 }
 
@@ -138,12 +138,12 @@ public class iOSPickerWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 50);
         applyFrameworkElementDefaults(_textBox);
         
-        var toolbar = UIToolbar();
+        let toolbar = UIToolbar();
         toolbar.barStyle = UIBarStyle.Black;
         toolbar.translucent = true;
         toolbar.sizeToFit();
         
-        var doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "doneButtonPressed:");
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "doneButtonPressed:");
         toolbar.setItems([doneButton], animated: true);
         
         _textBox.inputView = _picker;
@@ -155,7 +155,7 @@ public class iOSPickerWrapper : iOSControlWrapper
             
             if let items = bindingSpec["items"]
             {
-                var theItemContent = bindingSpec["itemContent"]?.asString() ?? "{$data}";
+                let theItemContent = bindingSpec["itemContent"]?.asString() ?? "{$data}";
                 
                 processElementBoundValue(
                     "items",
@@ -167,7 +167,7 @@ public class iOSPickerWrapper : iOSControlWrapper
             
             if let selection = bindingSpec["selection"]
             {
-                var theSelectionItem = bindingSpec["selectionItem"]?.asString() ?? "$data";
+                let theSelectionItem = bindingSpec["selectionItem"]?.asString() ?? "$data";
                 
                 processElementBoundValue(
                     "selection",
@@ -183,9 +183,9 @@ public class iOSPickerWrapper : iOSControlWrapper
     {
         if (_textBox.isFirstResponder())
         {
-            var model = _picker.dataSource as! BindingContextPickerModel;
+            let model = _picker.dataSource as! BindingContextPickerModel;
 
-            var row = _picker.selectedRowInComponent(0);
+            let row = _picker.selectedRowInComponent(0);
             _textBox.text = model.pickerView(_picker, titleForRow: row, forComponent: 0);
             _textBox.resignFirstResponder();
             self.picker_ItemSelected(_picker, row: row);
@@ -203,7 +203,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     
         _selectionChangingProgramatically = true;
         
-        var model = picker.dataSource as! BindingContextPickerModel;
+        let model = picker.dataSource as! BindingContextPickerModel;
         model.setContents(bindingContext, itemContent: itemContent);
         
         if let selectionBinding = getValueBinding("selection")
@@ -223,7 +223,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     
     public func getPickerSelection(picker: UIPickerView, selectionItem: String) -> JToken
     {
-        var model = picker.dataSource as! BindingContextPickerModel;
+        let model = picker.dataSource as! BindingContextPickerModel;
         
         if (picker.selectedRowInComponent(0) >= 0)
         {
@@ -236,7 +236,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     {
         _selectionChangingProgramatically = true;
 
-        var model = picker.dataSource as! BindingContextPickerModel;
+        let model = picker.dataSource as! BindingContextPickerModel;
     
         for (var i = 0; i < model.pickerView(picker, numberOfRowsInComponent: 0); i++)
         {
@@ -257,7 +257,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     {
         logger.debug("Picker selection changed");
     
-        if let selectionBinding = getValueBinding("selection")
+        if (getValueBinding("selection") != nil)
         {
             updateValueBindingForAttribute("selection");
         }
@@ -275,7 +275,7 @@ public class iOSPickerWrapper : iOSControlWrapper
                 
                 // The item click command handler resolves its tokens relative to the item clicked (not the list view).
                 //
-                var model = picker.dataSource as! BindingContextPickerModel;
+                let model = picker.dataSource as! BindingContextPickerModel;
                 stateManager.sendCommandRequestAsync(command.Command, parameters: command.getResolvedParameters(model.getBindingContext(row)));
             }
         }

@@ -18,8 +18,8 @@ public class iOSGridViewWrapper : iOSControlWrapper
         logger.debug("Creating grid view element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var gridViewLaout = UICollectionViewFlowLayout();
-        var gridView = UICollectionView(frame: CGRect(), collectionViewLayout: gridViewLaout);
+        let gridViewLaout = UICollectionViewFlowLayout();
+        let gridView = UICollectionView(frame: CGRect(), collectionViewLayout: gridViewLaout);
         self._control = gridView;
         
         processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 50);

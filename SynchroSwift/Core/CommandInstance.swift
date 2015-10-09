@@ -65,7 +65,7 @@ public class CommandInstance
     //
     public func getResolvedParameters(bindingContext: BindingContext) -> JObject
     {
-        var obj = JObject();
+        let obj = JObject();
         for (parameterKey, parameterValue) in _parameters
         {
             var value: JToken? = parameterValue;
@@ -74,7 +74,7 @@ public class CommandInstance
                 value = PropertyValue.expand(parameterValue.asString()!, bindingContext: bindingContext);
             }
             
-            if let theValue = value
+            if (value != nil)
             {
                 obj[parameterKey] = value!.deepClone();
             }

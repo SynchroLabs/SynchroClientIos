@@ -18,7 +18,7 @@ public class iOSProgressRingWrapper : iOSControlWrapper
         logger.debug("Creating progress ring element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var progress = UIActivityIndicatorView();
+        let progress = UIActivityIndicatorView();
         progress.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
         
         self._control = progress;
@@ -28,8 +28,8 @@ public class iOSProgressRingWrapper : iOSControlWrapper
         applyFrameworkElementDefaults(progress);
         
         processElementProperty(controlSpec["value"], setValue: { (value) in
-            var animate = self.toBoolean(value);
-            var isAnimating = progress.isAnimating();
+            let animate = self.toBoolean(value);
+            let isAnimating = progress.isAnimating();
             if (animate && !isAnimating)
             {
                 progress.startAnimating();

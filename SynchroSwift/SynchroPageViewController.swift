@@ -26,7 +26,7 @@ public class SynchroPageViewController : UIViewController
         super.init(nibName: nil, bundle: nil);
     }
 
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented");
     }
@@ -39,9 +39,9 @@ public class SynchroPageViewController : UIViewController
         
         self.view.frame = UIScreen.mainScreen().bounds;
         self.view.backgroundColor = UIColor.whiteColor();
-        self.view.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+        self.view.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight];
         
-        var deviceMetrics = DeviceMetrics(controller: self);
+        let deviceMetrics = DeviceMetrics(controller: self);
         
         // When using AFNetworkHandler via ModernHttpClient component:
         //     HttpClient httpClient = new HttpClient(new AFNetworkHandler());
@@ -50,7 +50,7 @@ public class SynchroPageViewController : UIViewController
         // When using WebSocket transport:
         // Transport transport = new iOSTransportWs(this, _maaasApp.Endpoint);
         //
-        var transport = TransportHttp(uri: TransportHttp.uriFromHostString(_app.endpoint)!);
+        let transport = TransportHttp(uri: TransportHttp.uriFromHostString(_app.endpoint)!);
         
         var backToMenu:(() -> Void)? = nil;
         if ((_appManager.appSeed == nil) && (self.navigationController != nil))
@@ -75,67 +75,34 @@ public class SynchroPageViewController : UIViewController
         
         logger.debug("Completed viewDidLoad");
     }
-    
-    private func normalizeOrientation(orientation: UIInterfaceOrientation) -> UIInterfaceOrientation
-    {
-        if (orientation == UIInterfaceOrientation.LandscapeRight)
-        {
-            return UIInterfaceOrientation.LandscapeLeft;
-        }
-        else if (orientation == UIInterfaceOrientation.PortraitUpsideDown)
-        {
-            return UIInterfaceOrientation.Portrait;
-        }
         
-        return orientation;
-    }
-    
-    // When the device rotates, the OS calls this method to determine if it should try and rotate the
-    // application and then call WillAnimateRotation
-    //
-    // The method that this method overrides is obsolete, which was causing a compiler warning.  Since
-    // we allow rotation in all cases (at least for now), we don't need this anyway.
-    /*
-    public override func shouldAutorotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation) -> Bool
+    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator)
     {
-        // We're passed to orientation that it will rotate to. We could just return true, but this
-        // switch illustrates how you can test for the different cases.
-        //
-        switch (toInterfaceOrientation)
-        {
-            case UIInterfaceOrientation.LandscapeLeft:
-            case UIInterfaceOrientation.LandscapeRight:
-            case UIInterfaceOrientation.Portrait:
-            case UIInterfaceOrientation.PortraitUpsideDown:
-            default:
-                return true;
-        }
-    }
-    */
-    
-    // Is called when the OS is going to rotate the application. It handles rotating the status bar
-    // if it's present, as well as it's controls like the navigation controller and tab bar, but you
-    // must handle the rotation of your view and associated subviews. This call is wrapped in an
-    // animation block in the underlying implementation, so it will automatically animate your control
-    // repositioning.
-    //
-    public override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval)
-    {
-        // this.InterfaceOrientation == UIInterfaceOrientation.
-        super.willAnimateRotationToInterfaceOrientation(toInterfaceOrientation, duration: duration);
+        logger.info("App bounds changed (new world order)");
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator);
         
-        // Do our own rotation handling here
-        if (normalizeOrientation(toInterfaceOrientation) == UIInterfaceOrientation.Portrait)
-        {
-            logger.debug("Screen oriented to Portrait");
-            _stateManager.sendViewUpdateAsync(SynchroOrientation.Portrait);
-        }
-        else
-        {
-            logger.debug("Screen oriented to Landscape");
-            _stateManager.sendViewUpdateAsync(SynchroOrientation.Landscape);
-        }
+        logger.info("Transition from size - \(UIScreen.mainScreen().bounds) to size - \(size)");
         
-        _pageView.updateLayout();
+        coordinator.animateAlongsideTransition(nil, completion: {context in
+            logger.info("Transition to size complete - \(UIScreen.mainScreen().bounds)");
+            // !!! Need some kind of viewUpdateAsync (like above).  
+            
+            if (UIScreen.mainScreen().bounds.width < UIScreen.mainScreen().bounds.height)
+            {
+                logger.debug("Screen oriented to Portrait");
+                self._stateManager.sendViewUpdateAsync(SynchroOrientation.Portrait);
+            }
+            else
+            {
+                logger.debug("Screen oriented to Landscape");
+                self._stateManager.sendViewUpdateAsync(SynchroOrientation.Landscape);
+            }
+
+            // !!! Need to update view metrics somehow (locally and send to server), since container size changed (this would be when 
+            //     running multiple apps and having sizable windows - such as Split View and Slide Over modes on iPad in iOS 9).
+            
+            self._pageView.updateLayout();
+        })
+        
     }
 }

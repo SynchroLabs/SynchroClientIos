@@ -97,7 +97,7 @@ public class PageView : NSObject
             self.setBackEnabled!(self.hasBackCommand);
         }
         
-        var pageTitle = pageView["title"]?.asString();
+        let pageTitle = pageView["title"]?.asString();
         if ((pageTitle != nil) && (setPageTitle != nil))
         {
             setPageTitle!(pageTitle!);
@@ -115,7 +115,7 @@ public class PageView : NSObject
             {
                 // There is a collection of page elements, create a default container (vertical stackpanel), make it the root, and populate it...
                 //
-                var controlSpec = JObject(
+                let controlSpec = JObject(
                 [
                     "control": JValue("stackpanel"),
                     "orientation": JValue("vertical"),

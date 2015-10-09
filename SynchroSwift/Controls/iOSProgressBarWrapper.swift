@@ -35,7 +35,7 @@ public class iOSProgressBarWrapper : iOSControlWrapper
         logger.debug("Creating progressbar element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var progress = UIProgressView();
+        let progress = UIProgressView();
         self._control = progress;
         
         processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 25);

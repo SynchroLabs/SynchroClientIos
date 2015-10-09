@@ -21,15 +21,15 @@ class BindingTests: XCTestCase
         //
         //     binding: "username"
         //
-        var controlSpec = JObject(["binding": JValue("username")]);
+        let controlSpec = JObject(["binding": JValue("username")]);
 
         // becomes
         //
         //     binding: { value: "username" }
         //
-        var expectedBindingSpec = JObject(["value": JValue("username")]);
+        let expectedBindingSpec = JObject(["value": JValue("username")]);
 
-        var bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "value");
+        let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "value");
         XCTAssert(bindingSpec!.deepEquals(expectedBindingSpec));
     }
     
@@ -39,7 +39,7 @@ class BindingTests: XCTestCase
         //
         //     binding: "doSomething"
         //
-        var controlSpec = JObject(["binding": JValue("doSomething")]);
+        let controlSpec = JObject(["binding": JValue("doSomething")]);
 
         // becomes
         //
@@ -49,9 +49,9 @@ class BindingTests: XCTestCase
         //
         //     binding: { onClick: { command: "doSomething" } }
         //
-        var expectedBindingSpec = JObject(["onClick": JObject(["command": JValue("doSomething")])]);
+        let expectedBindingSpec = JObject(["onClick": JObject(["command": JValue("doSomething")])]);
 
-        var bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "onClick", commandAttributes: ["onClick"]);
+        let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "onClick", commandAttributes: ["onClick"]);
         XCTAssert(bindingSpec!.deepEquals(expectedBindingSpec));
     }
     
@@ -61,15 +61,15 @@ class BindingTests: XCTestCase
         //
         //     binding: { command: "doSomething" value: "theValue" }
         //
-        var controlSpec = JObject(["binding": JObject(["command": JValue("doSomething"), "value": JValue("theValue")])]);
+        let controlSpec = JObject(["binding": JObject(["command": JValue("doSomething"), "value": JValue("theValue")])]);
 
         // becomes
         //
         //     binding: { onClick: { command: "doSomething", value: "theValue" } }
         //
-        var expectedBindingSpec = JObject(["onClick": JObject(["command": JValue("doSomething"), "value": JValue("theValue")])]);
+        let expectedBindingSpec = JObject(["onClick": JObject(["command": JValue("doSomething"), "value": JValue("theValue")])]);
 
-        var bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "onClick", commandAttributes: ["onClick"]);
+        let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "onClick", commandAttributes: ["onClick"]);
         XCTAssert(bindingSpec!.deepEquals(expectedBindingSpec));
     }
     
@@ -79,15 +79,15 @@ class BindingTests: XCTestCase
         //
         //     binding: { onClick: "doClickCommand", onSelect: "doSelectCommand" }
         //
-        var controlSpec = JObject(["binding": JObject(["onClick": JValue("doClickCommand"), "onSelect": JValue("doSelectCommand")])]);
+        let controlSpec = JObject(["binding": JObject(["onClick": JValue("doClickCommand"), "onSelect": JValue("doSelectCommand")])]);
         
         // becomes
         //
         //     binding: { onClick: { command: "doClickCommand" }, onSelect: { command: "doSelectCommand" } }
         //
-        var expectedBindingSpec = JObject(["onClick": JObject(["command": JValue("doClickCommand")]), "onSelect": JObject(["command": JValue("doSelectCommand")])]);
+        let expectedBindingSpec = JObject(["onClick": JObject(["command": JValue("doClickCommand")]), "onSelect": JObject(["command": JValue("doSelectCommand")])]);
         
-        var bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "onClick", commandAttributes: ["onClick", "onSelect"]);
+        let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "onClick", commandAttributes: ["onClick", "onSelect"]);
         XCTAssert(bindingSpec!.deepEquals(expectedBindingSpec));
     }
 
@@ -107,7 +107,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
 
-        var propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {colors[2].name}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {colors[2].name}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand()!.asString()!);
     }
@@ -128,7 +128,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {colors[2].name}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {colors[2].name}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand()!.asString()!);
         
@@ -157,7 +157,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {^colors[2].name}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The {title} are {colors[0].name}, {colors[1].name}, and {^colors[2].name}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The Colors are Red, Green, and Blue", propVal.expand()!.asString()!);
         
@@ -180,8 +180,8 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand()!;
+        let propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
+        let expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.Integer, expandedPropValToken.Type);
         XCTAssertEqual(420, expandedPropValToken.asInt()!);
@@ -196,8 +196,8 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand()!;
+        let propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
+        let expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.Float, expandedPropValToken.Type);
         XCTAssertEqual(13.69, expandedPropValToken.asDouble()!);
@@ -212,8 +212,8 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand()!;
+        let propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
+        let expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.Boolean, expandedPropValToken.Type);
         XCTAssertEqual(true, expandedPropValToken.asBool()!);
@@ -228,8 +228,8 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("{!serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand()!;
+        let propVal = PropertyValue("{!serial}", bindingContext: bindingCtx);
+        let expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.Boolean, expandedPropValToken.Type);
         XCTAssertEqual(false, expandedPropValToken.asBool()!);
@@ -244,8 +244,8 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand()!;
+        let propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
+        let expandedPropValToken = propVal.expand()!;
         
         XCTAssertEqual(JTokenType.String, expandedPropValToken.Type);
         XCTAssertEqual("foo", expandedPropValToken.asString()!);
@@ -260,8 +260,8 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("{!serial}", bindingContext: bindingCtx);
-        var expandedPropValToken = propVal.expand()!;
+        let propVal = PropertyValue("{!serial}", bindingContext: bindingCtx);
+        let expandedPropValToken = propVal.expand()!;
         
         // When we negate a string, the type is coerced (converted) to bool, the inverted...
         XCTAssertEqual(JTokenType.Boolean, expandedPropValToken.Type);
@@ -305,7 +305,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The number is: {serial}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The number is: {serial}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The number is: 69", propVal.expand()!.asString()!);
     }
@@ -319,7 +319,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The number is: {serial}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The number is: {serial}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The number is: 13.69", propVal.expand()!.asString()!);
     }
@@ -335,7 +335,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The int percentage is {intVal:P}, the double is: {doubleVal:P2}, and the str is {strVal:P2}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The int percentage is {intVal:P}, the double is: {doubleVal:P2}, and the str is {strVal:P2}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The int percentage is 1,300.00%, the double is: 69.14%, and the str is threeve", propVal.expand()!.asString()!);
     }
@@ -351,7 +351,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The int val is {intVal:D}, the double val is: {doubleVal:D4}, and the str val is {strVal:D2}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The int val is {intVal:D}, the double val is: {doubleVal:D4}, and the str val is {strVal:D2}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The int val is -13420, the double val is: 0069, and the str val is threeve", propVal.expand()!.asString()!);
     }
@@ -367,7 +367,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The int val is {intVal:N}, the double val is: {doubleVal:N4}, and the str val is {strVal:N2}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The int val is {intVal:N}, the double val is: {doubleVal:N4}, and the str val is {strVal:N2}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The int val is -13,420.00, the double val is: 69.1399, and the str val is threeve", propVal.expand()!.asString()!);
     }
@@ -383,7 +383,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The int val is {intVal:x}, the double val is: {doubleVal:X4}, and the str val is {strVal:X2}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The int val is {intVal:x}, the double val is: {doubleVal:X4}, and the str val is {strVal:X2}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The int val is fe, the double val is: 00FE, and the str val is threeve", propVal.expand()!.asString()!);
     }
@@ -399,7 +399,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The int val is {intVal:F2}, the double val is: {doubleVal:F4}, and the str val is {strVal:F2}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The int val is {intVal:F2}, the double val is: {doubleVal:F4}, and the str val is {strVal:F2}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The int val is -13420.00, the double val is: 254.1399, and the str val is threeve", propVal.expand()!.asString()!);
     }
@@ -415,7 +415,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The int val is {intVal:E2}, the double val is: {doubleVal:e4}, and the str val is {strVal:e2}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The int val is {intVal:E2}, the double val is: {doubleVal:e4}, and the str val is {strVal:e2}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The int val is -6.90E1, the double val is: 6.9123e1, and the str val is threeve", propVal.expand()!.asString()!);
     }
@@ -429,7 +429,7 @@ class BindingTests: XCTestCase
     
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The numeric value is {strVal:F2}", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The numeric value is {strVal:F2}", bindingContext: bindingCtx);
         
         XCTAssertEqual("The numeric value is 13.00", propVal.expand()!.asString()!);
     }
@@ -446,7 +446,7 @@ class BindingTests: XCTestCase
         
         let bindingCtx = BindingContext(viewModel);
         
-        var propVal = PropertyValue("The numeric value is {strVal:F2}%", bindingContext: bindingCtx);
+        let propVal = PropertyValue("The numeric value is {strVal:F2}%", bindingContext: bindingCtx);
         
         XCTAssertEqual("The numeric value is 13.00%", propVal.expand()!.asString()!);
     }

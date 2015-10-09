@@ -18,7 +18,7 @@ public class iOSCanvasWrapper : iOSControlWrapper
         logger.debug("Creating canvas element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var canvas = UIView();
+        let canvas = UIView();
         self._control = canvas;
         
         processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 50);

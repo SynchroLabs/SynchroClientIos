@@ -17,12 +17,12 @@ class TokenConverterTests: XCTestCase
 {
     func testToString()
     {
-        var objVal = JObject(["foo": JValue("bar"), "baz": JValue("fraz")]);
-        var arrayVal = JArray([JValue("foo"), JValue("bar")]);
-        var stringVal = JValue("foo");
-        var intVal = JValue(13);
-        var floatVal = JValue(13.69);
-        var boolVal = JValue(true);
+        let objVal = JObject(["foo": JValue("bar"), "baz": JValue("fraz")]);
+        let arrayVal = JArray([JValue("foo"), JValue("bar")]);
+        let stringVal = JValue("foo");
+        let intVal = JValue(13);
+        let floatVal = JValue(13.69);
+        let boolVal = JValue(true);
         
         XCTAssertEqual("", TokenConverter.toString(objVal));
         XCTAssertEqual("2", TokenConverter.toString(arrayVal));
@@ -34,18 +34,18 @@ class TokenConverterTests: XCTestCase
     
     func testToBoolean()
     {
-        var objVal = JObject(["foo": JValue("bar"), "baz": JValue("fraz")]);
-        var objValEmpty = JObject();
-        var arrayVal = JArray([JValue("foo"), JValue("bar")]);
-        var arrayValEmpty = JArray();
-        var stringVal = JValue("foo");
-        var stringValEmpty = JValue("");
-        var intVal = JValue(13);
-        var intValZero = JValue(0);
-        var floatVal = JValue(13.69);
-        var floatValZero = JValue(0.0);
-        var boolValTrue = JValue(true);
-        var boolValFalse = JValue(false);
+        let objVal = JObject(["foo": JValue("bar"), "baz": JValue("fraz")]);
+        let objValEmpty = JObject();
+        let arrayVal = JArray([JValue("foo"), JValue("bar")]);
+        let arrayValEmpty = JArray();
+        let stringVal = JValue("foo");
+        let stringValEmpty = JValue("");
+        let intVal = JValue(13);
+        let intValZero = JValue(0);
+        let floatVal = JValue(13.69);
+        let floatValZero = JValue(0.0);
+        let boolValTrue = JValue(true);
+        let boolValFalse = JValue(false);
         
         XCTAssertEqual(true, TokenConverter.toBoolean(objVal));
         XCTAssertEqual(true, TokenConverter.toBoolean(objValEmpty));
@@ -63,12 +63,12 @@ class TokenConverterTests: XCTestCase
     
     func testToDouble()
     {
-        var arrayVal = JArray([JValue("foo"), JValue("bar")]);
-        var arrayValEmpty = JArray();
-        var stringVal = JValue("12.34");
-        var stringNotNum = JValue("threeve");
-        var intVal = JValue(13);
-        var floatVal = JValue(13.69);
+        let arrayVal = JArray([JValue("foo"), JValue("bar")]);
+        let arrayValEmpty = JArray();
+        let stringVal = JValue("12.34");
+        let stringNotNum = JValue("threeve");
+        let intVal = JValue(13);
+        let floatVal = JValue(13.69);
     
         XCTAssertEqual(2, TokenConverter.toDouble(arrayVal)!);
         XCTAssertEqual(0, TokenConverter.toDouble(arrayValEmpty)!);

@@ -38,7 +38,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper
         
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "value")
         {
-            if (!self.processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(self._textBox.text) }, setValue: { (value) in self._textBox.text = self.toString(value) }))
+            if (!self.processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(self._textBox.text!) }, setValue: { (value) in self._textBox.text = self.toString(value) }))
             {
                 processElementProperty(controlSpec["value"], setValue: { (value) in self._textBox.text = self.toString(value) });
                 _textBox.sizeToFit();

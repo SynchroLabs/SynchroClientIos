@@ -31,12 +31,12 @@ class ViewModelTests: XCTestCase
     {
         // Create a binding of each type, initialize them from the view model, verify that their values were set properly
         //
-        var viewModel = ViewModel();
+        let viewModel = ViewModel();
         
         viewModel.initializeViewModelData(viewModelObj);
       
         var serialString = "";
-        var propBinding = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Serial: {serial}", setValue:
+        let propBinding = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Serial: {serial}", setValue:
         {
             (valueToken) in
             
@@ -44,7 +44,7 @@ class ViewModelTests: XCTestCase
         });
 
         var serialValue = -1;
-        var valBinding = viewModel.createAndRegisterValueBinding(viewModel.rootBindingContext.select("serial"),
+        let valBinding = viewModel.createAndRegisterValueBinding(viewModel.rootBindingContext.select("serial"),
             getValue: { () -> JToken in
                 return JValue(serialValue);
             },
@@ -62,14 +62,14 @@ class ViewModelTests: XCTestCase
     
     func testUpdateViewFromValueBinding()
     {
-        var viewModel = ViewModel();
+        let viewModel = ViewModel();
         
         viewModel.initializeViewModelData(viewModelObj);
         
         var bindingsInitialized = false;
         
         var serialString = "";
-        var propBinding = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Serial: {serial}", setValue:
+        let propBinding = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Serial: {serial}", setValue:
         {
             (valueToken) in
             
@@ -77,7 +77,7 @@ class ViewModelTests: XCTestCase
         });
 
         var titleString = "";
-        var propBindingTitle = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Title: {title}", setValue:
+        let propBindingTitle = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Title: {title}", setValue:
         {
             (valueToken) in
             
@@ -89,7 +89,7 @@ class ViewModelTests: XCTestCase
         });
 
         var serialValue = -1;
-        var valBinding = viewModel.createAndRegisterValueBinding(viewModel.rootBindingContext.select("serial"),
+        let valBinding = viewModel.createAndRegisterValueBinding(viewModel.rootBindingContext.select("serial"),
             getValue: { () -> JToken in
                 return JValue(serialValue);
             },
@@ -133,14 +133,14 @@ class ViewModelTests: XCTestCase
 
     func testUpdateViewFromViewModelDeltas()
     {
-        var viewModel = ViewModel();
+        let viewModel = ViewModel();
         
         viewModel.initializeViewModelData(viewModelObj);
         
         var bindingsInitialized = false;
         
         var serialString = "";
-        var propBinding = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Serial: {serial}", setValue:
+        let propBinding = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Serial: {serial}", setValue:
         {
             (valueToken) in
             
@@ -148,7 +148,7 @@ class ViewModelTests: XCTestCase
         });
         
         var titleString = "";
-        var propBindingTitle = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Title: {title}", setValue:
+        let propBindingTitle = viewModel.createAndRegisterPropertyBinding(viewModel.rootBindingContext, value: "Title: {title}", setValue:
         {
             (valueToken) in
             
@@ -160,7 +160,7 @@ class ViewModelTests: XCTestCase
         });
         
         var serialValue = -1;
-        var valBinding = viewModel.createAndRegisterValueBinding(viewModel.rootBindingContext.select("serial"),
+        let valBinding = viewModel.createAndRegisterValueBinding(viewModel.rootBindingContext.select("serial"),
             getValue: { () -> JToken in
                 return JValue(serialValue);
             },
@@ -182,7 +182,7 @@ class ViewModelTests: XCTestCase
         // We're going to apply some deltas to the view model and verify that the correct dependant bindings got updated,
         // and that no non-dependant bindings got updated
         //
-        var deltas = JArray(
+        let deltas = JArray(
         [
             JObject(["path": JValue("serial"), "change": JValue("update"), "value": JValue(2)])
         ]);

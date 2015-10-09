@@ -20,7 +20,7 @@ class RectangleView : UIView
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     }
 
-    required init(coder aDecoder: NSCoder)
+    required init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented");
     }
@@ -57,7 +57,7 @@ public class iOSRectangleWrapper : iOSControlWrapper
         logger.debug("Creating rectangle element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var rect = RectangleView();
+        let rect = RectangleView();
         self._control = rect;
         
         rect.layer.masksToBounds = true; // So that fill color will stay inside of border (if any)

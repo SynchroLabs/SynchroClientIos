@@ -26,9 +26,17 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         self.title = "Synchro Explorer";
     }
 
-    required init(coder aDecoder: NSCoder)
+    required init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented");
+    }
+
+    // Without this, you won't get portrait upside down (not in the default set for some fucking reason)
+    //
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask
+    {
+        logger.info("All of the orientations");
+        return UIInterfaceOrientationMask.All;
     }
     
     override func viewDidLoad()
@@ -40,7 +48,7 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
 
         logger.info("viewDidLoad - number of apps: \(_appManager.apps.count)");
 
-        var addButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addClicked:")
+        let addButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addClicked:")
         self.navigationItem.rightBarButtonItem = addButton;
     }
     
@@ -67,7 +75,7 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        var cell = self.tableView.dequeueReusableCellWithIdentifier("appCell") as? UITableViewCell
+        var cell = self.tableView.dequeueReusableCellWithIdentifier("appCell")
         if (cell == nil)
         {
             cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "appCell");
@@ -90,7 +98,7 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
     func addClicked(sender: UIBarButtonItem)
     {
         logger.info("Add clicked...");
-        var appDetailVC = AppDetailViewController(appManager: _appManager);
+        let appDetailVC = AppDetailViewController(appManager: _appManager);
         self.navigationController?.pushViewController(appDetailVC, animated: true);
     }
 
@@ -100,10 +108,10 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         
         tableView.deselectRowAtIndexPath(indexPath, animated: true); // Normal iOS behavior is to remove the blue highlight
         
-        var app = _appManager.apps[indexPath.row];
+        let app = _appManager.apps[indexPath.row];
         
         logger.debug("Launching Synchro app at endpoint: \(app.endpoint)");
-        var synchroVC = SynchroPageViewController(appManager: _appManager, app: app);
+        let synchroVC = SynchroPageViewController(appManager: _appManager, app: app);
         
         logger.debug("Launching Synchro page view controller");
         
@@ -116,8 +124,8 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
     {
         logger.info("Disclosure tapped for row #\(indexPath.row)!");
         
-        var app = _appManager.apps[indexPath.row];
-        var appDetailVC = AppDetailViewController(appManager: _appManager, app: app);
+        let app = _appManager.apps[indexPath.row];
+        let appDetailVC = AppDetailViewController(appManager: _appManager, app: app);
 
         self.navigationController?.pushViewController(appDetailVC, animated: true);
     }
@@ -127,7 +135,7 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         if (editingStyle == UITableViewCellEditingStyle.Delete)
         {
             logger.info("Items deleted at row #\(indexPath.row)!");
-            var app = _appManager.apps[indexPath.row];
+            let app = _appManager.apps[indexPath.row];
             _appManager.remove(app);
             _appManager.saveState();
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)

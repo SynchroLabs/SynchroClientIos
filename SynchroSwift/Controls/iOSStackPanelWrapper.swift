@@ -55,7 +55,7 @@ class StackPanelView : PaddedView
         super.init();
     }
 
-    required internal init(coder aDecoder: NSCoder)
+    required internal init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented");
     }
@@ -77,38 +77,35 @@ class StackPanelView : PaddedView
         //
         var intrinsicSize = CGSize(width: 0, height: 0);
         
-        for subview in self.subviews
+        for childView in self.subviews
         {
-            if let childView = subview as? UIView
+            if (childView.hidden == true)
             {
-                if (childView.hidden == true)
+                // Skip hidden children for layout purposes
+                continue;
+            }
+        
+            if let childControlWrapper = _controlWrapper.getChildControlWrapper(childView as UIView)
+            {
+                // For FillParent ("star sized") elements, we don't want to count the current value in that dimension in
+                // the maximum or total values (those items will grow to fit when we arrange them later).
+                //
+                let countedChildHeight: CGFloat = (childControlWrapper.frameProperties.starHeight == 0) ? childView.frame.height : 0;
+                let countedChildWidth: CGFloat = (childControlWrapper.frameProperties.starWidth == 0) ? childView.frame.width : 0;
+                
+                let margin = childControlWrapper.margin;
+                
+                if (_orientation == Orientation.Horizontal)
                 {
-                    // Skip hidden children for layout purposes
-                    continue;
+                    // Add to the width, update height as appropriate
+                    intrinsicSize.width += countedChildWidth + (margin.left + margin.right);
+                    intrinsicSize.height = max(intrinsicSize.height, countedChildHeight + (margin.top + margin.bottom));
                 }
-            
-                if let childControlWrapper = _controlWrapper.getChildControlWrapper(childView as UIView)
+                else // Orientation.Vertical
                 {
-                    // For FillParent ("star sized") elements, we don't want to count the current value in that dimension in
-                    // the maximum or total values (those items will grow to fit when we arrange them later).
-                    //
-                    var countedChildHeight: CGFloat = (childControlWrapper.frameProperties.starHeight == 0) ? childView.frame.height : 0;
-                    var countedChildWidth: CGFloat = (childControlWrapper.frameProperties.starWidth == 0) ? childView.frame.width : 0;
-                    
-                    var margin = childControlWrapper.margin;
-                    
-                    if (_orientation == Orientation.Horizontal)
-                    {
-                        // Add to the width, update height as appropriate
-                        intrinsicSize.width += countedChildWidth + (margin.left + margin.right);
-                        intrinsicSize.height = max(intrinsicSize.height, countedChildHeight + (margin.top + margin.bottom));
-                    }
-                    else // Orientation.Vertical
-                    {
-                        // Add to the height, update width as appropriate
-                        intrinsicSize.height += countedChildHeight + (margin.top + margin.bottom);
-                        intrinsicSize.width = max(intrinsicSize.width, countedChildWidth + (margin.left + margin.right));
-                    }
+                    // Add to the height, update width as appropriate
+                    intrinsicSize.height += countedChildHeight + (margin.top + margin.bottom);
+                    intrinsicSize.width = max(intrinsicSize.width, countedChildWidth + (margin.left + margin.right));
                 }
             }
         }
@@ -143,26 +140,23 @@ class StackPanelView : PaddedView
         
         var contentSize = self.intrinsicContentSize();
         
-        for subview in self.subviews
+        for childView in self.subviews
         {
-            if let childView = subview as? UIView
+            if (childView.hidden == true)
             {
-                if (childView.hidden == true)
-                {
-                    // Skip hidden children for layout purposes
-                    continue;
-                }
+                // Skip hidden children for layout purposes
+                continue;
+            }
+        
+            let childControlWrapper = _controlWrapper.getChildControlWrapper(childView)!;
             
-                var childControlWrapper = _controlWrapper.getChildControlWrapper(childView)!;
-                
-                if (_orientation == Orientation.Horizontal)
-                {
-                    totalStars += childControlWrapper.frameProperties.starWidth;
-                }
-                else // Orientation.Vertical
-                {
-                    totalStars += childControlWrapper.frameProperties.starHeight;
-                }
+            if (_orientation == Orientation.Horizontal)
+            {
+                totalStars += childControlWrapper.frameProperties.starWidth;
+            }
+            else // Orientation.Vertical
+            {
+                totalStars += childControlWrapper.frameProperties.starHeight;
             }
         }
         
@@ -195,7 +189,7 @@ class StackPanelView : PaddedView
             }
         }
         
-        var starSpaceManager = StarSpaceManager(totalStars: totalStars, totalStarSpace: totalStarSpace);
+        let starSpaceManager = StarSpaceManager(totalStars: totalStars, totalStarSpace: totalStarSpace);
         
         var _currTop = _padding.top;
         var _currLeft = _padding.left;
@@ -206,125 +200,122 @@ class StackPanelView : PaddedView
         
         // Arrange the subviews (align as appropriate)
         //
-        for subview in self.subviews
+        for childView in self.subviews
         {
-            if let childView = subview as? UIView
+            if (childView.hidden == true)
             {
-                if (childView.hidden == true)
+                // Skip hidden children for layout purposes
+                continue;
+            }
+            
+            let childControlWrapper = _controlWrapper.getChildControlWrapper(childView)!;
+            let margin = childControlWrapper.margin;
+            
+            var childFrame = childView.frame;
+            
+            if (_orientation == Orientation.Horizontal)
+            {
+                if (childControlWrapper.frameProperties.starWidth > 0)
                 {
-                    // Skip hidden children for layout purposes
-                    continue;
-                }
-                
-                var childControlWrapper = _controlWrapper.getChildControlWrapper(childView)!;
-                var margin = childControlWrapper.margin;
-                
-                var childFrame = childView.frame;
-                
-                if (_orientation == Orientation.Horizontal)
-                {
-                    if (childControlWrapper.frameProperties.starWidth > 0)
-                    {
-                        childFrame.width = CGFloat(starSpaceManager.getStarSpace(childControlWrapper.frameProperties.starWidth));
-                    }
-                
-                    // Set the horizontal position (considering margin overlap)
-                    childFrame.x = _currLeft + max(lastMargin.right, margin.left);
-                    
-                    // Set the vertical position based on aligment (default Top)
-                    childFrame.y = _currTop + margin.top;
-                    
-                    if (childControlWrapper.frameProperties.heightSpec == SizeSpec.FillParent)
-                    {
-                        // Filling to parent height (already top aligned, so set width relative to parent,
-                        // accounting for margins.
-                        //
-                        childFrame.height = max(0, self.frame.height - (margin.top + margin.bottom));
-                    }
-                    else
-                    {
-                        // Explicit height - align as needed.
-                        //
-                        if (childControlWrapper.verticalAlignment == VerticalAlignment.Center)
-                        {
-                            // Should we consider margin when centering?  For now, we don't.
-                            childFrame.y = _currTop + ((contentSize.height - childFrame.height) / 2);
-                        }
-                        else if (childControlWrapper.verticalAlignment == VerticalAlignment.Bottom)
-                        {
-                            childFrame.y = _currTop + (contentSize.height - childFrame.height) - margin.bottom;
-                        }
-                    }
-                
-                    childView.frame = childFrame; // <== This is where we size child (the frame may or may not have actually changed)
-                    
-                    // We are going to explicitly call LayoutSubviews on the child here, as opposed to using SetNeedsLayout, because we want
-                    // the child to do the layout now so that we can accomodate size changes to the child (caused by its own LayoutSubviews)
-                    // in our own layout logic here...
-                    //
-                    childView.layoutSubviews();
-                    childFrame = childView.frame;
-                    
-                    _currLeft = childFrame.x + childFrame.width;
-                }
-                else // Orientation.Vertical
-                {
-                    if (childControlWrapper.frameProperties.starHeight > 0)
-                    {
-                        childFrame.height = CGFloat(starSpaceManager.getStarSpace(childControlWrapper.frameProperties.starHeight));
-                    }
-                    
-                    // Set the vertical position (considering margin overlap)
-                    childFrame.y = _currTop + max(lastMargin.bottom, margin.top);
-                    
-                    // Set the horizontal position based on aligment (default Left)
-                    childFrame.x = _currLeft + margin.left;
-                    
-                    if (childControlWrapper.frameProperties.widthSpec == SizeSpec.FillParent)
-                    {
-                        // Filling to parent width (already left aligned, so set width relative to parent,
-                        // accounting for margins.
-                        //
-                        childFrame.width = max(0, self.frame.width - (margin.left + margin.right));
-                    }
-                    else
-                    {
-                        // Explicit height - align as needed.
-                        //
-                        if (childControlWrapper.horizontalAlignment == HorizontalAlignment.Center)
-                        {
-                            // Should we consider margin when centering?  For now, we don't.
-                            childFrame.x = _currLeft + ((contentSize.width - childFrame.width) / 2);
-                        }
-                        else if (childControlWrapper.horizontalAlignment == HorizontalAlignment.Right)
-                        {
-                            childFrame.x = _currLeft + (contentSize.width - childFrame.width) - margin.right;
-                        }
-                    }
-                    
-                    childView.frame = childFrame; // <== This is where we size child (the frame may or may not have actually changed)
-                    
-                    // We are going to explicitly call LayoutSubviews on the child here, as opposed to using SetNeedsLayout, because we want
-                    // the child to do the layout now so that we can accomodate size changes to the child (caused by its own LayoutSubviews)
-                    // in our own layout logic here...
-                    //
-                    childView.layoutSubviews();
-                    childFrame = childView.frame;
-                    
-                    _currTop = childFrame.y + childFrame.height;
+                    childFrame.width = CGFloat(starSpaceManager.getStarSpace(childControlWrapper.frameProperties.starWidth));
                 }
             
-                if ((childFrame.x + childFrame.width + margin.right) > newPanelSize.width)
+                // Set the horizontal position (considering margin overlap)
+                childFrame.x = _currLeft + max(lastMargin.right, margin.left);
+                
+                // Set the vertical position based on aligment (default Top)
+                childFrame.y = _currTop + margin.top;
+                
+                if (childControlWrapper.frameProperties.heightSpec == SizeSpec.FillParent)
                 {
-                    newPanelSize.width = childFrame.x + childFrame.width + margin.right;
+                    // Filling to parent height (already top aligned, so set width relative to parent,
+                    // accounting for margins.
+                    //
+                    childFrame.height = max(0, self.frame.height - (margin.top + margin.bottom));
                 }
-                if ((childFrame.y + childFrame.height + margin.bottom) > newPanelSize.height)
+                else
                 {
-                    newPanelSize.height = childFrame.y + childFrame.height + margin.bottom;
+                    // Explicit height - align as needed.
+                    //
+                    if (childControlWrapper.verticalAlignment == VerticalAlignment.Center)
+                    {
+                        // Should we consider margin when centering?  For now, we don't.
+                        childFrame.y = _currTop + ((contentSize.height - childFrame.height) / 2);
+                    }
+                    else if (childControlWrapper.verticalAlignment == VerticalAlignment.Bottom)
+                    {
+                        childFrame.y = _currTop + (contentSize.height - childFrame.height) - margin.bottom;
+                    }
+                }
+            
+                childView.frame = childFrame; // <== This is where we size child (the frame may or may not have actually changed)
+                
+                // We are going to explicitly call LayoutSubviews on the child here, as opposed to using SetNeedsLayout, because we want
+                // the child to do the layout now so that we can accomodate size changes to the child (caused by its own LayoutSubviews)
+                // in our own layout logic here...
+                //
+                childView.layoutSubviews();
+                childFrame = childView.frame;
+                
+                _currLeft = childFrame.x + childFrame.width;
+            }
+            else // Orientation.Vertical
+            {
+                if (childControlWrapper.frameProperties.starHeight > 0)
+                {
+                    childFrame.height = CGFloat(starSpaceManager.getStarSpace(childControlWrapper.frameProperties.starHeight));
                 }
                 
-                lastMargin = margin;
+                // Set the vertical position (considering margin overlap)
+                childFrame.y = _currTop + max(lastMargin.bottom, margin.top);
+                
+                // Set the horizontal position based on aligment (default Left)
+                childFrame.x = _currLeft + margin.left;
+                
+                if (childControlWrapper.frameProperties.widthSpec == SizeSpec.FillParent)
+                {
+                    // Filling to parent width (already left aligned, so set width relative to parent,
+                    // accounting for margins.
+                    //
+                    childFrame.width = max(0, self.frame.width - (margin.left + margin.right));
+                }
+                else
+                {
+                    // Explicit height - align as needed.
+                    //
+                    if (childControlWrapper.horizontalAlignment == HorizontalAlignment.Center)
+                    {
+                        // Should we consider margin when centering?  For now, we don't.
+                        childFrame.x = _currLeft + ((contentSize.width - childFrame.width) / 2);
+                    }
+                    else if (childControlWrapper.horizontalAlignment == HorizontalAlignment.Right)
+                    {
+                        childFrame.x = _currLeft + (contentSize.width - childFrame.width) - margin.right;
+                    }
+                }
+                
+                childView.frame = childFrame; // <== This is where we size child (the frame may or may not have actually changed)
+                
+                // We are going to explicitly call LayoutSubviews on the child here, as opposed to using SetNeedsLayout, because we want
+                // the child to do the layout now so that we can accomodate size changes to the child (caused by its own LayoutSubviews)
+                // in our own layout logic here...
+                //
+                childView.layoutSubviews();
+                childFrame = childView.frame;
+                
+                _currTop = childFrame.y + childFrame.height;
             }
+        
+            if ((childFrame.x + childFrame.width + margin.right) > newPanelSize.width)
+            {
+                newPanelSize.width = childFrame.x + childFrame.width + margin.right;
+            }
+            if ((childFrame.y + childFrame.height + margin.bottom) > newPanelSize.height)
+            {
+                newPanelSize.height = childFrame.y + childFrame.height + margin.bottom;
+            }
+            
+            lastMargin = margin;
         }
         
         // Resize the stackpanel to contain the subview
@@ -369,7 +360,7 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         logger.debug("Creating stackpanel element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var stackPanel = StackPanelView(controlWrapper: self);
+        let stackPanel = StackPanelView(controlWrapper: self);
         self._control = stackPanel;
         
         processElementDimensions(controlSpec, defaultWidth: 0, defaultHeight: 0);

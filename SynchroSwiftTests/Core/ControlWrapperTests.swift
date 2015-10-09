@@ -44,31 +44,31 @@ class ControlWrapperTests: XCTestCase
 
     func testStarWithStarOnly()
     {
-        var stars = ControlWrapper.getStarCount("*");
+        let stars = ControlWrapper.getStarCount("*");
         XCTAssertEqual(1, stars);
     }
 
     func testStarWithNumStar()
     {
-        var stars = ControlWrapper.getStarCount("69*");
+        let stars = ControlWrapper.getStarCount("69*");
         XCTAssertEqual(69, stars);
     }
 
     func testStarWithNum()
     {
-        var stars = ControlWrapper.getStarCount("69");
+        let stars = ControlWrapper.getStarCount("69");
         XCTAssertEqual(0, stars);
     }
 
     func testStarWithEmpty()
     {
-        var stars = ControlWrapper.getStarCount("");
+        let stars = ControlWrapper.getStarCount("");
         XCTAssertEqual(0, stars);
     }
     
     func testStarWithNil()
     {
-        var stars = ControlWrapper.getStarCount(nil);
+        let stars = ControlWrapper.getStarCount(nil);
         XCTAssertEqual(0, stars);
     }    
 }

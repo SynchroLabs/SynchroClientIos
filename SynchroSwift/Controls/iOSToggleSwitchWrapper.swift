@@ -24,7 +24,7 @@ class ToggleSwitchView : PaddedView
         super.init();
     }
 
-    required init(coder aDecoder: NSCoder)
+    required init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented");
     }
@@ -201,10 +201,10 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
         logger.debug("Creating toggleswitch element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var label = UILabel();
-        var toggleSwitch = UISwitch();
+        let label = UILabel();
+        let toggleSwitch = UISwitch();
         
-        var view = ToggleSwitchView(controlWrapper: self);
+        let view = ToggleSwitchView(controlWrapper: self);
         view.clipsToBounds = true;
         view.addSubview(label);
         view.addSubview(toggleSwitch);
@@ -252,7 +252,7 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
     {
         updateValueBindingForAttribute("value");
         
-        var command = getCommand(CommandName.OnToggle);
+        let command = getCommand(CommandName.OnToggle);
         if (command != nil)
         {
             logger.debug("ToggleSwitch toggled with command: \(command)");

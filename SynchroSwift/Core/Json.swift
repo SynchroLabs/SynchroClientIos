@@ -90,14 +90,14 @@ public class JToken: Equatable
     {
         var path = "";
         
-        var parent = Parent;
+        let parent = Parent;
         if (parent != nil)
         {
-            path += Parent!.getPath(useDotNotation: useDotNotation);
+            path += Parent!.getPath(useDotNotation);
         
             if (parent is JObject)
             {
-                var parentObject = parent as! JObject;
+                let parentObject = parent as! JObject;
                 for key in parentObject
                 {
                     if (parentObject[key]! == self)
@@ -113,8 +113,8 @@ public class JToken: Equatable
             }
             else if (parent is JArray)
             {
-                var parentArray = parent as! JArray;
-                var pos = parentArray.findChildIndex(self);
+                let parentArray = parent as! JArray;
+                let pos = parentArray.findChildIndex(self);
                 if (useDotNotation)
                 {
                     if (!path.isEmpty)
@@ -141,21 +141,21 @@ public class JToken: Equatable
         }
     }
 
-    var pathRegex = NSRegularExpression(pattern: "\\[(\\d+)\\]", options: nil, error: nil);
+    var pathRegex = try? NSRegularExpression(pattern: "\\[(\\d+)\\]", options: []);
     
     public func selectToken(path: String, errorWhenNoMatch: Bool = false) -> JToken?
     {
-        var thePath = NSMutableString(string: path);
-        pathRegex?.replaceMatchesInString(thePath, options: NSMatchingOptions.allZeros, range: NSMakeRange(0, thePath.length) , withTemplate: ".$1");
+        let thePath = NSMutableString(string: path);
+        pathRegex?.replaceMatchesInString(thePath, options: NSMatchingOptions(), range: NSMakeRange(0, thePath.length) , withTemplate: ".$1");
 
-        var pathElements = String(thePath).componentsSeparatedByString(".");
+        let pathElements = String(thePath).componentsSeparatedByString(".");
 
         var currentToken: JToken? = self;
         for element in pathElements
         {
             if let currentArray = currentToken as? JArray
             {
-                if let index = element.toInt()
+                if let index = Int(element)
                 {
                     if index < currentArray.count
                     {
@@ -210,8 +210,8 @@ public class JToken: Equatable
         {
             if (Parent is JObject)
             {
-                var parentObject = Parent as! JObject;
-                var key = parentObject.keyForValue(self);
+                let parentObject = Parent as! JObject;
+                let key = parentObject.keyForValue(self);
                 if (key != nil)
                 {
                     parentObject[key!] = nil;
@@ -220,7 +220,7 @@ public class JToken: Equatable
             }
             else if (Parent is JArray)
             {
-                var parentArray = Parent as! JArray;
+                let parentArray = Parent as! JArray;
                 bRemoved = parentArray.remove(self);
             }
     
@@ -246,8 +246,8 @@ public class JToken: Equatable
             //
             if (Parent is JObject)
             {
-                var parentObject = Parent as! JObject;
-                var key = parentObject.keyForValue(self);
+                let parentObject = Parent as! JObject;
+                let key = parentObject.keyForValue(self);
                 if (key != nil)
                 {
                     parentObject[key!] = token;
@@ -256,8 +256,8 @@ public class JToken: Equatable
             }
             else if (Parent is JArray)
             {
-                var parentArray = Parent as! JArray;
-                var pos = parentArray.findChildIndex(self);
+                let parentArray = Parent as! JArray;
+                let pos = parentArray.findChildIndex(self);
                 parentArray[pos!] = token;
                 bReplaced = true;
             }
@@ -354,7 +354,7 @@ public class JToken: Equatable
     
     public func toJson() -> String
     {
-        var writer = StringBuilder();
+        let writer = StringBuilder();
         JsonWriter.WriteValue(writer, value: self);
         return writer.toString();
     }
@@ -421,7 +421,7 @@ public class JObject : JToken, SequenceType
     
     public override func deepClone() -> JToken
     {
-        var clone = JObject();
+        let clone = JObject();
         for key in _keys
         {
             clone[key] = _tokens[key]!.deepClone();
@@ -453,7 +453,7 @@ public class JObject : JToken, SequenceType
                     oldValue.Parent = nil;
                 }
                 _tokens.removeValueForKey(key);
-                _keys.filter { $0 != key };
+                _keys = _keys.filter { $0 != key };
                 return;
             }
             
@@ -521,7 +521,7 @@ public class JArray : JToken, SequenceType, CollectionType
             else
             {
                 // Compare elements
-                for (index, token) in enumerate(_tokens)
+                for (index, token) in _tokens.enumerate()
                 {
                     if !token.deepEquals(other[index])
                     {
@@ -540,7 +540,7 @@ public class JArray : JToken, SequenceType, CollectionType
     
     public override func deepClone() -> JToken
     {
-        var clone = JArray();
+        let clone = JArray();
         for element in _tokens
         {
             clone.append(element.deepClone());
@@ -548,7 +548,7 @@ public class JArray : JToken, SequenceType, CollectionType
         return clone;
     }
     
-    typealias Index = Int
+    public typealias Index = Int
     public var startIndex: Int { get { return _tokens.startIndex } }
     public var endIndex: Int { get { return _tokens.endIndex } }
     
@@ -597,7 +597,7 @@ public class JArray : JToken, SequenceType, CollectionType
     {
         if let index = findChildIndex(object)
         {
-            var oldValue = _tokens.removeAtIndex(index)
+            let oldValue = _tokens.removeAtIndex(index)
             oldValue.Parent = nil;
             return true
         }

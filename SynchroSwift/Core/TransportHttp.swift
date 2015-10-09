@@ -45,8 +45,8 @@ public class TransportHttp : TransportBase, Transport
         let theResponseHandler = (responseHandler ?? _responseHandler);
         let theRequestFailureHandler = (requestFailureHandler ?? _requestFailureHandler);
 
-        var request = NSMutableURLRequest(URL: _uri);
-        var session = NSURLSession.sharedSession();
+        let request = NSMutableURLRequest(URL: _uri);
+        let session = NSURLSession.sharedSession();
         request.HTTPMethod = "POST"
         request.HTTPBody = requestObject.toJson().dataUsingEncoding(NSUTF8StringEncoding);
 
@@ -68,7 +68,7 @@ public class TransportHttp : TransportBase, Transport
                 {
                     dispatch_async(dispatch_get_main_queue(),
                     {
-                        failureHandler(request: requestObject, exception: error);
+                        failureHandler(request: requestObject, exception: err);
                     });
                 }
             }
@@ -77,8 +77,8 @@ public class TransportHttp : TransportBase, Transport
                 // We consider non-2XX to be an error, even though from the HTTP standpoint they're really just
                 // fine.  So we create our own NSError and call the failure handler (if any) in this case.
                 //
-                var httpResponse = response as! NSHTTPURLResponse;
-                var nonSuccessError = NSError(domain: NSURLErrorDomain, code: httpResponse.statusCode, userInfo: httpResponse.allHeaderFields);
+                let httpResponse = response as! NSHTTPURLResponse;
+                let nonSuccessError = NSError(domain: NSURLErrorDomain, code: httpResponse.statusCode, userInfo: httpResponse.allHeaderFields);
 
                 if let failureHandler = theRequestFailureHandler
                 {
@@ -90,7 +90,7 @@ public class TransportHttp : TransportBase, Transport
             }
             else
             {
-                var strData = NSString(data: data, encoding: NSUTF8StringEncoding)
+                var strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 if strData == nil
                 {
                     // In the event that the UTF8 decode fails, we'll go ahead and let the string encoder try to find an
@@ -98,12 +98,8 @@ public class TransportHttp : TransportBase, Transport
                     // when it shouldn't, and the code below correctly decodes (as USASCII, which is a subset of the UF8
                     // that it failed on above - go figure).
                     //
-                    // Asserting here so we can see if this happens again...
-                    //
-                    assert(false, "Failed to decode response date as UTF-8, release code will try harder");
-                    
-                    var convertedString: NSString?
-                    let encoding = NSString.stringEncodingForData(data, encodingOptions: nil, convertedString: &convertedString, usedLossyConversion: nil)
+                    let encoding = NSString.stringEncodingForData(data!, encodingOptions: nil, convertedString: &strData, usedLossyConversion: nil)
+                    logger.error("Failed to decode response data as UTF-8, tried generic decode, which produced and encoding of: \(encoding)");
                 }
                 
                 if let actualStrData = strData
@@ -111,7 +107,7 @@ public class TransportHttp : TransportBase, Transport
                     logger.debug("Body: \(actualStrData)");
                     
                     // !!! Need to handle failed JSON parsing and call failure handler with appropriate NSError
-                    var responseObject = JObject.parse(actualStrData as String);
+                    let responseObject = JObject.parse(actualStrData as String);
                     
                     if (theResponseHandler != nil)
                     {

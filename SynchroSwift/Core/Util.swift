@@ -18,13 +18,13 @@ extension String
     
     func substring(startCharIndex: Int) -> String
     {
-        return self[Range(start: advance(startIndex, startCharIndex), end: endIndex)];
+        return self[Range(start: startIndex.advancedBy(startCharIndex), end: endIndex)];
     }
     
     func lastIndexOf(find: Character) -> String.Index?
     {
         let findStr = String(find);
-        var nsRange = self.rangeOfString(findStr, options: NSStringCompareOptions.BackwardsSearch);
+        let nsRange = self.rangeOfString(findStr, options: NSStringCompareOptions.BackwardsSearch);
         if let theRange = nsRange
         {
             return theRange.startIndex;
@@ -34,10 +34,10 @@ extension String
 
     subscript (i: Int) -> String
     {
-        return String(Array(self)[i])
+        return String(Array(self.characters)[i])
     }
     
-    var length: Int { get { return count(self); } }
+    var length: Int { get { return self.characters.count; } }
 }
 
 extension UInt32
@@ -97,11 +97,14 @@ public class Regex
     
     public init(_ pattern: String)
     {
-        var parseError: NSError?
-        _regex = NSRegularExpression(pattern: pattern, options: nil, error: &parseError);
+        do {
+            _regex = try NSRegularExpression(pattern: pattern, options: [])
+        } catch {
+            _regex = nil
+        };
         if (_regex == nil)
         {
-            // parseError is pretty useless (NSCocoaDomainError with a single kvp - "NSInvalidValue": pattern
+            // parseError that can be caught is pretty useless (NSCocoaDomainError with a single kvp - "NSInvalidValue": pattern
             //
             assert(false, "Failed to create regular expression"); // !!! Handle this in production somehow (this is only for internal use / static regexes in code)
         }
@@ -112,7 +115,7 @@ public class Regex
         _regex = pattern;
     }
 
-    public func substituteMatches(string: String, substitution: (String, [String]) -> String, options: NSMatchingOptions = nil) -> String
+    public func substituteMatches(string: String, substitution: ((String, [String]) -> String), options: NSMatchingOptions = NSMatchingOptions(rawValue: 0)) -> String
     {
         let out = NSMutableString();
         var pos = 0;
@@ -121,14 +124,14 @@ public class Regex
         
         _regex!.enumerateMatchesInString(string, options: options, range: targetRange)
         {
-            (match: NSTextCheckingResult!, flags: NSMatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) in
+            (match: NSTextCheckingResult?, flags: NSMatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) in
             
-            let matchRange = match.range
+            let matchRange = match!.range
             let matchString = String(target.substringWithRange(matchRange));
             var matchStrings = Array<String>();
-            for index in 0...match.numberOfRanges-1
+            for index in 0...match!.numberOfRanges-1
             {
-                matchStrings.append(String(target.substringWithRange(match.rangeAtIndex(index))));
+                matchStrings.append(String(target.substringWithRange(match!.rangeAtIndex(index))));
             }
             out.appendString(target.substringWithRange(NSRange(location: pos, length: matchRange.location-pos)));
             out.appendString(substitution(matchString, matchStrings));
@@ -142,9 +145,9 @@ public class Regex
     
     public func isMatch(string: String) -> Bool
     {
-        if let matches = _regex?.matchesInString(string, options: nil, range: NSRange(location: 0, length: count(string)))
+        if let matches = _regex?.matchesInString(string, options: [], range: NSRange(location: 0, length: string.characters.count))
         {
-            if count(matches) > 0
+            if matches.count > 0
             {
                 return true;
             }
@@ -171,7 +174,7 @@ extension Array
     {
         var index: Int?;
         
-        for (idx, currApp) in enumerate(self)
+        for (idx, currApp) in self.enumerate()
         {
             if (item === currApp as? T)
             {

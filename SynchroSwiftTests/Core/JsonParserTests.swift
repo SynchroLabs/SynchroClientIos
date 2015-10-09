@@ -17,8 +17,8 @@ class JsonParserTests: XCTestCase
 {
     func validateRoundTrip(jsonInput: String, expected: JToken)
     {
-        var token = JToken.parse(jsonInput);
-        var jsonOutput = token.toJson();
+        let token = JToken.parse(jsonInput);
+        let jsonOutput = token.toJson();
         XCTAssertEqual(jsonInput, jsonOutput);
         
         XCTAssert(token.deepEquals(expected));
@@ -26,7 +26,7 @@ class JsonParserTests: XCTestCase
 
     func testStringReader()
     {
-        var reader = StringReader(str: "$\u{20ac}%\u{2665}X"); // dollar-sign, Euro, percent, heart
+        let reader = StringReader(str: "$\u{20ac}%\u{2665}X"); // dollar-sign, Euro, percent, heart
         XCTAssert("$" == reader.peek());
         XCTAssert("$" == reader.peek());
         XCTAssert("$" == reader.read());
@@ -45,9 +45,9 @@ class JsonParserTests: XCTestCase
     
     func testParseSimple()
     {
-        var jsonStr = "{\"foo\":true}";
+        let jsonStr = "{\"foo\":true}";
         
-        var token = JToken.parse(jsonStr) as! JObject;
+        let token = JToken.parse(jsonStr) as! JObject;
         
         if let foo = token["foo"]
         {
@@ -58,7 +58,7 @@ class JsonParserTests: XCTestCase
             XCTAssert(false, "foo was not token");
         }
         
-        var out = token.toJson();
+        let out = token.toJson();
         
         XCTAssertEqual(jsonStr, out);
     }
@@ -132,7 +132,7 @@ class JsonParserTests: XCTestCase
 
     func testParseObjectWithWhitespace()
     {
-        var token = JToken.parse("  {  \"foo\"  :  0  ,  \"bar\"  :  \"kitty\"  ,  \"baz\"  :  [8  ,  \"dog\"  ]  }  ");
+        let token = JToken.parse("  {  \"foo\"  :  0  ,  \"bar\"  :  \"kitty\"  ,  \"baz\"  :  [8  ,  \"dog\"  ]  }  ");
         XCTAssert(token.deepEquals(JObject(
         [
             "foo": JValue(0),
@@ -147,8 +147,7 @@ class JsonParserTests: XCTestCase
 
     func testComments()
     {
-        var jsonWithComments = "\r\n".join(
-        [
+        let jsonWithComments = [
             "// This is a comment",
             "{",
             "// The foo element is my favorite",
@@ -158,9 +157,10 @@ class JsonParserTests: XCTestCase
             "\"baz\"  :  [  8  ,  \"dog\"  ]",
             "}",
             ""
-        ]);
+        ].joinWithSeparator(
+        "\r\n");
         
-        var token = JToken.parse(jsonWithComments);
+        let token = JToken.parse(jsonWithComments);
         XCTAssert(token.deepEquals(JObject(
         [
             "foo": JValue(0),
@@ -175,8 +175,7 @@ class JsonParserTests: XCTestCase
 
     func testMultilineComments()
     {
-        var jsonWithComments = "\r\n".join(
-            [
+        let jsonWithComments = [
                 "// This is a comment",
                 "{",
                 "// The foo element is my favorite.  But comment him out for now.",
@@ -188,9 +187,10 @@ class JsonParserTests: XCTestCase
                 "\"baz\"  :  [  8  ,  \"dog\"  ]",
                 "}",
                 ""
-            ]);
+            ].joinWithSeparator(
+            "\r\n");
         
-        var token = JToken.parse(jsonWithComments);
+        let token = JToken.parse(jsonWithComments);
         XCTAssert(token.deepEquals(JObject(
         [
             "bar": JValue("kitty"),

@@ -30,7 +30,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
 
         self._isVisualElement = false;
         
-        var threshold = toDouble(controlSpec["movementThreshold"], defaultValue: 100);
+        let threshold = toDouble(controlSpec["movementThreshold"], defaultValue: 100);
         
         _locMgr = CLLocationManager();
         if let locMgr = _locMgr
@@ -71,7 +71,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
             processCommands(bindingSpec, commands: commands);
             
             processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in
-                var obj = JObject(
+                let obj = JObject(
                 [
                     "available": JValue((self._status == LocationStatus.Available) || (self._status == LocationStatus.Active)),
                     "status": JValue(self._status.description)
@@ -140,7 +140,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
         super.unregister();
     }
     
-    public func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!)
+    public func locationManager(manager: CLLocationManager, didFailWithError error: NSError)
     {
         _location = nil;
         
@@ -200,7 +200,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
         return LocationStatus.Unknown;
     }
     
-    public func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus)
+    public func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus)
     {
         logger.info("Location manager authorization change: \(status)");
         _status = fromNativeStatus(status);
@@ -214,10 +214,10 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
         }
     }
     
-    public func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!)
+    public func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
     {
         _status = LocationStatus.Active;
-        _location = locations[locations.count - 1] as? CLLocation;
+        _location = locations[locations.count - 1];
         logger.info("Location: \(_location)");
         
         updateValueBindingForAttribute("value");

@@ -70,7 +70,7 @@ public class AppDetailViewController: UIViewController
         appSaveButton.hidden = mode != DisplayMode.Add;
     }
     
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
@@ -92,21 +92,9 @@ public class AppDetailViewController: UIViewController
     
     func alert(title: String, message: String)
     {
-        if let gotModernAlert: AnyClass = NSClassFromString("UIAlertController")
-        {
-            // Use UIAlertController (new hotness as of 8.0)
-            //
-            var alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil));
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-        else
-        {
-            // Use UIAlertView (deprecated as of 8.0, but only thing that works pre-8.0)
-            //
-            var alert = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "Close");
-            alert.show();
-        }
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil));
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     @IBAction func onFind(sender: AnyObject)
@@ -118,7 +106,7 @@ public class AppDetailViewController: UIViewController
             if (endpoint.length > 0)
             {
                 logger.info("Finding enpoint: \(endpoint)");
-                var managedApp = _appManager.getApp(endpoint);
+                let managedApp = _appManager.getApp(endpoint);
                 if (managedApp != nil)
                 {
                     alert("Synchro Application Search", message: "You already have a Synchro application with the supplied endpoint in your list");
@@ -127,7 +115,7 @@ public class AppDetailViewController: UIViewController
                 
                 if let endpointUri = TransportHttp.uriFromHostString(endpoint)
                 {
-                    var transport = TransportHttp(uri: endpointUri);
+                    let transport = TransportHttp(uri: endpointUri);
                     
                     transport.getAppDefinition(
                         { (appDefinition) in

@@ -20,7 +20,7 @@ public class PaddedView : UIView
         super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
     }
     
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented");
     }
@@ -125,7 +125,7 @@ class BorderView : PaddedView
         super.init();
     }
 
-    required internal init(coder aDecoder: NSCoder)
+    required internal init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented");
     }
@@ -152,7 +152,7 @@ class BorderView : PaddedView
     
         if let childView = _childView
         {
-            var insets = UIEdgeInsets(
+            let insets = UIEdgeInsets(
                 top: self.layer.borderWidth + _padding.top,
                 left: self.layer.borderWidth + _padding.left,
                 bottom: self.layer.borderWidth + _padding.bottom,
@@ -275,7 +275,7 @@ public class iOSBorderWrapper : iOSControlWrapper
         logger.debug("Creating border element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var border = BorderView(controlWrapper: self);
+        let border = BorderView(controlWrapper: self);
         self._control = border;
         
         processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);

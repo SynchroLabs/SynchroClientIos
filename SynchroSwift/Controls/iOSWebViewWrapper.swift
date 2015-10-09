@@ -18,7 +18,7 @@ public class iOSWebViewWrapper : iOSControlWrapper
         logger.debug("Creating webview element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var webView = UIWebView();
+        let webView = UIWebView();
         self._control = webView;
         
         processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 50);

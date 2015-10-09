@@ -40,7 +40,7 @@ public class TransportBase
 
     func getAppDefinition(transport: Transport, onDefinition: (JObject?) -> Void)
     {
-        var requestObject = JObject(
+        let requestObject = JObject(
         [
             "Mode": JValue("AppDefinition"),
             "TransactionId": JValue(0)

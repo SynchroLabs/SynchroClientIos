@@ -36,7 +36,7 @@ public class WrapPanelCell : UICollectionViewCell
         // contentView.backgroundColor = UIColor.whiteColor();
     }
 
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
@@ -81,11 +81,11 @@ public class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSourc
     // UICollectionViewDataSource method
     public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell
     {
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier(wrapPanelCellID, forIndexPath: indexPath) as! WrapPanelCell;
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(wrapPanelCellID, forIndexPath: indexPath) as! WrapPanelCell;
     
         // logger.Info("Updating cell {0} with frame: {1}", indexPath.Item, cell.Frame);
     
-        var controlWrapper = controlWrappers[indexPath.row];
+        let controlWrapper = controlWrappers[indexPath.row];
         cell.updateView(controlWrapper);
     
         return cell;
@@ -105,7 +105,7 @@ public class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSourc
     
     public func sizeForItemAtIndexPath(indexPath: NSIndexPath) -> CGSize
     {
-        var controlWrapper = controlWrappers[indexPath.row];
+        let controlWrapper = controlWrappers[indexPath.row];
         var controlSize = controlWrapper.control!.frame.size;
         if (_itemHeight > 0)
         {
@@ -142,7 +142,7 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
         super.init();
     }
 
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
@@ -174,9 +174,9 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
     
         for lineMember in lineContents
         {
-            var controlWrapper = _source.itemAtIndexPath(lineMember.indexPath);
-            var allocatedSize = _source.sizeForItemAtIndexPath(lineMember.indexPath);
-            var actualSize = controlWrapper.control!.frame.size;
+            let controlWrapper = _source.itemAtIndexPath(lineMember.indexPath);
+            let allocatedSize = _source.sizeForItemAtIndexPath(lineMember.indexPath);
+            let actualSize = controlWrapper.control!.frame.size;
             
             var x: CGFloat;
             var y: CGFloat;
@@ -257,10 +257,10 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
     // the items into "lines" (rows/columns as appropriate).  We then just process and lay out the line elements
     // to position each element appropriately given its margins and alignment.
     //
-    public override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? // [UICollectionViewLayoutAttributes]
+    public override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? // [UICollectionViewLayoutAttributes]
     {
         logger.debug("LayoutAttributesForElementsInRect: \(rect)");
-        var attributesArray = super.layoutAttributesForElementsInRect(rect) as! [UICollectionViewLayoutAttributes];
+        let attributesArray = super.layoutAttributesForElementsInRect(rect)!;
         
         var lineContents = [UICollectionViewLayoutAttributes]();
         
@@ -272,7 +272,7 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
         {
             if (attributes.representedElementKind == nil)
             {
-                attributes.frame = self.layoutAttributesForItemAtIndexPath(attributes.indexPath).frame;
+                attributes.frame = self.layoutAttributesForItemAtIndexPath(attributes.indexPath)!.frame;
                 
                 if (self.scrollDirection == UICollectionViewScrollDirection.Vertical)
                 {
@@ -399,7 +399,7 @@ public class WrapPanelCollectionView : UICollectionView
         self.backgroundColor = UIColor.clearColor(); // UICollectionView background defaults to Black
     }
 
-    required public init(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
@@ -410,7 +410,7 @@ public class WrapPanelCollectionView : UICollectionView
         
         if let layout = self.collectionViewLayout as? WrapPanelCollectionViewLayout
         {
-            var viewSource = self.dataSource as! WrapPanelCollectionViewSource;
+            // var viewSource = self.dataSource as! WrapPanelCollectionViewSource;
             
             var frameSize = self.frame.size;
             
@@ -456,9 +456,9 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
         logger.debug("Creating wrappanel element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        var source = WrapPanelCollectionViewSource();
-        var layout = WrapPanelCollectionViewLayout(source: source);
-        var view = WrapPanelCollectionView(controlWrapper: self, layout: layout);
+        let source = WrapPanelCollectionViewSource();
+        let layout = WrapPanelCollectionViewLayout(source: source);
+        let view = WrapPanelCollectionView(controlWrapper: self, layout: layout);
         view.delegate = source;
         
         self._control = view;
@@ -471,7 +471,7 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
         layout.minimumLineSpacing = 0;
         
         processElementProperty(controlSpec["orientation"], setValue: { (value) in
-            var orientation = self.toOrientation(value, defaultOrientation: Orientation.Horizontal);
+            let orientation = self.toOrientation(value, defaultOrientation: Orientation.Horizontal);
             if (orientation == Orientation.Horizontal)
             {
                 layout.scrollDirection = UICollectionViewScrollDirection.Vertical;

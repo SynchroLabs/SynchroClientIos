@@ -85,7 +85,7 @@ public class Logger
         }
         else
         {
-            var logger = Logger(className: className);
+            let logger = Logger(className: className);
             _loggers[className] = logger;
             return logger;
         }
@@ -123,11 +123,11 @@ public class Logger
     {
         if (level.ordinal >= self.level.ordinal)
         {    
-            var dateFormatter = NSDateFormatter();
+            let dateFormatter = NSDateFormatter();
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS";
             let dateStr = dateFormatter.stringFromDate(NSDate())
             
-            println("\(dateStr) [\(level.name)] \(_className) - \(format)");
+            print("\(dateStr) [\(level.name)] \(_className) - \(format)");
         }
     }
     

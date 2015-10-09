@@ -23,7 +23,7 @@ class ResizableLabel : UILabel
         super.init(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: _lastComputedSize));
     }
     
-    required init(coder aDecoder: NSCoder)
+    required init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented");
     }
@@ -71,7 +71,7 @@ class ResizableLabel : UILabel
             // that this will not do any line wrapping and will consume the width of the string as a single line).
             //
             self.numberOfLines = 1;
-            var size = self.sizeThatFits(CGSize(width: 0, height: 0)); // Compute height and width
+            let size = self.sizeThatFits(CGSize(width: 0, height: 0)); // Compute height and width
             self.updateComputedSize(size);
         }
         else if (_frameProperties.heightSpec == SizeSpec.WrapContent)
@@ -119,7 +119,7 @@ public class iOSTextBlockWrapper : iOSControlWrapper
         logger.debug("Creating textblock element");
         super.init(parent: parent, bindingContext: bindingContext);
 
-        var textBlock = ResizableLabel(frameProperties: self.frameProperties);
+        let textBlock = ResizableLabel(frameProperties: self.frameProperties);
         textBlock.numberOfLines = 0;
         textBlock.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         
@@ -144,7 +144,7 @@ public class iOSTextBlockWrapper : iOSControlWrapper
             //   UILineBreakMode.HeadTruncation;
             //   UILineBreakMode.MiddleTruncation;
             //
-            var bEllipsize = self.toBoolean(value);
+            let bEllipsize = self.toBoolean(value);
             if (bEllipsize)
             {
                 textBlock.lineBreakMode = NSLineBreakMode.ByTruncatingTail;
@@ -156,7 +156,7 @@ public class iOSTextBlockWrapper : iOSControlWrapper
         });
         
         processElementProperty(controlSpec["textAlignment"],setValue: { (value) in
-            var alignString = self.toString(value);
+            let alignString = self.toString(value);
             if (alignString == "Left")
             {
                 textBlock.textAlignment = NSTextAlignment.Left;

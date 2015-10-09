@@ -48,20 +48,20 @@ class SynchroSwiftTests: XCTestCase {
         var thing = "cow";
         logger.info("Don't have a \(thing)");
     }
-    
+
     func testDevice()
     {
-        var currentDevice = UIDevice.currentDevice();
-        println("Current device name: \(currentDevice.name)");
-        println("Current device systemName: \(currentDevice.systemName)");
-        println("Current device systemVersion: \(currentDevice.systemVersion)");
-        println("Current device model: \(currentDevice.model)");
-        println("Current device localizedModel: \(currentDevice.localizedModel)");
-        println("Current device userInterfaceIdiom: \(currentDevice.userInterfaceIdiom)");
-        println("Current device identifierForVendor: \(currentDevice.identifierForVendor)");
+        let currentDevice = UIDevice.currentDevice();
+        print("Current device name: \(currentDevice.name)");
+        print("Current device systemName: \(currentDevice.systemName)");
+        print("Current device systemVersion: \(currentDevice.systemVersion)");
+        print("Current device model: \(currentDevice.model)");
+        print("Current device localizedModel: \(currentDevice.localizedModel)");
+        print("Current device userInterfaceIdiom: \(currentDevice.userInterfaceIdiom)");
+        print("Current device identifierForVendor: \(currentDevice.identifierForVendor)");
 
-        println("Current device machine: \(currentDevice.machine)");
-        println("Current device modelName: \(currentDevice.modelName!)");
+        print("Current device machine: \(currentDevice.machine)");
+        print("Current device modelName: \(currentDevice.modelName!)");
     }
     */
 }

@@ -59,11 +59,9 @@ public class BindingHelper
         var defaultAttributeIsCommand = false;
         if (commandAttributes != nil)
         {
-            defaultAttributeIsCommand = contains(commandAttributes!, defaultBindingAttribute);
+            defaultAttributeIsCommand = (commandAttributes!).contains(defaultBindingAttribute);
         }
-    
-        var bindingSpec = controlSpec["binding"];
-    
+        
         if let bindingSpec = controlSpec["binding"]
         {
             if (bindingSpec.Type == JTokenType.Object)
@@ -208,11 +206,11 @@ public class BoundAndPossiblyResolvedToken
                 //
                 if let numericValue = TokenConverter.toDouble(_bindingContext.getValue())
                 {
-                    var formatSpecifier = formatSpec[0];
+                    let formatSpecifier = formatSpec[0];
                     var formatPrecision: Int? = nil;
                     if formatSpec.length > 1
                     {
-                        formatPrecision = formatSpec.substring(1).toInt();
+                        formatPrecision = Int(formatSpec.substring(1));
                         if (formatPrecision == nil)
                         {
                             logger.error("Format precision was provided, but was not an integer, was: \"\(formatSpec.substring(1))\"");
@@ -225,8 +223,8 @@ public class BoundAndPossiblyResolvedToken
                             logger.error("Currency formatting not supported");
                         
                         case "D", "d": // Decimal
-                            var intVal = Int(numericValue);
-                            var formatter = NSNumberFormatter();
+                            let intVal = Int(numericValue);
+                            let formatter = NSNumberFormatter();
                             formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
                             formatter.usesGroupingSeparator = false;
                             formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
@@ -245,7 +243,7 @@ public class BoundAndPossiblyResolvedToken
                             }
                         
                         case "E", "e": // Exponential
-                            var formatter = NSNumberFormatter();
+                            let formatter = NSNumberFormatter();
                             formatter.numberStyle = NSNumberFormatterStyle.ScientificStyle;
                             formatter.maximumSignificantDigits = formatPrecision ?? 6; // 6 is the default on .NET (all locales)
                             formatter.maximumSignificantDigits++; // Apparently, on .NET this is the number of digits after the decimal point, so we correct for that
@@ -262,7 +260,7 @@ public class BoundAndPossiblyResolvedToken
                         
                         case "F", "f": // Fixed-point
                             let decimalPlaces = formatPrecision ?? 2;  // 2 digits is the en_US locale default on .NET
-                            var formatter = NSNumberFormatter();
+                            let formatter = NSNumberFormatter();
                             formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
                             formatter.usesGroupingSeparator = false;
                             formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
@@ -282,7 +280,7 @@ public class BoundAndPossiblyResolvedToken
                         
                         case "N", "n": // Number
                             let decimalPlaces = formatPrecision ?? 2;  // 2 digits is the en_US locale default on .NET
-                            var formatter = NSNumberFormatter();
+                            let formatter = NSNumberFormatter();
                             formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
                             formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
                             formatter.minimumFractionDigits = decimalPlaces;
@@ -298,7 +296,7 @@ public class BoundAndPossiblyResolvedToken
                         
                         case "P", "p": // Percent
                             let decimalPlaces = formatPrecision ?? 2; // 2 digits is the en_US locale default on .NET
-                            var formatter = NSNumberFormatter();
+                            let formatter = NSNumberFormatter();
                             formatter.numberStyle = NSNumberFormatterStyle.PercentStyle;
                             formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
                             formatter.maximumFractionDigits = decimalPlaces;
@@ -455,7 +453,7 @@ public class PropertyValue
                 negated = true;
             }
 
-            var boundToken = BoundAndPossiblyResolvedToken(bindingContext.select(token), oneTime: oneTimeBinding, negated: negated, formatSpec: format);
+            let boundToken = BoundAndPossiblyResolvedToken(bindingContext.select(token), oneTime: oneTimeBinding, negated: negated, formatSpec: format);
             self._boundTokens.append(boundToken);
 
             return "%\(++tokenIndex)$@";
@@ -475,7 +473,7 @@ public class PropertyValue
             // a value of any type (not just string), and we want to preserve that type, so we process
             // that special case here...
             //
-            var token = _boundTokens[0];
+            let token = _boundTokens[0];
             return token.resolvedValue;
         }
         else
@@ -499,13 +497,13 @@ public class PropertyValue
 
     public class func expand(tokenString: String, bindingContext: BindingContext) -> JToken?
     {
-        var propertyValue = PropertyValue(tokenString, bindingContext: bindingContext);
+        let propertyValue = PropertyValue(tokenString, bindingContext: bindingContext);
         return propertyValue.expand();
     }
 
     public class func expandAsString(tokenString: String, bindingContext: BindingContext) -> String
     {
-        var expandedToken = PropertyValue.expand(tokenString, bindingContext: bindingContext);
+        let expandedToken = PropertyValue.expand(tokenString, bindingContext: bindingContext);
         return TokenConverter.toString(expandedToken);
     }
 }

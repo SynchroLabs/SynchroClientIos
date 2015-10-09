@@ -12,7 +12,7 @@ public extension Character
 {
     public func isOneOf(chars: String) -> Bool
     {
-        for char in chars
+        for char in chars.characters
         {
             if (self == char)
             {
@@ -28,9 +28,9 @@ public extension String
 {
     public func containsChars(chars: String) -> Bool
     {
-        for strChar in self
+        for strChar in self.characters
         {
-            for searchChar in chars
+            for searchChar in chars.characters
             {
                 if (strChar == searchChar)
                 {
@@ -70,10 +70,10 @@ public class StringReader : TextReader
     
     public func read() -> Character?
     {
-        var chr = peek();
+        let chr = peek();
         if (chr != nil)
         {
-            _currIndex = advance(_currIndex, 1);
+            _currIndex = _currIndex.advancedBy(1);
         }
         return chr;
      }
@@ -116,8 +116,8 @@ public class JsonParser
         {
             return false;
         }
-        var uniStr = String(char!).unicodeScalars;
-        var uniChar = uniStr[uniStr.startIndex];
+        let uniStr = String(char!).unicodeScalars;
+        let uniChar = uniStr[uniStr.startIndex];
         return whitespace.longCharacterIsMember(uniChar.value);
     }
     
@@ -171,7 +171,7 @@ public class JsonParser
     class func ParseString(reader: TextReader) -> String
     {
         var thisChar: Character?;
-        var returnString = StringBuilder();
+        let returnString = StringBuilder();
     
         SkipWhitespace(reader);
     
@@ -207,7 +207,7 @@ public class JsonParser
                         thisChar = "\t";
                     case "u":
                         // Parse four hex digits
-                        var hexBuilder = StringBuilder();
+                        let hexBuilder = StringBuilder();
                         for (var counter = 0; counter < 4; ++counter)
                         {
                             hexBuilder.append(reader.read()!);
@@ -234,7 +234,7 @@ public class JsonParser
 
     class func ParseNumber(reader: TextReader) -> JValue
     {
-        var numberBuilder = StringBuilder();
+        let numberBuilder = StringBuilder();
     
         SkipWhitespace(reader);
     
@@ -247,7 +247,7 @@ public class JsonParser
             numberBuilder.append(reader.read()!);
         }
     
-        var numberData = numberBuilder.toString();
+        let numberData = numberBuilder.toString();
         
         if (numberData.containsChars("eE."))
         {
@@ -261,13 +261,13 @@ public class JsonParser
         }
         else
         {
-            return JValue(numberData.toInt()!);
+            return JValue(Int(numberData)!);
         }
     }
 
     class func ParseArray(reader: TextReader) -> JArray
     {
-        var finalArray = JArray();
+        let finalArray = JArray();
     
         SkipWhitespace(reader);
     
@@ -306,7 +306,7 @@ public class JsonParser
 
     class func ParseObject(reader: TextReader) -> JObject
     {
-        var finalObject = JObject();
+        let finalObject = JObject();
     
         SkipWhitespace(reader);
     
@@ -399,7 +399,7 @@ public class JsonParser
     {
         SkipWhitespace(reader);
     
-        var lookahead = reader.peek();
+        let lookahead = reader.peek();
     
         if ((lookahead == "-") || ((lookahead >= "0") && (lookahead <= "9")))
         {

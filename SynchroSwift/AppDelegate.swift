@@ -10,6 +10,16 @@ import UIKit
 
 private var logger = Logger.getLogger("AppDelegate");
 
+class SynchroUINavigationController : UINavigationController
+{
+    // Without this, you won't get portrait upside down (not in the default set for some fucking reason)
+    //
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask
+    {
+        return UIInterfaceOrientationMask.All;
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate
 {
@@ -21,10 +31,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         // Override point for customization after application launch.
         logger.info("Application started...");
         
-        var rootNavigationController = UINavigationController();
+        let rootNavigationController = SynchroUINavigationController();
+        
+        rootNavigationController.supportedInterfaceOrientations()
+        
         window = UIWindow(frame: UIScreen.mainScreen().bounds);
         
-        var appManager = SynchroAppManager();
+        let appManager = SynchroAppManager();
         appManager.loadState();
         
         if let appSeed = appManager.appSeed

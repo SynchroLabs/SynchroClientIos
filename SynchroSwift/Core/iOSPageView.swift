@@ -27,7 +27,7 @@ class PageContentScrollView : UIScrollView
 
     // Subclasses required to implement...
     //
-    required init(coder aDecoder: NSCoder)
+    required init?(coder aDecoder: NSCoder)
     {
         fatalError("init(coder:) has not been implemented")
     }
@@ -101,7 +101,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onKeyboardShown:"), name: UIKeyboardDidShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onKeyboardHidden:"), name: UIKeyboardDidHideNotification, object: nil);
 
-        var tap = UITapGestureRecognizer(target: self, action: Selector("handleTap:"));
+        let tap = UITapGestureRecognizer(target: self, action: Selector("handleTap:"));
         tap.delegate = self;
         tap.cancelsTouchesInView = false;
         _rootControlWrapper!.control!.addGestureRecognizer(tap);
@@ -131,7 +131,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
 
         if let scrollView = _contentScrollView
         {
-            var contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardFrame.height, right: 0.0);
+            let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardFrame.height, right: 0.0);
             scrollView.contentInset = contentInsets;
             scrollView.scrollIndicatorInsets = contentInsets;
             
@@ -160,7 +160,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
             
             for subView in view.subviews
             {
-                if let firstResponder = findFirstResponder(subView as? UIView)
+                if let firstResponder = findFirstResponder(subView)
                 {
                     return firstResponder;
                 }
@@ -178,9 +178,9 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         if let activeView = iOSPageView.findFirstResponder(_contentScrollView)
         {
             var activeViewRect = activeView.superview!.convertRect(activeView.frame, fromView: _contentScrollView);
-            var scrollAreaHeight = _contentScrollView!.frame.height - _contentScrollView!.contentInset.bottom;
+            let scrollAreaHeight = _contentScrollView!.frame.height - _contentScrollView!.contentInset.bottom;
             
-            var offset = max(0, activeViewRect.y - (scrollAreaHeight - activeView.frame.height) / 2);
+            let offset = max(0, activeViewRect.y - (scrollAreaHeight - activeView.frame.height) / 2);
             _contentScrollView!.setContentOffset(CGPoint(x: 0, y: offset), animated: false);
         }
     }
@@ -190,33 +190,25 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         return iOSControlWrapper.createControl(_rootControlWrapper!, bindingContext: _viewModel.rootBindingContext, controlSpec: controlSpec);
     }
     
-    // !!! The ContentTop and SizeNavBar methods below are a pretty ugly hack to address the issues with
-    //     navigation bar sizing/positioning in iOS7.  iOS7 is supposed to magically handle all of this, and if
+    // !!! The ContentTop and SizeNavBar methods below are a pretty ugly hack to address the issues with navigation bar
+    //     sizing/positioning in iOS7 and later.  iOS7 and later is supposed to magically handle all of this, and if
     //     not, then NavigationBarDelegate.GetPositionForBar() fix is supposed to do the job, but it does not
     //     in our case.  I assume this is because we create our navbar on the fly, after the ViewController is
-    //     created.  I tried a number of ways to get this to work across iOS 6 and 7 without checking the version
-    //     number and using a hardcoded status bar height, but was not able to make it work.
+    //     created.
     //
     public class var contentTop: CGFloat
     {
         get
         {
-            if (Util.isIOS7())
-            {
-                return 20; // Height of status bar in iOS7
-            }
-
-            return 0;
+            let statusBarSize = UIApplication.sharedApplication().statusBarFrame.size
+            return Swift.min(statusBarSize.width, statusBarSize.height)
         }
     }
-
+    
     public class func sizeNavBar(navBar: UINavigationBar)
     {
         navBar.sizeToFit();
-        if (Util.isIOS7())
-        {
-            navBar.frame = CGRect(x: navBar.frame.x, y: contentTop, width: navBar.frame.width, height: navBar.frame.height);
-        }
+        navBar.frame = CGRect(x: navBar.frame.x, y: contentTop, width: navBar.frame.width, height: navBar.frame.height);
     }
 
     public func updateLayout()
@@ -229,7 +221,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         //
         if let panel: UIView = _rootControlWrapper!.control
         {
-            var contentRect = CGRect(x: 0, y: iOSPageView.contentTop, width: panel.frame.width, height: panel.frame.height - iOSPageView.contentTop);
+            var contentRect = CGRect(x: 0, y: iOSPageView.contentTop, width: panel.bounds.width, height: panel.bounds.height - iOSPageView.contentTop);
             
             if (_navBar != nil)
             {
@@ -336,11 +328,11 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
             {
                 // Add a "Back" context and a delegate to handle the back command...
                 //
-                var navItemBack = UINavigationItem(title: "Back");
+                let navItemBack = UINavigationItem(title: "Back");
                 _navBar!.pushNavigationItem(navItemBack, animated: false);
             }
             
-            var navItem = UINavigationItem(title: _pageTitle);
+            let navItem = UINavigationItem(title: _pageTitle);
             
             if (_navBarButton != nil)
             {
@@ -367,7 +359,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
                 
                 // Create a new colection of toolbar buttons with flexible space surrounding and between them, then add to toolbar
                 //
-                var flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil);
+                let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil);
                 var formattedItems = [UIBarButtonItem]();
                 formattedItems.append(flexibleSpace);
                 for buttonItem in _toolBarButtons
@@ -401,7 +393,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
 
     public override func processMessageBox(messageBox: JObject, onCommand: CommandHandler)
     {
-        var message = PropertyValue.expandAsString(messageBox["message"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
+        let message = PropertyValue.expandAsString(messageBox["message"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
         logger.debug("Message box with message: \(message)");
  
         var title: String?;
@@ -410,101 +402,37 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
             title = PropertyValue.expandAsString(messageBox["title"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
         }
         
-        if let gotModernAlert: AnyClass = NSClassFromString("UIAlertController")
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        if let options = messageBox["options"] as? JArray
         {
-            // Use UIAlertController (new hotness as of 8.0)
-            //
-            var alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            
-            if let options = messageBox["options"] as? JArray
+            for option in options
             {
-                for option in options
+                if let optionObject = option as? JObject
                 {
-                    if let optionObject = option as? JObject
+                    let buttonTitle = PropertyValue.expandAsString(optionObject["label"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
+                    var buttonCommand: String? = nil;
+                    if (optionObject["command"] != nil)
                     {
-                        var buttonTitle = PropertyValue.expandAsString(optionObject["label"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
-                        var buttonCommand: String? = nil;
-                        if (optionObject["command"] != nil)
-                        {
-                            buttonCommand = PropertyValue.expandAsString(optionObject["command"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
-                        }
-                        
-                        alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertActionStyle.Default, handler:
-                        { (action: UIAlertAction!) in
-                            if (buttonCommand != nil)
-                            {
-                                onCommand(buttonCommand!);
-                            }
-                        }))
+                        buttonCommand = PropertyValue.expandAsString(optionObject["command"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
                     }
+                    
+                    alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertActionStyle.Default, handler:
+                    { (action: UIAlertAction) in
+                        if (buttonCommand != nil)
+                        {
+                            onCommand(buttonCommand!);
+                        }
+                    }))
                 }
             }
-            else
-            {
-                alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil));
-            }
-            
-            _viewController.presentViewController(alert, animated: true, completion: nil)
         }
         else
         {
-            // Use UIAlertView (deprecated as of 8.0, but only thing that works pre-8.0)
-            //
-            var alert = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: nil);
-            
-            var buttonCommands = [String?]();
-            
-            if let options = messageBox["options"] as? JArray
-            {
-                for option in options
-                {
-                    if let optionObject = option as? JObject
-                    {
-                        var buttonTitle = PropertyValue.expandAsString(optionObject["label"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
-                        var buttonCommand: String? = nil;
-                        if (optionObject["command"] != nil)
-                        {
-                            buttonCommand = PropertyValue.expandAsString(optionObject["command"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
-                        }
-                        
-                        alert.addButtonWithTitle(buttonTitle);
-                        buttonCommands.append(buttonCommand);
-                    }
-                }
-            }
-            else
-            {
-                alert.addButtonWithTitle("Close");
-                buttonCommands.append(nil);
-            }
-
-            class AlertDelegate: NSObject, UIAlertViewDelegate
-            {
-                var _commands: [String?];
-                var _onCommand: CommandHandler;
-                
-                init(commands: [String?], onCommand: CommandHandler)
-                {
-                    _commands = commands;
-                    _onCommand = onCommand;
-                    super.init();
-                }
-                
-                func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int)
-                {
-                    if buttonIndex < _commands.count
-                    {
-                        if let command = _commands[buttonIndex]
-                        {
-                            _onCommand(command);                            
-                        }
-                    }
-                }
-            }
-            
-            alert.delegate = AlertDelegate(commands: buttonCommands, onCommand: onCommand);
-            alert.show();
+            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil));
         }
+        
+        _viewController.presentViewController(alert, animated: true, completion: nil)
     }
 }
 

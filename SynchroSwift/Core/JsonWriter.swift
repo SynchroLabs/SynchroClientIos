@@ -29,7 +29,7 @@ public class JsonWriter
         writer.append("\"");
         for _codePoint in str.unicodeScalars
         {
-            var _char = Character(_codePoint);
+            let _char = Character(_codePoint);
             if let subString = charSubstitutions[_char]
             {
                 writer.append(subString);
