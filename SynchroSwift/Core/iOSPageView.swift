@@ -338,6 +338,11 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
             {
                 navItem.setRightBarButtonItem(_navBarButton!, animated: false);
             }
+
+            // When starting in Landscape orientation, there was a bug where the initial vertical position of the back arrow was not correct (was
+            // aligned to the very top of the nav bar).  The statement below appears to remedy this issue.
+            //
+            _navBar?.layoutIfNeeded();
             
             _navBar!.pushNavigationItem(navItem, animated: false);
             panel.addSubview(_navBar!);
