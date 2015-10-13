@@ -70,7 +70,7 @@ public class SynchroPageViewController : UIViewController
         _stateManager = StateManager(appManager: _appManager, app: _app, transport: transport, deviceMetrics: deviceMetrics);
         _pageView = iOSPageView(stateManager: _stateManager, viewModel: _stateManager.viewModel, viewController: self, panel: self.view, doBackToMenu: backToMenu);
         
-        _stateManager.setProcessingHandlers(_pageView.processPageView, onProcessMessageBox: _pageView.processMessageBox);
+        _stateManager.setProcessingHandlers(_pageView.processPageView, onProcessMessageBox: _pageView.processMessageBox, onProcessLaunchUrl: _pageView.processLaunchUrl);
         _stateManager.startApplicationAsync();
         
         logger.debug("Completed viewDidLoad");

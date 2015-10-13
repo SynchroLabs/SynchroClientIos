@@ -71,7 +71,12 @@ class StateManagerTests: XCTestCase
             XCTAssert(false, "Unexpected message box call in test");
         }
         
-        stateManager.setProcessingHandlers(processPageView, onProcessMessageBox: processMessageBox)
+        func processLaunchUrl(primaryUrl: String, secondaryUrl: String?) -> Void
+        {
+            XCTAssert(false, "Unexpected launch url call in test");
+        }
+        
+        stateManager.setProcessingHandlers(processPageView, onProcessMessageBox: processMessageBox, onProcessLaunchUrl: processLaunchUrl)
         stateManager.startApplicationAsync();
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)

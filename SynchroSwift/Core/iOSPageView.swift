@@ -439,5 +439,18 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         
         _viewController.presentViewController(alert, animated: true, completion: nil)
     }
+    
+    public override func processLaunchUrl(primaryUrl: String, secondaryUrl: String?)
+    {
+        // You could use canOpenUrl to check, but there is a whole security shitshow associated with that (limits on the number of
+        // schemes you can check over the lifetime of the app on iOS 8, and a requirement to whitelist any scheme that you might check
+        // on iOS 9).  So for our purposes, just attempting to open and falling back if that returns false should work fine, while
+        // avoiding all of the complexity of canOpenUrl.
+        //
+        if (!UIApplication.sharedApplication().openURL(NSURL(string: primaryUrl)!) && (secondaryUrl != nil))
+        {
+            UIApplication.sharedApplication().openURL(NSURL(string: secondaryUrl!)!);
+        }
+    }
 }
 

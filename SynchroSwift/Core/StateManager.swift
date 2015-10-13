@@ -14,6 +14,7 @@ public typealias CommandHandler = (String) -> Void;
 
 public typealias ProcessPageView = (pageView: JObject) -> Void;
 public typealias ProcessMessageBox = (messageBox: JObject, commandHandler: CommandHandler) -> Void;
+public typealias ProcessLaunchUrl = (primaryUrl: String, secondaryUrl: String?) -> Void;
 
 public class StateManager
 {
@@ -36,6 +37,7 @@ public class StateManager
     var _viewModel: ViewModel;
     var _onProcessPageView: ProcessPageView?;
     var _onProcessMessageBox: ProcessMessageBox?;
+    var _onProcessLaunchUrl: ProcessLaunchUrl?;
     
     var _deviceMetrics: DeviceMetrics;
     
@@ -71,10 +73,11 @@ public class StateManager
     
     public var deviceMetrics: DeviceMetrics { get { return _deviceMetrics; } }
     
-    public func setProcessingHandlers(onProcessPageView: ProcessPageView, onProcessMessageBox: ProcessMessageBox)
+    public func setProcessingHandlers(onProcessPageView: ProcessPageView, onProcessMessageBox: ProcessMessageBox, onProcessLaunchUrl: ProcessLaunchUrl)
     {
         _onProcessPageView = onProcessPageView;
         _onProcessMessageBox = onProcessMessageBox;
+        _onProcessLaunchUrl = onProcessLaunchUrl;
     }
     
     func packageDeviceMetrics() -> JObject
@@ -371,6 +374,8 @@ public class StateManager
             }
         }
     
+        // Commands
+        //
         if (responseAsJSON["MessageBox"] != nil)
         {
             logger.info("Launching message box...");
@@ -382,6 +387,11 @@ public class StateManager
                 logger.info("Message box completed with command: '\(command)'");
                 self.sendCommandRequestAsync(command);
             });
+        }
+        else if (responseAsJSON["LaunchUrl"] != nil)
+        {
+            let jsonLaunchUrl = responseAsJSON["LaunchUrl"] as! JObject;
+            _onProcessLaunchUrl!(primaryUrl: jsonLaunchUrl["primaryUrl"]!.asString()!, secondaryUrl: jsonLaunchUrl["secondaryUrl"]?.asString());
         }
     
         if (responseAsJSON["NextRequest"] != nil)

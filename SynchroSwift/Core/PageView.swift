@@ -153,4 +153,9 @@ public class PageView : NSObject
     {
         fatalError("Must be overridden in derived class");
     }
+    
+    public func processLaunchUrl(primaryUrl: String, secondaryUrl: String?)
+    {
+        fatalError("Must be overridden in derived class");
+    }
 }
