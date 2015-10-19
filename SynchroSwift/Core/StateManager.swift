@@ -237,12 +237,30 @@ public class StateManager
             {
                 // Some other kind of error (ClientError or UserCodeError).
                 //
-                // !!! Maybe we should allow them to choose an option to get more details?  Configurable on the server?
-                //
-                messageBox("Application Error", message: "The application experienced an error.  Please contact your administrator.", buttonLabel: "Close", buttonCommand: "close", onCommand:
+                let userMessage = jsonError["userMessage"]?.asString();
+                let userMessageCaption = jsonError["userMessageCaption"]?.asString() ?? "Synchro";
+                
+                if (userMessage != nil)
                 {
-                    (command) in ()
-                });
+                    // The server indicated a message ot be displayed to the end user, so do that...
+                    //
+                    messageBox(userMessageCaption, message: userMessage!, buttonLabel: "Close", buttonCommand: "close", onCommand:
+                    {
+                        (command) in ()
+                    });
+
+                }
+                else
+                {
+                    // Error with no specified user-appropriate message
+                    //
+                    // !!! Maybe we should allow the user to choose an option/button to click to get more details?
+                    //
+                    messageBox("Application Error", message: "The application experienced an error.  Please contact your administrator.", buttonLabel: "Close", buttonCommand: "close", onCommand:
+                    {
+                        (command) in ()
+                    });
+                }
             }
             
             return;
