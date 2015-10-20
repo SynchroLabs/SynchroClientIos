@@ -95,10 +95,15 @@ class TransportTests: XCTestCase
                 [
                     "Mode": JValue("Page"),
                     "Path": JValue("menu"),
-                    "TransactionId": JValue(1)
+                    "TransactionId": JValue(1),
+                    "DeviceMetrics": JObject(["clientVersion": JValue("1.1.0")])
                 ]),
             responseHandler: { (response) in
                 XCTAssert("menu" == response["Path"]?.asString());
+                if (response["Error"] != nil)
+                {
+                    XCTAssertNil(response["Error"], "Unexpected Error: " + response["Error"]!.toJson());
+                }
                 if let sessionId = response["NewSessionId"]?.asString()
                 {
                     if let instanceId = response["InstanceId"]?.asInt()
