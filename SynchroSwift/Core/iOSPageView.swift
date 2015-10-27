@@ -452,5 +452,20 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
             UIApplication.sharedApplication().openURL(NSURL(string: secondaryUrl!)!);
         }
     }
+    
+    public override func processChoosePhoto(request: JObject, onComplete: (JObject) -> Void)
+    {
+        // !!! TODO - Implement this
+        //
+        //     I played around with UIImagePickerController and had some issues with it.  I think the proper solution is probably
+        //     to build a custom image picker that supports either camera, or camera roll/saved images, or a specified combination.
+        //     UIImagePickerController, in addition to generally not working at all, is limited to either camera or saved images, and
+        //     is always in portrait mode.
+        //
+        //     Also, the new view that we make to do this can handle status indication when any selected image is being uploaded, before
+        //     returning.
+        //
+        logger.error("processChoosePhoto not imeplemented yet");
+    }
 }
 

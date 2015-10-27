@@ -76,7 +76,12 @@ class StateManagerTests: XCTestCase
             XCTAssert(false, "Unexpected launch url call in test");
         }
         
-        stateManager.setProcessingHandlers(processPageView, onProcessMessageBox: processMessageBox, onProcessLaunchUrl: processLaunchUrl)
+        func processChoosePhoto(request: JObject, onComplete: (JObject) -> Void) -> Void
+        {
+            XCTAssert(false, "Unexpected choose photo call in test");
+        }
+        
+        stateManager.setProcessingHandlers(processPageView, onProcessMessageBox: processMessageBox, onProcessLaunchUrl: processLaunchUrl, onProcessChoosePhoto: processChoosePhoto)
         stateManager.startApplicationAsync();
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)

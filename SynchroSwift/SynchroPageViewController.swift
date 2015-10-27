@@ -11,8 +11,7 @@ import UIKit
 
 private var logger = Logger.getLogger("SynchroPageViewController");
 
-public class SynchroPageViewController : UIViewController
-{
+public class SynchroPageViewController : UIViewController{
     var _appManager: SynchroAppManager;
     var _app: SynchroApp;
     
@@ -70,7 +69,7 @@ public class SynchroPageViewController : UIViewController
         _stateManager = StateManager(appManager: _appManager, app: _app, transport: transport, deviceMetrics: deviceMetrics);
         _pageView = iOSPageView(stateManager: _stateManager, viewModel: _stateManager.viewModel, viewController: self, panel: self.view, doBackToMenu: backToMenu);
         
-        _stateManager.setProcessingHandlers(_pageView.processPageView, onProcessMessageBox: _pageView.processMessageBox, onProcessLaunchUrl: _pageView.processLaunchUrl);
+        _stateManager.setProcessingHandlers(_pageView.processPageView, onProcessMessageBox: _pageView.processMessageBox, onProcessLaunchUrl: _pageView.processLaunchUrl, onProcessChoosePhoto: _pageView.processChoosePhoto);
         _stateManager.startApplicationAsync();
         
         logger.debug("Completed viewDidLoad");

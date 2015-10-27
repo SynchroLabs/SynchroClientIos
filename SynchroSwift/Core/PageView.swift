@@ -158,4 +158,9 @@ public class PageView : NSObject
     {
         fatalError("Must be overridden in derived class");
     }
+
+    public func processChoosePhoto(request: JObject, onComplete: (JObject) -> Void)
+    {
+        fatalError("Must be overridden in derived class");
+    }
 }

@@ -15,6 +15,7 @@ public typealias CommandHandler = (String) -> Void;
 public typealias ProcessPageView = (pageView: JObject) -> Void;
 public typealias ProcessMessageBox = (messageBox: JObject, commandHandler: CommandHandler) -> Void;
 public typealias ProcessLaunchUrl = (primaryUrl: String, secondaryUrl: String?) -> Void;
+public typealias ProcessChoosePhoto = (request: JObject, onComplete: (JObject) -> Void) -> Void;
 
 public class StateManager
 {
@@ -38,6 +39,7 @@ public class StateManager
     var _onProcessPageView: ProcessPageView?;
     var _onProcessMessageBox: ProcessMessageBox?;
     var _onProcessLaunchUrl: ProcessLaunchUrl?;
+    var _onProcessChoosePhoto: ProcessChoosePhoto?;
     
     var _deviceMetrics: DeviceMetrics;
     
@@ -73,11 +75,12 @@ public class StateManager
     
     public var deviceMetrics: DeviceMetrics { get { return _deviceMetrics; } }
     
-    public func setProcessingHandlers(onProcessPageView: ProcessPageView, onProcessMessageBox: ProcessMessageBox, onProcessLaunchUrl: ProcessLaunchUrl)
+    public func setProcessingHandlers(onProcessPageView: ProcessPageView, onProcessMessageBox: ProcessMessageBox, onProcessLaunchUrl: ProcessLaunchUrl, onProcessChoosePhoto: ProcessChoosePhoto)
     {
         _onProcessPageView = onProcessPageView;
         _onProcessMessageBox = onProcessMessageBox;
         _onProcessLaunchUrl = onProcessLaunchUrl;
+        _onProcessChoosePhoto = onProcessChoosePhoto;
     }
     
     func packageDeviceMetrics() -> JObject
@@ -410,6 +413,18 @@ public class StateManager
         {
             let jsonLaunchUrl = responseAsJSON["LaunchUrl"] as! JObject;
             _onProcessLaunchUrl!(primaryUrl: jsonLaunchUrl["primaryUrl"]!.asString()!, secondaryUrl: jsonLaunchUrl["secondaryUrl"]?.asString());
+        }
+        else if (responseAsJSON["ChoosePhoto"] != nil)
+        {
+            logger.info("Launching photo chooser...");
+            let jsonChoosePhoto = responseAsJSON["ChoosePhoto"] as! JObject;
+            _onProcessChoosePhoto!(request: jsonChoosePhoto, onComplete:
+            {
+                (response) in
+                
+                logger.info("Photo chooser completed");
+                // !!! 
+            });
         }
     
         if (responseAsJSON["NextRequest"] != nil)
