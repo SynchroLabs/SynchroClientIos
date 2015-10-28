@@ -20,14 +20,20 @@ public class iOSButtonWrapper : iOSControlWrapper
         logger.debug("Creating button element");
         super.init(parent: parent, bindingContext: bindingContext);
         
-        let button = UIButton(); // !!! Was UIButton.fromType(UIButtonType.RoundedRect);
+        let button = UIButton(type: UIButtonType.System);
         self._control = button;
         
-        // !!! Was kind of hoping to inherit the default/theme button text color, but if we don't
-        //     set it explicitly here, it appears to be white/transparent (invisible at any rate).
+        // For an image button (seems mutually exclusive the system/text button)...
         //
-        button.setTitleColor(UIColor.blueColor(), forState: .Normal);
-        button.setTitleColor(UIColor.grayColor(), forState: .Disabled);
+        //     let button = UIButton(type: UIButtonType.Custom);
+        //     button.imageView!.contentMode = .ScaleAspectFit;
+        //
+        // Then load the image and set it using:
+        //
+        //     button.setImage(loadedImage, forState: .Normal);
+        //
+        // And if you want to size the button the the image (with insets, presumably), you can do that when setting the image also.
+        //
         
         processElementDimensions(controlSpec);
         applyFrameworkElementDefaults(button);
@@ -36,7 +42,7 @@ public class iOSButtonWrapper : iOSControlWrapper
             button.setTitle(self.toString(value), forState: .Normal);
             self.sizeToFit();
         });
-        
+                
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: CommandName.OnClick.Attribute, commandAttributes: commands)
         {
             processCommands(bindingSpec, commands: commands);
