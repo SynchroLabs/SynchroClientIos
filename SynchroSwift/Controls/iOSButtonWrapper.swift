@@ -27,6 +27,7 @@ public class iOSButtonWrapper : iOSControlWrapper
         //     set it explicitly here, it appears to be white/transparent (invisible at any rate).
         //
         button.setTitleColor(UIColor.blueColor(), forState: .Normal);
+        button.setTitleColor(UIColor.grayColor(), forState: .Disabled);
         
         processElementDimensions(controlSpec);
         applyFrameworkElementDefaults(button);

@@ -39,6 +39,7 @@ public class iOSImageWrapper : iOSControlWrapper
         
         let image = UIImageView();
         image.clipsToBounds = true;
+        image.contentMode = UIViewContentMode.ScaleAspectFit; // default
         
         self._control = image;
         
