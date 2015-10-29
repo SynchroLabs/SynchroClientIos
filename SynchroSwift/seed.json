@@ -11,6 +11,10 @@
         {
             "endpoint": "https://api.synchro.io/api/samples",
             "definition": { "name": "synchro-samples", "description": "Synchro API Samples" }
+        },
+        {
+            "endpoint": "https://api.synchro.io/api/civics",
+            "definition": { "name": "synchro-civics", "description": "Synchro Civics Sample" }
         }
     ]
 }
