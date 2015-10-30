@@ -28,7 +28,7 @@ class SynchroAppTests: XCTestCase
         appManager.loadState();
         
         XCTAssertNil(appManager.appSeed);
-        XCTAssertEqual(1, appManager.apps.count);
+        XCTAssertEqual(2, appManager.apps.count);
         
         let app = appManager.apps[0];
                 
@@ -43,5 +43,20 @@ class SynchroAppTests: XCTestCase
         ]);
                 
         XCTAssert(app.appDefinition.deepEquals(expected));
+        
+        let app2 = appManager.apps[1];
+        
+        XCTAssertEqual("synchro-civics", app2.name);
+        XCTAssertEqual("Synchro Civics Sample", app2.description);
+        XCTAssertEqual("https://api.synchro.io/api/civics", app2.endpoint);
+        
+        let expected2 = JObject(
+            [
+                "name": JValue("synchro-civics"),
+                "description": JValue("Synchro Civics Sample")
+            ]);
+        
+        XCTAssert(app2.appDefinition.deepEquals(expected2));
+
     }
 }
