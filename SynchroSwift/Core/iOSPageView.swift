@@ -447,9 +447,17 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         // on iOS 9).  So for our purposes, just attempting to open and falling back if that returns false should work fine, while
         // avoiding all of the complexity of canOpenUrl.
         //
-        if (!UIApplication.sharedApplication().openURL(NSURL(string: primaryUrl)!) && (secondaryUrl != nil))
+        let primaryNsUrl = NSURL(string: primaryUrl);
+        if (primaryNsUrl != nil)
         {
-            UIApplication.sharedApplication().openURL(NSURL(string: secondaryUrl!)!);
+            if (!UIApplication.sharedApplication().openURL(primaryNsUrl!) && (secondaryUrl != nil))
+            {
+                let secondaryNsUrl = NSURL(string: secondaryUrl!);
+                if (secondaryNsUrl != nil)
+                {
+                    UIApplication.sharedApplication().openURL(NSURL(string: secondaryUrl!)!);
+                }
+            }
         }
     }
     
