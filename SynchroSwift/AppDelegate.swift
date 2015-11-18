@@ -43,6 +43,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         if let appSeed = appManager.appSeed
         {
             viewController = SynchroPageViewController(appManager: appManager, app: appSeed);
+            
+            // We hide the nav controller (since we don't use it - the SynchroPageViewController has it's own nav bar).
+            // If you don't do this, you get an empty nav bar that completely covers the SynchrPageViewController nav bar.
+            //
+            rootNavigationController.setNavigationBarHidden(true, animated: false);
         }
         else
         {
