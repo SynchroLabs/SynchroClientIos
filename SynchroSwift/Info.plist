@@ -5,7 +5,7 @@
 	<key>Bundle identifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>Bundle name</key>
-	<string>Synchro</string>
+	<string>Synchro Civics</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
