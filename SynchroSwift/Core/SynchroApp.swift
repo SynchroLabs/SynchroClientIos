@@ -197,31 +197,19 @@ public class SynchroAppManager
     
     public func loadState() -> Bool
     {
-        let bundledState = loadBundledState()!;
-        let parsedBundledState = JToken.parse(bundledState) as! JObject;
+        // Load the local state
+        //
+        var localState = loadLocalState();
+        if localState == nil
+        {
+            // If there is no local state, initialize the local state from the bundled state and serialize
+            //
+            localState = loadBundledState()!;
+            saveLocalState(localState!);
+        }
         
-        if (parsedBundledState["seed"] != nil)
-        {
-            // If the bundled state contains a "seed", then we're just going to use that as the
-            // app state (we'll launch the app inidicated by the seed and suppress the launcher).
-            //
-            serializeFromJson(parsedBundledState);
-        }
-        else
-        {
-            // If the bundled state doesn't contain a seed, load the local state...
-            //
-            var localState = loadLocalState();
-            if localState == nil
-            {
-                // If there is no local state, initialize the local state from the bundled state.
-                //
-                localState = bundledState;
-                saveLocalState(localState!);
-            }
-            let parsedLocalState = JToken.parse(localState!) as! JObject;
-            serializeFromJson(parsedLocalState);
-        }
+        let parsedLocalState = JToken.parse(localState!) as! JObject;
+        serializeFromJson(parsedLocalState);
     
         return true;
     }

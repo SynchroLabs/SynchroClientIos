@@ -63,7 +63,7 @@ public enum SynchroOrientation
 
 public class DeviceMetrics
 {
-    private var _clientName = NSBundle.mainBundle().infoDictionary?["Bundle name"] as! String;
+    private var _clientName = NSBundle.mainBundle().infoDictionary?["CFBundleName"] as! String;
     private var _clientVersion = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as! String;
     
     private var _deviceClass = SynchroDeviceClass.Phone;
