@@ -197,13 +197,14 @@ public class StateManager
         if (responseAsJSON["Error"] != nil)
         {
             let jsonError = responseAsJSON["Error"] as! JObject;
+            let errorName = jsonError["name"]!.asString()!;
             let errorMessage = jsonError["message"]!.asString()!;
             logger.warn("Response contained error: \(errorMessage)");
-            if (errorMessage == "SyncError")
+            if (errorName == "SyncError")
             {
                 if (responseAsJSON["InstanceId"] == nil)
                 {
-                    // self is a sync error indicating that the server has no instance (do to a corrupt or
+                    // This is a sync error indicating that the server has no instance (do to a corrupt or
                     // re-initialized session).  All we can really do here is re-initialize the app (clear
                     // our local state and do a Page request for the app entry point).
                     //
