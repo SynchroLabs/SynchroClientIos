@@ -11,6 +11,8 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSRectangleWrapper");
 
+private var commands = [CommandName.OnTap.Attribute];
+
 class RectangleView : UIView
 {
     var _color: UIColor? = UIColor.clearColor();
@@ -78,6 +80,28 @@ public class iOSRectangleWrapper : iOSControlWrapper
                 rect.layer.cornerRadius = CGFloat(self.toDeviceUnits(theValue));
             }
         });
+        
         processElementProperty(controlSpec["fill"], setValue: { (value) in rect.color = self.toColor(value) });
+        if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: CommandName.OnTap.Attribute, commandAttributes: commands)
+        {
+            processCommands(bindingSpec, commands: commands);
+        }
+        
+        if (getCommand(CommandName.OnTap) != nil)
+        {
+            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+            rect.userInteractionEnabled = true
+            rect.addGestureRecognizer(tapGestureRecognizer)
+        }
     }
+    
+    func imageTapped(img: AnyObject)
+    {
+        if let command = getCommand(CommandName.OnTap)
+        {
+            logger.debug("Rectangle tap with command: \(command)");
+            self.stateManager.sendCommandRequestAsync(command.Command, parameters: command.getResolvedParameters(self.bindingContext));
+        }
+    }
+
 }
