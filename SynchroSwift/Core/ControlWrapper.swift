@@ -74,7 +74,7 @@ public enum FontFaceType
 
 }
 
-protocol FontSetter
+public protocol FontSetter
 {
     func setFaceType(faceType: FontFaceType);
     func setSize(size: Double);
@@ -237,6 +237,7 @@ public class ControlWrapper: NSObject
     var _stateManager: StateManager;
     var _viewModel: ViewModel;
     var _bindingContext: BindingContext;
+    var _styles: [String]?;
     
     var _commands = Dictionary<String, CommandInstance>();
     var _valueBindings = Dictionary<String, ValueBinding>();
@@ -254,11 +255,18 @@ public class ControlWrapper: NSObject
         super.init();
     }
     
-    public init(parent: ControlWrapper, bindingContext: BindingContext)
+    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec: JObject)
     {
         _stateManager = parent.stateManager;
         _viewModel = parent.viewModel;
         _bindingContext = bindingContext;
+        
+        if let styles = controlSpec["style"]
+        {
+            let separators = NSCharacterSet(charactersInString: " ,");
+            _styles = styles.asString()!.componentsSeparatedByCharactersInSet(separators).filter{!$0.isEmpty};
+        }
+        
         super.init();
     }
     
@@ -490,61 +498,46 @@ public class ControlWrapper: NSObject
         return nil;
     }
     
-    func processFontAttribute(controlSpec: JObject, fontSetter: FontSetter)
+    public func processFontAttribute(controlSpec: JObject, fontSetter: FontSetter)
     {
-        let fontAttributeValue = controlSpec["font"];
-        if (fontAttributeValue is JObject)
-        {
-            if let fontObject = fontAttributeValue as? JObject
+        processElementProperty(controlSpec, attributeName: "font.face",
+        setValue: { (value) in
+            var faceType = FontFaceType.FONT_DEFAULT;
+            let faceTypeString = value?.asString();
+            if faceTypeString == "Serif"
             {
-                processElementProperty(fontObject["face"],
-                setValue: { (value) in
-                    var faceType = FontFaceType.FONT_DEFAULT;
-                    let faceTypeString = value?.asString();
-                    if faceTypeString == "Serif"
-                    {
-                        faceType = FontFaceType.FONT_SERIF;
-                    }
-                    else if faceTypeString == "SanSerif"
-                    {
-                        faceType = FontFaceType.FONT_SANSERIF;
-                    }
-                    else if faceTypeString == "Monospace"
-                    {
-                        faceType = FontFaceType.FONT_MONOSPACE;
-                    }
-                    fontSetter.setFaceType(faceType);
-                });
-                
-                processElementProperty(fontObject["size"],
-                setValue: { (value) in
-                    if let theValue = value
-                    {
-                        fontSetter.setSize(self.toDeviceUnitsFromTypographicPoints(theValue));
-                    }
-                });
-                
-                processElementProperty(fontObject["bold"],
-                setValue: { (value) in
-                    fontSetter.setBold(self.toBoolean(value));
-                });
-                
-                processElementProperty(fontObject["italic"],
-                setValue: { (value) in
-                    fontSetter.setItalic(self.toBoolean(value));
-                });
+                faceType = FontFaceType.FONT_SERIF;
             }
-        }
+            else if faceTypeString == "SanSerif"
+            {
+                faceType = FontFaceType.FONT_SANSERIF;
+            }
+            else if faceTypeString == "Monospace"
+            {
+                faceType = FontFaceType.FONT_MONOSPACE;
+            }
+            fontSetter.setFaceType(faceType);
+        });
         
         // This will handle the simple style "fontsize" attribute (this is the most common font attribute and is
         // very often used by itself, so we'll support this alternate syntax).
         //
-        processElementProperty(controlSpec["fontsize"],
+        processElementProperty(controlSpec, attributeName: "font.size", altAttributeName: "fontsize",
         setValue: { (value) in
             if let theValue = value
             {
                 fontSetter.setSize(self.toDeviceUnitsFromTypographicPoints(theValue));
             }
+        });
+        
+        processElementProperty(controlSpec, attributeName: "font.bold",
+        setValue: { (value) in
+            fontSetter.setBold(self.toBoolean(value));
+        });
+        
+        processElementProperty(controlSpec, attributeName: "font.italic",
+        setValue: { (value) in
+            fontSetter.setItalic(self.toBoolean(value));
         });
     }
     
@@ -567,31 +560,81 @@ public class ControlWrapper: NSObject
         return false;
     }
     
+    private func attemptStyleBinding(style: String, attributeName: String, setValue: SetViewValue) -> Bool
+    {
+        // See if [style].[attributeName] is defined, and if so, bind to it
+        //
+        let styleBinding = style + "." + attributeName;
+        let styleBindingContext = _viewModel.rootBindingContext.select(styleBinding);
+        let value = styleBindingContext.getValue();
+        if ((value != nil) && (value?.Type != JTokenType.Object))
+        {
+            let binding = viewModel.createAndRegisterPropertyBinding(_bindingContext, value: "{$root." + styleBinding + "}", setValue: setValue);
+            _propertyBindings.append(binding);
+            
+            // Immediate content update during configuration
+            binding.updateViewFromViewModel();
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
     // Process an element property, which can contain a plain value, a property binding token string, or no value at all,
     // in which case any optionally supplied defaultValue will be used.  This call *may* result in a property binding to
     // the element property, or it may not.
     //
     // This is "public" because there are cases when a parent element needs to process properties on its children after creation.
     //
-    public func processElementProperty(value: JToken?, setValue: SetViewValue)
+    public func processElementProperty(controlSpec: JObject, attributeName: String, altAttributeName: String?, setValue: SetViewValue)
     {
-        if let token = value
+        var value = controlSpec.selectToken(attributeName);
+        if ((value == nil) && (altAttributeName != nil))
         {
-            if ((token.Type == JTokenType.String) && PropertyValue.containsBindingTokens(token.asString()!))
+            value = controlSpec.selectToken(altAttributeName!);
+            if ((value != nil) && (value?.Type == JTokenType.Object))
             {
-                // If value contains a binding, create a Binding and add it to metadata
-                let binding = viewModel.createAndRegisterPropertyBinding(self.bindingContext, value: token.asString()!, setValue: setValue);
-                _propertyBindings.append(binding);
-                
-                // Immediate content update during configuration.
-                binding.updateViewFromViewModel();
-            }
-            else
-            {
-                // Otherwise, just set the property value
-                setValue(token);
+                value = nil;
             }
         }
+        
+        if (value == nil)
+        {
+            if let styles = _styles
+            {
+                for style in styles
+                {
+                    if (attemptStyleBinding(style, attributeName: attributeName, setValue: setValue))
+                    {
+                        break;
+                    }
+                    else if ((altAttributeName != nil) && attemptStyleBinding(style, attributeName: altAttributeName!, setValue: setValue))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        else if ((value!.Type == JTokenType.String) && PropertyValue.containsBindingTokens(value!.asString()!))
+        {
+            // If value contains a binding, create a Binding and add it to metadata
+            let binding = viewModel.createAndRegisterPropertyBinding(self.bindingContext, value: value!.asString()!, setValue: setValue);
+            _propertyBindings.append(binding);
+            
+            // Immediate content update during configuration.
+            binding.updateViewFromViewModel();
+        }
+        else
+        {
+            // Otherwise, just set the property value
+            setValue(value!);
+        }
+    }
+
+    public func processElementProperty(controlSpec: JObject, attributeName: String, setValue: SetViewValue)
+    {
+        processElementProperty(controlSpec, attributeName: attributeName, altAttributeName: nil, setValue: setValue);
     }
     
     // This helper is used by control update handlers.

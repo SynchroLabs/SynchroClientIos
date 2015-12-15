@@ -13,10 +13,10 @@ private var logger = Logger.getLogger("iOSGridViewWrapper");
 
 public class iOSGridViewWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating grid view element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let gridViewLaout = UICollectionViewFlowLayout();
         let gridView = UICollectionView(frame: CGRect(), collectionViewLayout: gridViewLaout);

@@ -95,10 +95,10 @@ class AutoSizingScrollView : UIScrollView
 
 public class iOSScrollWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating scroll element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let orientation = self.toOrientation(controlSpec["orientation"], defaultOrientation: Orientation.Vertical);
         

@@ -13,10 +13,10 @@ private var logger = Logger.getLogger("iOSSliderWrapper");
 
 public class iOSSliderWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating slider element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let slider = UISlider();
         self._control = slider;
@@ -29,12 +29,12 @@ public class iOSSliderWrapper : iOSControlWrapper
         {
             if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(Double(slider.value)); }, setValue: { (value) in self.setValue(Float(self.toDouble(value))) }))
             {
-                processElementProperty(controlSpec["value"], setValue: { (value) in self.setValue(Float(self.toDouble(value))) });
+                processElementProperty(controlSpec, attributeName: "value", setValue: { (value) in self.setValue(Float(self.toDouble(value))) });
             }
         }
         
-        processElementProperty(controlSpec["minimum"], setValue: { (value) in self.setMin(Float(self.toDouble(value))) });
-        processElementProperty(controlSpec["maximum"], setValue: { (value) in self.setMax(Float(self.toDouble(value))) });
+        processElementProperty(controlSpec, attributeName: "minimum", setValue: { (value) in self.setMin(Float(self.toDouble(value))) });
+        processElementProperty(controlSpec, attributeName: "maximum", setValue: { (value) in self.setMax(Float(self.toDouble(value))) });
         
         slider.addTarget(self, action: "valueChanged:", forControlEvents: .ValueChanged);
     }

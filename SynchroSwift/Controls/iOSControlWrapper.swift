@@ -530,9 +530,8 @@ public class iOSFontSetter : FontSetter
     }
 }
 
-protocol ThicknessSetter
+public protocol ThicknessSetter
 {
-    func setThickness(thickness: Double);
     func setThicknessLeft(thickness: Double);
     func setThicknessTop(thickness: Double);
     func setThicknessRight(thickness: Double);
@@ -546,14 +545,6 @@ public class MarginThicknessSetter : ThicknessSetter
     public init(controlWrapper: iOSControlWrapper)
     {
         _controlWrapper = controlWrapper;
-    }
-
-    public func setThickness(thickness: Double)
-    {
-        self.setThicknessTop(thickness);
-        self.setThicknessLeft(thickness);
-        self.setThicknessBottom(thickness);
-        self.setThicknessRight(thickness);
     }
 
     public func setThicknessLeft(thickness: Double)
@@ -689,11 +680,10 @@ public class iOSControlWrapper : ControlWrapper
         super.init(stateManager: stateManager, viewModel: viewModel, bindingContext: bindingContext);
     }
     
-    public init(parent: ControlWrapper, bindingContext: BindingContext, control: UIView? = nil)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec: JObject)
     {
         _pageView = (parent as! iOSControlWrapper).pageView;
-        _control = control;
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
     }
     
     public func toOrientation(value: JToken?, defaultOrientation: Orientation = Orientation.Horizontal) -> Orientation
@@ -761,54 +751,36 @@ public class iOSControlWrapper : ControlWrapper
         return nil;
     }
         
-    func processThicknessProperty(thicknessAttributeValue: JToken?, thicknessSetter: ThicknessSetter)
+    public func processThicknessProperty(controlSpec: JObject, attributeName: String, thicknessSetter: ThicknessSetter)
     {
-        if let token = thicknessAttributeValue
-        {
-            if (token is JValue)
+        processElementProperty(controlSpec, attributeName: attributeName + ".left", altAttributeName: attributeName,
+        setValue: { (value) in
+            if let theValue = value
             {
-                processElementProperty(token,
-                setValue: { (value) in
-                    if let theValue = value
-                    {
-                        thicknessSetter.setThickness(self.toDeviceUnits(theValue));
-                    }
-                });
+                thicknessSetter.setThicknessLeft(self.toDeviceUnits(theValue));
             }
-            else if (token is JObject)
+        });
+        processElementProperty(controlSpec, attributeName: attributeName + ".top", altAttributeName: attributeName,
+        setValue: { (value) in
+            if let theValue = value
             {
-                let marginObject = token as! JObject;
-                
-                processElementProperty(marginObject["left"],
-                setValue: { (value) in
-                    if let theValue = value
-                    {
-                        thicknessSetter.setThicknessLeft(self.toDeviceUnits(theValue));
-                    }
-                });
-                processElementProperty(marginObject["top"],
-                setValue: { (value) in
-                    if let theValue = value
-                    {
-                        thicknessSetter.setThicknessTop(self.toDeviceUnits(theValue));
-                    }
-                });
-                processElementProperty(marginObject["right"],
-                setValue: { (value) in
-                    if let theValue = value
-                    {
-                        thicknessSetter.setThicknessRight(self.toDeviceUnits(theValue));
-                    }
-                });
-                processElementProperty(marginObject["bottom"],
-                setValue: { (value) in
-                    if let theValue = value
-                    {
-                        thicknessSetter.setThicknessBottom(self.toDeviceUnits(theValue));
-                    }
-                });
+                thicknessSetter.setThicknessTop(self.toDeviceUnits(theValue));
             }
-        }
+        });
+        processElementProperty(controlSpec, attributeName: attributeName + ".right", altAttributeName: attributeName,
+        setValue: { (value) in
+            if let theValue = value
+            {
+                thicknessSetter.setThicknessRight(self.toDeviceUnits(theValue));
+            }
+        });
+        processElementProperty(controlSpec, attributeName: attributeName + ".bottom", altAttributeName: attributeName,
+        setValue: { (value) in
+            if let theValue = value
+            {
+                thicknessSetter.setThicknessBottom(self.toDeviceUnits(theValue));
+            }
+        });
     }
     
     func applyFrameworkElementDefaults(element: UIView, applyMargins: Bool = true)
@@ -918,7 +890,7 @@ public class iOSControlWrapper : ControlWrapper
                 {
                     self.frameProperties.heightSpec = SizeSpec.Explicit;
                 }
-                processElementProperty(controlSpec["height"],
+                processElementProperty(controlSpec, attributeName: "height",
                 setValue: { (value) in
                     if let theValue = value
                     {
@@ -948,7 +920,7 @@ public class iOSControlWrapper : ControlWrapper
                 {
                     self.frameProperties.widthSpec = SizeSpec.Explicit;
                 }
-                processElementProperty(controlSpec["width"],
+                processElementProperty(controlSpec, attributeName: "width",
                 setValue: { (value) in
                     if let theValue = value
                     {
@@ -979,13 +951,13 @@ public class iOSControlWrapper : ControlWrapper
         // name, minHeight, minWidth, maxHeight, maxWidth -- when/if supported
         //
         
-        processElementProperty(controlSpec["horizontalAlignment"], setValue: { (value) in self.horizontalAlignment = self.toHorizontalAlignment(value) });
-        processElementProperty(controlSpec["verticalAlignment"], setValue: { (value) in self.verticalAlignment = self.toVerticalAlignment(value) });
+        processElementProperty(controlSpec, attributeName: "horizontalAlignment", setValue: { (value) in self.horizontalAlignment = self.toHorizontalAlignment(value) });
+        processElementProperty(controlSpec, attributeName: "verticalAlignment", setValue: { (value) in self.verticalAlignment = self.toVerticalAlignment(value) });
         
-        processElementProperty(controlSpec["opacity"], setValue: { (value) in self.control!.layer.opacity = Float(self.toDouble(value)) });
+        processElementProperty(controlSpec, attributeName: "opacity", setValue: { (value) in self.control!.layer.opacity = Float(self.toDouble(value)) });
         
-        processElementProperty(controlSpec["background"], setValue: { (value) in self.control!.backgroundColor = self.toColor(value) });
-        processElementProperty(controlSpec["visibility"],
+        processElementProperty(controlSpec, attributeName: "background", setValue: { (value) in self.control!.backgroundColor = self.toColor(value) });
+        processElementProperty(controlSpec, attributeName: "visibility",
         setValue: { (value) in
             self.control!.hidden = !self.toBoolean(value);
             if (self.control?.superview != nil)
@@ -996,14 +968,14 @@ public class iOSControlWrapper : ControlWrapper
         
         if let uiControl = self.control as? UIControl
         {
-            processElementProperty(controlSpec["enabled"], setValue: { (value) in uiControl.enabled = self.toBoolean(value) });
+            processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in uiControl.enabled = self.toBoolean(value) });
         }
         else
         {
-            processElementProperty(controlSpec["enabled"], setValue: { (value) in self.control!.userInteractionEnabled = self.toBoolean(value) });
+            processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in self.control!.userInteractionEnabled = self.toBoolean(value) });
         }
         
-        processThicknessProperty(controlSpec["margin"], thicknessSetter: MarginThicknessSetter(controlWrapper: self));
+        processThicknessProperty(controlSpec, attributeName: "margin", thicknessSetter: MarginThicknessSetter(controlWrapper: self));
     }
     
     public func getChildControlWrapper(control: UIView) -> iOSControlWrapper?

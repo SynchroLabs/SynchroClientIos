@@ -114,10 +114,10 @@ class TextBlockFontSetter : iOSFontSetter
 
 public class iOSTextBlockWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating textblock element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
 
         let textBlock = ResizableLabel(frameProperties: self.frameProperties);
         textBlock.numberOfLines = 0;
@@ -128,17 +128,17 @@ public class iOSTextBlockWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 0, defaultHeight: 0);
         applyFrameworkElementDefaults(textBlock);
         
-        processElementProperty(controlSpec["foreground"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "foreground", setValue: { (value) in
             textBlock.textColor = self.toColor(value);
         });
         
         processFontAttribute(controlSpec, fontSetter: TextBlockFontSetter(label: textBlock));
         
-        processElementProperty(controlSpec["value"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "value", setValue: { (value) in
             textBlock.text = self.toString(value);
         });
         
-        processElementProperty(controlSpec["ellipsize"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "ellipsize", setValue: { (value) in
             // Other trimming options:
             //
             //   UILineBreakMode.HeadTruncation;
@@ -155,7 +155,7 @@ public class iOSTextBlockWrapper : iOSControlWrapper
             }
         });
         
-        processElementProperty(controlSpec["textAlignment"],setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "textAlignment",setValue: { (value) in
             let alignString = self.toString(value);
             if (alignString == "Left")
             {

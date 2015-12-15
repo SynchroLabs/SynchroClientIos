@@ -67,6 +67,7 @@
 		C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1AF1A33DF4C00040A9D /* seed.json */; };
 		C4B4FD251A3E6DC800328772 /* iOSPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD241A3E6DC800328772 /* iOSPageView.swift */; };
 		C4B4FD271A3FA5BF00328772 /* SynchroPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */; };
+		C4B53C8F1C1FAE1B00C67701 /* iOSControlWrapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B53C8E1C1FAE1B00C67701 /* iOSControlWrapperTest.swift */; };
 		C4B6418D1A63A3580038EFC3 /* AppDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B6418B1A63A3570038EFC3 /* AppDetailViewController.swift */; };
 		C4B6418E1A63A3580038EFC3 /* AppDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4B6418C1A63A3570038EFC3 /* AppDetailView.xib */; };
 		C4F0DC0E1A45603600C4BB42 /* Res in Resources */ = {isa = PBXBuildFile; fileRef = C4F0DC0D1A45603600C4BB42 /* Res */; };
@@ -147,6 +148,7 @@
 		C4AFA1AF1A33DF4C00040A9D /* seed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = seed.json; sourceTree = "<group>"; };
 		C4B4FD241A3E6DC800328772 /* iOSPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSPageView.swift; sourceTree = "<group>"; };
 		C4B4FD261A3FA5BF00328772 /* SynchroPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchroPageViewController.swift; sourceTree = "<group>"; };
+		C4B53C8E1C1FAE1B00C67701 /* iOSControlWrapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSControlWrapperTest.swift; sourceTree = "<group>"; };
 		C4B6418B1A63A3570038EFC3 /* AppDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDetailViewController.swift; path = ../AppDetailViewController.swift; sourceTree = "<group>"; };
 		C4B6418C1A63A3570038EFC3 /* AppDetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AppDetailView.xib; path = ../AppDetailView.xib; sourceTree = "<group>"; };
 		C4F0DC0D1A45603600C4BB42 /* Res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Res; sourceTree = "<group>"; };
@@ -295,6 +297,7 @@
 				C416C4FE1A38415E00FD789A /* BindingTests.swift */,
 				C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */,
 				C40D605F1A3CC9F30048B5A0 /* ControlWrapperTests.swift */,
+				C4B53C8E1C1FAE1B00C67701 /* iOSControlWrapperTest.swift */,
 				C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */,
 				C4AFA1A81A33DEAB00040A9D /* JsonTests.swift */,
 				C40D60561A3AD0F50048B5A0 /* StateManagerTests.swift */,
@@ -469,6 +472,7 @@
 				C416C5031A38585500FD789A /* TokenConverterTests.swift in Sources */,
 				C4AFA1AE1A33DEAB00040A9D /* TransportTests.swift in Sources */,
 				C4646AA41A3A24EB0043FB90 /* ViewModelTests.swift in Sources */,
+				C4B53C8F1C1FAE1B00C67701 /* iOSControlWrapperTest.swift in Sources */,
 				C4AFA1AB1A33DEAB00040A9D /* JsonParserTests.swift in Sources */,
 				C4AFA1811A33D71F00040A9D /* SynchroSwiftTests.swift in Sources */,
 				C416C4FF1A38415E00FD789A /* BindingTests.swift in Sources */,

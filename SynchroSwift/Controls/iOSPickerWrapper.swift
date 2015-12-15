@@ -116,7 +116,7 @@ public class iOSPickerWrapper : iOSControlWrapper
     
     var _model: BindingContextPickerModel;
 
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating picker element");
         
@@ -131,7 +131,7 @@ public class iOSPickerWrapper : iOSControlWrapper
         _textBox = PickerTextField();
         _textBox.borderStyle = UITextBorderStyle.RoundedRect;
         
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
 
         self._control = _textBox;
         

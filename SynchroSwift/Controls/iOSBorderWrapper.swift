@@ -270,10 +270,10 @@ class BorderView : PaddedView
 
 public class iOSBorderWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating border element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let border = BorderView(controlWrapper: self);
         self._control = border;
@@ -283,20 +283,20 @@ public class iOSBorderWrapper : iOSControlWrapper
         
         // If border thickness or padding change, need to resize view to child...
         //
-        processElementProperty(controlSpec["border"], setValue: { (value) in border.layer.borderColor = self.toColor(value)?.CGColor });
-        processElementProperty(controlSpec["borderThickness"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "border", setValue: { (value) in border.layer.borderColor = self.toColor(value)?.CGColor });
+        processElementProperty(controlSpec, attributeName: "borderThickness", setValue: { (value) in
             if let theValue = value
             {
                 border.borderWidth = CGFloat(self.toDeviceUnits(theValue));
             }
         });
-        processElementProperty(controlSpec["cornerRadius"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "cornerRadius", setValue: { (value) in
             if let theValue = value
             {
                 border.layer.cornerRadius = CGFloat(self.toDeviceUnits(theValue));
             }
         });
-        processThicknessProperty(controlSpec["padding"], thicknessSetter: PaddedViewThicknessSetter(paddedView: border));
+        processThicknessProperty(controlSpec, attributeName: "padding", thicknessSetter: PaddedViewThicknessSetter(paddedView: border));
         
         // "background" color handled by base class
         

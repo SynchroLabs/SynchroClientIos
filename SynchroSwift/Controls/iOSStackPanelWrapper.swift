@@ -355,10 +355,10 @@ class StackPanelView : PaddedView
 
 public class iOSStackPanelWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating stackpanel element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let stackPanel = StackPanelView(controlWrapper: self);
         self._control = stackPanel;
@@ -372,10 +372,10 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         }
         else
         {
-            processElementProperty(controlSpec["orientation"], setValue: { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.Vertical) });
+            processElementProperty(controlSpec, attributeName: "orientation", setValue: { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.Vertical) });
         }
         
-        processThicknessProperty(controlSpec["padding"], thicknessSetter: PaddedViewThicknessSetter(paddedView: stackPanel));
+        processThicknessProperty(controlSpec, attributeName: "padding", thicknessSetter: PaddedViewThicknessSetter(paddedView: stackPanel));
         
         if let contentsArray = controlSpec["contents"] as? JArray
         {

@@ -34,10 +34,10 @@ public class iOSImageWrapper : iOSControlWrapper
         return mode;
     }
     
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating image element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let image = UIImageView();
         image.clipsToBounds = true;
@@ -55,7 +55,7 @@ public class iOSImageWrapper : iOSControlWrapper
         //       This could be accomplished by putting the UIImageView inside of another view and sizing / locating within that view based on desired
         //       content alignment, but that's more complexity than it's worth.
         //
-        processElementProperty(controlSpec["scale"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "scale", setValue: { (value) in
             image.contentMode = self.toImageContentMode(value);
             
             // There is some scaling state maintained on changing the contentMode that can only be reset by resetting the image (after updating the content mode)
@@ -67,7 +67,7 @@ public class iOSImageWrapper : iOSControlWrapper
         
         processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);
         applyFrameworkElementDefaults(image);
-        processElementProperty(controlSpec["resource"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "resource", setValue: { (value) in
             if ((value == nil) || (value!.asString() == ""))
             {
                 image.image = nil;

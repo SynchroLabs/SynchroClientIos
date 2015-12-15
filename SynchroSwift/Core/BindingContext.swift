@@ -126,7 +126,7 @@ public class BindingContext
             finalBindingPath = parentPath;
         }
         
-        logger.info("Resolved binding path is: \(finalBindingPath)");
+        logger.debug("Resolved binding path is: \(finalBindingPath)");
         
         return finalBindingPath;
     }

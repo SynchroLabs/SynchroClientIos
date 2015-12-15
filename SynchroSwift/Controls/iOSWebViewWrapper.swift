@@ -13,10 +13,10 @@ private var logger = Logger.getLogger("iOSWebViewWrapper");
 
 public class iOSWebViewWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating webview element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let webView = UIWebView();
         self._control = webView;
@@ -25,8 +25,8 @@ public class iOSWebViewWrapper : iOSControlWrapper
         applyFrameworkElementDefaults(webView);
         
         // !!! TODO - iOS Web View
-        processElementProperty(controlSpec["contents"], setValue: { (value) in webView.loadHTMLString(self.toString(value), baseURL: nil); });
-        processElementProperty(controlSpec["url"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "contents", setValue: { (value) in webView.loadHTMLString(self.toString(value), baseURL: nil); });
+        processElementProperty(controlSpec, attributeName: "url", setValue: { (value) in
             if let url = NSURL(string: self.toString(value))
             {
                 webView.loadRequest(NSURLRequest(URL: url));

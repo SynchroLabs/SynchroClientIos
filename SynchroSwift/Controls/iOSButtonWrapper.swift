@@ -15,10 +15,10 @@ private var commands = [CommandName.OnClick.Attribute];
 
 public class iOSButtonWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating button element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let button = UIButton(type: UIButtonType.System);
         self._control = button;
@@ -38,16 +38,16 @@ public class iOSButtonWrapper : iOSControlWrapper
         processElementDimensions(controlSpec);
         applyFrameworkElementDefaults(button);
         
-        processElementProperty(controlSpec["caption"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "caption", setValue: { (value) in
             button.setTitle(self.toString(value), forState: .Normal);
             self.sizeToFit();
         });
 
-        processElementProperty(controlSpec["foreground"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "foreground", setValue: { (value) in
             button.setTitleColor(self.toColor(value), forState: .Normal);
         });
         
-        processElementProperty(controlSpec["resource"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "resource", setValue: { (value) in
             if ((value == nil) || (value!.asString() == ""))
             {
                 button.setImage(nil, forState: UIControlState.Normal);

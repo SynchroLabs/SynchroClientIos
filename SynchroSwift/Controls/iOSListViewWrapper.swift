@@ -403,11 +403,11 @@ public class iOSListViewWrapper : iOSControlWrapper
     var _localSelection: JToken?;
     var _dataSource: CheckableBindingContextTableSource!;
 
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating listview element");
         
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let table = UITableView();
         self._control = table;

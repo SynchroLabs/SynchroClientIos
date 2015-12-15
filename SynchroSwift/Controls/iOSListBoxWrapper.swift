@@ -339,10 +339,10 @@ public class iOSListBoxWrapper : iOSControlWrapper
     var _localSelection: JToken?;
     var _dataSource: BindingContextAsCheckableStringTableSource!;
 
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating listbox element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
 
         let table = UITableView();
         self._control = table;
