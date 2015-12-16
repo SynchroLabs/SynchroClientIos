@@ -876,24 +876,20 @@ public class iOSControlWrapper : ControlWrapper
         
             control.frame = CGRect(x: 0, y: 0, width: defaultWidth, height: defaultHeight);
             
-            // Process star sizing...
-            //
-            let heightStarCount = ControlWrapper.getStarCount(controlSpec["height"]?.asString());
-            if (heightStarCount > 0)
-            {
-                self.frameProperties.heightSpec = SizeSpec.FillParent;
-                self.frameProperties.starHeight = heightStarCount;
-            }
-            else
-            {
-                if (controlSpec["height"] != nil)
+            processElementProperty(controlSpec, attributeName: "height",
+            setValue: { (value) in
+                if let theValue = value
                 {
-                    self.frameProperties.heightSpec = SizeSpec.Explicit;
-                }
-                processElementProperty(controlSpec, attributeName: "height",
-                setValue: { (value) in
-                    if let theValue = value
+                    let heightStarCount = ControlWrapper.getStarCount(controlSpec["height"]?.asString());
+                    if (heightStarCount > 0)
                     {
+                        self.frameProperties.heightSpec = SizeSpec.FillParent;
+                        self.frameProperties.starHeight = heightStarCount;
+                    }
+                    else
+                    {
+                        self.frameProperties.heightSpec = SizeSpec.Explicit;
+
                         var frame = control.frame;
                         var size = frame.size;
                         size.height = CGFloat(self.toDeviceUnits(theValue));
@@ -905,25 +901,23 @@ public class iOSControlWrapper : ControlWrapper
                         }
                         //this.SizeToFit();
                     }
-                });
-            }
-            
-            let widthStarCount = ControlWrapper.getStarCount(controlSpec["width"]?.asString());
-            if (widthStarCount > 0)
-            {
-                self.frameProperties.widthSpec = SizeSpec.FillParent;
-                self.frameProperties.starWidth = widthStarCount;
-            }
-            else
-            {
-                if (controlSpec["width"] != nil)
-                {
-                    self.frameProperties.widthSpec = SizeSpec.Explicit;
                 }
-                processElementProperty(controlSpec, attributeName: "width",
-                setValue: { (value) in
-                    if let theValue = value
+            });
+
+            processElementProperty(controlSpec, attributeName: "width",
+            setValue: { (value) in
+                if let theValue = value
+                {
+                    let widthStarCount = ControlWrapper.getStarCount(theValue.asString());
+                    if (widthStarCount > 0)
                     {
+                        self.frameProperties.widthSpec = SizeSpec.FillParent;
+                        self.frameProperties.starWidth = widthStarCount;
+                    }
+                    else
+                    {
+                        self.frameProperties.widthSpec = SizeSpec.Explicit;
+                        
                         var frame = control.frame;
                         var size = frame.size;
                         size.width = CGFloat(self.toDeviceUnits(theValue));
@@ -935,8 +929,8 @@ public class iOSControlWrapper : ControlWrapper
                         }
                         //this.SizeToFit();
                     }
-                });
-            }
+                }
+            });
         }
         
         return self.frameProperties;

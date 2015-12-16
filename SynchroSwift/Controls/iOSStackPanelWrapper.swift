@@ -366,14 +366,7 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 0, defaultHeight: 0);
         applyFrameworkElementDefaults(stackPanel, applyMargins: false);
         
-        if (controlSpec["orientation"] == nil)
-        {
-            stackPanel.orientation = Orientation.Vertical;
-        }
-        else
-        {
-            processElementProperty(controlSpec, attributeName: "orientation", setValue: { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.Vertical) });
-        }
+        processElementProperty(controlSpec, attributeName: "orientation", setValue: { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.Vertical) });
         
         processThicknessProperty(controlSpec, attributeName: "padding", thicknessSetter: PaddedViewThicknessSetter(paddedView: stackPanel));
         
