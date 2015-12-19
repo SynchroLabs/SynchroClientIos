@@ -880,7 +880,7 @@ public class iOSControlWrapper : ControlWrapper
             setValue: { (value) in
                 if let theValue = value
                 {
-                    let heightStarCount = ControlWrapper.getStarCount(controlSpec["height"]?.asString());
+                    let heightStarCount = ControlWrapper.getStarCount(theValue.asString());
                     if (heightStarCount > 0)
                     {
                         self.frameProperties.heightSpec = SizeSpec.FillParent;
