@@ -560,7 +560,7 @@ public class ControlWrapper: NSObject
         return false;
     }
     
-    private func attemptStyleBinding(style: String, attributeName: String, setValue: SetViewValue) -> Bool
+    private func attemptStyleBinding(style: String, attributeName: String, setValue: SetViewValue?) -> JToken?
     {
         // See if [style].[attributeName] is defined, and if so, bind to it
         //
@@ -570,24 +570,38 @@ public class ControlWrapper: NSObject
         if ((value != nil) && (value?.Type != JTokenType.Object))
         {
             let binding = viewModel.createAndRegisterPropertyBinding(_bindingContext, value: "{$root." + styleBinding + "}", setValue: setValue);
-            _propertyBindings.append(binding);
+            if (setValue == nil)
+            {
+                viewModel.unregisterPropertyBinding(binding);
+            }
+            else
+            {
+                _propertyBindings.append(binding);
+            }
             
             // Immediate content update during configuration
-            binding.updateViewFromViewModel();
-            
-            return true;
+            return binding.updateViewFromViewModel();
         }
         
-        return false;
+        return nil;
     }
     
     // Process an element property, which can contain a plain value, a property binding token string, or no value at all,
-    // in which case any optionally supplied defaultValue will be used.  This call *may* result in a property binding to
-    // the element property, or it may not.
+    // in which case one or more "style" attribute values will be used to attempt to find a binding of the attributeName
+    // to a style value.  This call *may* result in a property binding to the element property, or it may not.
     //
     // This is "public" because there are cases when a parent element needs to process properties on its children after creation.
     //
-    public func processElementProperty(controlSpec: JObject, attributeName: String, altAttributeName: String?, setValue: SetViewValue)
+    // The returned JToken (if any) represents the bound value as determined at the time of processing the element.  It may return 
+    // nil in the case that there was no binding, or where there was a binding to an element in the view model that does not currently
+    // exist.  
+    //
+    // This function can be used for cases where the element binding is required to be present at processing time (for config elements
+    // that are required upon control creation, and that do not support value update during the control lifecycle).  In that case, a
+    // nil value may be passed for setValue, which will avoid creating and managing bindings (which should not be necessary since there
+    // is no setter), but will still return a resolved value if once can be determined.
+    //
+    public func processElementProperty(controlSpec: JObject, attributeName: String, altAttributeName: String?, setValue: SetViewValue?) -> JToken?
     {
         var value = controlSpec.selectToken(attributeName);
         if ((value == nil) && (altAttributeName != nil))
@@ -605,13 +619,18 @@ public class ControlWrapper: NSObject
             {
                 for style in styles
                 {
-                    if (attemptStyleBinding(style, attributeName: attributeName, setValue: setValue))
+                    var resolvedValue = attemptStyleBinding(style, attributeName: attributeName, setValue: setValue);
+                    if (resolvedValue != nil)
                     {
-                        break;
+                        return resolvedValue;
                     }
-                    else if ((altAttributeName != nil) && attemptStyleBinding(style, attributeName: altAttributeName!, setValue: setValue))
+                    else if (altAttributeName != nil)
                     {
-                        break;
+                        resolvedValue = attemptStyleBinding(style, attributeName: altAttributeName!, setValue: setValue);
+                        if (resolvedValue != nil)
+                        {
+                            return resolvedValue;
+                        }
                     }
                 }
             }
@@ -620,21 +639,34 @@ public class ControlWrapper: NSObject
         {
             // If value contains a binding, create a Binding and add it to metadata
             let binding = viewModel.createAndRegisterPropertyBinding(self.bindingContext, value: value!.asString()!, setValue: setValue);
-            _propertyBindings.append(binding);
+            if (setValue == nil)
+            {
+                viewModel.unregisterPropertyBinding(binding);
+            }
+            else
+            {
+                _propertyBindings.append(binding);
+            }
             
             // Immediate content update during configuration.
-            binding.updateViewFromViewModel();
+            return binding.updateViewFromViewModel();
         }
         else
         {
             // Otherwise, just set the property value
-            setValue(value!);
+            if (setValue != nil)
+            {
+                setValue!(value!);
+            }
+            return value;
         }
+        
+        return nil;
     }
 
-    public func processElementProperty(controlSpec: JObject, attributeName: String, setValue: SetViewValue)
+    public func processElementProperty(controlSpec: JObject, attributeName: String, setValue: SetViewValue?) -> JToken?
     {
-        processElementProperty(controlSpec, attributeName: attributeName, altAttributeName: nil, setValue: setValue);
+        return processElementProperty(controlSpec, attributeName: attributeName, altAttributeName: nil, setValue: setValue);
     }
     
     // This helper is used by control update handlers.

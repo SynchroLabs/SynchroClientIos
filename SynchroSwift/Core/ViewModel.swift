@@ -43,7 +43,7 @@ public class ViewModel
         _valueBindings.removeObject(valueBinding);
     }
     
-    public func createAndRegisterPropertyBinding(bindingContext: BindingContext, value: String, setValue: SetViewValue) -> PropertyBinding
+    public func createAndRegisterPropertyBinding(bindingContext: BindingContext, value: String, setValue: SetViewValue?) -> PropertyBinding
     {
         let propertyBinding = PropertyBinding(bindingContext: bindingContext, value: value, setViewValue: setValue);
         _propertyBindings.append(propertyBinding);

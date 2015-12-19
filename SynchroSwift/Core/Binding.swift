@@ -520,17 +520,22 @@ public typealias GetViewValue = () -> (JToken);
 public class PropertyBinding
 {
     var _propertyValue: PropertyValue;
-    var _setViewValue: SetViewValue;
+    var _setViewValue: SetViewValue?;
     
-    public init(bindingContext: BindingContext, value: String, setViewValue: SetViewValue)
+    public init(bindingContext: BindingContext, value: String, setViewValue: SetViewValue?)
     {
         _propertyValue = PropertyValue(value, bindingContext: bindingContext);
         _setViewValue = setViewValue;
     }
     
-    public func updateViewFromViewModel()
+    public func updateViewFromViewModel() -> JToken?
     {
-        self._setViewValue(_propertyValue.expand());
+        let value = _propertyValue.expand();
+        if (_setViewValue != nil)
+        {
+            self._setViewValue!(value);
+        }
+        return value;
     }
     
     public var BindingContexts: [BindingContext] { get { return _propertyValue.BindingContexts; } }

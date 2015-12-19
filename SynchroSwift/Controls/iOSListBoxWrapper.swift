@@ -391,7 +391,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
         //
         // table.RegisterClassForCellReuse(typeof(TableCell), TableCell.CellIdentifier);
         
-        let selectionMode = self.toListSelectionMode(controlSpec["select"]);
+        let selectionMode = toListSelectionMode(processElementProperty(controlSpec, attributeName: "select", setValue: nil));
         
         _dataSource = BindingContextAsCheckableStringTableSource(selectionMode: selectionMode, onSelectionChanged: listbox_SelectionChanged, onItemClicked: listbox_ItemClicked);
         table.dataSource = _dataSource;

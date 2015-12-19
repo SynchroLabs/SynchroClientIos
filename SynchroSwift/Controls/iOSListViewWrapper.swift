@@ -422,7 +422,7 @@ public class iOSListViewWrapper : iOSControlWrapper
         //
         // table.RegisterClassForCellReuse(typeof(TableCell), TableCell.CellIdentifier);
         
-        let selectionMode = toListSelectionMode(controlSpec["select"]);
+        let selectionMode = toListSelectionMode(processElementProperty(controlSpec, attributeName: "select", setValue: nil));
         
         processElementDimensions(controlSpec, defaultWidth: 320, defaultHeight: 200);
         applyFrameworkElementDefaults(table);
