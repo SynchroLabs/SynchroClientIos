@@ -27,7 +27,7 @@ class TransportTests: XCTestCase
         let expected = JObject(
         [
             "name": JValue("synchro-samples"),
-            "version": JValue("0.1.0"),
+            "version": JValue("1.2.0"),
             "description": JValue("Synchro API Samples"),
             "main": JValue("menu"),
             "author": JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)")
@@ -69,7 +69,8 @@ class TransportTests: XCTestCase
             [
                 "Mode": JValue("Page"),
                 "Path": JValue("menu"),
-                "TransactionId": JValue(1)
+                "TransactionId": JValue(1),
+                "DeviceMetrics": JObject(["clientVersion": JValue("1.1.0")])
             ]),
             responseHandler: { (response) in
                 XCTAssert("menu" == response["Path"]?.asString());
@@ -96,7 +97,7 @@ class TransportTests: XCTestCase
                     "Mode": JValue("Page"),
                     "Path": JValue("menu"),
                     "TransactionId": JValue(1),
-                    "DeviceMetrics": JObject(["clientVersion": JValue("1.1.0")])
+                    "DeviceMetrics": JObject(["clientVersion": JValue("1.2.0")])
                 ]),
             responseHandler: { (response) in
                 XCTAssert("menu" == response["Path"]?.asString());
