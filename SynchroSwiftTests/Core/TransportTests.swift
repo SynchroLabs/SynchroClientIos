@@ -27,7 +27,7 @@ class TransportTests: XCTestCase
         let expected = JObject(
         [
             "name": JValue("synchro-samples"),
-            "version": JValue("1.2.0"),
+            "version": JValue("1.3.0"),
             "description": JValue("Synchro API Samples"),
             "main": JValue("menu"),
             "author": JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)")
@@ -43,7 +43,7 @@ class TransportTests: XCTestCase
         expected["private"] = JValue(true);
         expected["engines"] = JObject(
             [
-                "synchro": JValue("*")
+                "synchro": JValue(">= 1.3.0")
             ]);
 
         let transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
