@@ -27,7 +27,7 @@ public class BindingContext
         get { return _bindingRoot; }
         set (value)
         {
-            if (value != _bindingRoot)
+            if (value !== _bindingRoot)
             {
                 _bindingRoot = value;
                 self.rebind();
