@@ -31,7 +31,7 @@ public class PageView : NSObject
     var _rootContainerControlWrapper: ControlWrapper?;
     
     var onBackCommand: String?;
-    
+        
     public init(stateManager: StateManager, viewModel: ViewModel, doBackToMenu: (() -> Void)?)
     {
         _stateManager = stateManager;

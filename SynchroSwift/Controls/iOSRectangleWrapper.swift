@@ -11,6 +11,8 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSRectangleWrapper");
 
+private var commands = [CommandName.OnTap.Attribute];
+
 class RectangleView : UIView
 {
     var _color: UIColor? = UIColor.clearColor();
@@ -52,10 +54,10 @@ class RectangleView : UIView
 
 public class iOSRectangleWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating rectangle element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let rect = RectangleView();
         self._control = rect;
@@ -65,19 +67,42 @@ public class iOSRectangleWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);
         applyFrameworkElementDefaults(rect);
         
-        processElementProperty(controlSpec["border"], setValue: { (value) in rect.layer.borderColor = self.toColor(value)?.CGColor });
-        processElementProperty(controlSpec["borderThickness"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "border", setValue: { (value) in rect.layer.borderColor = self.toColor(value)?.CGColor });
+        processElementProperty(controlSpec, attributeName: "borderThickness", setValue: { (value) in
             if let theValue = value
             {
                 rect.layer.borderWidth = CGFloat(self.toDeviceUnits(theValue));
             }
         });
-        processElementProperty(controlSpec["cornerRadius"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "cornerRadius", setValue: { (value) in
             if let theValue = value
             {
                 rect.layer.cornerRadius = CGFloat(self.toDeviceUnits(theValue));
             }
         });
-        processElementProperty(controlSpec["fill"], setValue: { (value) in rect.color = self.toColor(value) });
+        
+        processElementProperty(controlSpec, attributeName: "fill", setValue: { (value) in rect.color = self.toColor(value) });
+        
+        if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: CommandName.OnTap.Attribute, commandAttributes: commands)
+        {
+            processCommands(bindingSpec, commands: commands);
+        }
+        
+        if (getCommand(CommandName.OnTap) != nil)
+        {
+            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+            rect.userInteractionEnabled = true
+            rect.addGestureRecognizer(tapGestureRecognizer)
+        }
     }
+    
+    func imageTapped(img: AnyObject)
+    {
+        if let command = getCommand(CommandName.OnTap)
+        {
+            logger.debug("Rectangle tap with command: \(command)");
+            self.stateManager.sendCommandRequestAsync(command.Command, parameters: command.getResolvedParameters(self.bindingContext));
+        }
+    }
+
 }

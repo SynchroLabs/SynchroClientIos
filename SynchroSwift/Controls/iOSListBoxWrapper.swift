@@ -99,6 +99,20 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
     var _onItemClicked: OnItemClicked?;
     var _selectionMode: ListSelectionMode;
     
+    // This is used only in the case of non-select list view that has an onItemClicked handler (in that case only, it indicates whether
+    // the accessory should be none or disclosure).
+    //
+    var _disclosure = false;
+    
+    public init(selectionMode: ListSelectionMode, onSelectionChanged: OnSelectionChanged, onItemClicked: OnItemClicked, disclosure: Bool)
+    {
+        _selectionMode = selectionMode;
+        super.init();
+        _onSelectionChanged = onSelectionChanged;
+        _onItemClicked = onItemClicked;
+        _disclosure = disclosure;
+    }
+
     public init(selectionMode: ListSelectionMode, onSelectionChanged: OnSelectionChanged, onItemClicked: OnItemClicked)
     {
         _selectionMode = selectionMode;
@@ -106,7 +120,7 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
         _onSelectionChanged = onSelectionChanged;
         _onItemClicked = onItemClicked;
     }
-    
+
     public var selectionMode: ListSelectionMode { get { return _selectionMode; } }
     
     public var allItems: [CheckableTableSourceItem] { get { return _tableItems; } }
@@ -146,10 +160,36 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
         logger.debug("Getting cell for path: \(indexPath)");
         let item = _tableItems[indexPath.row];
         let cell = item.getCell(tableView);
-        if ((_selectionMode == ListSelectionMode.None) && (_onItemClicked != nil))
+
+        // This seems like it would work, but actually accomplishes jack shit.
+        //
+        cell.separatorInset = UIEdgeInsetsZero;
+
+        // So instead we do this - from: http://stackoverflow.com/questions/18365049/is-there-a-way-to-make-uitableview-cells-in-ios-7-not-have-a-line-break-in-the-s/27626312#27626312
+        
+        // Remove seperator inset
+        if cell.respondsToSelector("setSeparatorInset:")
+        {
+            cell.separatorInset = UIEdgeInsetsZero
+        }
+        
+        // Prevent the cell from inheriting the Table View's margin settings
+        if cell.respondsToSelector("setPreservesSuperviewLayoutMargins:")
+        {
+            cell.preservesSuperviewLayoutMargins = false
+        }
+        
+        // Explictly set your cell's layout margins
+        if cell.respondsToSelector("setLayoutMargins:")
+        {
+            cell.layoutMargins = UIEdgeInsetsZero
+        }
+        
+        if ((_selectionMode == ListSelectionMode.None) && (_disclosure))
         {
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator;
         }
+
         return cell;
     }
     
@@ -339,10 +379,10 @@ public class iOSListBoxWrapper : iOSControlWrapper
     var _localSelection: JToken?;
     var _dataSource: BindingContextAsCheckableStringTableSource!;
 
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating listbox element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
 
         let table = UITableView();
         self._control = table;
@@ -351,7 +391,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
         //
         // table.RegisterClassForCellReuse(typeof(TableCell), TableCell.CellIdentifier);
         
-        let selectionMode = self.toListSelectionMode(controlSpec["select"]);
+        let selectionMode = toListSelectionMode(processElementProperty(controlSpec, attributeName: "select", setValue: nil));
         
         _dataSource = BindingContextAsCheckableStringTableSource(selectionMode: selectionMode, onSelectionChanged: listbox_SelectionChanged, onItemClicked: listbox_ItemClicked);
         table.dataSource = _dataSource;

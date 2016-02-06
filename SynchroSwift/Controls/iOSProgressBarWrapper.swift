@@ -30,10 +30,10 @@ public class iOSProgressBarWrapper : iOSControlWrapper
         return (progress - _min) / (_max - _min);
     }
 
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating progressbar element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let progress = UIProgressView();
         self._control = progress;
@@ -42,9 +42,9 @@ public class iOSProgressBarWrapper : iOSControlWrapper
         
         applyFrameworkElementDefaults(progress);
         
-        processElementProperty(controlSpec["value"], setValue: { (value) in progress.progress = Float(self.getProgress(self.toDouble(value))) });
-        processElementProperty(controlSpec["minimum"], setValue: { (value) in self._min = self.toDouble(value) });
-        processElementProperty(controlSpec["maximum"], setValue: { (value) in self._max = self.toDouble(value) });
+        processElementProperty(controlSpec, attributeName: "value", setValue: { (value) in progress.progress = Float(self.getProgress(self.toDouble(value))) });
+        processElementProperty(controlSpec, attributeName: "minimum", setValue: { (value) in self._min = self.toDouble(value) });
+        processElementProperty(controlSpec, attributeName: "maximum", setValue: { (value) in self._max = self.toDouble(value) });
 
     }
 }

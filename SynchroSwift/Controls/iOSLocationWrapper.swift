@@ -23,10 +23,10 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
     var _status: LocationStatus = LocationStatus.Unknown;
     var _location: CLLocation?;
 
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating location element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
 
         self._isVisualElement = false;
         

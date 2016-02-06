@@ -49,6 +49,7 @@ public class StateManager
     
         _appManager = appManager;
         _app = app;
+        _appDefinition = app.appDefinition;
         _deviceMetrics = deviceMetrics;
         _transport = transport;
         _transport.setDefaultHandlers(self.processResponseAsync, requestFailureHandler: self.processRequestFailure);
@@ -234,7 +235,7 @@ public class StateManager
                     // The best option in self situation is to request a Resync with the server...
                     //
                     logger.warn("ERROR - client state out of sync - need resync");
-                    self.sendResyncRequestAsync();
+                    self.sendResyncInstanceRequestAsync();
                 }
             }
             else
@@ -288,7 +289,7 @@ public class StateManager
             self.sendAppStartPageRequestAsync();
             return;
         }
-        else if (responseAsJSON["ViewModel"] != nil) // self means we have a new page/screen
+        else if ((responseAsJSON["ViewModel"] != nil) && (responseAsJSON["View"] != nil)) // ViewModel and View - means we have a new page/screen
         {
             self._instanceId = responseAsJSON["InstanceId"]!.asInt()!;
             self._instanceVersion = responseAsJSON["InstanceVersion"]!.asInt()!;
@@ -297,29 +298,48 @@ public class StateManager
             
             self._viewModel.initializeViewModelData(jsonViewModel);
             
-            // In certain situations, like a resync where the instance matched but the version
-            // was out of date, you might get only the ViewModel (and not the View).
-            //
-            if (responseAsJSON["View"] != nil)
-            {
-                self._path = responseAsJSON["Path"]!.asString()!;
-                logger.info("Got ViewModel for new view - path: '\(self._path!)', instanceId: \(self._instanceId!), instanceVersion: \(self._instanceVersion!)");
+            self._path = responseAsJSON["Path"]!.asString()!;
+            logger.info("Got ViewModel for new view - path: '\(self._path!)', instanceId: \(self._instanceId!), instanceVersion: \(self._instanceVersion!)");
 
-                self._isBackSupported = responseAsJSON["Back"]?.asBool() ?? false;
+            self._isBackSupported = responseAsJSON["Back"]?.asBool() ?? false;
+            
+            let jsonPageView = responseAsJSON["View"] as! JObject;
+            _onProcessPageView!(pageView: jsonPageView);
+            
+            // If the view model is dirty after rendering the page, then the changes are going to have been
+            // written by new view controls that produced initial output (such as location or sensor controls).
+            // We need to signal than a viewModel "Update" is required to get these changes to the server.
+            //
+            updateRequired = self._viewModel.isDirty();
+        }
+        else if (responseAsJSON["ViewModel"] != nil) // ViewModel without View (resync)
+        {
+            let responseInstanceId = responseAsJSON["InstanceId"]?.asInt();
+            if (responseInstanceId == self._instanceId)
+            {
+                self._instanceVersion = responseAsJSON["InstanceVersion"]!.asInt()!;
                 
-                let jsonPageView = responseAsJSON["View"] as! JObject;
-                _onProcessPageView!(pageView: jsonPageView);
+                let jsonViewModel = responseAsJSON["ViewModel"] as! JObject;
                 
-                // If the view model is dirty after rendering the page, then the changes are going to have been
-                // written by new view controls that produced initial output (such as location or sensor controls).
-                // We need to signal than a viewModel "Update" is required to get these changes to the server.
-                //
-                updateRequired = self._viewModel.isDirty();
+                self._viewModel.setViewModelData(jsonViewModel); // update
+
+                logger.info("Got ViewModel resync for existing view - path: '\(self._path!)', instanceId: \(self._instanceId!), instanceVersion: \(self._instanceVersion!)");
+                self._viewModel.updateViewFromViewModel();
+            }
+            else if (responseInstanceId < self._instanceId)
+            {
+                // Resync response was for a previous instance, so we can safely ignore it (we've moved on).
             }
             else
             {
-                logger.info("Got ViewModel for existing view - path: '\(self._path!)', instanceId: \(self._instanceId!), instanceVersion: \(self._instanceVersion!)");
-                self._viewModel.updateViewFromViewModel();
+                // Incorrect instance id on resync - For this to happen, we'd have to get a resync for a "future" instance (meaning one for which
+                // we haven't seen the initial view/viewModel).  This should never happen, but if it does, it's not clear how to recover from it.
+                // Requesting an "instance" resync might very well result in just hitting this case again repeatedy.  The only potential way out of
+                // this (if it ever does happen) is to request the "big" resync.
+                //
+                logger.warn("ERROR - instance id mismatch (response instance id > local instance id), updates not applied - app resync requested");
+                sendResyncRequestAsync();
+                return;
             }
         }
         else // Updating existing page/screen
@@ -356,7 +376,7 @@ public class StateManager
                         // Instance version was not one more than current version on view model update
                         //
                         logger.warn("ERROR - instance version mismatch, updates not applied - need resync");
-                        self.sendResyncRequestAsync();
+                        self.sendResyncInstanceRequestAsync();
                         return;
                     }
                 }
@@ -377,7 +397,7 @@ public class StateManager
                         // Instance version was not correct on view update
                         //
                         logger.warn("ERROR - instance version mismatch on view update - need resync");
-                        self.sendResyncRequestAsync();
+                        self.sendResyncInstanceRequestAsync();
                         return;
                     }
                 }
@@ -391,7 +411,7 @@ public class StateManager
                 // Incorrect instance id
                 //
                 logger.warn("ERROR - instance id mismatch (response instance id > local instance id), updates not applied - need resync");
-                self.sendResyncRequestAsync();
+                self.sendResyncInstanceRequestAsync();
                 return;
             }
         }
@@ -477,7 +497,7 @@ public class StateManager
         _transport.sendMessage(_app.sessionId, requestObject: requestObject);
     }
     
-    private func sendResyncRequestAsync()
+    private func sendResyncInstanceRequestAsync()
     {
         logger.info("Sending resync for path: '\(self._path)'");
         
@@ -595,6 +615,28 @@ public class StateManager
             "InstanceVersion": JValue(self._instanceVersion!),
             "ViewMetrics": self.packageViewMetrics(orientation)
         ]);
+        
+        _transport.sendMessage(_app.sessionId, requestObject: requestObject);
+    }
+    
+    // If your app has a session, but no other state, such as on recovery from tombstoning, you
+    // can call this method instead of startApplicationAsync().  The server will respond with the
+    // full state required to resume your app.
+    //
+    // This method should only be called in a restart from tombstoning state.  For example, if a
+    // user had navigated into the app and then shut it down via the operating system, when they
+    // restart they do not expect to return to where they were (as they would with this method),
+    // they expect to return to the entry sreen of the app.
+    //
+    public func sendResyncRequestAsync()
+    {
+        logger.info("Sending resync (no path/instance)");
+        
+        let requestObject = JObject(
+            [
+                "Mode": JValue("Resync"),
+                "TransactionId": JValue(getNewTransactionId())
+            ]);
         
         _transport.sendMessage(_app.sessionId, requestObject: requestObject);
     }

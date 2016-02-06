@@ -169,11 +169,11 @@ public class CheckableBindingContextTableSource : CheckableTableSource
     var _parentControl: iOSControlWrapper;
     var _itemTemplate: JObject;
     
-    public init(parentControl:iOSControlWrapper, itemTemplate: JObject, selectionMode: ListSelectionMode, onSelectionChanged: OnSelectionChanged, onItemClicked: OnItemClicked)
+    public init(parentControl:iOSControlWrapper, itemTemplate: JObject, selectionMode: ListSelectionMode, onSelectionChanged: OnSelectionChanged, onItemClicked: OnItemClicked, disclosure: Bool)
     {
         _parentControl = parentControl;
         _itemTemplate = itemTemplate;
-        super.init(selectionMode: selectionMode, onSelectionChanged: onSelectionChanged, onItemClicked: onItemClicked);
+        super.init(selectionMode: selectionMode, onSelectionChanged: onSelectionChanged, onItemClicked: onItemClicked, disclosure: disclosure);
     }
     
     public func setContents(bindingContext: BindingContext, itemSelector: String)
@@ -403,14 +403,16 @@ public class iOSListViewWrapper : iOSControlWrapper
     var _localSelection: JToken?;
     var _dataSource: CheckableBindingContextTableSource!;
 
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating listview element");
         
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let table = UITableView();
         self._control = table;
+        
+        table.separatorInset = UIEdgeInsetsZero;
         
         // This is better performance, but only works if all the rows are the same height and you know the height ahead of time...
         //
@@ -420,11 +422,7 @@ public class iOSListViewWrapper : iOSControlWrapper
         //
         // table.RegisterClassForCellReuse(typeof(TableCell), TableCell.CellIdentifier);
         
-        let selectionMode = toListSelectionMode(controlSpec["select"]);
-        
-        _dataSource = CheckableBindingContextTableSource(parentControl: self, itemTemplate: controlSpec["itemTemplate"] as! JObject, selectionMode: selectionMode, onSelectionChanged: listview_SelectionChanged, onItemClicked: listview_ItemClicked);
-        table.dataSource = _dataSource;
-        table.delegate = _dataSource;
+        let selectionMode = toListSelectionMode(processElementProperty(controlSpec, attributeName: "select", setValue: nil));
         
         processElementDimensions(controlSpec, defaultWidth: 320, defaultHeight: 200);
         applyFrameworkElementDefaults(table);
@@ -443,9 +441,29 @@ public class iOSListViewWrapper : iOSControlWrapper
             });
         }
         
+        var disclosure = false;
+        
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: "items", commandAttributes: commands)
         {
             processCommands(bindingSpec, commands: commands);
+            
+            // We can have a single or multiple select list, in which case the accessory will be a checkbox for selected items.  If we have a non-select
+            // list, then by default we will have a disclosure accessory *if* there is an onItemClick handler, otherwise we will have no accessory.  In
+            // the specific case of a non-select list where there is an onItemClick handler and you don't want the disclosure accessory, you may specify
+            // disclosure: false to suppress it.
+            //
+            if ((selectionMode == ListSelectionMode.None) && (controlSpec[CommandName.OnItemClick.Attribute] != nil))
+            {
+                disclosure = true;
+                if (controlSpec["disclosure"] != nil)
+                {
+                    disclosure = toBoolean(controlSpec["disclosure"]);
+                }
+            }
+
+            _dataSource = CheckableBindingContextTableSource(parentControl: self, itemTemplate: controlSpec["itemTemplate"] as! JObject, selectionMode: selectionMode, onSelectionChanged: listview_SelectionChanged, onItemClicked: listview_ItemClicked, disclosure: disclosure);
+            table.dataSource = _dataSource;
+            table.delegate = _dataSource;
             
             if (bindingSpec["items"] != nil)
             {

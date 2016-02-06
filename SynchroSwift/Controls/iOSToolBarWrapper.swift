@@ -81,10 +81,10 @@ public class iOSToolBarWrapper : iOSControlWrapper
         return UIImage(named: "Res/icons/blue/" + named);
     }
     
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating toolbar element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         var buttonItem: UIBarButtonItem!;
         
@@ -115,11 +115,11 @@ public class iOSToolBarWrapper : iOSControlWrapper
             // Custom items, can specify text, icon, or both
             //
             buttonItem = UIBarButtonItem(image: nil, style: .Plain, target: self, action: "barButtonItemClicked:")
-            processElementProperty(controlSpec["text"], setValue: { (value) in buttonItem.title = self.toString(value) });
-            processElementProperty(controlSpec["icon"], setValue: { (value) in buttonItem.image = iOSToolBarWrapper.loadIconImage(self.toString(value)) });
+            processElementProperty(controlSpec, attributeName: "text", setValue: { (value) in buttonItem.title = self.toString(value) });
+            processElementProperty(controlSpec, attributeName: "icon", setValue: { (value) in buttonItem.image = iOSToolBarWrapper.loadIconImage(self.toString(value)) });
         }
         
-        processElementProperty(controlSpec["enabled"], setValue: { (value) in buttonItem.enabled = self.toBoolean(value) });
+        processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in buttonItem.enabled = self.toBoolean(value) });
         
         if (controlSpec["control"]?.asString() == "navBar.button")
         {

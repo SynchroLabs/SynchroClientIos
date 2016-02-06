@@ -43,7 +43,7 @@ public class ViewModel
         _valueBindings.removeObject(valueBinding);
     }
     
-    public func createAndRegisterPropertyBinding(bindingContext: BindingContext, value: String, setValue: SetViewValue) -> PropertyBinding
+    public func createAndRegisterPropertyBinding(bindingContext: BindingContext, value: String, setValue: SetViewValue?) -> PropertyBinding
     {
         let propertyBinding = PropertyBinding(bindingContext: bindingContext, value: value, setViewValue: setValue);
         _propertyBindings.append(propertyBinding);
@@ -74,9 +74,31 @@ public class ViewModel
     public func initializeViewModelData(viewModel: JObject)
     {
         _rootObject = viewModel;
+        _rootBindingContext = BindingContext(_rootObject);
+        
+        // Clear bindings
         _valueBindings.removeAll();
         _propertyBindings.removeAll();
-        _rootBindingContext.BindingRoot = _rootObject;
+    }
+    
+    public func setViewModelData(viewModel: JObject)
+    {
+        _rootObject = viewModel;
+        _rootBindingContext = BindingContext(_rootObject);
+        
+        // Update Bindings (setting BindingRoot to new value will cause rebind)
+        //
+        for valueBinding in _valueBindings
+        {
+            valueBinding.bindingContext.BindingRoot = _rootBindingContext.BindingRoot;
+        }
+        for propertyBinding in _propertyBindings
+        {
+            for propBinding in propertyBinding.BindingContexts
+            {
+                propBinding.BindingRoot = _rootBindingContext.BindingRoot;
+            }
+        }
     }
     
     // This object represents a binding update (the path of the bound item and an indication of whether rebinding is required)

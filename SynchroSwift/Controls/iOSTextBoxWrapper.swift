@@ -16,12 +16,12 @@ public class iOSTextBoxWrapper : iOSControlWrapper
     var _textBox: UITextField;
     var _updateOnChange = false;
     
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating textbox element");
         _textBox = UITextField();
         
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
 
         self._control = _textBox;
         
@@ -40,7 +40,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper
         {
             if (!self.processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(self._textBox.text!) }, setValue: { (value) in self._textBox.text = self.toString(value) }))
             {
-                processElementProperty(controlSpec["value"], setValue: { (value) in self._textBox.text = self.toString(value) });
+                processElementProperty(controlSpec, attributeName: "value", setValue: { (value) in self._textBox.text = self.toString(value) });
                 _textBox.sizeToFit();
             }
             
@@ -50,7 +50,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper
             }
         }
         
-        processElementProperty(controlSpec["placeholder"], setValue: { (value) in self._textBox.placeholder = self.toString(value) });
+        processElementProperty(controlSpec, attributeName: "placeholder", setValue: { (value) in self._textBox.placeholder = self.toString(value) });
         
         _textBox.addTarget(self, action: "editingChanged:", forControlEvents: .EditingChanged);
     }

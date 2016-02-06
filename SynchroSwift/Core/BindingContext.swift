@@ -27,7 +27,7 @@ public class BindingContext
         get { return _bindingRoot; }
         set (value)
         {
-            if (value != _bindingRoot)
+            if (value !== _bindingRoot)
             {
                 _bindingRoot = value;
                 self.rebind();
@@ -126,7 +126,7 @@ public class BindingContext
             finalBindingPath = parentPath;
         }
         
-        logger.info("Resolved binding path is: \(finalBindingPath)");
+        logger.debug("Resolved binding path is: \(finalBindingPath)");
         
         return finalBindingPath;
     }

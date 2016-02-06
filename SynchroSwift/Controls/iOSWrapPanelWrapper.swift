@@ -451,10 +451,10 @@ public class WrapPanelCollectionView : UICollectionView
 
 public class iOSWrapPanelWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating wrappanel element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let source = WrapPanelCollectionViewSource();
         let layout = WrapPanelCollectionViewLayout(source: source);
@@ -470,7 +470,7 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
         layout.minimumInteritemSpacing = 0;
         layout.minimumLineSpacing = 0;
         
-        processElementProperty(controlSpec["orientation"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "orientation", setValue: { (value) in
             let orientation = self.toOrientation(value, defaultOrientation: Orientation.Horizontal);
             if (orientation == Orientation.Horizontal)
             {
@@ -484,20 +484,20 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
         
         // Need support for fixed item height/width - has implications to item positioning within fixed dimension
         //
-        processElementProperty(controlSpec["itemHeight"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "itemHeight", setValue: { (value) in
             if let theValue = value
             {
                 layout.itemHeight = CGFloat(self.toDeviceUnits(theValue));
             }
         });
-        processElementProperty(controlSpec["itemWidth"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "itemWidth", setValue: { (value) in
             if let theValue = value
             {
                 layout.itemWidth = CGFloat(self.toDeviceUnits(theValue));
             }
         });
         
-        processThicknessProperty(controlSpec["padding"], thicknessSetter: PaddingThicknessSetter(layout: layout));
+        processThicknessProperty(controlSpec, attributeName: "padding", thicknessSetter: PaddingThicknessSetter(layout: layout));
         
         if let contents = controlSpec["contents"] as? JArray
         {

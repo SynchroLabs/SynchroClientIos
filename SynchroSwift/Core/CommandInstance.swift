@@ -19,7 +19,8 @@ private var staticCommandNames =
     "onItemClick": CommandName(attribute: "onItemClick"),
     "onSelectionChange":  CommandName(attribute: "onSelectionChange"),
     "onToggle":  CommandName(attribute: "onToggle"),
-    "onUpdate": CommandName(attribute: "onUpdate")
+    "onUpdate": CommandName(attribute: "onUpdate"),
+    "onTap": CommandName(attribute: "onTap")
 ]
 
 public class CommandName
@@ -36,6 +37,7 @@ public class CommandName
     public class var OnSelectionChange: CommandName { get { return staticCommandNames["onSelectionChange"]!; } }
     public class var OnToggle: CommandName { get { return staticCommandNames["onToggle"]!; } }
     public class var OnUpdate: CommandName { get { return staticCommandNames["onUpdate"]!; } }
+    public class var OnTap: CommandName { get { return staticCommandNames["onTap"]!; } }
 }
 
 // This class corresponds to an instance of a command in a view

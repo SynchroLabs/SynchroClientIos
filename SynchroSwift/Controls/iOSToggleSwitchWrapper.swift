@@ -196,10 +196,10 @@ private var commands = [CommandName.OnToggle.Attribute];
 
 public class iOSToggleSwitchWrapper : iOSControlWrapper
 {
-    public init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
+    public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating toggleswitch element");
-        super.init(parent: parent, bindingContext: bindingContext);
+        super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
         let label = UILabel();
         let toggleSwitch = UISwitch();
@@ -222,7 +222,7 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
             //
             if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(toggleSwitch.on); }, setValue: { (value) in toggleSwitch.on = self.toBoolean(value) }))
             {
-                processElementProperty(controlSpec["value"], setValue: { (value) in toggleSwitch.on = self.toBoolean(value) });
+                processElementProperty(controlSpec, attributeName: "value", setValue: { (value) in toggleSwitch.on = self.toBoolean(value) });
             }
         }
         
@@ -235,9 +235,9 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
         
         // Label
         //
-        processElementProperty(controlSpec["caption"], setValue: { (value) in label.text = self.toString(value) });
+        processElementProperty(controlSpec, attributeName: "caption", setValue: { (value) in label.text = self.toString(value) });
         
-        processElementProperty(controlSpec["foreground"], setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "foreground", setValue: { (value) in
             label.textColor = self.toColor(value);
         });
         
