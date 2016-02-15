@@ -44,6 +44,7 @@
 		C4646AA01A391D150043FB90 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646A9F1A391D150043FB90 /* Util.swift */; };
 		C4646AA21A392BC30043FB90 /* UtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646AA11A392BC30043FB90 /* UtilTests.swift */; };
 		C4646AA41A3A24EB0043FB90 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4646AA31A3A24EB0043FB90 /* ViewModelTests.swift */; };
+		C471FC001C724D6E00A00610 /* CommandInstanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C471FBFF1C724D6E00A00610 /* CommandInstanceTests.swift */; };
 		C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */; };
 		C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1711A33D71F00040A9D /* Images.xcassets */; };
 		C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */; };
@@ -121,6 +122,7 @@
 		C4646A9F1A391D150043FB90 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		C4646AA11A392BC30043FB90 /* UtilTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilTests.swift; sourceTree = "<group>"; };
 		C4646AA31A3A24EB0043FB90 /* ViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
+		C471FBFF1C724D6E00A00610 /* CommandInstanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandInstanceTests.swift; sourceTree = "<group>"; };
 		C4AFA1651A33D71F00040A9D /* SynchroSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynchroSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AFA1691A33D71F00040A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 			children = (
 				C416C4FE1A38415E00FD789A /* BindingTests.swift */,
 				C42F3CFD1A370B950010AC55 /* BindingContextTests.swift */,
+				C471FBFF1C724D6E00A00610 /* CommandInstanceTests.swift */,
 				C40D605F1A3CC9F30048B5A0 /* ControlWrapperTests.swift */,
 				C4B53C8E1C1FAE1B00C67701 /* iOSControlWrapperTest.swift */,
 				C4AFA1A71A33DEAB00040A9D /* JsonParserTests.swift */,
@@ -479,6 +482,7 @@
 				C4AFA1AD1A33DEAB00040A9D /* SynchroAppTests.swift in Sources */,
 				C40D60601A3CC9F30048B5A0 /* ControlWrapperTests.swift in Sources */,
 				C4AFA1AC1A33DEAB00040A9D /* JsonTests.swift in Sources */,
+				C471FC001C724D6E00A00610 /* CommandInstanceTests.swift in Sources */,
 				C40D60571A3AD0F50048B5A0 /* StateManagerTests.swift in Sources */,
 				C4646AA21A392BC30043FB90 /* UtilTests.swift in Sources */,
 				C42F3CFE1A370B950010AC55 /* BindingContextTests.swift in Sources */,

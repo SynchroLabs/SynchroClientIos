@@ -30,14 +30,14 @@ class StateManagerTests: XCTestCase
         var appManager = SynchroAppManager();
         
         var app = SynchroApp(
-            endpoint: "localhost:1337/api/samples",
+            endpoint: "https://api.synchro.io/api/samples",
             appDefinition: JObject(["name": JValue("synchro-samples"), "description": JValue("Synchro API Samples")]),
             sessionId: nil
         );
         
         appManager.append(app);
         
-        var transport = TransportHttp(uri: NSURL(string: "http://\(app.endpoint)")!);
+        var transport = TransportHttp(uri: NSURL(string: app.endpoint)!);
         
         let v = UIViewController();
         

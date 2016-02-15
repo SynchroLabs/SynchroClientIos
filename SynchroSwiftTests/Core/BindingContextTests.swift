@@ -24,6 +24,19 @@ class BindingContextTests: XCTestCase
             JObject(["name": JValue("Red"), "color": JValue("red"), "value": JValue("0xff0000")]),
             JObject(["name": JValue("Green"), "color": JValue("green"), "value": JValue("0x00ff00")]),
             JObject(["name": JValue("Blue"), "color": JValue("blue"), "value": JValue("0x0000ff")])
+        ]),
+        "board": JArray(
+        [
+            JArray(
+            [
+                JObject(["name": JValue("s00")]),
+                JObject(["name": JValue("s01")])
+            ]),
+            JArray(
+            [
+                JObject(["name": JValue("s10")]),
+                JObject(["name": JValue("s11")])
+            ])
         ])
     ]);
     
@@ -63,9 +76,19 @@ class BindingContextTests: XCTestCase
     {
         let bindingCtx = BindingContext(viewModel);
         
-        XCTAssertEqual("Colors", bindingCtx.select("colors[1].name").select("$parent.$parent.title").getValue()!.asString()!);
+        XCTAssertEqual("Green", bindingCtx.select("colors[1].name").select("$parent.name").getValue()!.asString()!);
+        XCTAssertEqual("Red", bindingCtx.select("colors[0].name").select("$parent.$parent[0].name").getValue()!.asString()!);
+        XCTAssertEqual("Colors", bindingCtx.select("colors[1].name").select("$parent.$parent.$parent.title").getValue()!.asString()!);
+        XCTAssertEqual(nil, bindingCtx.select("colors[1].name").select("$parent.$parent.$parent.$parent").getValue());
     }
 
+    func testParentElementInArrayofArray()
+    {
+        let bindingCtx = BindingContext(viewModel);
+        
+        XCTAssertEqual(1, bindingCtx.select("board[1][0]").select("$parent.$index").getValue()!.asInt()!);
+    }
+    
     func testRootElement()
     {
         let bindingCtx = BindingContext(viewModel);

@@ -17,7 +17,7 @@ import SynchroSwift
 // I have found: http://nshipster.com/nserror/
 //
 
-var testEndpoint = "http://localhost:1337/api/samples";
+var testEndpoint = "https://api.synchro.io/api/samples";
 
 class TransportTests: XCTestCase
 {
@@ -150,7 +150,7 @@ class TransportTests: XCTestCase
     {
         let expectation = self.expectationWithDescription("got response")
         
-        let transport = TransportHttp(uri: NSURL(string: "http://localhost:1337")!);
+        let transport = TransportHttp(uri: NSURL(string: "https://api.synchro.io")!);
         
         transport.sendMessage(
             nil,

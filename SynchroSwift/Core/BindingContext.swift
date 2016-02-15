@@ -10,7 +10,9 @@ import Foundation
 
 private var logger = Logger.getLogger("BindingContext");
 
-private var _bindingTokensRE = Regex("[$]([^.]*)[.]?"); // Token starts with $, separated by dot
+// Token starts with $, separated by dot or square bracket
+//
+private var _bindingTokensRE = Regex("[$]([^.]*)[.]?"); // Break on dot or open square bracket, only consume dot
 
 // Corresponds to a specific location in a JSON oject (which may or may not exist at the time the BindingContext is created).
 //
@@ -89,6 +91,18 @@ public class BindingContext
             {
                 if (!parentPath.isEmpty)
                 {
+                    if let rangeOfLastSep = parentPath.rangeOfCharacterFromSet(NSCharacterSet(charactersInString: ".["), options: .BackwardsSearch)
+                    {
+                        // Remove the last (rightmost) path segment
+                        parentPath = parentPath.substringToIndex(rangeOfLastSep.startIndex);
+                    }
+                    else
+                    {
+                        // Remove the only remaining path segment
+                        parentPath = "";
+                    }
+                    
+                    /*
                     var pathComponents = parentPath.componentsSeparatedByCharactersInSet(NSCharacterSet(charactersInString: "."));
                     
                     if (pathComponents.count == 1)
@@ -102,6 +116,7 @@ public class BindingContext
                         pathComponents.removeLast();
                         parentPath = pathComponents.joinWithSeparator(".");
                     }
+                    */
                 }
             }
             else if (pathElement == "data")
@@ -119,7 +134,11 @@ public class BindingContext
         var finalBindingPath = processedBindingPath;
         if ((!parentPath.isEmpty) && (!processedBindingPath.isEmpty))
         {
-            finalBindingPath = parentPath + "." + processedBindingPath;
+            if (!processedBindingPath.hasPrefix("["))
+            {
+                parentPath += ".";
+            }
+            finalBindingPath = parentPath + processedBindingPath;
         }
         else if (!parentPath.isEmpty)
         {
