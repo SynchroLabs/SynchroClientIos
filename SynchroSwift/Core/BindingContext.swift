@@ -231,7 +231,7 @@ public class BindingContext
                 {
                     if let parentArray = parent as? JArray
                     {
-                        let pos = parentArray.indexOf(child!);
+                        let pos = parentArray.indexOf({$0 === child!});
                         return JValue(pos! as Int);
                     }
                     else
