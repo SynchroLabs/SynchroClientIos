@@ -11,6 +11,8 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSBorderWrapper");
 
+private var commands = [CommandName.OnTap.Attribute];
+
 public class PaddedView : UIView
 {
     var _padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
@@ -300,6 +302,18 @@ public class iOSBorderWrapper : iOSControlWrapper
         
         // "background" color handled by base class
         
+        if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: CommandName.OnTap.Attribute, commandAttributes: commands)
+        {
+            processCommands(bindingSpec, commands: commands);
+        }
+        
+        if (getCommand(CommandName.OnTap) != nil)
+        {
+            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("borderTapped:"))
+            border.userInteractionEnabled = true
+            border.addGestureRecognizer(tapGestureRecognizer)
+        }
+        
         if let contentsArray = controlSpec["contents"] as? JArray
         {
             createControls(controlList: contentsArray, onCreateControl: { (childControlSpec, childControlWrapper) in
@@ -309,5 +323,14 @@ public class iOSBorderWrapper : iOSControlWrapper
                 }
             });
         }        
+    }
+    
+    func borderTapped(img: AnyObject)
+    {
+        if let command = getCommand(CommandName.OnTap)
+        {
+            logger.debug("Image tap with command: \(command)");
+            self.stateManager.sendCommandRequestAsync(command.Command, parameters: command.getResolvedParameters(self.bindingContext));
+        }
     }
 }
