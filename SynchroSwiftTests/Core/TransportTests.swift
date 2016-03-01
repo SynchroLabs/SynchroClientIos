@@ -30,26 +30,12 @@ class TransportTests: XCTestCase
             "version": JValue("1.3.1"),
             "description": JValue("Synchro API Samples"),
             "main": JValue("menu"),
-            "author": JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)")
+            "author": JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"),
+            "private": JValue(true),
+            "engines": JObject(["synchro" : JValue(">= 1.3.0")]),
+            "synchroArchiveUrl": JValue("https://github.com/SynchroLabs/SynchroSamples/archive/master.zip"),
+            "synchro": JObject(["clientVersion" : JValue(">=1.2.3")])
         ])
-    
-        // Apparently having SIX dictionary entries in an initializer blows up the Swift compiler
-        //
-        // http://stackoverflow.com/questions/26550775/if-condition-failing-with-expression-too-complex
-        // http://stackoverflow.com/questions/25810625/xcode-beta-6-1-and-xcode-6-gm-stuck-indexing-for-weird-reason/25813625#25813625
-        //
-        // So we work around by adding these values after the initializer...
-        //
-        expected["private"] = JValue(true);
-        expected["engines"] = JObject(
-            [
-                "synchro": JValue(">= 1.3.0")
-            ]);
-        expected["synchroArchiveUrl"] = JValue("https://github.com/SynchroLabs/SynchroSamples/archive/master.zip")
-        expected["synchro"] = JObject(
-            [
-                "clientVersion": JValue(">=1.2.3")
-            ]);
 
         let transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
         
