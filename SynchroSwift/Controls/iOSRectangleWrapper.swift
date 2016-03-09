@@ -94,6 +94,8 @@ public class iOSRectangleWrapper : iOSControlWrapper
             rect.userInteractionEnabled = true
             rect.addGestureRecognizer(tapGestureRecognizer)
         }
+        
+        logger.debug("Rectangle created, size: \(rect.frame.size)");
     }
     
     func imageTapped(img: AnyObject)

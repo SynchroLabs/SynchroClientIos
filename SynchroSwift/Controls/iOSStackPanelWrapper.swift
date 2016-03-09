@@ -110,6 +110,7 @@ class StackPanelView : PaddedView
             }
         }
         
+        logger.debug("Intrinsic size: \(intrinsicSize)");
         return intrinsicSize;
     }
     
@@ -167,12 +168,12 @@ class StackPanelView : PaddedView
         {
             if (_controlWrapper.frameProperties.widthSpec != SizeSpec.WrapContent)
             {
-                totalStarSpace = max(0, Double(self.frame.width - contentSize.width));
+                totalStarSpace = max(0, Double(self.frame.width - contentSize.width - (_padding.left + _padding.right)));
             }
             
             if (_controlWrapper.frameProperties.heightSpec != SizeSpec.WrapContent)
             {
-                contentSize.height = self.frame.height;
+                contentSize.height = self.frame.height - (_padding.top + _padding.bottom);
             }
         }
         
@@ -180,12 +181,12 @@ class StackPanelView : PaddedView
         {
             if (_controlWrapper.frameProperties.heightSpec != SizeSpec.WrapContent)
             {
-                totalStarSpace = max(0, Double(self.frame.height - contentSize.height));
+                totalStarSpace = max(0, Double(self.frame.height - contentSize.height - (_padding.top + _padding.bottom)));
             }
             
             if (_controlWrapper.frameProperties.widthSpec != SizeSpec.WrapContent)
             {
-                contentSize.width = self.frame.width;
+                contentSize.width = self.frame.width - (_padding.left + _padding.right);
             }
         }
         
@@ -231,7 +232,7 @@ class StackPanelView : PaddedView
                     // Filling to parent height (already top aligned, so set width relative to parent,
                     // accounting for margins.
                     //
-                    childFrame.height = max(0, self.frame.height - (margin.top + margin.bottom));
+                    childFrame.height = max(0, self.frame.height - (margin.top + _padding.top + margin.bottom + _padding.bottom));
                 }
                 else
                 {
@@ -277,7 +278,7 @@ class StackPanelView : PaddedView
                     // Filling to parent width (already left aligned, so set width relative to parent,
                     // accounting for margins.
                     //
-                    childFrame.width = max(0, self.frame.width - (margin.left + margin.right));
+                    childFrame.width = max(0, self.frame.width - (margin.left + _padding.left + margin.right + _padding.right));
                 }
                 else
                 {
@@ -350,6 +351,8 @@ class StackPanelView : PaddedView
                 }
             }
         }
+        
+        logger.debug("Stackpanel size: \(self.frame.size.width), \(self.frame.size.height)");
     }
 }
 
@@ -363,7 +366,7 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         let stackPanel = StackPanelView(controlWrapper: self);
         self._control = stackPanel;
         
-        processElementDimensions(controlSpec, defaultWidth: 0, defaultHeight: 0);
+        processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);
         applyFrameworkElementDefaults(stackPanel, applyMargins: false);
         
         processElementProperty(controlSpec, attributeName: "orientation", setValue: { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.Vertical) });
@@ -381,5 +384,6 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         }
         
         stackPanel.layoutSubviews();
+        logger.debug("StackPanel created, size: \(stackPanel.frame.size)");
     }
 }

@@ -154,7 +154,7 @@ public class BindingContextTableSourceItem : TableSourceItem
         //
         BindingContextTableViewCell.updateControlWidth(_contentControlWrapper, cellWidth: tableView.frame.width);
         
-        // logger.info("Returning row height of: \(_contentControlWrapper.control.frame.height)");
+        logger.debug("Returning row height of: \(_contentControlWrapper.control!.frame.height)");
         return _contentControlWrapper.control!.frame.height;
     }
     

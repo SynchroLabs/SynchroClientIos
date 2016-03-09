@@ -186,7 +186,7 @@ class BorderView : PaddedView
                     {
                         // Child will fill parent (less margins/padding)
                         //
-                        childFrame.width = panelSize.width - (insets.right + margin.right);
+                        childFrame.width = panelSize.width - (insets.left + margin.left + insets.right + margin.right);
                     }
                     else
                     {
@@ -221,7 +221,7 @@ class BorderView : PaddedView
                     {
                         // Child will fill parent (less margins/padding)
                         //
-                        childFrame.height = panelSize.height - (insets.bottom + margin.bottom);
+                        childFrame.height = panelSize.height - (insets.top + margin.top + insets.bottom + margin.bottom);
                     }
                     else
                     {
@@ -265,6 +265,8 @@ class BorderView : PaddedView
                 }
             }
         }
+        
+        logger.debug("Border sized to: \(self.frame.size.width), \(self.frame.size.height)");
         
         super.layoutSubviews();
     }
@@ -322,7 +324,10 @@ public class iOSBorderWrapper : iOSControlWrapper
                     border.addSubview(control);
                 }
             });
-        }        
+        }
+        
+        logger.debug("Border created, size: \(border.frame.size)");
+        border.layoutSubviews();
     }
     
     func borderTapped(img: AnyObject)

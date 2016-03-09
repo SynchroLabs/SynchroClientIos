@@ -13,6 +13,22 @@ private var logger = Logger.getLogger("iOSButtonWrapper");
 
 private var commands = [CommandName.OnClick.Attribute];
 
+
+class LessSuckingButton : UIButton
+{
+    // UIButton does not account for title insets in size calc...
+    //
+    internal override func sizeThatFits(size: CGSize) -> CGSize
+    {
+        let theSize = super.sizeThatFits(size);
+        
+        let adjustedWidth = theSize.width + titleEdgeInsets.left + titleEdgeInsets.right
+        let adjustedHeight = theSize.height + titleEdgeInsets.top + titleEdgeInsets.bottom
+        
+        return CGSize(width: adjustedWidth, height: adjustedHeight);
+    }
+}
+
 public class iOSButtonWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
@@ -20,7 +36,7 @@ public class iOSButtonWrapper : iOSControlWrapper
         logger.debug("Creating button element");
         super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
-        let button = UIButton(type: UIButtonType.System);
+        let button = LessSuckingButton(type: UIButtonType.System);
         self._control = button;
         
         // For an image button (seems mutually exclusive the system/text button)...
@@ -39,6 +55,8 @@ public class iOSButtonWrapper : iOSControlWrapper
         applyFrameworkElementDefaults(button);
         
         processElementProperty(controlSpec, attributeName: "caption", setValue: { (value) in
+            // Add some edge insets to give spacing to the left/right of the text
+            button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0 ,right: 5);
             button.setTitle(self.toString(value), forState: .Normal);
             self.sizeToFit();
         });
@@ -46,7 +64,15 @@ public class iOSButtonWrapper : iOSControlWrapper
         processElementProperty(controlSpec, attributeName: "foreground", setValue: { (value) in
             button.setTitleColor(self.toColor(value), forState: .Normal);
         });
-        
+
+        processElementProperty(controlSpec, attributeName: "foregroundDisabled", setValue: { (value) in
+            button.setTitleColor(self.toColor(value), forState: .Disabled);
+        });
+
+        processElementProperty(controlSpec, attributeName: "cornerRadius", setValue: { (value) in
+            button.layer.cornerRadius = CGFloat(self.toDeviceUnits(value!));
+        });
+
         processElementProperty(controlSpec, attributeName: "resource", setValue: { (value) in
             if ((value == nil) || (value!.asString() == ""))
             {

@@ -29,7 +29,7 @@ class ResizableLabel : UILabel
     }
     
     internal override var text: String?
-        {
+    {
         get
         {
             return super.text;
@@ -121,7 +121,7 @@ public class iOSTextBlockWrapper : iOSControlWrapper
 
         let textBlock = ResizableLabel(frameProperties: self.frameProperties);
         textBlock.numberOfLines = 0;
-        textBlock.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        textBlock.lineBreakMode = .ByWordWrapping;
         
         self._control = textBlock;
         
@@ -147,11 +147,13 @@ public class iOSTextBlockWrapper : iOSControlWrapper
             let bEllipsize = self.toBoolean(value);
             if (bEllipsize)
             {
-                textBlock.lineBreakMode = NSLineBreakMode.ByTruncatingTail;
+                textBlock.numberOfLines = 1; // Required for ellipsizing
+                textBlock.lineBreakMode = .ByTruncatingTail;
             }
             else
             {
-                textBlock.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+                textBlock.numberOfLines = 0; // Required for wrapping
+                textBlock.lineBreakMode = .ByWordWrapping;
             }
         });
         
