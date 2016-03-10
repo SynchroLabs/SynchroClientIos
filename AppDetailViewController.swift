@@ -23,6 +23,7 @@ public class AppDetailViewController: UIViewController
     @IBOutlet weak var appEndpointEdit: UITextField!
 
     @IBOutlet weak var appFindButton: UIButton!
+    @IBOutlet weak var appScanButton: UIButton!
 
     @IBOutlet weak var appNameCaption: UILabel!
     @IBOutlet weak var appNameLabel: UILabel!
@@ -34,6 +35,8 @@ public class AppDetailViewController: UIViewController
 
     var _appManager: SynchroAppManager;
     var _app: SynchroApp?;
+    
+    var scannedUrl: String?
 
     public init(appManager: SynchroAppManager, app: SynchroApp? = nil)
     {
@@ -60,6 +63,7 @@ public class AppDetailViewController: UIViewController
     {
         appEndpointEdit.hidden = mode != DisplayMode.Find;
         appFindButton.hidden = mode != DisplayMode.Find;
+        appScanButton.hidden = mode != DisplayMode.Find;
         
         appEndpointLabel.hidden = mode == DisplayMode.Find;
         appNameCaption.hidden = mode == DisplayMode.Find;
@@ -90,17 +94,24 @@ public class AppDetailViewController: UIViewController
         }
     }
     
+    override public func viewDidAppear(animated: Bool)
+    {
+        if (scannedUrl != nil)
+        {
+            appEndpointEdit.text = scannedUrl;
+            doFind();
+        }
+    }
+    
     func alert(title: String, message: String)
     {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil));
         self.presentViewController(alert, animated: true, completion: nil)
     }
-    
-    @IBAction func onFind(sender: AnyObject)
+
+    func doFind()
     {
-        logger.info("Find pushed");
-        
         if let endpoint = appEndpointEdit.text
         {
             if (endpoint.length > 0)
@@ -129,7 +140,7 @@ public class AppDetailViewController: UIViewController
                                 self.populate();
                                 self.updateVisibility(DisplayMode.Add);
                             }
-                    });        
+                    });
                 }
                 else
                 {
@@ -138,6 +149,19 @@ public class AppDetailViewController: UIViewController
                 }
             }
         }
+    }
+    
+    @IBAction func onFind(sender: AnyObject)
+    {
+        logger.info("Find pushed");
+        doFind();
+    }
+
+    @IBAction func onScan(sender: AnyObject)
+    {
+        logger.info("Scan pushed");
+        let qrVC = QRCodeViewController(appDetailVC: self);
+        self.navigationController?.pushViewController(qrVC, animated: true);
     }
 
     @IBAction func onSave(sender: AnyObject)
