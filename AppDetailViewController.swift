@@ -160,6 +160,7 @@ public class AppDetailViewController: UIViewController
     @IBAction func onScan(sender: AnyObject)
     {
         logger.info("Scan pushed");
+        self.scannedUrl = nil;
         let qrVC = QRCodeViewController(appDetailVC: self);
         self.navigationController?.pushViewController(qrVC, animated: true);
     }
