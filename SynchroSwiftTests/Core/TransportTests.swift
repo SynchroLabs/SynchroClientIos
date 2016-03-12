@@ -27,12 +27,12 @@ class TransportTests: XCTestCase
         let expected = JObject(
         [
             "name": JValue("synchro-samples"),
-            "version": JValue("1.3.1"),
+            "version": JValue("1.3.3"),
             "description": JValue("Synchro API Samples"),
             "main": JValue("menu"),
             "author": JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"),
             "private": JValue(true),
-            "engines": JObject(["synchro" : JValue(">= 1.3.0")]),
+            "engines": JObject(["synchro" : JValue(">= 1.3.3")]),
             "synchroArchiveUrl": JValue("https://github.com/SynchroLabs/SynchroSamples/archive/master.zip"),
             "synchro": JObject(["clientVersion" : JValue(">=1.2.3")])
         ])
