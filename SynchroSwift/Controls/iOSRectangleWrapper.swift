@@ -13,45 +13,6 @@ private var logger = Logger.getLogger("iOSRectangleWrapper");
 
 private var commands = [CommandName.OnTap.Attribute];
 
-class RectangleView : UIView
-{
-    var _color: UIColor? = UIColor.clearColor();
-    
-    init()
-    {
-        super.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0));
-    }
-
-    required init?(coder aDecoder: NSCoder)
-    {
-        fatalError("init(coder:) has not been implemented");
-    }
-    
-    var color: UIColor?
-    {
-        get { return _color; }
-        set(value)
-        {
-            _color = value;
-            self.setNeedsDisplay();
-        }
-    }
-    
-    override func drawRect(rect: CGRect)
-    {
-        super.drawRect(rect);
-        
-        if let context = UIGraphicsGetCurrentContext()
-        {
-            if let theColor = _color?.CGColor
-            {
-                CGContextSetFillColorWithColor(context, theColor);
-            }
-            CGContextFillRect(context, rect);
-        }
-    }
-}
-
 public class iOSRectangleWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
@@ -59,7 +20,7 @@ public class iOSRectangleWrapper : iOSControlWrapper
         logger.debug("Creating rectangle element");
         super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
-        let rect = RectangleView();
+        let rect = UIView();
         self._control = rect;
         
         rect.layer.masksToBounds = true; // So that fill color will stay inside of border (if any)
@@ -81,7 +42,7 @@ public class iOSRectangleWrapper : iOSControlWrapper
             }
         });
         
-        processElementProperty(controlSpec, attributeName: "fill", setValue: { (value) in rect.color = self.toColor(value) });
+        processElementProperty(controlSpec, attributeName: "fill", setValue: { (value) in rect.backgroundColor = self.toColor(value) });
         
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: CommandName.OnTap.Attribute, commandAttributes: commands)
         {
