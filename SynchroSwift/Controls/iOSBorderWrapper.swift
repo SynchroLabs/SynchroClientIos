@@ -211,7 +211,7 @@ class BorderView : PaddedView
                     childFrame.y = insets.top + margin.top;
                     panelSize.height = childFrame.y + childFrame.height + insets.bottom + margin.bottom;
                 }
-                else if (_controlWrapper.frameProperties.heightSpec == SizeSpec.Explicit)
+                else
                 {
                     // Panel height is explicit, so align content using the content vertical alignment (along with padding and margin)
                     //
