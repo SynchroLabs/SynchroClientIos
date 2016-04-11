@@ -48,7 +48,7 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
 
         logger.info("viewDidLoad - number of apps: \(_appManager.apps.count)");
 
-        let addButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: "addClicked:")
+        let addButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: #selector(addClicked))
         self.navigationItem.rightBarButtonItem = addButton;
     }
     

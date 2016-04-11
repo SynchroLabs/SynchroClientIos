@@ -311,7 +311,7 @@ public class iOSBorderWrapper : iOSControlWrapper
         
         if (getCommand(CommandName.OnTap) != nil)
         {
-            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("borderTapped:"))
+            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(borderTapped))
             border.userInteractionEnabled = true
             border.addGestureRecognizer(tapGestureRecognizer)
         }

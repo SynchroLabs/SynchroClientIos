@@ -208,7 +208,7 @@ public class JsonParser
                     case "u":
                         // Parse four hex digits
                         let hexBuilder = StringBuilder();
-                        for (var counter = 0; counter < 4; ++counter)
+                        for _ in 0 ..< 4
                         {
                             hexBuilder.append(reader.read()!);
                         }

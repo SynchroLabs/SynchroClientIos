@@ -52,7 +52,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper
         
         processElementProperty(controlSpec, attributeName: "placeholder", setValue: { (value) in self._textBox.placeholder = self.toString(value) });
         
-        _textBox.addTarget(self, action: "editingChanged:", forControlEvents: .EditingChanged);
+        _textBox.addTarget(self, action: #selector(editingChanged), forControlEvents: .EditingChanged);
     }
     
     public func editingChanged(sender: AnyObject)

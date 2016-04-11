@@ -103,7 +103,7 @@ public class iOSToolBarWrapper : iOSControlWrapper
             //
             if let systemItem = iOSToolBarWrapper.systemItemFromName(systemItemName)
             {
-                buttonItem = UIBarButtonItem(barButtonSystemItem: systemItem, target: self, action: "barButtonItemClicked:")
+                buttonItem = UIBarButtonItem(barButtonSystemItem: systemItem, target: self, action: #selector(barButtonItemClicked))
             }
             else
             {
@@ -114,7 +114,7 @@ public class iOSToolBarWrapper : iOSControlWrapper
         {
             // Custom items, can specify text, icon, or both
             //
-            buttonItem = UIBarButtonItem(image: nil, style: .Plain, target: self, action: "barButtonItemClicked:")
+            buttonItem = UIBarButtonItem(image: nil, style: .Plain, target: self, action: #selector(barButtonItemClicked))
             processElementProperty(controlSpec, attributeName: "text", setValue: { (value) in buttonItem.title = self.toString(value) });
             processElementProperty(controlSpec, attributeName: "icon", setValue: { (value) in buttonItem.image = iOSToolBarWrapper.loadIconImage(self.toString(value)) });
         }

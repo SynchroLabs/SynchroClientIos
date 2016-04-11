@@ -168,19 +168,19 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
         // So instead we do this - from: http://stackoverflow.com/questions/18365049/is-there-a-way-to-make-uitableview-cells-in-ios-7-not-have-a-line-break-in-the-s/27626312#27626312
         
         // Remove seperator inset
-        if cell.respondsToSelector("setSeparatorInset:")
+        if cell.respondsToSelector(Selector("setSeparatorInset:"))
         {
             cell.separatorInset = UIEdgeInsetsZero
         }
         
         // Prevent the cell from inheriting the Table View's margin settings
-        if cell.respondsToSelector("setPreservesSuperviewLayoutMargins:")
+        if cell.respondsToSelector(Selector("setPreservesSuperviewLayoutMargins:"))
         {
             cell.preservesSuperviewLayoutMargins = false
         }
         
         // Explictly set your cell's layout margins
-        if cell.respondsToSelector("setLayoutMargins:")
+        if cell.respondsToSelector(Selector("setLayoutMargins:"))
         {
             cell.layoutMargins = UIEdgeInsetsZero
         }
@@ -457,7 +457,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
         var deleteRows = [NSIndexPath]();
     
         let maxCount = max(newCount, oldCount);
-        for (var i = 0; i < maxCount; i++)
+        for i in 0 ..< maxCount
         {
             let row = NSIndexPath(forRow: i, inSection: 0);
             if (i < min(newCount, oldCount))

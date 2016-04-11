@@ -127,7 +127,7 @@ public class iOSButtonWrapper : iOSControlWrapper
         
         if (getCommand(CommandName.OnClick) != nil)
         {
-            button.addTarget(self, action: "pressed:", forControlEvents: .TouchUpInside);
+            button.addTarget(self, action: #selector(pressed), forControlEvents: .TouchUpInside);
         }
     }
 

@@ -18,7 +18,7 @@ extension String
     
     func substring(startCharIndex: Int) -> String
     {
-        return self[Range(start: startIndex.advancedBy(startCharIndex), end: endIndex)];
+        return self[startIndex.advancedBy(startCharIndex) ..< endIndex];
     }
     
     func lastIndexOf(find: Character) -> String.Index?

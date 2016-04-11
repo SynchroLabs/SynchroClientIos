@@ -143,7 +143,7 @@ public class iOSPickerWrapper : iOSControlWrapper
         toolbar.translucent = true;
         toolbar.sizeToFit();
         
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: "doneButtonPressed:");
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: #selector(doneButtonPressed));
         toolbar.setItems([doneButton], animated: true);
         
         _textBox.inputView = _picker;
@@ -238,7 +238,7 @@ public class iOSPickerWrapper : iOSControlWrapper
 
         let model = picker.dataSource as! BindingContextPickerModel;
     
-        for (var i = 0; i < model.pickerView(picker, numberOfRowsInComponent: 0); i++)
+        for i in 0 ..< model.pickerView(picker, numberOfRowsInComponent: 0)
         {
             if (JToken.deepEquals(selection, token2: model.getSelection(i, selectionItem: selectionItem)))
             {

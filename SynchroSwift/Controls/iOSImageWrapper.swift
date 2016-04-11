@@ -155,7 +155,7 @@ public class iOSImageWrapper : iOSControlWrapper
         
         if (getCommand(CommandName.OnTap) != nil)
         {
-            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(imageTapped))
             image.userInteractionEnabled = true
             image.addGestureRecognizer(tapGestureRecognizer)
         }

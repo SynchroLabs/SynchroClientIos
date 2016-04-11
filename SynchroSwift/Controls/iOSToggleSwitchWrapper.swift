@@ -243,7 +243,7 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
         
         processFontAttribute(controlSpec, fontSetter: ToggleLabelFontSetter(label: label));
         
-        toggleSwitch.addTarget(self, action: "stateChanged:", forControlEvents: .ValueChanged);
+        toggleSwitch.addTarget(self, action: #selector(stateChanged), forControlEvents: .ValueChanged);
         
         view.layoutSubviews();
     }

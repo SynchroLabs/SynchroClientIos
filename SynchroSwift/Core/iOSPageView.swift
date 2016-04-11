@@ -98,10 +98,10 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
 
         self.setPageTitle = {(title) in self._pageTitle = title };
     
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onKeyboardShown:"), name: UIKeyboardDidShowNotification, object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("onKeyboardHidden:"), name: UIKeyboardDidHideNotification, object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onKeyboardShown), name: UIKeyboardDidShowNotification, object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onKeyboardHidden), name: UIKeyboardDidHideNotification, object: nil);
 
-        let tap = UITapGestureRecognizer(target: self, action: Selector("handleTap:"));
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap));
         tap.delegate = self;
         tap.cancelsTouchesInView = false;
         _rootControlWrapper!.control!.addGestureRecognizer(tap);

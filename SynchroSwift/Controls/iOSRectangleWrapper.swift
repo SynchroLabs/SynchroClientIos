@@ -51,7 +51,7 @@ public class iOSRectangleWrapper : iOSControlWrapper
         
         if (getCommand(CommandName.OnTap) != nil)
         {
-            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:Selector("imageTapped:"))
+            let tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(imageTapped))
             rect.userInteractionEnabled = true
             rect.addGestureRecognizer(tapGestureRecognizer)
         }

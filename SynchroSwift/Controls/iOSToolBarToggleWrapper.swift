@@ -121,7 +121,7 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
      
         // Custom items, can specify text, icon, or both
         //
-        _buttonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: self, action: "barButtonItemClicked:");
+        _buttonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(barButtonItemClicked));
 
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: CommandName.OnClick.Attribute, commandAttributes: commands)
         {

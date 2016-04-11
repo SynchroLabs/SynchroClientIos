@@ -458,7 +458,7 @@ public class ControlWrapper: NSObject
         
         if (colorValue.hasPrefix("#"))
         {
-            len--;
+            len -= 1;
             let hexColor = colorValue.substringFromIndex(colorValue.startIndex.advancedBy(1));
             var rgbValue:UInt32 = 0
             NSScanner(string: hexColor).scanHexInt(&rgbValue)

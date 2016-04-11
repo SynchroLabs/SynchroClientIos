@@ -36,7 +36,7 @@ public class iOSSliderWrapper : iOSControlWrapper
         processElementProperty(controlSpec, attributeName: "minimum", setValue: { (value) in self.setMin(Float(self.toDouble(value))) });
         processElementProperty(controlSpec, attributeName: "maximum", setValue: { (value) in self.setMax(Float(self.toDouble(value))) });
         
-        slider.addTarget(self, action: "valueChanged:", forControlEvents: .ValueChanged);
+        slider.addTarget(self, action: #selector(valueChanged), forControlEvents: .ValueChanged);
     }
     
     func valueChanged(slider: UISlider)

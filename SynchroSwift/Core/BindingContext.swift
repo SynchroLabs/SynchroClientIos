@@ -53,8 +53,10 @@ public class BindingContext
         }
     }
     
-    private func resolveBinding(var parentPath: String, bindingPath: String) -> String
+    private func resolveBinding(parentPathParam: String, bindingPath: String) -> String
     {
+        var parentPath = parentPathParam; // was var param - thank for nothing Swift team
+        
         // Process path elements:
         //
         //  $root
@@ -206,7 +208,7 @@ public class BindingContext
             for _ in _boundToken as! JArray
             {
                 bindingContexts.append(BindingContext(self, index: index, bindingPath: bindingPath));
-                index++;
+                index += 1;
             }
         }
     

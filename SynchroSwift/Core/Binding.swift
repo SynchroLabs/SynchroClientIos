@@ -246,7 +246,7 @@ public class BoundAndPossiblyResolvedToken
                             let formatter = NSNumberFormatter();
                             formatter.numberStyle = NSNumberFormatterStyle.ScientificStyle;
                             formatter.maximumSignificantDigits = formatPrecision ?? 6; // 6 is the default on .NET (all locales)
-                            formatter.maximumSignificantDigits++; // Apparently, on .NET this is the number of digits after the decimal point, so we correct for that
+                            formatter.maximumSignificantDigits += 1; // Apparently, on .NET this is the number of digits after the decimal point, so we correct for that
                             formatter.minimumSignificantDigits = formatter.maximumSignificantDigits;
                             formatter.exponentSymbol = formatSpecifier;
                             if let result = formatter.stringFromNumber(numericValue)
@@ -456,7 +456,8 @@ public class PropertyValue
             let boundToken = BoundAndPossiblyResolvedToken(bindingContext.select(token), oneTime: oneTimeBinding, negated: negated, formatSpec: format);
             self._boundTokens.append(boundToken);
 
-            return "%\(++tokenIndex)$@";
+            tokenIndex += 1;
+            return "%\(tokenIndex)$@";
         });
         
         // De-escape any escaped braces...

@@ -27,7 +27,8 @@ public class StateManager
     var _transactionNumber = 1;
     func getNewTransactionId() -> Int
     {
-        return _transactionNumber++;
+        _transactionNumber += 1;
+        return _transactionNumber;
     }
     
     var _path: String?;
@@ -360,7 +361,7 @@ public class StateManager
                     
                     if ((self._instanceVersion! + 1) == responseInstanceVersion)
                     {
-                        self._instanceVersion!++;
+                        self._instanceVersion! += 1;
                         
                         let jsonViewModelDeltas = responseAsJSON["ViewModelDeltas"]!;
                         // logger.Debug("ViewModel deltas: {0}", jsonViewModelDeltas);

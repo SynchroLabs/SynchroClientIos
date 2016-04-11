@@ -50,7 +50,7 @@ class StateManagerTests: XCTestCase
         
         func processPageView(pageView: JObject) -> Void
         {
-            responseNumber++;
+            responseNumber += 1;
             print("processPageView response: \(responseNumber)");
             
             if responseNumber == 1

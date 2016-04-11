@@ -42,7 +42,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
             if (CLLocationManager.locationServicesEnabled())
             {
                 
-                if (locMgr.respondsToSelector(Selector("requestWhenInUseAuthorization")))
+                if (locMgr.respondsToSelector(#selector(CLLocationManager.requestWhenInUseAuthorization)))
                 {
                     // RequestWhenInUseAuthorization is only present in iOS 8.0 and later.  If available, we need
                     // to call it to get authorized (using our custom message defined in Info.plist under the key:

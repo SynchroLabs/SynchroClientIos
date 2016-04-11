@@ -509,7 +509,7 @@ public class iOSListViewWrapper : iOSControlWrapper
         var deleteRows = [NSIndexPath]();
         
         let maxCount = max(newCount, oldCount);
-        for (var i = 0; i < maxCount; i++)
+        for i in 0 ..< maxCount
         {
             let row = NSIndexPath(forRow: i, inSection: 0);
             if (i < min(newCount, oldCount))
