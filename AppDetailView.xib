@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AppDetailViewController" customModule="SynchroSwift" customModuleProvider="target">
@@ -15,7 +15,6 @@
                 <outlet property="appNameCaption" destination="Xdm-3X-yDx" id="iID-aL-9io"/>
                 <outlet property="appNameLabel" destination="ZNb-kt-ELg" id="c3E-89-GtK"/>
                 <outlet property="appSaveButton" destination="4ys-M9-J5U" id="Y82-7d-VlS"/>
-                <outlet property="appScanButton" destination="FeY-gE-M2U" id="eME-vu-ksI"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -90,15 +89,6 @@
                     </state>
                     <connections>
                         <action selector="onFind:" destination="-1" eventType="touchUpInside" id="P3q-vI-njQ"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FeY-gE-M2U">
-                    <rect key="frame" x="95" y="147" width="50" height="30"/>
-                    <state key="normal" title="Scan">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="onScan:" destination="-1" eventType="touchUpInside" id="yg5-bI-XOj"/>
                     </connections>
                 </button>
             </subviews>

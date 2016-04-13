@@ -23,7 +23,6 @@ public class AppDetailViewController: UIViewController
     @IBOutlet weak var appEndpointEdit: UITextField!
 
     @IBOutlet weak var appFindButton: UIButton!
-    @IBOutlet weak var appScanButton: UIButton!
 
     @IBOutlet weak var appNameCaption: UILabel!
     @IBOutlet weak var appNameLabel: UILabel!
@@ -36,6 +35,7 @@ public class AppDetailViewController: UIViewController
     var _appManager: SynchroAppManager;
     var _app: SynchroApp?;
     
+    var scanButton: UIBarButtonItem?;
     var scannedUrl: String?
 
     public init(appManager: SynchroAppManager, app: SynchroApp? = nil)
@@ -44,8 +44,8 @@ public class AppDetailViewController: UIViewController
         _app = app;
         
         super.init(nibName: "AppDetailView", bundle: nil);
-        
-        self.title = "App Detail";
+
+        self.title = "App";
     }
 
     func populate()
@@ -63,7 +63,10 @@ public class AppDetailViewController: UIViewController
     {
         appEndpointEdit.hidden = mode != DisplayMode.Find;
         appFindButton.hidden = mode != DisplayMode.Find;
-        appScanButton.hidden = mode != DisplayMode.Find;
+        
+        // Show/hide toolbar button
+        scanButton?.enabled = mode == DisplayMode.Find;
+        scanButton?.tintColor = mode == DisplayMode.Find ? nil : UIColor.clearColor();
         
         appEndpointLabel.hidden = mode == DisplayMode.Find;
         appNameCaption.hidden = mode == DisplayMode.Find;
@@ -82,6 +85,9 @@ public class AppDetailViewController: UIViewController
     override public func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        scanButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Camera, target: self, action: #selector(scanClicked))
+        self.navigationItem.rightBarButtonItem = scanButton;
 
         if (_app != nil)
         {
@@ -92,6 +98,14 @@ public class AppDetailViewController: UIViewController
         {
             updateVisibility(DisplayMode.Find);
         }
+    }
+    
+    func scanClicked(sender: UIBarButtonItem)
+    {
+        logger.info("Scan pushed");
+        self.scannedUrl = nil;
+        let qrVC = QRCodeViewController(appDetailVC: self);
+        self.navigationController?.pushViewController(qrVC, animated: true);
     }
     
     override public func viewDidAppear(animated: Bool)
@@ -155,14 +169,6 @@ public class AppDetailViewController: UIViewController
     {
         logger.info("Find pushed");
         doFind();
-    }
-
-    @IBAction func onScan(sender: AnyObject)
-    {
-        logger.info("Scan pushed");
-        self.scannedUrl = nil;
-        let qrVC = QRCodeViewController(appDetailVC: self);
-        self.navigationController?.pushViewController(qrVC, animated: true);
     }
 
     @IBAction func onSave(sender: AnyObject)

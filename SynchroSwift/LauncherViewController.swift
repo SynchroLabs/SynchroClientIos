@@ -23,7 +23,7 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         _appManager = appManager;
         super.init(nibName: "LauncherView", bundle: nil);
         
-        self.title = "Synchro Explorer";
+        self.title = "Synchro";
     }
 
     required init?(coder aDecoder: NSCoder)
@@ -59,7 +59,7 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         //
         logger.info("viewWillAppear - showing navigation bar");
         self.navigationController?.setNavigationBarHidden(false, animated: false);
-        
+
         self.tableView.reloadData();
     }
     
