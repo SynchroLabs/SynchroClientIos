@@ -119,7 +119,6 @@ public class PageView : NSObject
                 [
                     "control": JValue("stackpanel"),
                     "orientation": JValue("vertical"),
-                    "height": JValue("*"),
                     "width": JValue("*"),
                     "contents": elements.deepClone() // !!! Alternatively, we could just unparent elements here...
                 ]);
