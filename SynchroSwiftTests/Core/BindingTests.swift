@@ -450,4 +450,91 @@ class BindingTests: XCTestCase
         
         XCTAssertEqual("The numeric value is 13.00%", propVal.expand()!.asString()!);
     }
+    
+    func testEvalStringResult()
+    {
+        let viewModel = JObject(
+            [
+                "strVal": JValue("hello"),
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval({strVal} + ' world')", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("hello world", propVal.expand()!.asString());
+    }
+
+    func testEvalNumericResult()
+    {
+        let viewModel = JObject(
+            [
+                "strVal": JValue("hello"),
+                "intVal": JValue(10)
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval({strVal}.length + {intVal})", bindingContext: bindingCtx);
+        
+        XCTAssertEqual(15, propVal.expand()!.asDouble());
+    }
+
+    func testEvalBoolResult()
+    {
+        let viewModel = JObject(
+            [
+                "intVal": JValue(10)
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval({intVal} == 10)", bindingContext: bindingCtx);
+        
+        XCTAssertEqual(true, propVal.expand()!.asBool());
+    }
+
+    func testEvalNullResult()
+    {
+        let viewModel = JObject(
+            [
+                "intVal": JValue(10)
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval(null)", bindingContext: bindingCtx);
+        
+        XCTAssertEqual(true, propVal.expand()!.Type == JTokenType.Null);
+    }
+
+    func testEvalUnsupportResultType()
+    {
+        let viewModel = JObject(
+            [
+                "intVal": JValue(10)
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval(['foo', 'bar'])", bindingContext: bindingCtx);
+
+        // Expected result is toString() of actual result when not of support type (Boolean, Number, String, Null)
+        XCTAssertEqual("foo,bar", propVal.expand()!.asString());
+    }
+
+    func testEvalBadScript()
+    {
+        let viewModel = JObject(
+            [
+                "intVal": JValue(10)
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval()foo)", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("undefined", propVal.expand()!.asString());
+    }
+
 }
