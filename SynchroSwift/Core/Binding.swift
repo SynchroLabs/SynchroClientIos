@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import JavaScriptCore
 
 private var logger = Logger.getLogger("Binding");
 
@@ -388,6 +389,7 @@ public class PropertyValue
 {
     var _formatString = ""; // Initialize to empty string - Otherwise Swift gets confused and thinks we using it
                             // before initializing when try to assign a value to it in the constructore.
+    var _isExpression = false;
     
     var _boundTokens: [BoundAndPossiblyResolvedToken];
     
@@ -414,11 +416,26 @@ public class PropertyValue
         self._boundTokens = [BoundAndPossiblyResolvedToken]();
         var tokenIndex = 0;
         
-        // Escape any % to %% (format string will unescape them for us when called later)
-        //
-        let escapedString = tokenString.stringByReplacingOccurrencesOfString("%", withString: "%%", options: NSStringCompareOptions.LiteralSearch, range: nil)
-
-        _formatString = _braceContentsRE.substituteMatches(escapedString, substitution:
+        var theTokenString = tokenString;
+        
+        let prefix = "eval(";
+        let suffix = ")";
+        if (theTokenString.hasPrefix(prefix) && theTokenString.hasSuffix(suffix))
+        {
+            _isExpression = true;
+            let newStartIndex = theTokenString.startIndex.advancedBy(prefix.length);
+            let newEndIndex = theTokenString.endIndex.advancedBy(-suffix.length);
+            theTokenString = theTokenString.substringWithRange(newStartIndex..<newEndIndex);
+            logger.debug("Propery value string is expresion: \(theTokenString)");
+        }
+        else
+        {
+            // Escape any % to %% (format string will unescape them for us when called later)
+            //
+            theTokenString = tokenString.stringByReplacingOccurrencesOfString("%", withString: "%%", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        }
+        
+        _formatString = _braceContentsRE.substituteMatches(theTokenString, substitution:
         {
             (match: String, matchGroups: [String]) -> String in
             
@@ -456,19 +473,77 @@ public class PropertyValue
             let boundToken = BoundAndPossiblyResolvedToken(bindingContext.select(token), oneTime: oneTimeBinding, negated: negated, formatSpec: format);
             self._boundTokens.append(boundToken);
 
+            // Expressions get var0, var1, etc, whereas format string gets %1$@, %2$@, etc
+            //
+            let replacementToken = self._isExpression ? "var\(tokenIndex)" : "%\(tokenIndex + 1)$@";
             tokenIndex += 1;
-            return "%\(tokenIndex)$@";
+            
+            return replacementToken;
         });
         
         // De-escape any escaped braces...
         //
         _formatString = _formatString.stringByReplacingOccurrencesOfString("{{", withString: "{", options: NSStringCompareOptions.LiteralSearch, range: nil)
         _formatString = _formatString.stringByReplacingOccurrencesOfString("}}", withString: "}", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        
+        logger.debug("PropertValue - isExpression: \(_isExpression), formatString: \(_formatString)");
     }
 
     public func expand() -> JToken?
     {
-        if (_formatString == "%1$@")
+        if (_isExpression)
+        {
+            let context = JSContext();
+            
+            // Set up our bound tokens as JS variables
+            //
+            var index = 0;
+            for boundToken in _boundTokens
+            {
+                let resolvedValue = boundToken.resolvedValue;
+                if (resolvedValue?.Type == JTokenType.Boolean)
+                {
+                    context.setObject(resolvedValue?.asBool(), forKeyedSubscript: "var\(index)");
+                }
+                else if (resolvedValue?.Type == JTokenType.Integer)
+                {
+                    context.setObject(resolvedValue?.asInt(), forKeyedSubscript: "var\(index)");
+                }
+                else if (resolvedValue?.Type == JTokenType.Float)
+                {
+                    context.setObject(resolvedValue?.asDouble(), forKeyedSubscript: "var\(index)");
+                }
+                else if (resolvedValue?.Type == JTokenType.Null)
+                {
+                    context.setObject(nil, forKeyedSubscript: "var\(index)");
+                }
+                else
+                {
+                    context.setObject(boundToken.resolvedValueAsString, forKeyedSubscript: "var\(index)");
+                }
+                index += 1;
+            }
+            
+            let result: JSValue = context.evaluateScript(_formatString);
+            
+            if (result.isBoolean)
+            {
+                return JValue(result.toBool());
+            }
+            else if (result.isNumber)
+            {
+                return JValue(result.toNumber().doubleValue);
+            }
+            else if (result.isNull)
+            {
+                return JValue();
+            }
+            else
+            {
+                return JValue(result.toString());
+            }
+        }
+        else if (_formatString == "%1$@")
         {
             // If there is a binding containing exactly a single token, then that token may resolve to
             // a value of any type (not just string), and we want to preserve that type, so we process
