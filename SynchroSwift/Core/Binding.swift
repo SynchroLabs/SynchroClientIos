@@ -515,7 +515,7 @@ public class PropertyValue
                 }
                 else if (resolvedValue?.Type == JTokenType.Null)
                 {
-                    context.setObject(nil, forKeyedSubscript: "var\(index)");
+                    context.setObject(JSValue.init(nullInContext: context), forKeyedSubscript: "var\(index)");
                 }
                 else
                 {

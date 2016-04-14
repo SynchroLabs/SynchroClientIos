@@ -494,6 +494,58 @@ class BindingTests: XCTestCase
         XCTAssertEqual(true, propVal.expand()!.asBool());
     }
 
+    func testEvalBoolParam()
+    {
+        let viewModel = JObject(
+            [
+                "boolVal": JValue(true)
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval(false || {boolVal})", bindingContext: bindingCtx);
+        
+        XCTAssertEqual(true, propVal.expand()!.asBool());
+    }
+
+    func testEvalNullParan()
+    {
+        let viewModel = JObject(
+            [
+                "nullVal": JValue()
+            ]);
+        
+        XCTAssertEqual(JTokenType.Null, viewModel["nullVal"]?.Type);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval(null === {nullVal})", bindingContext: bindingCtx);
+        
+        XCTAssertEqual(true, propVal.expand()!.asBool());
+    }
+
+    func testEvalUnsupportedParamType()
+    {
+        let viewModel = JObject(
+            [
+                "colors": JArray(
+                    [
+                        JObject(["name": JValue("Red"), "color": JValue("red"), "value": JValue("0xff0000")]),
+                        JObject(["name": JValue("Green"), "color": JValue("green"), "value": JValue("0x00ff00")]),
+                        JObject(["name": JValue("Blue"), "color": JValue("blue"), "value": JValue("0x0000ff")])
+                    ])
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval({colors})", bindingContext: bindingCtx);
+        
+        // Unsupport JValue type will be converted to string in the Synchro way (array will get converted to string value representing
+        // length of the array).
+        //
+        XCTAssertEqual("3", propVal.expand()!.asString());
+    }
+    
     func testEvalNullResult()
     {
         let viewModel = JObject(
