@@ -480,6 +480,53 @@ class BindingTests: XCTestCase
         XCTAssertEqual(15, propVal.expand()!.asDouble());
     }
 
+    func testEvalNumericResultIntAsInt()
+    {
+        let viewModel = JObject(
+            [
+                "strVal": JValue("hello"),
+                "intVal": JValue(10)
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval({strVal}.length + {intVal})", bindingContext: bindingCtx);
+        
+        XCTAssertEqual(JTokenType.Integer, propVal.expand()!.Type);
+        XCTAssertEqual(15, propVal.expand()!.asInt());
+    }
+
+    func testEvalNumericResultDoubleAsDouble()
+    {
+        let viewModel = JObject(
+            [
+                "strVal": JValue("hello"),
+                "intVal": JValue(10)
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue("eval({strVal}.length / {intVal})", bindingContext: bindingCtx);
+        
+        XCTAssertEqual(JTokenType.Float, propVal.expand()!.Type);
+        XCTAssertEqual(0.5, propVal.expand()!.asDouble());
+    }
+
+    func testEvalNumericResultIntAsString()
+    {
+        let viewModel = JObject(
+            [
+                "strVal": JValue("hello"),
+                "intVal": JValue(10)
+            ]);
+        
+        let bindingCtx = BindingContext(viewModel);
+        
+        let propVal = PropertyValue.expandAsString("eval({strVal}.length + {intVal})", bindingContext: bindingCtx);
+        
+        XCTAssertEqual("15", propVal);
+    }
+
     func testEvalBoolResult()
     {
         let viewModel = JObject(

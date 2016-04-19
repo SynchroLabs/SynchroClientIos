@@ -532,7 +532,17 @@ public class PropertyValue
             }
             else if (result.isNumber)
             {
-                return JValue(result.toNumber().doubleValue);
+                let doubleVal = result.toNumber().doubleValue;
+                if (floor(doubleVal) == doubleVal)
+                {
+                    // Int
+                    return JValue(Int(doubleVal));
+                }
+                else
+                {
+                    // Double
+                    return JValue(doubleVal);
+                }
             }
             else if (result.isNull)
             {

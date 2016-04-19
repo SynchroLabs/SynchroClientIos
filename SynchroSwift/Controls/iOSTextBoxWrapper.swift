@@ -193,7 +193,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
         {
             // Multi-line
             //
-            logger.info("Multi-line");
+            logger.debug("Multi-line");
             
             let _textView = TextView();
             self._control = _textView;
@@ -206,6 +206,11 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
             applyFrameworkElementDefaults(_textView);
             
             _textView.text = " "; // You have to set text into UITextView in order for it to have a font
+
+            // Setting the font property to itself triggers the setter logic to sync the placeholder font.  We have to do this
+            // because there may not be a font attribute to set an explicit font and thus sync them up.
+            _textView.font = _textView.font ?? nil;
+
             processFontAttribute(controlSpec, fontSetter: TextViewFontSetter(controlWrapper: self, textView: _textView));
             _textView.text = "";
             
@@ -231,7 +236,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
         {
             // Single line
             //
-            logger.info("Single line");
+            logger.debug("Single line");
 
             let _textField = UITextField();
             self._control = _textField;
