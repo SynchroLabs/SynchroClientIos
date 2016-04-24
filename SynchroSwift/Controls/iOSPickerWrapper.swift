@@ -135,7 +135,8 @@ public class iOSPickerWrapper : iOSControlWrapper
 
         self._control = _textBox;
         
-        processElementDimensions(controlSpec, defaultWidth: 150, defaultHeight: 50);
+        processElementDimensions(controlSpec, defaultWidth: 100);
+        
         applyFrameworkElementDefaults(_textBox);
         
         let toolbar = UIToolbar();
