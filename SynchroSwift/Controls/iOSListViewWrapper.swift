@@ -460,8 +460,11 @@ public class iOSListViewWrapper : iOSControlWrapper
                     disclosure = toBoolean(controlSpec["disclosure"]);
                 }
             }
+            
+            let itemContent = (bindingSpec["itemContent"] != nil) ? bindingSpec["itemContent"]?.deepClone() : JValue("{$data}");
+            let itemTemplate = controlSpec["itemTemplate"] ?? JObject(["control": JValue("text"), "value": itemContent!, "margin": JValue(5) ]);
 
-            _dataSource = CheckableBindingContextTableSource(parentControl: self, itemTemplate: controlSpec["itemTemplate"] as! JObject, selectionMode: selectionMode, onSelectionChanged: listview_SelectionChanged, onItemClicked: listview_ItemClicked, disclosure: disclosure);
+            _dataSource = CheckableBindingContextTableSource(parentControl: self, itemTemplate: itemTemplate as! JObject, selectionMode: selectionMode, onSelectionChanged: listview_SelectionChanged, onItemClicked: listview_ItemClicked, disclosure: disclosure);
             table.dataSource = _dataSource;
             table.delegate = _dataSource;
             
