@@ -398,8 +398,12 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
 
     public override func processMessageBox(messageBox: JObject, onCommand: CommandHandler)
     {
-        let message = PropertyValue.expandAsString(messageBox["message"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
-        logger.debug("Message box with message: \(message)");
+        var message = "";
+        if (messageBox["message"] != nil)
+        {
+            message = PropertyValue.expandAsString(messageBox["message"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
+            logger.debug("Message box with message: \(message)");
+        }
  
         var title: String?;
         if (messageBox["title"] != nil)
