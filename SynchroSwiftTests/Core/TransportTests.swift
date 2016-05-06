@@ -34,7 +34,7 @@ class TransportTests: XCTestCase
             "private": JValue(true),
             "engines": JObject(["synchro" : JValue(">= 1.3.3")]),
             "synchroArchiveUrl": JValue("https://github.com/SynchroLabs/SynchroSamples/archive/master.zip"),
-            "synchro": JObject(["clientVersion" : JValue(">=1.2.3")])
+            "synchro": JObject(["clientVersion" : JValue(">=1.3.0")])
         ])
 
         let transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
@@ -88,7 +88,7 @@ class TransportTests: XCTestCase
                     "Mode": JValue("Page"),
                     "Path": JValue("menu"),
                     "TransactionId": JValue(1),
-                    "DeviceMetrics": JObject(["clientVersion": JValue("1.2.3")])
+                    "DeviceMetrics": JObject(["clientVersion": JValue("1.3.0")])
                 ]),
             responseHandler: { (response) in
                 XCTAssert("menu" == response["Path"]?.asString());
