@@ -573,6 +573,8 @@ public class iOSControlWrapper : ControlWrapper
     var _control: UIView?;
     public var control: UIView? { get { return _control; } }
     
+    public var DEFAULT_MARGIN: Double { get { return 5; } }
+    
     var _pageView: iOSPageView;
     public var pageView: iOSPageView { get { return _pageView; } }
 
@@ -785,14 +787,12 @@ public class iOSControlWrapper : ControlWrapper
     
     func applyFrameworkElementDefaults(element: UIView, applyMargins: Bool = true)
     {
-        // !!! This could be a little more thourough ;)
-        
         if (applyMargins)
         {
-            self.marginLeft = toDeviceUnits(10);
-            self.marginTop = toDeviceUnits(10);
-            self.marginRight = toDeviceUnits(10);
-            self.marginBottom = toDeviceUnits(10);
+            self.marginLeft = toDeviceUnits(self.DEFAULT_MARGIN);
+            self.marginTop = toDeviceUnits(self.DEFAULT_MARGIN);
+            self.marginRight = toDeviceUnits(self.DEFAULT_MARGIN);
+            self.marginBottom = toDeviceUnits(self.DEFAULT_MARGIN);
         }
     }
     

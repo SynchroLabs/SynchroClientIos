@@ -221,8 +221,11 @@ class StackPanelView : PaddedView
                     childFrame.width = CGFloat(starSpaceManager.getStarSpace(childControlWrapper.frameProperties.starWidth));
                 }
             
-                // Set the horizontal position (considering margin overlap)
-                childFrame.x = _currLeft + max(lastMargin.right, margin.left);
+                // Set the horizontal position
+                childFrame.x = _currLeft + lastMargin.right + margin.left;
+                //
+                // To collapse margins, instead do...
+                // childFrame.x = _currLeft + max(lastMargin.right, margin.left);
                 
                 // Set the vertical position based on aligment (default Top)
                 childFrame.y = _currTop + margin.top;
@@ -267,8 +270,11 @@ class StackPanelView : PaddedView
                     childFrame.height = CGFloat(starSpaceManager.getStarSpace(childControlWrapper.frameProperties.starHeight));
                 }
                 
-                // Set the vertical position (considering margin overlap)
-                childFrame.y = _currTop + max(lastMargin.bottom, margin.top);
+                // Set the vertical position
+                childFrame.y = _currTop + lastMargin.bottom + margin.top;
+                //
+                //x To collapse margins, instead do...
+                // childFrame.y = _currTop + max(lastMargin.bottom, margin.top);
                 
                 // Set the horizontal position based on aligment (default Left)
                 childFrame.x = _currLeft + margin.left;
@@ -366,7 +372,7 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         let stackPanel = StackPanelView(controlWrapper: self);
         self._control = stackPanel;
         
-        processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);
+        processElementDimensions(controlSpec);
         applyFrameworkElementDefaults(stackPanel, applyMargins: false);
         
         processElementProperty(controlSpec, attributeName: "orientation", setValue: { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.Vertical) });
