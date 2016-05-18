@@ -424,7 +424,7 @@ public class iOSListViewWrapper : iOSControlWrapper
         
         let selectionMode = toListSelectionMode(processElementProperty(controlSpec, attributeName: "select", setValue: nil));
         
-        processElementDimensions(controlSpec, defaultWidth: 320, defaultHeight: 200);
+        processElementDimensions(controlSpec, defaultWidth: 320);
         applyFrameworkElementDefaults(table);
         
         if (controlSpec["header"] != nil)
@@ -596,6 +596,20 @@ public class iOSListViewWrapper : iOSControlWrapper
         }
         
         _selectionChangingProgramatically = false;
+        
+        // If our height is WrapContent, then we need to adjust the frame size after the content is set, and we need to do
+        // this on the main thread.
+        //
+        if (self.frameProperties.heightSpec == SizeSpec.WrapContent)
+        {
+            dispatch_async(dispatch_get_main_queue(),
+            {
+                tableView.invalidateIntrinsicContentSize();
+                var frame = tableView.frame;
+                frame.size.height = tableView.contentSize.height;
+                tableView.frame = frame;
+            })
+        }
     }
     
     public func getListViewSelection(tableView: UITableView, selectionItem: String) -> JToken
@@ -708,7 +722,7 @@ public class iOSListViewWrapper : iOSControlWrapper
     
         let tableView: UITableView = self.control as! UITableView;
         let tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
-        
+
         if (getValueBinding("selection") != nil)
         {
             updateValueBindingForAttribute("selection");

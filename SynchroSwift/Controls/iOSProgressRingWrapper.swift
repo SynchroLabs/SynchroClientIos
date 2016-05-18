@@ -23,7 +23,7 @@ public class iOSProgressRingWrapper : iOSControlWrapper
         
         self._control = progress;
         
-        processElementDimensions(controlSpec, defaultWidth: 50, defaultHeight: 50);
+        processElementDimensions(controlSpec); // Size to system default for control (if implicit)
         
         applyFrameworkElementDefaults(progress);
         

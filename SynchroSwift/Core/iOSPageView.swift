@@ -318,6 +318,19 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         {
             var contentRect = CGRect(x: 0, y: iOSPageView.contentTop, width: panel.frame.width, height: panel.frame.height - iOSPageView.contentTop);
             
+            // Apply any margins of the top-level control here.
+            //
+            // Note that generally the top-level control will be a container and not have a margin.  Note
+            // also that this margin inset is done at the time the content is set, so the applied margin 
+            // will not updated after that point (the margin property cannot be animated in this case).
+            // This is really to handle the "Hello World" case of a standalone non-container top-level 
+            // control that we don't want jammed into the upper left corner.
+            //
+            if let iOSControl = content as? iOSControlWrapper
+            {
+                contentRect = UIEdgeInsetsInsetRect(contentRect, iOSControl.margin)
+            }
+            
             // Create the nav bar, add a back control as appropriate...
             //
             _navBar = UINavigationBar();
