@@ -48,6 +48,7 @@
 		C4696E1F1C90E4640041B3F2 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4696E1E1C90E4640041B3F2 /* QRCodeViewController.swift */; };
 		C471FC001C724D6E00A00610 /* CommandInstanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C471FBFF1C724D6E00A00610 /* CommandInstanceTests.swift */; };
 		C492B7841CFE0F0D007D5F88 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C492B7831CFE0F0D007D5F88 /* main.swift */; };
+		C492B7891CFE1FC1007D5F88 /* iOSToggleButtonWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C492B7881CFE1FC1007D5F88 /* iOSToggleButtonWrapper.swift */; };
 		C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */; };
 		C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1711A33D71F00040A9D /* Images.xcassets */; };
 		C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */; };
@@ -141,6 +142,7 @@
 		C471FBFF1C724D6E00A00610 /* CommandInstanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandInstanceTests.swift; sourceTree = "<group>"; };
 		C492B7811CFE0F0C007D5F88 /* IconFixer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = IconFixer; sourceTree = BUILT_PRODUCTS_DIR; };
 		C492B7831CFE0F0D007D5F88 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		C492B7881CFE1FC1007D5F88 /* iOSToggleButtonWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSToggleButtonWrapper.swift; sourceTree = "<group>"; };
 		C4AFA1651A33D71F00040A9D /* SynchroSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynchroSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AFA1691A33D71F00040A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				C45611781A3D775C00779139 /* iOSStackPanelWrapper.swift */,
 				C456117A1A3D777600779139 /* iOSTextBlockWrapper.swift */,
 				C456115C1A3D767200779139 /* iOSTextBoxWrapper.swift */,
+				C492B7881CFE1FC1007D5F88 /* iOSToggleButtonWrapper.swift */,
 				C456117C1A3D778300779139 /* iOSToggleSwitchWrapper.swift */,
 				C456116A1A3D76DF00779139 /* iOSToolBarToggleWrapper.swift */,
 				C45611681A3D76D000779139 /* iOSToolBarWrapper.swift */,
@@ -523,6 +526,7 @@
 				C4696E1F1C90E4640041B3F2 /* QRCodeViewController.swift in Sources */,
 				C4B6418D1A63A3580038EFC3 /* AppDetailViewController.swift in Sources */,
 				C4AFA19A1A33DE9100040A9D /* Json.swift in Sources */,
+				C492B7891CFE1FC1007D5F88 /* iOSToggleButtonWrapper.swift in Sources */,
 				C456117F1A3D77CC00779139 /* iOSWebViewWrapper.swift in Sources */,
 				C456116D1A3D76FA00779139 /* iOSPickerWrapper.swift in Sources */,
 				C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */,

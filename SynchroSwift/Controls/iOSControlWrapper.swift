@@ -1079,8 +1079,8 @@ public class iOSControlWrapper : ControlWrapper
                     controlWrapper = iOSTextBlockWrapper(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
                 case "toggle":
                     controlWrapper = iOSToggleSwitchWrapper(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
-                //case "togglebutton":
-                //    controlWrapper = iOSToggleButtonWrapper(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
+                case "togglebutton":
+                    controlWrapper = iOSToggleButtonWrapper(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
                 case "toolBar.button":
                     controlWrapper = iOSToolBarWrapper(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
                 case "toolBar.toggle":
