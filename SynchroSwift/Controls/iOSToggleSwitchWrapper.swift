@@ -237,7 +237,7 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
         //
         processElementProperty(controlSpec, attributeName: "caption", setValue: { (value) in label.text = self.toString(value) });
         
-        processElementProperty(controlSpec, attributeName: "foreground", setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "color", altAttributeName: "foreground", setValue: { (value) in
             label.textColor = self.toColor(value);
         });
         

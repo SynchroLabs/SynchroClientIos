@@ -47,6 +47,7 @@
 		C4696E1D1C90E2BE0041B3F2 /* QRCodeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4696E1C1C90E2BE0041B3F2 /* QRCodeView.xib */; };
 		C4696E1F1C90E4640041B3F2 /* QRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4696E1E1C90E4640041B3F2 /* QRCodeViewController.swift */; };
 		C471FC001C724D6E00A00610 /* CommandInstanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C471FBFF1C724D6E00A00610 /* CommandInstanceTests.swift */; };
+		C492B7841CFE0F0D007D5F88 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C492B7831CFE0F0D007D5F88 /* main.swift */; };
 		C4AFA16B1A33D71F00040A9D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */; };
 		C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1711A33D71F00040A9D /* Images.xcassets */; };
 		C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4AFA1731A33D71F00040A9D /* LaunchScreen.xib */; };
@@ -73,7 +74,6 @@
 		C4B53C8F1C1FAE1B00C67701 /* iOSControlWrapperTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B53C8E1C1FAE1B00C67701 /* iOSControlWrapperTest.swift */; };
 		C4B6418D1A63A3580038EFC3 /* AppDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B6418B1A63A3570038EFC3 /* AppDetailViewController.swift */; };
 		C4B6418E1A63A3580038EFC3 /* AppDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4B6418C1A63A3570038EFC3 /* AppDetailView.xib */; };
-		C4F0DC0E1A45603600C4BB42 /* Res in Resources */ = {isa = PBXBuildFile; fileRef = C4F0DC0D1A45603600C4BB42 /* Res */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +85,18 @@
 			remoteInfo = SynchroSwift;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C492B77F1CFE0F0C007D5F88 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C40D60561A3AD0F50048B5A0 /* StateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateManagerTests.swift; sourceTree = "<group>"; };
@@ -127,6 +139,8 @@
 		C4696E1C1C90E2BE0041B3F2 /* QRCodeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRCodeView.xib; sourceTree = "<group>"; };
 		C4696E1E1C90E4640041B3F2 /* QRCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeViewController.swift; sourceTree = "<group>"; };
 		C471FBFF1C724D6E00A00610 /* CommandInstanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandInstanceTests.swift; sourceTree = "<group>"; };
+		C492B7811CFE0F0C007D5F88 /* IconFixer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = IconFixer; sourceTree = BUILT_PRODUCTS_DIR; };
+		C492B7831CFE0F0D007D5F88 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C4AFA1651A33D71F00040A9D /* SynchroSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SynchroSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AFA1691A33D71F00040A9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -157,10 +171,16 @@
 		C4B53C8E1C1FAE1B00C67701 /* iOSControlWrapperTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSControlWrapperTest.swift; sourceTree = "<group>"; };
 		C4B6418B1A63A3570038EFC3 /* AppDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDetailViewController.swift; path = ../AppDetailViewController.swift; sourceTree = "<group>"; };
 		C4B6418C1A63A3570038EFC3 /* AppDetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AppDetailView.xib; path = ../AppDetailView.xib; sourceTree = "<group>"; };
-		C4F0DC0D1A45603600C4BB42 /* Res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Res; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C492B77E1CFE0F0C007D5F88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4AFA1621A33D71F00040A9D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -178,11 +198,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C492B7821CFE0F0D007D5F88 /* IconFixer */ = {
+			isa = PBXGroup;
+			children = (
+				C492B7831CFE0F0D007D5F88 /* main.swift */,
+			);
+			path = IconFixer;
+			sourceTree = "<group>";
+		};
 		C4AFA15C1A33D71F00040A9D = {
 			isa = PBXGroup;
 			children = (
 				C4AFA1671A33D71F00040A9D /* SynchroSwift */,
 				C4AFA17D1A33D71F00040A9D /* SynchroSwiftTests */,
+				C492B7821CFE0F0D007D5F88 /* IconFixer */,
 				C4AFA1661A33D71F00040A9D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -192,6 +221,7 @@
 			children = (
 				C4AFA1651A33D71F00040A9D /* SynchroSwift.app */,
 				C4AFA17A1A33D71F00040A9D /* SynchroSwiftTests.xctest */,
+				C492B7811CFE0F0C007D5F88 /* IconFixer */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -199,7 +229,6 @@
 		C4AFA1671A33D71F00040A9D /* SynchroSwift */ = {
 			isa = PBXGroup;
 			children = (
-				C4F0DC0D1A45603600C4BB42 /* Res */,
 				C4AFA1A31A33DE9E00040A9D /* Controls */,
 				C4AFA18A1A33DE9100040A9D /* Core */,
 				C4AFA16A1A33D71F00040A9D /* AppDelegate.swift */,
@@ -322,6 +351,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C492B7801CFE0F0C007D5F88 /* IconFixer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C492B7851CFE0F0D007D5F88 /* Build configuration list for PBXNativeTarget "IconFixer" */;
+			buildPhases = (
+				C492B77D1CFE0F0C007D5F88 /* Sources */,
+				C492B77E1CFE0F0C007D5F88 /* Frameworks */,
+				C492B77F1CFE0F0C007D5F88 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = IconFixer;
+			productName = IconFixer;
+			productReference = C492B7811CFE0F0C007D5F88 /* IconFixer */;
+			productType = "com.apple.product-type.tool";
+		};
 		C4AFA1641A33D71F00040A9D /* SynchroSwift */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C4AFA1841A33D71F00040A9D /* Build configuration list for PBXNativeTarget "SynchroSwift" */;
@@ -364,10 +410,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Robert Dickinson";
 				TargetAttributes = {
+					C492B7801CFE0F0C007D5F88 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 					C4AFA1641A33D71F00040A9D = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = LJNF82AZ4G;
@@ -394,6 +443,7 @@
 			targets = (
 				C4AFA1641A33D71F00040A9D /* SynchroSwift */,
 				C4AFA1791A33D71F00040A9D /* SynchroSwiftTests */,
+				C492B7801CFE0F0C007D5F88 /* IconFixer */,
 			);
 		};
 /* End PBXProject section */
@@ -405,7 +455,6 @@
 			files = (
 				C4696E1D1C90E2BE0041B3F2 /* QRCodeView.xib in Resources */,
 				C4AFA1751A33D71F00040A9D /* LaunchScreen.xib in Resources */,
-				C4F0DC0E1A45603600C4BB42 /* Res in Resources */,
 				C42323791A412B520032FFB5 /* LauncherView.xib in Resources */,
 				C4AFA1B01A33DF4C00040A9D /* seed.json in Resources */,
 				C4AFA1721A33D71F00040A9D /* Images.xcassets in Resources */,
@@ -423,6 +472,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C492B77D1CFE0F0C007D5F88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C492B7841CFE0F0D007D5F88 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4AFA1611A33D71F00040A9D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -519,6 +576,33 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C492B7861CFE0F0D007D5F88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CODE_SIGN_IDENTITY = "-";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C492B7871CFE0F0D007D5F88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 		C4AFA1821A33D71F00040A9D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -671,6 +755,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C492B7851CFE0F0D007D5F88 /* Build configuration list for PBXNativeTarget "IconFixer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C492B7861CFE0F0D007D5F88 /* Debug */,
+				C492B7871CFE0F0D007D5F88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		C4AFA1601A33D71F00040A9D /* Build configuration list for PBXProject "SynchroSwift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

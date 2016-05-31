@@ -128,7 +128,7 @@ public class iOSTextBlockWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 0, defaultHeight: 0);
         applyFrameworkElementDefaults(textBlock);
         
-        processElementProperty(controlSpec, attributeName: "foreground", setValue: { (value) in
+        processElementProperty(controlSpec, attributeName: "color", altAttributeName: "foreground", setValue: { (value) in
             textBlock.textColor = self.toColor(value);
         });
         

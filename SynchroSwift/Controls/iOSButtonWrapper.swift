@@ -13,19 +13,47 @@ private var logger = Logger.getLogger("iOSButtonWrapper");
 
 private var commands = [CommandName.OnClick.Attribute];
 
-
-class LessSuckingButton : UIButton
+extension UIButton
 {
-    // UIButton does not account for title insets in size calc...
-    //
-    internal override func sizeThatFits(size: CGSize) -> CGSize
+    func setInsets()
     {
-        let theSize = super.sizeThatFits(size);
-        
-        let adjustedWidth = theSize.width + titleEdgeInsets.left + titleEdgeInsets.right
-        let adjustedHeight = theSize.height + titleEdgeInsets.top + titleEdgeInsets.bottom
-        
-        return CGSize(width: adjustedWidth, height: adjustedHeight);
+        // For text only buttons we want a little more vertically padding (to ensure viable min height on
+        // buttons using the default system font).
+        //
+        let hPadding = CGFloat(5);
+        let vPadding = CGFloat(8);
+        contentEdgeInsets = UIEdgeInsets(top: vPadding, left: hPadding, bottom: vPadding, right: hPadding);
+    }
+    
+    func setImageInsets(hasText: Bool)
+    {
+        // If there is an image, we'll set standard padding (overriding the exagerated vertical padding set above)
+        // and we'll make some adjustments to put some space between the image and text (assuming we have text), while
+        // keeping everything centered.
+        //
+        let padding = CGFloat(5);
+        let spacing = hasText ? CGFloat(5) : 0;
+        imageEdgeInsets = UIEdgeInsets(top: 0, left: -spacing, bottom: 0, right: 0);
+        contentEdgeInsets = UIEdgeInsets(top: padding, left: padding + spacing/2, bottom: padding, right: padding);
+    }
+}
+
+class ButtonFontSetter : iOSFontSetter
+{
+    var _controlWrapper: iOSButtonWrapper;
+    var _button: UIButton;
+    
+    internal init(controlWrapper: iOSButtonWrapper, button: UIButton)
+    {
+        _controlWrapper = controlWrapper;
+        _button = button;
+        super.init(font: button.titleLabel!.font);
+    }
+    
+    internal override func setFont(font: UIFont)
+    {
+        _button.titleLabel!.font = font;
+        _controlWrapper.sizeToFit();
     }
 }
 
@@ -36,7 +64,7 @@ public class iOSButtonWrapper : iOSControlWrapper
         logger.debug("Creating button element");
         super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
-        let button = LessSuckingButton(type: UIButtonType.System);
+        let button = UIButton(type: UIButtonType.System);
         self._control = button;
         
         // For an image button (seems mutually exclusive the system/text button)...
@@ -53,26 +81,43 @@ public class iOSButtonWrapper : iOSControlWrapper
         
         processElementDimensions(controlSpec);
         applyFrameworkElementDefaults(button);
+
+        button.setInsets();
+        self.sizeToFit();
         
         processElementProperty(controlSpec, attributeName: "caption", setValue: { (value) in
-            // Add some edge insets to give spacing to the left/right of the text
-            button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0 ,right: 5);
             button.setTitle(self.toString(value), forState: .Normal);
             self.sizeToFit();
         });
 
-        processElementProperty(controlSpec, attributeName: "foreground", setValue: { (value) in
-            button.setTitleColor(self.toColor(value), forState: .Normal);
+        processElementProperty(controlSpec, attributeName: "icon", setValue: { (value) in
+            let img = iOSControlWrapper.loadImageFromIcon(self.toString(value));
+            button.setImage(img, forState: .Normal);
+            button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+            button.setImageInsets(controlSpec["caption"] != nil);
+            self.sizeToFit();
         });
 
-        processElementProperty(controlSpec, attributeName: "foregroundDisabled", setValue: { (value) in
-            button.setTitleColor(self.toColor(value), forState: .Disabled);
+        processElementProperty(controlSpec, attributeName: "color", altAttributeName: "foreground", setValue: { (value) in
+            // I think tintColor does what we want (it's still affected by the enabled/disabled state - it doesn't look
+            // exactly like other disabled text, but it looks disabled-ish).  Most importantly, it affects the image
+            // and title in the same way.
+            //
+            button.tintColor = self.toColor(value);
+            
+            // Old solution:
+            //
+            // let disabledColor = button.titleColorForState(.Disabled);
+            // button.setTitleColor(self.toColor(value), forState: .Normal);
+            // button.setTitleColor(disabledColor, forState: .Disabled);
         });
+
+        processFontAttribute(controlSpec, fontSetter: ButtonFontSetter(controlWrapper: self, button: button));
 
         processElementProperty(controlSpec, attributeName: "cornerRadius", setValue: { (value) in
             button.layer.cornerRadius = CGFloat(self.toDeviceUnits(value!));
         });
-
+        
         processElementProperty(controlSpec, attributeName: "resource", setValue: { (value) in
             if ((value == nil) || (value!.asString() == ""))
             {
@@ -133,6 +178,9 @@ public class iOSButtonWrapper : iOSControlWrapper
 
     func pressed(sender: UIButton!)
     {
+        logger.info("Title insets: \(sender.titleEdgeInsets)");
+        logger.info("Content insets: \(sender.contentEdgeInsets)");
+
         if let command = getCommand(CommandName.OnClick)
         {
             logger.debug("Button click with command: \(command)");

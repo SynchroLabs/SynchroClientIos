@@ -35,7 +35,7 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
     {
         if (value != nil)
         {
-            _buttonItem.image = iOSToolBarWrapper.loadIconImage(value!);
+            _buttonItem.image = iOSControlWrapper.loadImageFromIcon(value!);
             self._pageView.setNavBarButton(_buttonItem);
         }
     }
@@ -134,7 +134,7 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
         }
         
         processElementProperty(controlSpec, attributeName: "text", setValue: { (value) in self._buttonItem.title = self.toString(value) });
-        processElementProperty(controlSpec, attributeName: "icon", setValue: { (value) in self._buttonItem.image = iOSToolBarWrapper.loadIconImage(self.toString(value)) });
+        processElementProperty(controlSpec, attributeName: "icon", setValue: { (value) in self._buttonItem.image = iOSControlWrapper.loadImageFromIcon(self.toString(value)) });
         
         processElementProperty(controlSpec, attributeName: "uncheckedtext", setValue: { (value) in self.uncheckedText = self.toString(value) });
         processElementProperty(controlSpec, attributeName: "checkedtext", setValue: { (value) in self.checkedText = self.toString(value) });
@@ -145,7 +145,7 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
         
         if (controlSpec["control"]?.asString() == "navBar.toggle")
         {
-            // When image and text specified, uses image.  Image is placed on button surface verbatim (no color coersion).
+            // When image and text specified, uses image.
             //
             _pageView.setNavBarButton(_buttonItem);
         }

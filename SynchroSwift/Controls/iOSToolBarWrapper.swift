@@ -76,11 +76,6 @@ public class iOSToolBarWrapper : iOSControlWrapper
         return nil;
     }
     
-    public class func loadIconImage(named: String) -> UIImage?
-    {
-        return UIImage(named: "Res/icons/blue/" + named);
-    }
-    
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating toolbar element");
@@ -116,7 +111,7 @@ public class iOSToolBarWrapper : iOSControlWrapper
             //
             buttonItem = UIBarButtonItem(image: nil, style: .Plain, target: self, action: #selector(barButtonItemClicked))
             processElementProperty(controlSpec, attributeName: "text", setValue: { (value) in buttonItem.title = self.toString(value) });
-            processElementProperty(controlSpec, attributeName: "icon", setValue: { (value) in buttonItem.image = iOSToolBarWrapper.loadIconImage(self.toString(value)) });
+            processElementProperty(controlSpec, attributeName: "icon", setValue: { (value) in buttonItem.image = iOSControlWrapper.loadImageFromIcon(self.toString(value)) });
         }
         
         processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in buttonItem.enabled = self.toBoolean(value) });

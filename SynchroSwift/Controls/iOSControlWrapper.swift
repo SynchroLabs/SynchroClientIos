@@ -582,6 +582,41 @@ public class iOSControlWrapper : ControlWrapper
 
     public var frameProperties = FrameProperties();
 
+    // !!! Allow black/white and/or size to be specified
+    //
+    public class func getResourceNameFromIcon(icon: String) -> String
+    {
+        // Backward compat for Civics - convert the old ic_ icons to the new names...
+        if (icon == "star-mini")
+        {
+            return "ic_star";
+        }
+        else if (icon == "star-empty-mini")
+        {
+            return "ic_star_border";
+        }
+        else if (icon.hasPrefix("ic_"))
+        {
+            // The user knows *exactly* what they want, so give it to them...
+            return icon;
+        }
+        return "ic_" + icon; // <-- Allow black/white and/or size to be specified, if prefixed with "ic_", leave alone.
+    }
+
+    public class func loadImageFromIcon(icon: String) -> UIImage
+    {
+        let iconResourceName = iOSControlWrapper.getResourceNameFromIcon(icon);
+        var img = UIImage(named: iOSControlWrapper.getResourceNameFromIcon(iconResourceName));
+        if (img == nil)
+        {
+            // If specified icon not found, default icon is do_not_disturb
+            logger.warn("Button icon not found: \(iconResourceName), using default");
+            img = UIImage(named: iOSControlWrapper.getResourceNameFromIcon("do_not_disturb"));
+        }
+        
+        return img!;
+    }
+    
     var _horizontalAlignment = HorizontalAlignment.Left;
     public var horizontalAlignment: HorizontalAlignment
     {
@@ -1044,6 +1079,8 @@ public class iOSControlWrapper : ControlWrapper
                     controlWrapper = iOSTextBlockWrapper(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
                 case "toggle":
                     controlWrapper = iOSToggleSwitchWrapper(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
+                //case "togglebutton":
+                //    controlWrapper = iOSToggleButtonWrapper(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
                 case "toolBar.button":
                     controlWrapper = iOSToolBarWrapper(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
                 case "toolBar.toggle":

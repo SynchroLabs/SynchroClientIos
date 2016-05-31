@@ -42,7 +42,7 @@ public class iOSRectangleWrapper : iOSControlWrapper
             }
         });
         
-        processElementProperty(controlSpec, attributeName: "fill", setValue: { (value) in rect.backgroundColor = self.toColor(value) });
+        processElementProperty(controlSpec, attributeName: "color", altAttributeName: "fill", setValue: { (value) in rect.backgroundColor = self.toColor(value) });
         
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: CommandName.OnTap.Attribute, commandAttributes: commands)
         {
