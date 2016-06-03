@@ -27,7 +27,7 @@ class TransportTests: XCTestCase
         let expected = JObject(
         [
             "name": JValue("synchro-samples"),
-            "version": JValue("1.3.3"),
+            "version": JValue("1.3.5"),
             "description": JValue("Synchro API Samples"),
             "main": JValue("menu"),
             "author": JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"),

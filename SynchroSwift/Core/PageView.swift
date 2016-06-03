@@ -17,7 +17,7 @@ public class PageView : NSObject
     
     var _stateManager: StateManager;
     var _viewModel: ViewModel;
-    var _doBackToMenu: (() -> Void)?;
+    var _launchedFromMenu = false;
     
     // This is the top level container of controls for a page.  If the page specifies a single top level
     // element, then this represents that element.  If not, then this is a container control that we
@@ -32,11 +32,11 @@ public class PageView : NSObject
     
     var onBackCommand: String?;
         
-    public init(stateManager: StateManager, viewModel: ViewModel, doBackToMenu: (() -> Void)?)
+    public init(stateManager: StateManager, viewModel: ViewModel, launchedFromMenu: Bool)
     {
         _stateManager = stateManager;
         _viewModel = viewModel;
-        _doBackToMenu = doBackToMenu;
+        _launchedFromMenu = launchedFromMenu;
         super.init();
     }
     
@@ -50,7 +50,7 @@ public class PageView : NSObject
                 //
                 return true;
             }
-            else if ((_doBackToMenu != nil) && _stateManager.isOnMainPath())
+            else if (_launchedFromMenu && _stateManager.isOnMainPath())
             {
                 // No page-specified back command, launched from menu, and is main (top-level) page...
                 //
@@ -63,22 +63,15 @@ public class PageView : NSObject
     
     public func goBack() -> Bool
     {
-        if (_stateManager.isBackSupported())
+        if (_launchedFromMenu || _stateManager.isBackSupported())
         {
             logger.debug("Back navigation");
             _stateManager.sendBackRequestAsync();
             return true;
         }
-        else if ((_doBackToMenu != nil) && _stateManager.isOnMainPath())
-        {
-            logger.debug("Back navigation - returning to menu");
-            _rootContainerControlWrapper!.unregister();
-            _doBackToMenu!();
-            return true;
-        }
         else
         {
-            logger.warn("OnBackCommand called with no back command, ignoring");
+            logger.warn("OnBackCommand when no back navigation available");
             return false; // Not handled
         }
     }

@@ -51,25 +51,32 @@ public class SynchroPageViewController : UIViewController{
         //
         let transport = TransportHttp(uri: TransportHttp.uriFromHostString(_app.endpoint)!);
         
-        var backToMenu:(() -> Void)? = nil;
-        if ((_appManager.appSeed == nil) && (self.navigationController != nil))
-        {
-            // If we are't nailed to a predefined app, then we'll allow the app to navigate back to
-            // this page from its top level page.
-            //
-            backToMenu = { () -> Void in
+        let launchedFromMenu = ((self._appManager.appSeed == nil) && (self.navigationController != nil));
+        
+        let processAppExit = { () -> Void in
+            if (launchedFromMenu)
+            {
                 // If we are't nailed to a predefined app, then we'll allow the app to navigate back to
                 // this page from its top level page.
                 //
                 logger.debug("Going back...");
                 self.navigationController!.popViewControllerAnimated(true);
-            };
+                
+                // Detach StateManager
+                self._stateManager = nil;
+            }
         }
-
-        _stateManager = StateManager(appManager: _appManager, app: _app, transport: transport, deviceMetrics: deviceMetrics);
-        _pageView = iOSPageView(stateManager: _stateManager, viewModel: _stateManager.viewModel, viewController: self, panel: self.view, doBackToMenu: backToMenu);
         
-        _stateManager.setProcessingHandlers(_pageView.processPageView, onProcessMessageBox: _pageView.processMessageBox, onProcessLaunchUrl: _pageView.processLaunchUrl, onProcessChoosePhoto: _pageView.processChoosePhoto);
+        _stateManager = StateManager(appManager: _appManager, app: _app, transport: transport, deviceMetrics: deviceMetrics);
+        _pageView = iOSPageView(stateManager: _stateManager, viewModel: _stateManager.viewModel, viewController: self, panel: self.view, launchedFromMenu: launchedFromMenu);
+        
+        _stateManager.setProcessingHandlers(
+            _pageView.processPageView,
+            onProcessAppExit: processAppExit,
+            onProcessMessageBox: _pageView.processMessageBox,
+            onProcessLaunchUrl: _pageView.processLaunchUrl,
+            onProcessChoosePhoto: _pageView.processChoosePhoto
+            );
         _stateManager.startApplicationAsync();
         
         logger.debug("Completed viewDidLoad");
@@ -86,15 +93,18 @@ public class SynchroPageViewController : UIViewController{
             logger.info("Transition to size complete - \(UIScreen.mainScreen().bounds)");
             // !!! Need some kind of viewUpdateAsync (like above).  
             
-            if (UIScreen.mainScreen().bounds.width < UIScreen.mainScreen().bounds.height)
+            if (self._stateManager != nil)
             {
-                logger.debug("Screen oriented to Portrait");
-                self._stateManager.sendViewUpdateAsync(SynchroOrientation.Portrait);
-            }
-            else
-            {
-                logger.debug("Screen oriented to Landscape");
-                self._stateManager.sendViewUpdateAsync(SynchroOrientation.Landscape);
+                if (UIScreen.mainScreen().bounds.width < UIScreen.mainScreen().bounds.height)
+                {
+                    logger.debug("Screen oriented to Portrait");
+                    self._stateManager.sendViewUpdateAsync(SynchroOrientation.Portrait);
+                }
+                else
+                {
+                    logger.debug("Screen oriented to Landscape");
+                    self._stateManager.sendViewUpdateAsync(SynchroOrientation.Landscape);
+                }                
             }
 
             // !!! Need to update view metrics somehow (locally and send to server), since container size changed (this would be when 

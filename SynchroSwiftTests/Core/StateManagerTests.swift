@@ -66,6 +66,11 @@ class StateManagerTests: XCTestCase
             }
         }
         
+        func processAppExit() -> Void
+        {
+            XCTAssert(false, "Unexpected app exit in test");            
+        }
+        
         func processMessageBox(messageBox: JObject, commandHandler: CommandHandler) -> Void
         {
             XCTAssert(false, "Unexpected message box call in test");
@@ -81,7 +86,7 @@ class StateManagerTests: XCTestCase
             XCTAssert(false, "Unexpected choose photo call in test");
         }
         
-        stateManager.setProcessingHandlers(processPageView, onProcessMessageBox: processMessageBox, onProcessLaunchUrl: processLaunchUrl, onProcessChoosePhoto: processChoosePhoto)
+        stateManager.setProcessingHandlers(processPageView, onProcessAppExit: processAppExit, onProcessMessageBox: processMessageBox, onProcessLaunchUrl: processLaunchUrl, onProcessChoosePhoto: processChoosePhoto)
         stateManager.startApplicationAsync();
         
         self.waitForExpectationsWithTimeout(5.0, handler: nil)

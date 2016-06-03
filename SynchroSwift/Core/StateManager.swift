@@ -13,6 +13,7 @@ private var logger = Logger.getLogger("StateManager");
 public typealias CommandHandler = (String) -> Void;
 
 public typealias ProcessPageView = (pageView: JObject) -> Void;
+public typealias ProcessAppExit = () -> Void;
 public typealias ProcessMessageBox = (messageBox: JObject, commandHandler: CommandHandler) -> Void;
 public typealias ProcessLaunchUrl = (primaryUrl: String, secondaryUrl: String?) -> Void;
 public typealias ProcessChoosePhoto = (request: JObject, onComplete: (JObject) -> Void) -> Void;
@@ -35,9 +36,11 @@ public class StateManager
     var _instanceId: Int?;
     var _instanceVersion: Int?;
     var _isBackSupported = false;
+    var _isExited = false;
     
     var _viewModel: ViewModel;
     var _onProcessPageView: ProcessPageView?;
+    var _onProcessAppExit: ProcessAppExit?;
     var _onProcessMessageBox: ProcessMessageBox?;
     var _onProcessLaunchUrl: ProcessLaunchUrl?;
     var _onProcessChoosePhoto: ProcessChoosePhoto?;
@@ -77,9 +80,10 @@ public class StateManager
     
     public var deviceMetrics: DeviceMetrics { get { return _deviceMetrics; } }
     
-    public func setProcessingHandlers(onProcessPageView: ProcessPageView, onProcessMessageBox: ProcessMessageBox, onProcessLaunchUrl: ProcessLaunchUrl, onProcessChoosePhoto: ProcessChoosePhoto)
+    public func setProcessingHandlers(onProcessPageView: ProcessPageView, onProcessAppExit: ProcessAppExit, onProcessMessageBox: ProcessMessageBox, onProcessLaunchUrl: ProcessLaunchUrl, onProcessChoosePhoto: ProcessChoosePhoto)
     {
         _onProcessPageView = onProcessPageView;
+        _onProcessAppExit = onProcessAppExit;
         _onProcessMessageBox = onProcessMessageBox;
         _onProcessLaunchUrl = onProcessLaunchUrl;
         _onProcessChoosePhoto = onProcessChoosePhoto;
@@ -174,6 +178,12 @@ public class StateManager
     func processResponseAsync(responseAsJSON: JObject)
     {
         // logger.Info("Got response: {0}", (string)responseAsJSON);
+        
+        if (_isExited)
+        {
+            logger.error("StateManager called after exit, ignoring");
+            return;
+        }
         
         if (responseAsJSON["NewSessionId"] != nil)
         {
@@ -273,8 +283,20 @@ public class StateManager
         }
     
         var updateRequired = false;
-    
-        if (responseAsJSON["App"] != nil) // self means we have a new app
+
+        if (responseAsJSON["Exit"] != nil) // navigate back out of the app
+        {
+            // Return to launcher (if there is one).  Disable StateManager (so it won't keep processing responses).
+            //
+            logger.info("Navigated back out of the app");
+            if (self._onProcessAppExit != nil)
+            {
+                _isExited = true;
+                self._onProcessAppExit!();
+            }
+            return;
+        }
+        else if (responseAsJSON["App"] != nil) // self means we have a new app
         {
             // Note that we already have an app definition from the MaaasApp that was passed in.  The App in self
             // response was triggered by a request at app startup for the current version of the app metadata

@@ -89,10 +89,10 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
     var _toolBar: UIToolbar?;
     var _toolBarButtons = [UIBarButtonItem]();
         
-    public init(stateManager: StateManager, viewModel: ViewModel, viewController: UIViewController, panel: UIView, doBackToMenu: (() -> Void)?)
+    public init(stateManager: StateManager, viewModel: ViewModel, viewController: UIViewController, panel: UIView, launchedFromMenu: Bool)
     {
         _viewController = viewController;
-        super.init(stateManager: stateManager, viewModel: viewModel, doBackToMenu: doBackToMenu);
+        super.init(stateManager: stateManager, viewModel: viewModel, launchedFromMenu: launchedFromMenu);
 
         _rootControlWrapper = iOSControlWrapper(pageView: self, stateManager: _stateManager, viewModel: _viewModel, bindingContext: _viewModel.rootBindingContext, control: panel);
 

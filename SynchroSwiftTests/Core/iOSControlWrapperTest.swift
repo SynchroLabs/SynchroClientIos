@@ -149,7 +149,7 @@ class iOSControlWrapperTests: XCTestCase
         viewModel.initializeViewModelData(viewModelObj);
         
         let stateManager = getTestStateManager();
-        let pageView = iOSPageView(stateManager: stateManager, viewModel: viewModel, viewController: UIViewController(), panel: UIView(), doBackToMenu: nil);
+        let pageView = iOSPageView(stateManager: stateManager, viewModel: viewModel, viewController: UIViewController(), panel: UIView(), launchedFromMenu: false);
         
         return iOSControlWrapper(pageView: pageView, stateManager: stateManager, viewModel: viewModel, bindingContext: viewModel.rootBindingContext, control: UIView());
     }
