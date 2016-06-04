@@ -766,6 +766,7 @@
 				C492B7871CFE0F0D007D5F88 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C4AFA1601A33D71F00040A9D /* Build configuration list for PBXProject "SynchroSwift" */ = {
 			isa = XCConfigurationList;
