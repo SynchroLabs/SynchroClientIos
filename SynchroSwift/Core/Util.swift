@@ -11,23 +11,23 @@ import UIKit
 
 extension String
 {
-    func contains(find: String) -> Bool
+    func contains(_ find: String) -> Bool
     {
-        return self.rangeOfString(find) != nil;
+        return self.range(of: find) != nil;
     }
     
-    func substring(startCharIndex: Int) -> String
+    func substring(_ startCharIndex: Int) -> String
     {
-        return self[startIndex.advancedBy(startCharIndex) ..< endIndex];
+        return self[characters.index(startIndex, offsetBy: startCharIndex) ..< endIndex];
     }
     
-    func lastIndexOf(find: Character) -> String.Index?
+    func lastIndexOf(_ find: Character) -> String.Index?
     {
         let findStr = String(find);
-        let nsRange = self.rangeOfString(findStr, options: NSStringCompareOptions.BackwardsSearch);
+        let nsRange = self.range(of: findStr, options: NSString.CompareOptions.backwards);
         if let theRange = nsRange
         {
-            return theRange.startIndex;
+            return theRange.lowerBound;
         }
         return nil;
     }
@@ -91,7 +91,7 @@ extension CGRect
     }
 }
 
-public class Regex
+open class Regex
 {
     var _regex: NSRegularExpression?;
     
@@ -115,37 +115,37 @@ public class Regex
         _regex = pattern;
     }
 
-    public func substituteMatches(string: String, substitution: ((String, [String]) -> String), options: NSMatchingOptions = NSMatchingOptions(rawValue: 0)) -> String
+    open func substituteMatches(_ string: String, substitution: ((String, [String]) -> String), options: NSRegularExpression.MatchingOptions = NSRegularExpression.MatchingOptions(rawValue: 0)) -> String
     {
         let out = NSMutableString();
         var pos = 0;
         let target = string as NSString;
         let targetRange = NSRange(location: 0, length: target.length);
         
-        _regex!.enumerateMatchesInString(string, options: options, range: targetRange)
+        _regex!.enumerateMatches(in: string, options: options, range: targetRange)
         {
-            (match: NSTextCheckingResult?, flags: NSMatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) in
+            (match: NSTextCheckingResult?, flags: NSRegularExpression.MatchingFlags, stop: UnsafeMutablePointer<ObjCBool>) in
             
             let matchRange = match!.range
-            let matchString = String(target.substringWithRange(matchRange));
+            let matchString = String(target.substring(with: matchRange));
             var matchStrings = Array<String>();
             for index in 0...match!.numberOfRanges-1
             {
-                matchStrings.append(String(target.substringWithRange(match!.rangeAtIndex(index))));
+                matchStrings.append(String(target.substring(with: match!.rangeAt(index))));
             }
-            out.appendString(target.substringWithRange(NSRange(location: pos, length: matchRange.location-pos)));
-            out.appendString(substitution(matchString, matchStrings));
+            out.append(target.substring(with: NSRange(location: pos, length: matchRange.location-pos)));
+            out.append(substitution(matchString!, matchStrings));
             pos = matchRange.location + matchRange.length;
         }
         
-        out.appendString(target.substringWithRange(NSRange(location: pos, length: targetRange.length-pos)))
+        out.append(target.substring(with: NSRange(location: pos, length: targetRange.length-pos)))
         
         return String(out);
     }
     
-    public func isMatch(string: String) -> Bool
+    open func isMatch(_ string: String) -> Bool
     {
-        if let matches = _regex?.matchesInString(string, options: [], range: NSRange(location: 0, length: string.characters.count))
+        if let matches = _regex?.matches(in: string, options: [], range: NSRange(location: 0, length: string.characters.count))
         {
             if matches.count > 0
             {
@@ -158,7 +158,7 @@ public class Regex
 
 extension Array
 {
-    func contains<T:AnyObject>(item:T) -> Bool
+    func contains<T:AnyObject>(_ item:T) -> Bool
     {
         for element in self
         {
@@ -170,11 +170,11 @@ extension Array
         return false
     }
     
-    mutating func removeObject<T:AnyObject>(item:T) -> Bool
+    mutating func removeObject<T:AnyObject>(_ item:T) -> Bool
     {
         var index: Int?;
         
-        for (idx, currApp) in self.enumerate()
+        for (idx, currApp) in self.enumerated()
         {
             if (item === currApp as? T)
             {
@@ -184,7 +184,7 @@ extension Array
         
         if (index != nil)
         {
-            self.removeAtIndex(index!)
+            self.remove(at: index!)
             return true
         }
         return false;
@@ -192,11 +192,11 @@ extension Array
 
 }
 
-public class Util
+open class Util
 {
-    public class func isIOS7() -> Bool
+    open class func isIOS7() -> Bool
     {
-        let os = NSProcessInfo().operatingSystemVersion;
+        let os = ProcessInfo().operatingSystemVersion;
         return os.majorVersion >= 7;
     }
 }

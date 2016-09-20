@@ -33,10 +33,10 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
 
     // Without this, you won't get portrait upside down (not in the default set for some fucking reason)
     //
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask
     {
         logger.info("All of the orientations");
-        return UIInterfaceOrientationMask.All;
+        return UIInterfaceOrientationMask.all;
     }
     
     override func viewDidLoad()
@@ -48,11 +48,11 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
 
         logger.info("viewDidLoad - number of apps: \(_appManager.apps.count)");
 
-        let addButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Add, target: self, action: #selector(addClicked))
+        let addButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(addClicked))
         self.navigationItem.rightBarButtonItem = addButton;
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         // We hide the navigation controller when navigating to the Synchro page view, so we need
         // so show it here (in case we're navigating back to here)...
@@ -68,47 +68,47 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         super.didReceiveMemoryWarning()
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return _appManager.apps.count;
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        var cell = self.tableView.dequeueReusableCellWithIdentifier("appCell")
+        var cell = self.tableView.dequeueReusableCell(withIdentifier: "appCell")
         if (cell == nil)
         {
-            cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "appCell");
+            cell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "appCell");
         }
         
-        cell!.textLabel?.text =  _appManager.apps[indexPath.row].name + " - " + _appManager.apps[indexPath.row].description;
-        cell!.detailTextLabel?.text = _appManager.apps[indexPath.row].endpoint;
-        cell!.accessoryType = UITableViewCellAccessoryType.DetailDisclosureButton;
+        cell!.textLabel?.text =  _appManager.apps[(indexPath as NSIndexPath).row].name + " - " + _appManager.apps[(indexPath as NSIndexPath).row].description;
+        cell!.detailTextLabel?.text = _appManager.apps[(indexPath as NSIndexPath).row].endpoint;
+        cell!.accessoryType = UITableViewCellAccessoryType.detailDisclosureButton;
         
-        logger.info("Rendering cell at position: \(indexPath.row) with value: \(_appManager.apps[indexPath.row].name)");
+        logger.info("Rendering cell at position: \((indexPath as NSIndexPath).row) with value: \(_appManager.apps[(indexPath as NSIndexPath).row].name)");
         
         return cell!
     }
 
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool
     {
         return true
     }
 
-    func addClicked(sender: UIBarButtonItem)
+    func addClicked(_ sender: UIBarButtonItem)
     {
         logger.info("Add clicked...");
         let appDetailVC = AppDetailViewController(appManager: _appManager);
         self.navigationController?.pushViewController(appDetailVC, animated: true);
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        logger.info("Items selected at row #\(indexPath.row)!");
+        logger.info("Items selected at row #\((indexPath as NSIndexPath).row)!");
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: true); // Normal iOS behavior is to remove the blue highlight
+        tableView.deselectRow(at: indexPath, animated: true); // Normal iOS behavior is to remove the blue highlight
         
-        let app = _appManager.apps[indexPath.row];
+        let app = _appManager.apps[(indexPath as NSIndexPath).row];
         
         logger.debug("Launching Synchro app at endpoint: \(app.endpoint)");
         let synchroVC = SynchroPageViewController(appManager: _appManager, app: app);
@@ -120,25 +120,25 @@ class LauncherViewController: UIViewController, UITableViewDelegate, UITableView
         self.navigationController?.pushViewController(synchroVC, animated: true);
     }
 
-    func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath)
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath)
     {
-        logger.info("Disclosure tapped for row #\(indexPath.row)!");
+        logger.info("Disclosure tapped for row #\((indexPath as NSIndexPath).row)!");
         
-        let app = _appManager.apps[indexPath.row];
+        let app = _appManager.apps[(indexPath as NSIndexPath).row];
         let appDetailVC = AppDetailViewController(appManager: _appManager, app: app);
 
         self.navigationController?.pushViewController(appDetailVC, animated: true);
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
     {
-        if (editingStyle == UITableViewCellEditingStyle.Delete)
+        if (editingStyle == UITableViewCellEditingStyle.delete)
         {
-            logger.info("Items deleted at row #\(indexPath.row)!");
-            let app = _appManager.apps[indexPath.row];
+            logger.info("Items deleted at row #\((indexPath as NSIndexPath).row)!");
+            let app = _appManager.apps[(indexPath as NSIndexPath).row];
             _appManager.remove(app);
             _appManager.saveState();
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
 }

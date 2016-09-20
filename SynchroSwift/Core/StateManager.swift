@@ -7,18 +7,29 @@
 //
 
 import Foundation
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 private var logger = Logger.getLogger("StateManager");
 
 public typealias CommandHandler = (String) -> Void;
 
-public typealias ProcessPageView = (pageView: JObject) -> Void;
+public typealias ProcessPageView = (_ pageView: JObject) -> Void;
 public typealias ProcessAppExit = () -> Void;
-public typealias ProcessMessageBox = (messageBox: JObject, commandHandler: CommandHandler) -> Void;
-public typealias ProcessLaunchUrl = (primaryUrl: String, secondaryUrl: String?) -> Void;
-public typealias ProcessChoosePhoto = (request: JObject, onComplete: (JObject) -> Void) -> Void;
+public typealias ProcessMessageBox = (_ messageBox: JObject, _ commandHandler: CommandHandler) -> Void;
+public typealias ProcessLaunchUrl = (_ primaryUrl: String, _ secondaryUrl: String?) -> Void;
+public typealias ProcessChoosePhoto = (_ request: JObject, _ onComplete: (JObject) -> Void) -> Void;
 
-public class StateManager
+open class StateManager
 {
     var _appManager: SynchroAppManager;
     var _app: SynchroApp;
@@ -59,12 +70,12 @@ public class StateManager
         _transport.setDefaultHandlers(self.processResponseAsync, requestFailureHandler: self.processRequestFailure);
     }
     
-    public func isBackSupported() -> Bool
+    open func isBackSupported() -> Bool
     {
         return _isBackSupported;
     }
     
-    public func isOnMainPath() -> Bool
+    open func isOnMainPath() -> Bool
     {
         if let path = _path
         {
@@ -76,11 +87,11 @@ public class StateManager
         return false;
     }
     
-    public var viewModel: ViewModel { get { return _viewModel; } }
+    open var viewModel: ViewModel { get { return _viewModel; } }
     
-    public var deviceMetrics: DeviceMetrics { get { return _deviceMetrics; } }
+    open var deviceMetrics: DeviceMetrics { get { return _deviceMetrics; } }
     
-    public func setProcessingHandlers(onProcessPageView: ProcessPageView, onProcessAppExit: ProcessAppExit, onProcessMessageBox: ProcessMessageBox, onProcessLaunchUrl: ProcessLaunchUrl, onProcessChoosePhoto: ProcessChoosePhoto)
+    open func setProcessingHandlers(_ onProcessPageView: @escaping ProcessPageView, onProcessAppExit: @escaping ProcessAppExit, onProcessMessageBox: @escaping ProcessMessageBox, onProcessLaunchUrl: @escaping ProcessLaunchUrl, onProcessChoosePhoto: @escaping ProcessChoosePhoto)
     {
         _onProcessPageView = onProcessPageView;
         _onProcessAppExit = onProcessAppExit;
@@ -112,7 +123,7 @@ public class StateManager
         ]);
     }
     
-    func packageViewMetrics(orientation: SynchroOrientation) -> JObject
+    func packageViewMetrics(_ orientation: SynchroOrientation) -> JObject
     {
         if (orientation == self.deviceMetrics.NaturalOrientation)
         {
@@ -138,7 +149,7 @@ public class StateManager
         }
     }
     
-    func messageBox(title: String, message: String, buttonLabel: String, buttonCommand: String, onCommand: CommandHandler)
+    func messageBox(_ title: String, message: String, buttonLabel: String, buttonCommand: String, onCommand: @escaping CommandHandler)
     {
         let messageBox = JObject(
         [
@@ -154,15 +165,14 @@ public class StateManager
             ])
         ]);
     
-        _onProcessMessageBox!(messageBox: messageBox, commandHandler:
-        {
+        _onProcessMessageBox!(messageBox, {
             (command) in
             
             onCommand(command);
         });
     }
     
-    func processRequestFailure(request: JObject, err: NSError)
+    func processRequestFailure(_ request: JObject, err: NSError)
     {
         logger.warn("Got request failure for request: \(request)");
     
@@ -175,7 +185,7 @@ public class StateManager
         });
     }
     
-    func processResponseAsync(responseAsJSON: JObject)
+    func processResponseAsync(_ responseAsJSON: JObject)
     {
         // logger.Info("Got response: {0}", (string)responseAsJSON);
         
@@ -327,7 +337,7 @@ public class StateManager
             self._isBackSupported = responseAsJSON["Back"]?.asBool() ?? false;
             
             let jsonPageView = responseAsJSON["View"] as! JObject;
-            _onProcessPageView!(pageView: jsonPageView);
+            _onProcessPageView!(jsonPageView);
             
             // If the view model is dirty after rendering the page, then the changes are going to have been
             // written by new view controls that produced initial output (such as location or sensor controls).
@@ -412,7 +422,7 @@ public class StateManager
                         //
                         self._path = responseAsJSON["Path"]!.asString()!;
                         let jsonPageView = responseAsJSON["View"] as! JObject;
-                        _onProcessPageView!(pageView: jsonPageView);
+                        _onProcessPageView!(jsonPageView);
                         updateRequired = self._viewModel.isDirty();
                     }
                     else
@@ -445,8 +455,7 @@ public class StateManager
         {
             logger.info("Launching message box...");
             let jsonMessageBox = responseAsJSON["MessageBox"] as! JObject;
-            _onProcessMessageBox!(messageBox: jsonMessageBox, commandHandler:
-            {
+            _onProcessMessageBox!(jsonMessageBox, {
                 (command) in
                 
                 logger.info("Message box completed with command: '\(command)'");
@@ -456,7 +465,7 @@ public class StateManager
         else if (responseAsJSON["LaunchUrl"] != nil)
         {
             let jsonLaunchUrl = responseAsJSON["LaunchUrl"] as! JObject;
-            _onProcessLaunchUrl!(primaryUrl: jsonLaunchUrl["primaryUrl"]!.asString()!, secondaryUrl: jsonLaunchUrl["secondaryUrl"]?.asString());
+            _onProcessLaunchUrl!(jsonLaunchUrl["primaryUrl"]!.asString()!, jsonLaunchUrl["secondaryUrl"]?.asString());
         }
         else if (responseAsJSON["ChoosePhoto"] != nil)
         {
@@ -491,7 +500,7 @@ public class StateManager
         }
     }
     
-    public func startApplicationAsync()
+    open func startApplicationAsync()
     {
         logger.info("Loading Synchro application definition for app at: \(_app.endpoint)");
         let requestObject = JObject(
@@ -502,7 +511,7 @@ public class StateManager
         _transport.sendMessage(nil, requestObject: requestObject);
     }
     
-    private func sendAppStartPageRequestAsync()
+    fileprivate func sendAppStartPageRequestAsync()
     {
         self._path = _appDefinition!["main"]!.asString()!;
         
@@ -520,7 +529,7 @@ public class StateManager
         _transport.sendMessage(_app.sessionId, requestObject: requestObject);
     }
     
-    private func sendResyncInstanceRequestAsync()
+    fileprivate func sendResyncInstanceRequestAsync()
     {
         logger.info("Sending resync for path: '\(self._path)'");
         
@@ -536,7 +545,7 @@ public class StateManager
         _transport.sendMessage(_app.sessionId, requestObject: requestObject);
     }
     
-    private func addDeltasToRequestObject(requestObject: JObject) -> Bool
+    fileprivate func addDeltasToRequestObject(_ requestObject: JObject) -> Bool
     {
         let vmDeltas = self._viewModel.collectChangedValues();
         if (vmDeltas.count > 0)
@@ -558,7 +567,7 @@ public class StateManager
         return false;
     }
     
-    public func sendUpdateRequestAsync()
+    open func sendUpdateRequestAsync()
     {
         logger.debug("Process update for path: '\(self._path)'");
         
@@ -584,7 +593,7 @@ public class StateManager
         }
     }
     
-    public func sendCommandRequestAsync(command: String, parameters: JObject? = nil)
+    open func sendCommandRequestAsync(_ command: String, parameters: JObject? = nil)
     {
         logger.info("Sending command: '\(command)' for path: '\(self._path!)'");
         
@@ -608,7 +617,7 @@ public class StateManager
         _transport.sendMessage(_app.sessionId, requestObject: requestObject);
     }
     
-    public func sendBackRequestAsync()
+    open func sendBackRequestAsync()
     {
         logger.info("Sending 'back' for path: '\(self._path)'");
         
@@ -624,7 +633,7 @@ public class StateManager
         _transport.sendMessage(_app.sessionId, requestObject: requestObject);
     }
     
-    public func sendViewUpdateAsync(orientation: SynchroOrientation)
+    open func sendViewUpdateAsync(_ orientation: SynchroOrientation)
     {
         logger.info("Sending ViewUpdate for path: '\(self._path)'");
         
@@ -651,7 +660,7 @@ public class StateManager
     // restart they do not expect to return to where they were (as they would with this method),
     // they expect to return to the entry sreen of the app.
     //
-    public func sendResyncRequestAsync()
+    open func sendResyncRequestAsync()
     {
         logger.info("Sending resync (no path/instance)");
         

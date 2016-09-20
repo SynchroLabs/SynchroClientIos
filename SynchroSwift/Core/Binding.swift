@@ -11,7 +11,7 @@ import JavaScriptCore
 
 private var logger = Logger.getLogger("Binding");
 
-public class BindingHelper
+open class BindingHelper
 {
     // Binding is specified in the "binding" attribute of an element.  For example, binding: { value: "foo" } will bind the "value"
     // property of the control to the "foo" value in the current binding context.  For controls that can call commands, the command
@@ -53,7 +53,7 @@ public class BindingHelper
     //
     //       binding: { onClick: { command: "doSomething", value: "theValue" } }
     //
-    public class func getCanonicalBindingSpec(controlSpec: JObject, defaultBindingAttribute: String, commandAttributes: [String]? = nil) -> JObject?
+    open class func getCanonicalBindingSpec(_ controlSpec: JObject, defaultBindingAttribute: String, commandAttributes: [String]? = nil) -> JObject?
     {
         var bindingObject: JObject? = nil;
     
@@ -65,7 +65,7 @@ public class BindingHelper
         
         if let bindingSpec = controlSpec["binding"]
         {
-            if (bindingSpec.Type == JTokenType.Object)
+            if (bindingSpec.Type == JTokenType.object)
             {
                 // Encountered an object spec, return that (subject to further processing below)
                 //
@@ -134,7 +134,7 @@ public class BindingHelper
 // which type of binding it is, and to extract the resolved/expanded value without needing to know which type
 // of binding it is.
 //
-public class BoundAndPossiblyResolvedToken
+open class BoundAndPossiblyResolvedToken
 {
     var _bindingContext: BindingContext;
     var _resolvedValue: JToken?;
@@ -167,11 +167,11 @@ public class BoundAndPossiblyResolvedToken
         }
     }
     
-    public var bindingContext: BindingContext { get { return _bindingContext; } }
+    open var bindingContext: BindingContext { get { return _bindingContext; } }
     
-    public var resolved: Bool { get { return _resolvedValue != nil; } }
+    open var resolved: Bool { get { return _resolvedValue != nil; } }
     
-    public var resolvedValue: JToken?
+    open var resolvedValue: JToken?
     {
         get
         {
@@ -191,7 +191,7 @@ public class BoundAndPossiblyResolvedToken
         }
     }
     
-    public var resolvedValueAsString: String
+    open var resolvedValueAsString: String
     {
         get
         {
@@ -225,16 +225,16 @@ public class BoundAndPossiblyResolvedToken
                         
                         case "D", "d": // Decimal
                             let intVal = Int(numericValue);
-                            let formatter = NSNumberFormatter();
-                            formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
+                            let formatter = NumberFormatter();
+                            formatter.numberStyle = NumberFormatter.Style.decimal;
                             formatter.usesGroupingSeparator = false;
-                            formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
+                            formatter.roundingMode = NumberFormatter.RoundingMode.halfUp;
                             formatter.roundingIncrement = 0;
                             if (formatPrecision != nil)
                             {
                                 formatter.minimumIntegerDigits = formatPrecision!
                             }
-                            if let result = formatter.stringFromNumber(intVal)
+                            if let result = formatter.string(from: intVal)
                             {
                                 return result;
                             }
@@ -244,13 +244,13 @@ public class BoundAndPossiblyResolvedToken
                             }
                         
                         case "E", "e": // Exponential
-                            let formatter = NSNumberFormatter();
-                            formatter.numberStyle = NSNumberFormatterStyle.ScientificStyle;
+                            let formatter = NumberFormatter();
+                            formatter.numberStyle = NumberFormatter.Style.scientific;
                             formatter.maximumSignificantDigits = formatPrecision ?? 6; // 6 is the default on .NET (all locales)
                             formatter.maximumSignificantDigits += 1; // Apparently, on .NET this is the number of digits after the decimal point, so we correct for that
                             formatter.minimumSignificantDigits = formatter.maximumSignificantDigits;
                             formatter.exponentSymbol = formatSpecifier;
-                            if let result = formatter.stringFromNumber(numericValue)
+                            if let result = formatter.string(from: numericValue)
                             {
                                 return result;
                             }
@@ -261,13 +261,13 @@ public class BoundAndPossiblyResolvedToken
                         
                         case "F", "f": // Fixed-point
                             let decimalPlaces = formatPrecision ?? 2;  // 2 digits is the en_US locale default on .NET
-                            let formatter = NSNumberFormatter();
-                            formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
+                            let formatter = NumberFormatter();
+                            formatter.numberStyle = NumberFormatter.Style.decimal;
                             formatter.usesGroupingSeparator = false;
-                            formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
+                            formatter.roundingMode = NumberFormatter.RoundingMode.halfUp;
                             formatter.minimumFractionDigits = decimalPlaces;
                             formatter.maximumFractionDigits = decimalPlaces;
-                            if let result = formatter.stringFromNumber(numericValue)
+                            if let result = formatter.string(from: numericValue)
                             {
                                 return result;
                             }
@@ -281,12 +281,12 @@ public class BoundAndPossiblyResolvedToken
                         
                         case "N", "n": // Number
                             let decimalPlaces = formatPrecision ?? 2;  // 2 digits is the en_US locale default on .NET
-                            let formatter = NSNumberFormatter();
-                            formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle;
-                            formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
+                            let formatter = NumberFormatter();
+                            formatter.numberStyle = NumberFormatter.Style.decimal;
+                            formatter.roundingMode = NumberFormatter.RoundingMode.halfUp;
                             formatter.minimumFractionDigits = decimalPlaces;
                             formatter.maximumFractionDigits = decimalPlaces;
-                            if let result = formatter.stringFromNumber(numericValue)
+                            if let result = formatter.string(from: numericValue)
                             {
                                 return result;
                             }
@@ -297,12 +297,12 @@ public class BoundAndPossiblyResolvedToken
                         
                         case "P", "p": // Percent
                             let decimalPlaces = formatPrecision ?? 2; // 2 digits is the en_US locale default on .NET
-                            let formatter = NSNumberFormatter();
-                            formatter.numberStyle = NSNumberFormatterStyle.PercentStyle;
-                            formatter.roundingMode = NSNumberFormatterRoundingMode.RoundHalfUp;
+                            let formatter = NumberFormatter();
+                            formatter.numberStyle = NumberFormatter.Style.percent;
+                            formatter.roundingMode = NumberFormatter.RoundingMode.halfUp;
                             formatter.maximumFractionDigits = decimalPlaces;
                             formatter.minimumFractionDigits = decimalPlaces;
-                            if let result = formatter.stringFromNumber(numericValue)
+                            if let result = formatter.string(from: numericValue)
                             {
                                 return result;
                             }
@@ -385,7 +385,7 @@ public class BoundAndPossiblyResolvedToken
 //
 private var _braceContentsRE = Regex("(?<![{])[{](?![{])([^}]*)[}]");
 
-public class PropertyValue
+open class PropertyValue
 {
     var _formatString = ""; // Initialize to empty string - Otherwise Swift gets confused and thinks we using it
                             // before initializing when try to assign a value to it in the constructore.
@@ -395,7 +395,7 @@ public class PropertyValue
     
     // Construct and return the unresolved binding contexts (the one-way bindings, excluding the one-time bindings)
     //
-    public var BindingContexts: [BindingContext]
+    open var BindingContexts: [BindingContext]
     {
         get
         {
@@ -423,16 +423,16 @@ public class PropertyValue
         if (theTokenString.hasPrefix(prefix) && theTokenString.hasSuffix(suffix))
         {
             _isExpression = true;
-            let newStartIndex = theTokenString.startIndex.advancedBy(prefix.length);
-            let newEndIndex = theTokenString.endIndex.advancedBy(-suffix.length);
-            theTokenString = theTokenString.substringWithRange(newStartIndex..<newEndIndex);
+            let newStartIndex = theTokenString.characters.index(theTokenString.startIndex, offsetBy: prefix.length);
+            let newEndIndex = theTokenString.characters.index(theTokenString.endIndex, offsetBy: -suffix.length);
+            theTokenString = theTokenString.substring(with: newStartIndex..<newEndIndex);
             logger.debug("Propery value string is expresion: \(theTokenString)");
         }
         else
         {
             // Escape any % to %% (format string will unescape them for us when called later)
             //
-            theTokenString = tokenString.stringByReplacingOccurrencesOfString("%", withString: "%%", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            theTokenString = tokenString.replacingOccurrences(of: "%", with: "%%", options: NSString.CompareOptions.literal, range: nil)
         }
         
         _formatString = _braceContentsRE.substituteMatches(theTokenString, substitution:
@@ -447,7 +447,7 @@ public class PropertyValue
             var format: String?;
             if (token.contains(":"))
             {
-                var result = token.componentsSeparatedByString(":");
+                var result = token.components(separatedBy: ":");
                 token = result[0];
                 format = result[1];
             }
@@ -483,13 +483,13 @@ public class PropertyValue
         
         // De-escape any escaped braces...
         //
-        _formatString = _formatString.stringByReplacingOccurrencesOfString("{{", withString: "{", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        _formatString = _formatString.stringByReplacingOccurrencesOfString("}}", withString: "}", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        _formatString = _formatString.replacingOccurrences(of: "{{", with: "{", options: NSString.CompareOptions.literal, range: nil)
+        _formatString = _formatString.replacingOccurrences(of: "}}", with: "}", options: NSString.CompareOptions.literal, range: nil)
         
         logger.debug("PropertValue - isExpression: \(_isExpression), formatString: \(_formatString)");
     }
 
-    public func expand() -> JToken?
+    open func expand() -> JToken?
     {
         if (_isExpression)
         {
@@ -501,30 +501,30 @@ public class PropertyValue
             for boundToken in _boundTokens
             {
                 let resolvedValue = boundToken.resolvedValue;
-                if (resolvedValue?.Type == JTokenType.Boolean)
+                if (resolvedValue?.Type == JTokenType.boolean)
                 {
-                    context.setObject(resolvedValue?.asBool(), forKeyedSubscript: "var\(index)");
+                    context?.setObject(resolvedValue?.asBool(), forKeyedSubscript: "var\(index)" as (NSCopying & NSObjectProtocol)!);
                 }
-                else if (resolvedValue?.Type == JTokenType.Integer)
+                else if (resolvedValue?.Type == JTokenType.integer)
                 {
-                    context.setObject(resolvedValue?.asInt(), forKeyedSubscript: "var\(index)");
+                    context?.setObject(resolvedValue?.asInt(), forKeyedSubscript: "var\(index)" as (NSCopying & NSObjectProtocol)!);
                 }
-                else if (resolvedValue?.Type == JTokenType.Float)
+                else if (resolvedValue?.Type == JTokenType.float)
                 {
-                    context.setObject(resolvedValue?.asDouble(), forKeyedSubscript: "var\(index)");
+                    context?.setObject(resolvedValue?.asDouble(), forKeyedSubscript: "var\(index)" as (NSCopying & NSObjectProtocol)!);
                 }
-                else if (resolvedValue?.Type == JTokenType.Null)
+                else if (resolvedValue?.Type == JTokenType.null)
                 {
-                    context.setObject(JSValue.init(nullInContext: context), forKeyedSubscript: "var\(index)");
+                    context?.setObject(JSValue.init(nullIn: context), forKeyedSubscript: "var\(index)" as (NSCopying & NSObjectProtocol)!);
                 }
                 else
                 {
-                    context.setObject(boundToken.resolvedValueAsString, forKeyedSubscript: "var\(index)");
+                    context?.setObject(boundToken.resolvedValueAsString, forKeyedSubscript: "var\(index)" as (NSCopying & NSObjectProtocol)!);
                 }
                 index += 1;
             }
             
-            let result: JSValue = context.evaluateScript(_formatString);
+            let result: JSValue = context!.evaluateScript(_formatString);
             
             if (result.isBoolean)
             {
@@ -566,7 +566,7 @@ public class PropertyValue
         {
             // Otherwise we replace all tokens with the string representations of the values.
             //
-            var resolvedTokens = [CVarArgType]();
+            var resolvedTokens = [CVarArg]();
             for boundToken in _boundTokens
             {
                 resolvedTokens.append(boundToken.resolvedValueAsString);
@@ -576,18 +576,18 @@ public class PropertyValue
         }
     }
 
-    public class func containsBindingTokens(value: String) -> Bool
+    open class func containsBindingTokens(_ value: String) -> Bool
     {
         return _braceContentsRE.isMatch(value);
     }
 
-    public class func expand(tokenString: String, bindingContext: BindingContext) -> JToken?
+    open class func expand(_ tokenString: String, bindingContext: BindingContext) -> JToken?
     {
         let propertyValue = PropertyValue(tokenString, bindingContext: bindingContext);
         return propertyValue.expand();
     }
 
-    public class func expandAsString(tokenString: String, bindingContext: BindingContext) -> String
+    open class func expandAsString(_ tokenString: String, bindingContext: BindingContext) -> String
     {
         let expandedToken = PropertyValue.expand(tokenString, bindingContext: bindingContext);
         return TokenConverter.toString(expandedToken);
@@ -603,7 +603,7 @@ public typealias GetViewValue = () -> (JToken);
 
 // For one-way binding of any property (binding to a pattern string than can incorporate multiple bound values)
 //
-public class PropertyBinding
+open class PropertyBinding
 {
     var _propertyValue: PropertyValue;
     var _setViewValue: SetViewValue?;
@@ -614,7 +614,7 @@ public class PropertyBinding
         _setViewValue = setViewValue;
     }
     
-    public func updateViewFromViewModel() -> JToken?
+    open func updateViewFromViewModel() -> JToken?
     {
         let value = _propertyValue.expand();
         if (_setViewValue != nil)
@@ -624,21 +624,21 @@ public class PropertyBinding
         return value;
     }
     
-    public var BindingContexts: [BindingContext] { get { return _propertyValue.BindingContexts; } }
+    open var BindingContexts: [BindingContext] { get { return _propertyValue.BindingContexts; } }
 }
 
 // For two-way binding (typically of primary "value" property) - binding to a single value only
 //
-public class ValueBinding
+open class ValueBinding
 {
     var _viewModel: ViewModel;
     var _bindingContext: BindingContext;
     var _getViewValue: GetViewValue;
     var _setViewValue: SetViewValue?;
     
-    public var isDirty: Bool;
+    open var isDirty: Bool;
     
-    public init(viewModel: ViewModel, bindingContext: BindingContext, getViewValue: GetViewValue, setViewValue: SetViewValue? = nil)
+    public init(viewModel: ViewModel, bindingContext: BindingContext, getViewValue: @escaping GetViewValue, setViewValue: SetViewValue? = nil)
     {
         _viewModel = viewModel;
         _bindingContext = bindingContext;
@@ -647,12 +647,12 @@ public class ValueBinding
         isDirty = false;
     }
     
-    public func updateViewModelFromView()
+    open func updateViewModelFromView()
     {
         _viewModel.updateViewModelFromView(_bindingContext, getValue: _getViewValue);
     }
     
-    public func updateViewFromViewModel()
+    open func updateViewFromViewModel()
     {
         if (_setViewValue != nil)
         {
@@ -660,7 +660,7 @@ public class ValueBinding
         }
     }
     
-    public var bindingContext: BindingContext { get { return _bindingContext; } }
+    open var bindingContext: BindingContext { get { return _bindingContext; } }
 }
 
 

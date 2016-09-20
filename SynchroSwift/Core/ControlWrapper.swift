@@ -12,63 +12,63 @@ private var logger = Logger.getLogger("ControlWrapper");
 
 public enum ListSelectionMode : Int
 {
-    case None;
-    case Single;
-    case Multiple;
+    case none;
+    case single;
+    case multiple;
     
     var description : String
     {
         switch self
         {
-            case .None:     return "None";
-            case .Single:   return "Single";
-            case .Multiple: return "Multiple";
+            case .none:     return "None";
+            case .single:   return "Single";
+            case .multiple: return "Multiple";
         }
     }
 }
 
 public enum LocationStatus : Int
 {
-    case Unknown = 0;
-    case DeterminingAvailabily;
-    case Available;
-    case NotAvailable;
-    case PendingApproval;
-    case NotApproved;
-    case Active;
-    case Failed;
+    case unknown = 0;
+    case determiningAvailabily;
+    case available;
+    case notAvailable;
+    case pendingApproval;
+    case notApproved;
+    case active;
+    case failed;
     
     var description : String
     {
         switch self
         {
-            case .Unknown:               return "Unknown";
-            case .DeterminingAvailabily: return "DeterminingAvailability";
-            case .Available:             return "Available";
-            case .NotAvailable:          return "NotAvailable";
-            case .PendingApproval:       return "PendingApproval";
-            case .NotApproved:           return "NotApproved";
-            case .Active:                return "Active";
-            case .Failed:                return "Failed";
+            case .unknown:               return "Unknown";
+            case .determiningAvailabily: return "DeterminingAvailability";
+            case .available:             return "Available";
+            case .notAvailable:          return "NotAvailable";
+            case .pendingApproval:       return "PendingApproval";
+            case .notApproved:           return "NotApproved";
+            case .active:                return "Active";
+            case .failed:                return "Failed";
         }
     }
 }
 
 public enum FontFaceType
 {
-    case FONT_DEFAULT;
-    case FONT_SERIF;
-    case FONT_SANSERIF;
-    case FONT_MONOSPACE;
+    case font_DEFAULT;
+    case font_SERIF;
+    case font_SANSERIF;
+    case font_MONOSPACE;
 
     var description : String
     {
         switch self
         {
-            case .FONT_DEFAULT:   return "FONT_DEFAULT";
-            case .FONT_SERIF:     return "FONT_SERIF";
-            case .FONT_SANSERIF:  return "FONT_SANSERIF";
-            case .FONT_MONOSPACE: return "FONT_MONOSPACE";
+            case .font_DEFAULT:   return "FONT_DEFAULT";
+            case .font_SERIF:     return "FONT_SERIF";
+            case .font_SANSERIF:  return "FONT_SANSERIF";
+            case .font_MONOSPACE: return "FONT_MONOSPACE";
             }
     }
 
@@ -76,10 +76,10 @@ public enum FontFaceType
 
 public protocol FontSetter
 {
-    func setFaceType(faceType: FontFaceType);
-    func setSize(size: Double);
-    func setBold(bold: Bool);
-    func setItalic(italic: Bool);
+    func setFaceType(_ faceType: FontFaceType);
+    func setSize(_ size: Double);
+    func setBold(_ bold: Bool);
+    func setItalic(_ italic: Bool);
 }
 
 // Silverlight colors
@@ -232,7 +232,7 @@ private var colorNames: Dictionary<String, UInt32> =
 ];
 
 
-public class ControlWrapper: NSObject
+open class ControlWrapper: NSObject
 {
     var _stateManager: StateManager;
     var _viewModel: ViewModel;
@@ -245,7 +245,7 @@ public class ControlWrapper: NSObject
     var _childControls = [ControlWrapper]();
     
     var _isVisualElement = true;
-    public var isVisualElement: Bool { get { return _isVisualElement; } }
+    open var isVisualElement: Bool { get { return _isVisualElement; } }
     
     public init(stateManager: StateManager, viewModel: ViewModel, bindingContext: BindingContext)
     {
@@ -263,33 +263,33 @@ public class ControlWrapper: NSObject
         
         if let styles = controlSpec["style"]
         {
-            let separators = NSCharacterSet(charactersInString: " ,");
-            _styles = styles.asString()!.componentsSeparatedByCharactersInSet(separators).filter{!$0.isEmpty};
+            let separators = CharacterSet(charactersIn: " ,");
+            _styles = styles.asString()!.components(separatedBy: separators).filter{!$0.isEmpty};
         }
         
         super.init();
     }
     
-    public var stateManager: StateManager { get { return _stateManager; } }
-    public var viewModel: ViewModel { get { return _viewModel; } }
+    open var stateManager: StateManager { get { return _stateManager; } }
+    open var viewModel: ViewModel { get { return _viewModel; } }
     
-    public var bindingContext: BindingContext { get { return _bindingContext; } }
-    public var childControls: [ControlWrapper] { get { return _childControls; } }
-    public func addChildControl(control: ControlWrapper)
+    open var bindingContext: BindingContext { get { return _bindingContext; } }
+    open var childControls: [ControlWrapper] { get { return _childControls; } }
+    open func addChildControl(_ control: ControlWrapper)
     {
         _childControls.append(control);
     }
-    public func clearChildControls()
+    open func clearChildControls()
     {
-        _childControls.removeAll(keepCapacity: false);
+        _childControls.removeAll(keepingCapacity: false);
     }
     
-    func setCommand(attribute: String, command: CommandInstance)
+    func setCommand(_ attribute: String, command: CommandInstance)
     {
         _commands[attribute] = command;
     }
     
-    public func getCommand(commandName: CommandName) -> CommandInstance?
+    open func getCommand(_ commandName: CommandName) -> CommandInstance?
     {
         if (_commands.keys.contains(commandName.Attribute))
         {
@@ -298,12 +298,12 @@ public class ControlWrapper: NSObject
         return nil;
     }
     
-    func setValueBinding(attribute: String, valueBinding: ValueBinding)
+    func setValueBinding(_ attribute: String, valueBinding: ValueBinding)
     {
         _valueBindings[attribute] = valueBinding;
     }
     
-    public func getValueBinding(attribute: String) -> ValueBinding?
+    open func getValueBinding(_ attribute: String) -> ValueBinding?
     {
         if (_valueBindings.keys.contains(attribute))
         {
@@ -317,7 +317,7 @@ public class ControlWrapper: NSObject
     //
     // !!! Use this for min/max height/width, as needed...
     //
-    public class func getRangeLimitedValue(value: Double, min: Double?, max: Double?) -> Double
+    open class func getRangeLimitedValue(_ value: Double, min: Double?, max: Double?) -> Double
     {
         var result = value;
     
@@ -347,13 +347,13 @@ public class ControlWrapper: NSObject
     // Value conversion helpers
     //
     
-    public class func getStarCount(starString: String?) -> Int
+    open class func getStarCount(_ starString: String?) -> Int
     {
         var starCnt = 0;
         if ((starString != nil) && (starString!.hasSuffix("*")))
         {
             starCnt = 1;
-            let valueString = starString!.stringByReplacingOccurrencesOfString("*", withString: "", options: [], range: nil);
+            let valueString = starString!.replacingOccurrences(of: "*", with: "", options: [], range: nil);
             if (valueString.length > 0)
             {
                 starCnt = Int(valueString) ?? starCnt;
@@ -366,12 +366,12 @@ public class ControlWrapper: NSObject
     // Basic token conversions
     //
     
-    public func toString(token: JToken?, defaultValue: String = "") -> String
+    open func toString(_ token: JToken?, defaultValue: String = "") -> String
     {
         return TokenConverter.toString(token, defaultValue: defaultValue);
     }
     
-    public func toBoolean(token: JToken?, defaultValue: Bool = false) -> Bool
+    open func toBoolean(_ token: JToken?, defaultValue: Bool = false) -> Bool
     {
         return TokenConverter.toBoolean(token, defaultValue: defaultValue);
     }
@@ -380,7 +380,7 @@ public class ControlWrapper: NSObject
     //     coerced to a double.  This method should probably also return an optional, and everyone who calls
     //     it should be checking to make sure it was a number (unless they passed in a default value).
     //
-    public func toDouble(value: JToken?, defaultValue: Double = 0) -> Double
+    open func toDouble(_ value: JToken?, defaultValue: Double = 0) -> Double
     {
         return TokenConverter.toDouble(value, defaultValue: defaultValue) ?? defaultValue;
     }
@@ -388,41 +388,41 @@ public class ControlWrapper: NSObject
     // Conversion functions to go from Maaas units or typographic points to device units
     //
     
-    public func toDeviceUnits(value: Double) -> Double
+    open func toDeviceUnits(_ value: Double) -> Double
     {
         return self.stateManager.deviceMetrics.SynchroUnitsToDeviceUnits(value);
     }
     
-    public func toDeviceUnits(value: JToken) -> Double
+    open func toDeviceUnits(_ value: JToken) -> Double
     {
         return toDeviceUnits(toDouble(value));
     }
     
-    public func toDeviceUnitsFromTypographicPoints(value: JToken) -> Double
+    open func toDeviceUnitsFromTypographicPoints(_ value: JToken) -> Double
     {
         return toDeviceUnits(self.stateManager.deviceMetrics.TypographicPointsToMaaasUnits(toDouble(value)));
     }
     
-    public func toListSelectionMode(value: JToken?, defaultSelectionMode: ListSelectionMode = ListSelectionMode.Single) -> ListSelectionMode
+    open func toListSelectionMode(_ value: JToken?, defaultSelectionMode: ListSelectionMode = ListSelectionMode.single) -> ListSelectionMode
     {
         var selectionMode = defaultSelectionMode;
         let selectionModeValue = value?.asString();
         if (selectionModeValue == "None")
         {
-            selectionMode = ListSelectionMode.None;
+            selectionMode = ListSelectionMode.none;
         }
         else if (selectionModeValue == "Single")
         {
-            selectionMode = ListSelectionMode.Single;
+            selectionMode = ListSelectionMode.single;
         }
         else if (selectionModeValue == "Multiple")
         {
-            selectionMode = ListSelectionMode.Multiple;
+            selectionMode = ListSelectionMode.multiple;
         }
         return selectionMode;
     }
     
-    public class ColorARGB
+    open class ColorARGB
     {
         var _a: UInt8;
         var _r: UInt8;
@@ -446,22 +446,22 @@ public class ControlWrapper: NSObject
             _b = bytes[3];
         }
         
-        public var a: UInt8 { get { return _a; } }
-        public var r: UInt8 { get { return _r; } }
-        public var g: UInt8 { get { return _g; } }
-        public var b: UInt8 { get { return _b; } }
+        open var a: UInt8 { get { return _a; } }
+        open var r: UInt8 { get { return _r; } }
+        open var g: UInt8 { get { return _g; } }
+        open var b: UInt8 { get { return _b; } }
     }
     
-    public class func getColor(colorValue: String) -> ColorARGB?
+    open class func getColor(_ colorValue: String) -> ColorARGB?
     {
         var len = colorValue.characters.count;
         
         if (colorValue.hasPrefix("#"))
         {
             len -= 1;
-            let hexColor = colorValue.substringFromIndex(colorValue.startIndex.advancedBy(1));
+            let hexColor = colorValue.substring(from: colorValue.characters.index(colorValue.startIndex, offsetBy: 1));
             var rgbValue:UInt32 = 0
-            NSScanner(string: hexColor).scanHexInt(&rgbValue)
+            Scanner(string: hexColor).scanHexInt32(&rgbValue)
             
             var bytes = rgbValue.getBytes();
             let alpha = bytes[0];
@@ -498,23 +498,23 @@ public class ControlWrapper: NSObject
         return nil;
     }
     
-    public func processFontAttribute(controlSpec: JObject, fontSetter: FontSetter)
+    open func processFontAttribute(_ controlSpec: JObject, fontSetter: FontSetter)
     {
         processElementProperty(controlSpec, attributeName: "font.face",
         setValue: { (value) in
-            var faceType = FontFaceType.FONT_DEFAULT;
+            var faceType = FontFaceType.font_DEFAULT;
             let faceTypeString = value?.asString();
             if faceTypeString == "Serif"
             {
-                faceType = FontFaceType.FONT_SERIF;
+                faceType = FontFaceType.font_SERIF;
             }
             else if faceTypeString == "SanSerif"
             {
-                faceType = FontFaceType.FONT_SANSERIF;
+                faceType = FontFaceType.font_SANSERIF;
             }
             else if faceTypeString == "Monospace"
             {
-                faceType = FontFaceType.FONT_MONOSPACE;
+                faceType = FontFaceType.font_MONOSPACE;
             }
             fontSetter.setFaceType(faceType);
         });
@@ -543,7 +543,7 @@ public class ControlWrapper: NSObject
     
     // Process a value binding on an element.  If a value is supplied, a value binding to that binding context will be created.
     //
-    func processElementBoundValue(attributeName: String, attributeValue: JToken?, getValue: GetViewValue, setValue: SetViewValue? = nil) -> Bool
+    func processElementBoundValue(_ attributeName: String, attributeValue: JToken?, getValue: GetViewValue, setValue: SetViewValue? = nil) -> Bool
     {
         if let value = attributeValue?.asString()
         {
@@ -560,14 +560,14 @@ public class ControlWrapper: NSObject
         return false;
     }
     
-    private func attemptStyleBinding(style: String, attributeName: String, setValue: SetViewValue?) -> JToken?
+    fileprivate func attemptStyleBinding(_ style: String, attributeName: String, setValue: SetViewValue?) -> JToken?
     {
         // See if [style].[attributeName] is defined, and if so, bind to it
         //
         let styleBinding = style + "." + attributeName;
         let styleBindingContext = _viewModel.rootBindingContext.select(styleBinding);
         let value = styleBindingContext.getValue();
-        if ((value != nil) && (value?.Type != JTokenType.Object))
+        if ((value != nil) && (value?.Type != JTokenType.object))
         {
             let binding = viewModel.createAndRegisterPropertyBinding(_bindingContext, value: "{$root." + styleBinding + "}", setValue: setValue);
             if (setValue == nil)
@@ -601,13 +601,13 @@ public class ControlWrapper: NSObject
     // nil value may be passed for setValue, which will avoid creating and managing bindings (which should not be necessary since there
     // is no setter), but will still return a resolved value if once can be determined.
     //
-    public func processElementProperty(controlSpec: JObject, attributeName: String, altAttributeName: String?, setValue: SetViewValue?) -> JToken?
+    open func processElementProperty(_ controlSpec: JObject, attributeName: String, altAttributeName: String?, setValue: SetViewValue?) -> JToken?
     {
         var value = controlSpec.selectToken(attributeName);
         if ((value == nil) && (altAttributeName != nil))
         {
             value = controlSpec.selectToken(altAttributeName!);
-            if ((value != nil) && (value?.Type == JTokenType.Object))
+            if ((value != nil) && (value?.Type == JTokenType.object))
             {
                 value = nil;
             }
@@ -635,7 +635,7 @@ public class ControlWrapper: NSObject
                 }
             }
         }
-        else if ((value!.Type == JTokenType.String) && PropertyValue.containsBindingTokens(value!.asString()!))
+        else if ((value!.Type == JTokenType.string) && PropertyValue.containsBindingTokens(value!.asString()!))
         {
             // If value contains a binding, create a Binding and add it to metadata
             let binding = viewModel.createAndRegisterPropertyBinding(self.bindingContext, value: value!.asString()!, setValue: setValue);
@@ -664,14 +664,14 @@ public class ControlWrapper: NSObject
         return nil;
     }
 
-    public func processElementProperty(controlSpec: JObject, attributeName: String, setValue: SetViewValue?) -> JToken?
+    open func processElementProperty(_ controlSpec: JObject, attributeName: String, setValue: SetViewValue?) -> JToken?
     {
         return processElementProperty(controlSpec, attributeName: attributeName, altAttributeName: nil, setValue: setValue);
     }
     
     // This helper is used by control update handlers.
     //
-    func updateValueBindingForAttribute(attributeName: String)
+    func updateValueBindingForAttribute(_ attributeName: String)
     {
         let binding = getValueBinding(attributeName);
         if (binding != nil)
@@ -683,7 +683,7 @@ public class ControlWrapper: NSObject
     
     // Process and record any commands in a binding spec
     //
-    func processCommands(bindingSpec: JObject, commands: [String])
+    func processCommands(_ bindingSpec: JObject, commands: [String])
     {
         for command in commands
         {
@@ -709,7 +709,7 @@ public class ControlWrapper: NSObject
     // bound values go away, such as when an array element is removed, causing a cooresponding (bound) list
     // or list view item to be removed.
     //
-    public func unregister()
+    open func unregister()
     {
         for valueBinding in _valueBindings.values
         {
@@ -730,7 +730,7 @@ public class ControlWrapper: NSObject
     // This will create controls from a list of control specifications.  It will apply any "foreach" and "with" bindings
     // as part of the process.  It will call the supplied callback to actually create the individual controls.
     //
-    public func createControls(bindingContext: BindingContext, controlList: JArray, onCreateControl: (BindingContext, JObject) -> (Void))
+    open func createControls(_ bindingContext: BindingContext, controlList: JArray, onCreateControl: (BindingContext, JObject) -> (Void))
     {
         for control in controlList
         {
@@ -739,7 +739,7 @@ public class ControlWrapper: NSObject
                 var controlBindingContext = bindingContext;
                 var controlCreated = false;
                 
-                if ((element["binding"] != nil) && (element["binding"]!.Type == JTokenType.Object))
+                if ((element["binding"] != nil) && (element["binding"]!.Type == JTokenType.object))
                 {
                     logger.debug("Found binding object");
                     let bindingSpec = element["binding"] as! JObject;

@@ -33,36 +33,36 @@ private var staticLogLevels =
     "Off":   LogLevel(name: "Off", ordinal: 6)
 ]
 
-public class LogLevel
+open class LogLevel
 {
-    private var _ordinal: Int;
-    private var _name: String;
+    fileprivate var _ordinal: Int;
+    fileprivate var _name: String;
     
-    private init(name: String, ordinal: Int)
+    fileprivate init(name: String, ordinal: Int)
     {
         self._name = name;
         self._ordinal = ordinal;
     }
     
-    public var name: String
+    open var name: String
     {
         get { return _name; }
     }
     
-    public var ordinal: Int
+    open var ordinal: Int
     {
         get { return _ordinal; }
     }
     
-    public class var Trace: LogLevel { get { return staticLogLevels["Trace"]!; } }
-    public class var Debug: LogLevel { get { return staticLogLevels["Debug"]!; } }
-    public class var Info:  LogLevel { get { return staticLogLevels["Info"]!;  } }
-    public class var Warn:  LogLevel { get { return staticLogLevels["Warn"]!;  } }
-    public class var Error: LogLevel { get { return staticLogLevels["Error"]!; } }
-    public class var Fatal: LogLevel { get { return staticLogLevels["Fatal"]!; } }
-    public class var Off:   LogLevel { get { return staticLogLevels["Off"]!;   } }
+    open class var Trace: LogLevel { get { return staticLogLevels["Trace"]!; } }
+    open class var Debug: LogLevel { get { return staticLogLevels["Debug"]!; } }
+    open class var Info:  LogLevel { get { return staticLogLevels["Info"]!;  } }
+    open class var Warn:  LogLevel { get { return staticLogLevels["Warn"]!;  } }
+    open class var Error: LogLevel { get { return staticLogLevels["Error"]!; } }
+    open class var Fatal: LogLevel { get { return staticLogLevels["Fatal"]!; } }
+    open class var Off:   LogLevel { get { return staticLogLevels["Off"]!;   } }
     
-    public class func fromString(levelName: String) -> LogLevel?
+    open class func fromString(_ levelName: String) -> LogLevel?
     {
         return staticLogLevels[levelName];
     }
@@ -73,11 +73,11 @@ public class LogLevel
 private var _loggers = Dictionary<String, Logger>();
 private var _defaultLogLevel = LogLevel.Info;
 
-public class Logger
+open class Logger
 {
     // This is our static Logger "factory"
     //
-    public class func getLogger(className: String) -> Logger
+    open class func getLogger(_ className: String) -> Logger
     {
         if let existingLogger = _loggers[className]
         {
@@ -91,19 +91,19 @@ public class Logger
         }
     }
     
-    public class var DefaultLogLevel: LogLevel { get { return _defaultLogLevel; } set(value) { _defaultLogLevel = value; } }
+    open class var DefaultLogLevel: LogLevel { get { return _defaultLogLevel; } set(value) { _defaultLogLevel = value; } }
     
     // This is our Logger instance implementation
     //
-    private var _className: String;
-    private var _level: LogLevel? = nil;
+    fileprivate var _className: String;
+    fileprivate var _level: LogLevel? = nil;
     
-    private init(className: String)
+    fileprivate init(className: String)
     {
         self._className = className;
     }
     
-    public var level: LogLevel
+    open var level: LogLevel
     {
         get
         {
@@ -119,44 +119,44 @@ public class Logger
         }
     }
     
-    public func log(level: LogLevel, format: String)
+    open func log(_ level: LogLevel, format: String)
     {
         if (level.ordinal >= self.level.ordinal)
         {    
-            let dateFormatter = NSDateFormatter();
+            let dateFormatter = DateFormatter();
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS";
-            let dateStr = dateFormatter.stringFromDate(NSDate())
+            let dateStr = dateFormatter.string(from: Date())
             
             print("\(dateStr) [\(level.name)] \(_className) - \(format)");
         }
     }
     
-    public func trace(format: String)
+    open func trace(_ format: String)
     {
         log(LogLevel.Trace, format: format);
     }
     
-    public func debug(format: String)
+    open func debug(_ format: String)
     {
         log(LogLevel.Debug, format: format);
     }
     
-    public func info(format: String)
+    open func info(_ format: String)
     {
         log(LogLevel.Info, format: format);
     }
     
-    public func warn(format: String)
+    open func warn(_ format: String)
     {
         log(LogLevel.Warn, format: format);
     }
     
-    public func error(format: String)
+    open func error(_ format: String)
     {
         log(LogLevel.Error, format: format);
     }
     
-    public func fatal(format: String)
+    open func fatal(_ format: String)
     {
         log(LogLevel.Fatal, format: format);
     }

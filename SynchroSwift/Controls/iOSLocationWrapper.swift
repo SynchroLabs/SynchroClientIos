@@ -13,14 +13,14 @@ private var logger = Logger.getLogger("iOSLocationWrapper");
 
 private var commands = [CommandName.OnUpdate.Attribute];
 
-public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
+open class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
 {
     
     var _updateOnChange = false;
     
     var _locMgr: CLLocationManager?;
     
-    var _status: LocationStatus = LocationStatus.Unknown;
+    var _status: LocationStatus = LocationStatus.unknown;
     var _location: CLLocation?;
 
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
@@ -42,7 +42,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
             if (CLLocationManager.locationServicesEnabled())
             {
                 
-                if (locMgr.respondsToSelector(#selector(CLLocationManager.requestWhenInUseAuthorization)))
+                if (locMgr.responds(to: #selector(CLLocationManager.requestWhenInUseAuthorization)))
                 {
                     // RequestWhenInUseAuthorization is only present in iOS 8.0 and later.  If available, we need
                     // to call it to get authorized (using our custom message defined in Info.plist under the key:
@@ -62,7 +62,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
             else
             {
                 logger.info("Location services not enabled");
-                _status = LocationStatus.NotAvailable;
+                _status = LocationStatus.notAvailable;
             }
         }
         
@@ -73,7 +73,7 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
             processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in
                 let obj = JObject(
                 [
-                    "available": JValue((self._status == LocationStatus.Available) || (self._status == LocationStatus.Active)),
+                    "available": JValue((self._status == LocationStatus.available) || (self._status == LocationStatus.active)),
                     "status": JValue(self._status.description)
                 ]);
                 
@@ -134,17 +134,17 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
         }
     }
     
-    public override func unregister()
+    open override func unregister()
     {
         stopLocationServices();
         super.unregister();
     }
     
-    public func locationManager(manager: CLLocationManager, didFailWithError error: NSError)
+    open func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
     {
         _location = nil;
         
-        if CLError.LocationUnknown == CLError(rawValue: error.code)
+        if CLError.Code.locationUnknown == CLError.Code(rawValue: error.code)
         {
             // "Location unknown" is not really an error.  It just indicates that the location couldn't be determined
             // immediately (it's going to keep trying), per...
@@ -152,12 +152,12 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
             // https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManagerDelegate_Protocol/index.html#//apple_ref/occ/intfm/CLLocationManagerDelegate/locationManager:didFailWithError:
             //
             logger.info("Location manager could not immediately determine location, still trying");
-            _status = LocationStatus.Available;
+            _status = LocationStatus.available;
         }
         else
         {
             logger.info("Location manager failed: \(error)");
-            _status = LocationStatus.Failed;
+            _status = LocationStatus.failed;
             
         }
         
@@ -170,37 +170,37 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
         }
     }
     
-    func fromNativeStatus(status: CLAuthorizationStatus) -> LocationStatus
+    func fromNativeStatus(_ status: CLAuthorizationStatus) -> LocationStatus
     {
-        if (status == CLAuthorizationStatus.Denied)
+        if (status == CLAuthorizationStatus.denied)
         {
             // The user explicitly denied the use of location services for this app or location
             // services are currently disabled in Settings.
             //
-            return LocationStatus.NotApproved;
+            return LocationStatus.notApproved;
         }
-        else if (status == CLAuthorizationStatus.Restricted)
+        else if (status == CLAuthorizationStatus.restricted)
         {
             // This app is not authorized to use location services. The user cannot change this app’s
             // status, possibly due to active restrictions such as parental controls being in place.
             //
-            return LocationStatus.NotAvailable;
+            return LocationStatus.notAvailable;
         }
-        else if (status == CLAuthorizationStatus.NotDetermined)
+        else if (status == CLAuthorizationStatus.notDetermined)
         {
             // The user has not yet made a choice regarding whether this app can use location services.
             //
-            return LocationStatus.PendingApproval;
+            return LocationStatus.pendingApproval;
         }
-        else if ((status == CLAuthorizationStatus.AuthorizedAlways) || (status == CLAuthorizationStatus.AuthorizedWhenInUse))
+        else if ((status == CLAuthorizationStatus.authorizedAlways) || (status == CLAuthorizationStatus.authorizedWhenInUse))
         {
-            return LocationStatus.Available;
+            return LocationStatus.available;
         }
         
-        return LocationStatus.Unknown;
+        return LocationStatus.unknown;
     }
     
-    public func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus)
+    open func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus)
     {
         logger.info("Location manager authorization change: \(status)");
         _status = fromNativeStatus(status);
@@ -214,9 +214,9 @@ public class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
         }
     }
     
-    public func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
+    open func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
     {
-        _status = LocationStatus.Active;
+        _status = LocationStatus.active;
         _location = locations[locations.count - 1];
         logger.info("Location: \(_location)");
         

@@ -25,7 +25,7 @@ extension UIButton
         contentEdgeInsets = UIEdgeInsets(top: vPadding, left: hPadding, bottom: vPadding, right: hPadding);
     }
     
-    func setImageInsets(hasText: Bool)
+    func setImageInsets(_ hasText: Bool)
     {
         // If there is an image, we'll set standard padding (overriding the exagerated vertical padding set above)
         // and we'll make some adjustments to put some space between the image and text (assuming we have text), while
@@ -50,21 +50,21 @@ class ButtonFontSetter : iOSFontSetter
         super.init(font: button.titleLabel!.font);
     }
     
-    internal override func setFont(font: UIFont)
+    internal override func setFont(_ font: UIFont)
     {
         _button.titleLabel!.font = font;
         _controlWrapper.sizeToFit();
     }
 }
 
-public class iOSButtonWrapper : iOSControlWrapper
+open class iOSButtonWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating button element");
         super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
-        let button = UIButton(type: UIButtonType.System);
+        let button = UIButton(type: UIButtonType.system);
         self._control = button;
         
         // For an image button (seems mutually exclusive the system/text button)...
@@ -86,14 +86,14 @@ public class iOSButtonWrapper : iOSControlWrapper
         self.sizeToFit();
         
         processElementProperty(controlSpec, attributeName: "caption", setValue: { (value) in
-            button.setTitle(self.toString(value), forState: .Normal);
+            button.setTitle(self.toString(value), for: UIControlState());
             self.sizeToFit();
         });
 
         processElementProperty(controlSpec, attributeName: "icon", setValue: { (value) in
             let img = iOSControlWrapper.loadImageFromIcon(self.toString(value));
-            button.setImage(img, forState: .Normal);
-            button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+            button.setImage(img, for: UIControlState());
+            button.imageView?.contentMode = UIViewContentMode.scaleAspectFit
             button.setImageInsets(controlSpec["caption"] != nil);
             self.sizeToFit();
         });
@@ -121,16 +121,16 @@ public class iOSButtonWrapper : iOSControlWrapper
         processElementProperty(controlSpec, attributeName: "resource", setValue: { (value) in
             if ((value == nil) || (value!.asString() == ""))
             {
-                button.setImage(nil, forState: UIControlState.Normal);
+                button.setImage(nil, for: UIControlState());
             }
             else
             {
-                let url = NSURL(string: self.toString(value));
+                let url = URL(string: self.toString(value));
                 if let validUrl = url
                 {
                     logger.info("Loading image for URL: \(validUrl)");
-                    let request: NSURLRequest = NSURLRequest(URL: validUrl);
-                    NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
+                    let request: URLRequest = URLRequest(url: validUrl);
+                    NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response: URLResponse?, data: Data?, error: NSError?) -> Void in
                         if let err = error
                         {
                             logger.error("Failed to load image, reason: \(err.description)");
@@ -139,12 +139,12 @@ public class iOSButtonWrapper : iOSControlWrapper
                         
                         if (response != nil)
                         {
-                            let httpResponse = response as! NSHTTPURLResponse
+                            let httpResponse = response as! HTTPURLResponse
                             if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300)
                             {
                                 logger.info("Image loaded from URL: \(validUrl)");
                                 let loadedImage = UIImage(data: data!);
-                                button.setBackgroundImage(loadedImage, forState: UIControlState.Normal);
+                                button.setBackgroundImage(loadedImage, for: UIControlState());
                             }
                             else
                             {
@@ -172,11 +172,11 @@ public class iOSButtonWrapper : iOSControlWrapper
         
         if (getCommand(CommandName.OnClick) != nil)
         {
-            button.addTarget(self, action: #selector(pressed), forControlEvents: .TouchUpInside);
+            button.addTarget(self, action: #selector(pressed), for: .touchUpInside);
         }
     }
 
-    func pressed(sender: UIButton!)
+    func pressed(_ sender: UIButton!)
     {
         logger.info("Title insets: \(sender.titleEdgeInsets)");
         logger.info("Content insets: \(sender.contentEdgeInsets)");

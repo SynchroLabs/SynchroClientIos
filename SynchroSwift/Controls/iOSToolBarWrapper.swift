@@ -13,62 +13,62 @@ private var logger = Logger.getLogger("iOSToolBarWrapper");
 
 private var commands = [CommandName.OnClick.Attribute];
 
-public class iOSToolBarWrapper : iOSControlWrapper
+open class iOSToolBarWrapper : iOSControlWrapper
 {
-    class func systemItemFromName(name: String?) -> UIBarButtonSystemItem?
+    class func systemItemFromName(_ name: String?) -> UIBarButtonSystemItem?
     {
         if name != nil
         {
             switch name!
             {
                 case "Action":
-                    return UIBarButtonSystemItem.Action;
+                    return UIBarButtonSystemItem.action;
                 case "Add":
-                    return UIBarButtonSystemItem.Add;
+                    return UIBarButtonSystemItem.add;
                 case "Bookmarks":
-                    return UIBarButtonSystemItem.Bookmarks;
+                    return UIBarButtonSystemItem.bookmarks;
                 case "Camera":
-                    return UIBarButtonSystemItem.Camera;
+                    return UIBarButtonSystemItem.camera;
                 case "Cancel":
-                    return UIBarButtonSystemItem.Cancel;
+                    return UIBarButtonSystemItem.cancel;
                 case "Compose":
-                    return UIBarButtonSystemItem.Compose;
+                    return UIBarButtonSystemItem.compose;
                 case "Done":
-                    return UIBarButtonSystemItem.Done;
+                    return UIBarButtonSystemItem.done;
                 case "Edit":
-                    return UIBarButtonSystemItem.Edit;
+                    return UIBarButtonSystemItem.edit;
                 case "FastForward":
-                    return UIBarButtonSystemItem.FastForward;
+                    return UIBarButtonSystemItem.fastForward;
                 case "FixedSpace":
-                    return UIBarButtonSystemItem.FixedSpace;
+                    return UIBarButtonSystemItem.fixedSpace;
                 case "FlexibleSpace":
-                    return UIBarButtonSystemItem.FlexibleSpace;
+                    return UIBarButtonSystemItem.flexibleSpace;
                 case "Organize":
-                    return UIBarButtonSystemItem.Organize;
+                    return UIBarButtonSystemItem.organize;
                 case "PageCurl":
-                    return UIBarButtonSystemItem.PageCurl;
+                    return UIBarButtonSystemItem.pageCurl;
                 case "Pause":
-                    return UIBarButtonSystemItem.Pause;
+                    return UIBarButtonSystemItem.pause;
                 case "Play":
-                    return UIBarButtonSystemItem.Play;
+                    return UIBarButtonSystemItem.play;
                 case "Redo":
-                    return UIBarButtonSystemItem.Redo;
+                    return UIBarButtonSystemItem.redo;
                 case "Refresh":
-                    return UIBarButtonSystemItem.Refresh;
+                    return UIBarButtonSystemItem.refresh;
                 case "Reply":
-                    return UIBarButtonSystemItem.Reply;
+                    return UIBarButtonSystemItem.reply;
                 case "Rewind":
-                    return UIBarButtonSystemItem.Rewind;
+                    return UIBarButtonSystemItem.rewind;
                 case "Save":
-                    return UIBarButtonSystemItem.Save;
+                    return UIBarButtonSystemItem.save;
                 case "Search":
-                    return UIBarButtonSystemItem.Search;
+                    return UIBarButtonSystemItem.search;
                 case "Stop":
-                    return UIBarButtonSystemItem.Stop;
+                    return UIBarButtonSystemItem.stop;
                 case "Trash":
-                    return UIBarButtonSystemItem.Trash;
+                    return UIBarButtonSystemItem.trash;
                 case "Undo":
-                    return UIBarButtonSystemItem.Undo;
+                    return UIBarButtonSystemItem.undo;
                 default: ()
             }
         }
@@ -109,12 +109,12 @@ public class iOSToolBarWrapper : iOSControlWrapper
         {
             // Custom items, can specify text, icon, or both
             //
-            buttonItem = UIBarButtonItem(image: nil, style: .Plain, target: self, action: #selector(barButtonItemClicked))
+            buttonItem = UIBarButtonItem(image: nil, style: .plain, target: self, action: #selector(barButtonItemClicked))
             processElementProperty(controlSpec, attributeName: "text", setValue: { (value) in buttonItem.title = self.toString(value) });
             processElementProperty(controlSpec, attributeName: "icon", setValue: { (value) in buttonItem.image = iOSControlWrapper.loadImageFromIcon(self.toString(value)) });
         }
         
-        processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in buttonItem.enabled = self.toBoolean(value) });
+        processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in buttonItem.isEnabled = self.toBoolean(value) });
         
         if (controlSpec["control"]?.asString() == "navBar.button")
         {
@@ -138,7 +138,7 @@ public class iOSToolBarWrapper : iOSControlWrapper
         }
     }
     
-    func barButtonItemClicked(barButtonItem: UIBarButtonItem)
+    func barButtonItemClicked(_ barButtonItem: UIBarButtonItem)
     {
         if let command = getCommand(CommandName.OnClick)
         {

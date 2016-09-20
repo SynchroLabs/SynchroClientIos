@@ -41,7 +41,7 @@ class ResizableLabel : UILabel
         }
     }
     
-    func updateComputedSize(size: CGSize)
+    func updateComputedSize(_ size: CGSize)
     {
         _lastComputedSize.width = size.width;
         _lastComputedSize.height = size.height;
@@ -65,7 +65,7 @@ class ResizableLabel : UILabel
     
     internal func updateSize()
     {
-        if ((_frameProperties.heightSpec == SizeSpec.WrapContent) && (_frameProperties.widthSpec == SizeSpec.WrapContent))
+        if ((_frameProperties.heightSpec == SizeSpec.wrapContent) && (_frameProperties.widthSpec == SizeSpec.wrapContent))
         {
             // If both dimensions are WrapContent, then we don't care what the current dimensions are, we just sizeToFit (note
             // that this will not do any line wrapping and will consume the width of the string as a single line).
@@ -74,7 +74,7 @@ class ResizableLabel : UILabel
             let size = self.sizeThatFits(CGSize(width: 0, height: 0)); // Compute height and width
             self.updateComputedSize(size);
         }
-        else if (_frameProperties.heightSpec == SizeSpec.WrapContent)
+        else if (_frameProperties.heightSpec == SizeSpec.wrapContent)
         {
             // If only the height is WrapContent, then we obey the current width and set the height based on how tall the text would
             // be when wrapped at the current width.
@@ -83,7 +83,7 @@ class ResizableLabel : UILabel
             size.width = self.frame.size.width; // Maintain width
             self.updateComputedSize(size);
         }
-        else if (_frameProperties.widthSpec == SizeSpec.WrapContent)
+        else if (_frameProperties.widthSpec == SizeSpec.wrapContent)
         {
             // If only the width is WrapContent then we'll get the maximum width assuming the text is on a single line and we'll
             // set the width to that and leave the height alone (kind of a non-sensical case).
@@ -105,14 +105,14 @@ class TextBlockFontSetter : iOSFontSetter
         super.init(font: label.font);
     }
     
-    internal override func setFont(font: UIFont)
+    internal override func setFont(_ font: UIFont)
     {
         _label.font = font;
         _label.updateSize();
     }
 }
 
-public class iOSTextBlockWrapper : iOSControlWrapper
+open class iOSTextBlockWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
@@ -121,7 +121,7 @@ public class iOSTextBlockWrapper : iOSControlWrapper
 
         let textBlock = ResizableLabel(frameProperties: self.frameProperties);
         textBlock.numberOfLines = 0;
-        textBlock.lineBreakMode = .ByWordWrapping;
+        textBlock.lineBreakMode = .byWordWrapping;
         
         self._control = textBlock;
         
@@ -148,12 +148,12 @@ public class iOSTextBlockWrapper : iOSControlWrapper
             if (bEllipsize)
             {
                 textBlock.numberOfLines = 1; // Required for ellipsizing
-                textBlock.lineBreakMode = .ByTruncatingTail;
+                textBlock.lineBreakMode = .byTruncatingTail;
             }
             else
             {
                 textBlock.numberOfLines = 0; // Required for wrapping
-                textBlock.lineBreakMode = .ByWordWrapping;
+                textBlock.lineBreakMode = .byWordWrapping;
             }
         });
         
@@ -161,15 +161,15 @@ public class iOSTextBlockWrapper : iOSControlWrapper
             let alignString = self.toString(value);
             if (alignString == "Left")
             {
-                textBlock.textAlignment = NSTextAlignment.Left;
+                textBlock.textAlignment = NSTextAlignment.left;
             }
             if (alignString == "Center")
             {
-                textBlock.textAlignment = NSTextAlignment.Center;
+                textBlock.textAlignment = NSTextAlignment.center;
             }
             else if (alignString == "Right")
             {
-                textBlock.textAlignment = NSTextAlignment.Right;
+                textBlock.textAlignment = NSTextAlignment.right;
             }
         });
     }

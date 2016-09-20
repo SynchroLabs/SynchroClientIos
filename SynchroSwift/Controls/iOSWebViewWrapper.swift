@@ -11,7 +11,7 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSWebViewWrapper");
 
-public class iOSWebViewWrapper : iOSControlWrapper
+open class iOSWebViewWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
@@ -27,9 +27,9 @@ public class iOSWebViewWrapper : iOSControlWrapper
         // !!! TODO - iOS Web View
         processElementProperty(controlSpec, attributeName: "contents", setValue: { (value) in webView.loadHTMLString(self.toString(value), baseURL: nil); });
         processElementProperty(controlSpec, attributeName: "url", setValue: { (value) in
-            if let url = NSURL(string: self.toString(value))
+            if let url = URL(string: self.toString(value))
             {
-                webView.loadRequest(NSURLRequest(URL: url));
+                webView.loadRequest(URLRequest(url: url));
             }
         });
 

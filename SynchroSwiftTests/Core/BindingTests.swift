@@ -183,7 +183,7 @@ class BindingTests: XCTestCase
         let propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
         let expandedPropValToken = propVal.expand()!;
         
-        XCTAssertEqual(JTokenType.Integer, expandedPropValToken.Type);
+        XCTAssertEqual(JTokenType.integer, expandedPropValToken.Type);
         XCTAssertEqual(420, expandedPropValToken.asInt()!);
     }
 
@@ -199,7 +199,7 @@ class BindingTests: XCTestCase
         let propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
         let expandedPropValToken = propVal.expand()!;
         
-        XCTAssertEqual(JTokenType.Float, expandedPropValToken.Type);
+        XCTAssertEqual(JTokenType.float, expandedPropValToken.Type);
         XCTAssertEqual(13.69, expandedPropValToken.asDouble()!);
     }
 
@@ -215,7 +215,7 @@ class BindingTests: XCTestCase
         let propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
         let expandedPropValToken = propVal.expand()!;
         
-        XCTAssertEqual(JTokenType.Boolean, expandedPropValToken.Type);
+        XCTAssertEqual(JTokenType.boolean, expandedPropValToken.Type);
         XCTAssertEqual(true, expandedPropValToken.asBool()!);
     }
 
@@ -231,7 +231,7 @@ class BindingTests: XCTestCase
         let propVal = PropertyValue("{!serial}", bindingContext: bindingCtx);
         let expandedPropValToken = propVal.expand()!;
         
-        XCTAssertEqual(JTokenType.Boolean, expandedPropValToken.Type);
+        XCTAssertEqual(JTokenType.boolean, expandedPropValToken.Type);
         XCTAssertEqual(false, expandedPropValToken.asBool()!);
     }
 
@@ -247,7 +247,7 @@ class BindingTests: XCTestCase
         let propVal = PropertyValue("{serial}", bindingContext: bindingCtx);
         let expandedPropValToken = propVal.expand()!;
         
-        XCTAssertEqual(JTokenType.String, expandedPropValToken.Type);
+        XCTAssertEqual(JTokenType.string, expandedPropValToken.Type);
         XCTAssertEqual("foo", expandedPropValToken.asString()!);
     }
 
@@ -264,7 +264,7 @@ class BindingTests: XCTestCase
         let expandedPropValToken = propVal.expand()!;
         
         // When we negate a string, the type is coerced (converted) to bool, the inverted...
-        XCTAssertEqual(JTokenType.Boolean, expandedPropValToken.Type);
+        XCTAssertEqual(JTokenType.boolean, expandedPropValToken.Type);
         XCTAssertEqual(false, expandedPropValToken.asBool()!);
     }
 
@@ -492,7 +492,7 @@ class BindingTests: XCTestCase
         
         let propVal = PropertyValue("eval({strVal}.length + {intVal})", bindingContext: bindingCtx);
         
-        XCTAssertEqual(JTokenType.Integer, propVal.expand()!.Type);
+        XCTAssertEqual(JTokenType.integer, propVal.expand()!.Type);
         XCTAssertEqual(15, propVal.expand()!.asInt());
     }
 
@@ -508,7 +508,7 @@ class BindingTests: XCTestCase
         
         let propVal = PropertyValue("eval({strVal}.length / {intVal})", bindingContext: bindingCtx);
         
-        XCTAssertEqual(JTokenType.Float, propVal.expand()!.Type);
+        XCTAssertEqual(JTokenType.float, propVal.expand()!.Type);
         XCTAssertEqual(0.5, propVal.expand()!.asDouble());
     }
 
@@ -562,7 +562,7 @@ class BindingTests: XCTestCase
                 "nullVal": JValue()
             ]);
         
-        XCTAssertEqual(JTokenType.Null, viewModel["nullVal"]?.Type);
+        XCTAssertEqual(JTokenType.null, viewModel["nullVal"]?.Type);
         
         let bindingCtx = BindingContext(viewModel);
         
@@ -604,7 +604,7 @@ class BindingTests: XCTestCase
         
         let propVal = PropertyValue("eval(null)", bindingContext: bindingCtx);
         
-        XCTAssertEqual(true, propVal.expand()!.Type == JTokenType.Null);
+        XCTAssertEqual(true, propVal.expand()!.Type == JTokenType.null);
     }
 
     func testEvalUnsupportResultType()

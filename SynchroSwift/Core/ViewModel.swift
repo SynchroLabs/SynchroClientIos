@@ -13,7 +13,7 @@ private var logger = Logger.getLogger("ViewModel");
 // The ViewModel will manage the client view model data (initialize and update it).  It will also manage all bindings
 // to view model data, including managing updates on changes.
 //
-public class ViewModel
+open class ViewModel
 {
     var _rootBindingContext: BindingContext;
     var _rootObject = JObject();
@@ -27,30 +27,30 @@ public class ViewModel
         _rootBindingContext = BindingContext(_rootObject);
     }
     
-    public var rootBindingContext: BindingContext { get { return _rootBindingContext; } }
+    open var rootBindingContext: BindingContext { get { return _rootBindingContext; } }
     
-    public var rootObject: JObject { get { return _rootObject; } } // Only used by BindingContext - "internal"?
+    open var rootObject: JObject { get { return _rootObject; } } // Only used by BindingContext - "internal"?
     
-    public func createAndRegisterValueBinding(bindingContext: BindingContext, getValue: GetViewValue, setValue: SetViewValue?) -> ValueBinding
+    open func createAndRegisterValueBinding(_ bindingContext: BindingContext, getValue: GetViewValue, setValue: SetViewValue?) -> ValueBinding
     {
         let valueBinding = ValueBinding(viewModel: self, bindingContext: bindingContext, getViewValue: getValue, setViewValue: setValue);
         _valueBindings.append(valueBinding);
         return valueBinding;
     }
     
-    public func unregisterValueBinding(valueBinding: ValueBinding)
+    open func unregisterValueBinding(_ valueBinding: ValueBinding)
     {
         _valueBindings.removeObject(valueBinding);
     }
     
-    public func createAndRegisterPropertyBinding(bindingContext: BindingContext, value: String, setValue: SetViewValue?) -> PropertyBinding
+    open func createAndRegisterPropertyBinding(_ bindingContext: BindingContext, value: String, setValue: SetViewValue?) -> PropertyBinding
     {
         let propertyBinding = PropertyBinding(bindingContext: bindingContext, value: value, setViewValue: setValue);
         _propertyBindings.append(propertyBinding);
         return propertyBinding;
     }
     
-    public func unregisterPropertyBinding(propertyBinding: PropertyBinding)
+    open func unregisterPropertyBinding(_ propertyBinding: PropertyBinding)
     {
         _propertyBindings.removeObject(propertyBinding);
     }
@@ -59,7 +59,7 @@ public class ViewModel
     // JSON response).  We need to prune that off so future SelectToken operations will work when applied to the
     // root binding context (the context associated with the "ViewModel" JSON object).
     //
-    public class func getTokenPath(token: JToken) -> String
+    open class func getTokenPath(_ token: JToken) -> String
     {
         var path = token.Path;
     
@@ -71,7 +71,7 @@ public class ViewModel
         return path;
     }
     
-    public func initializeViewModelData(viewModel: JObject)
+    open func initializeViewModelData(_ viewModel: JObject)
     {
         _rootObject = viewModel;
         _rootBindingContext = BindingContext(_rootObject);
@@ -81,7 +81,7 @@ public class ViewModel
         _propertyBindings.removeAll();
     }
     
-    public func setViewModelData(viewModel: JObject)
+    open func setViewModelData(_ viewModel: JObject)
     {
         _rootObject = viewModel;
         _rootBindingContext = BindingContext(_rootObject);
@@ -103,10 +103,10 @@ public class ViewModel
     
     // This object represents a binding update (the path of the bound item and an indication of whether rebinding is required)
     //
-    public class BindingUpdate
+    open class BindingUpdate
     {
-        public var bindingPath: String;
-        public var rebindRequired: Bool;
+        open var bindingPath: String;
+        open var rebindRequired: Bool;
         
         public init(bindingPath: String, rebindRequired: Bool)
         {
@@ -127,7 +127,7 @@ public class ViewModel
     //    On update view model - pass list containing all updates
     //    On update view (from ux) - pass list containing the single update, and the sourceBinding (that triggered the update)
     //
-    public func updateViewFromViewModel(bindingUpdates: [BindingUpdate]? = nil, sourceBinding: BindingContext? = nil)
+    open func updateViewFromViewModel(_ bindingUpdates: [BindingUpdate]? = nil, sourceBinding: BindingContext? = nil)
     {
         _updatingView = true;
     
@@ -205,12 +205,12 @@ public class ViewModel
         _updatingView = false;
     }
     
-    public func updateViewModelData(viewModelDeltas: JToken, updateView: Bool = true)
+    open func updateViewModelData(_ viewModelDeltas: JToken, updateView: Bool = true)
     {
         var bindingUpdates = [BindingUpdate]();
     
         logger.debug("Processing view model updates: \(viewModelDeltas)");
-        if (viewModelDeltas.Type == JTokenType.Array)
+        if (viewModelDeltas.Type == JTokenType.array)
         {
             // Removals are generally reported as removals from the end of the list with increasing indexes.  If
             // we process them in this way, the first removal will change the list positions of remaining items
@@ -273,7 +273,7 @@ public class ViewModel
                             {
                                 // This is an array element...
                                 let parenPos = path.lastIndexOf("[");
-                                let parentPath = path.substringToIndex(parenPos!);
+                                let parentPath = path.substring(to: parenPos!);
                                 let parentToken = _rootObject.selectToken(parentPath);
                                 if ((parentToken != nil) && (parentToken is JArray))
                                 {
@@ -288,8 +288,8 @@ public class ViewModel
                             {
                                 // This is an object property...
                                 let dotPos = path.lastIndexOf(".");
-                                let parentPath = path.substringToIndex(dotPos!);
-                                let attributeName = path.substringFromIndex((dotPos!).advancedBy(1));
+                                let parentPath = path.substring(to: dotPos!);
+                                let attributeName = path.substring(from: <#T##String.CharacterView corresponding to your index##String.CharacterView#>.index((dotPos!), offsetBy: 1));
                                 let parentToken = _rootObject.selectToken(parentPath);
                                 if ((parentToken != nil) && (parentToken is JObject))
                                 {
@@ -355,7 +355,7 @@ public class ViewModel
     // update any binding that depends on this value.  This is the mechanism that allows for "client side
     // dynamic binding".
     //
-    public func updateViewModelFromView(bindingContext: BindingContext, getValue: GetViewValue)
+    open func updateViewModelFromView(_ bindingContext: BindingContext, getValue: GetViewValue)
     {
         if (_updatingView)
         {
@@ -401,7 +401,7 @@ public class ViewModel
         updateViewFromViewModel(bindingUpdates, sourceBinding: bindingContext);
     }
     
-    public func isDirty() -> Bool
+    open func isDirty() -> Bool
     {
         for valueBinding in _valueBindings
         {
@@ -413,7 +413,7 @@ public class ViewModel
         return false;
     }
     
-    public func collectChangedValues() -> Dictionary<String, JToken>
+    open func collectChangedValues() -> Dictionary<String, JToken>
     {
         var vmDeltas = Dictionary<String, JToken>();
     

@@ -13,7 +13,7 @@ private var logger = Logger.getLogger("iOSRectangleWrapper");
 
 private var commands = [CommandName.OnTap.Attribute];
 
-public class iOSRectangleWrapper : iOSControlWrapper
+open class iOSRectangleWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
@@ -28,7 +28,7 @@ public class iOSRectangleWrapper : iOSControlWrapper
         processElementDimensions(controlSpec, defaultWidth: 128, defaultHeight: 128);
         applyFrameworkElementDefaults(rect);
         
-        processElementProperty(controlSpec, attributeName: "border", setValue: { (value) in rect.layer.borderColor = self.toColor(value)?.CGColor });
+        processElementProperty(controlSpec, attributeName: "border", setValue: { (value) in rect.layer.borderColor = self.toColor(value)?.cgColor });
         processElementProperty(controlSpec, attributeName: "borderThickness", setValue: { (value) in
             if let theValue = value
             {
@@ -52,14 +52,14 @@ public class iOSRectangleWrapper : iOSControlWrapper
         if (getCommand(CommandName.OnTap) != nil)
         {
             let tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(imageTapped))
-            rect.userInteractionEnabled = true
+            rect.isUserInteractionEnabled = true
             rect.addGestureRecognizer(tapGestureRecognizer)
         }
         
         logger.debug("Rectangle created, size: \(rect.frame.size)");
     }
     
-    func imageTapped(img: AnyObject)
+    func imageTapped(_ img: AnyObject)
     {
         if let command = getCommand(CommandName.OnTap)
         {

@@ -13,82 +13,82 @@ private var logger = Logger.getLogger("iOSControlWrapper");
 
 public enum HorizontalAlignment
 {
-    case Center;
-    case Left;
-    case Right
-    case Stretch;
+    case center;
+    case left;
+    case right
+    case stretch;
     
     var description : String
     {
         switch self
         {
-            case .Center:  return "Center";
-            case .Left:    return "Left";
-            case .Right:   return "Right";
-            case .Stretch: return "Stretch";
+            case .center:  return "Center";
+            case .left:    return "Left";
+            case .right:   return "Right";
+            case .stretch: return "Stretch";
         }
     }
 }
 
 public enum VerticalAlignment
 {
-    case Center;
-    case Top;
-    case Bottom;
-    case Stretch;
+    case center;
+    case top;
+    case bottom;
+    case stretch;
     
     var description : String
     {
         switch self
         {
-            case .Center:  return "Center";
-            case .Top:     return "Top";
-            case .Bottom:  return "Bottom";
-            case .Stretch: return "Stretch";
+            case .center:  return "Center";
+            case .top:     return "Top";
+            case .bottom:  return "Bottom";
+            case .stretch: return "Stretch";
         }
     }
 }
 
 public enum Orientation
 {
-    case Horizontal;
-    case Vertical;
+    case horizontal;
+    case vertical;
     
     var description : String
     {
         switch self
         {
-            case .Horizontal: return "Horizontal";
-            case .Vertical:   return "Vertical";
+            case .horizontal: return "Horizontal";
+            case .vertical:   return "Vertical";
         }
     }
 }
 
 public enum SizeSpec
 {
-    case WrapContent;
-    case Explicit;
-    case FillParent;
+    case wrapContent;
+    case explicit;
+    case fillParent;
     
     
     var description : String
     {
         switch self
         {
-            case .WrapContent: return "WrapContent";
-            case .Explicit:    return "Explicit";
-            case .FillParent:  return "FillParent";
+            case .wrapContent: return "WrapContent";
+            case .explicit:    return "Explicit";
+            case .fillParent:  return "FillParent";
         }
     }
 }
 
-public class FrameProperties
+open class FrameProperties
 {
-    public var widthSpec: SizeSpec = SizeSpec.WrapContent;
-    public var heightSpec: SizeSpec = SizeSpec.WrapContent;
+    open var widthSpec: SizeSpec = SizeSpec.wrapContent;
+    open var heightSpec: SizeSpec = SizeSpec.wrapContent;
     
-    public var starWidth: Int = 0;
-    public var starHeight: Int = 0;
+    open var starWidth: Int = 0;
+    open var starHeight: Int = 0;
 }
 
 //
@@ -97,65 +97,65 @@ public class FrameProperties
 
 public enum FontSlope
 {
-    case Roman;    // Also Regular, Plain - standard upright font
-    case Italic;   // Italic font
-    case Oblique;  // Also Incline, Inclined - Slanted version of Roman glyphs
-    case Cursive;  // Also Kursiv - Italic with cursive glyph connections
+    case roman;    // Also Regular, Plain - standard upright font
+    case italic;   // Italic font
+    case oblique;  // Also Incline, Inclined - Slanted version of Roman glyphs
+    case cursive;  // Also Kursiv - Italic with cursive glyph connections
     
     var description : String
     {
         switch self
         {
-            case .Roman:   return "Roman";
-            case .Italic:  return "Italic";
-            case .Oblique: return "Oblique";
-            case .Cursive: return "Cursive";
+            case .roman:   return "Roman";
+            case .italic:  return "Italic";
+            case .oblique: return "Oblique";
+            case .cursive: return "Cursive";
         }
     }
 }
 
 public enum FontWidth
 {
-    case Normal;
-    case Narrow;   // Compressed, Condensed, Narrow
-    case Wide;     // Wide, Extended, Expanded
+    case normal;
+    case narrow;   // Compressed, Condensed, Narrow
+    case wide;     // Wide, Extended, Expanded
     
     var description : String
     {
         switch self
         {
-            case .Normal: return "Normal";
-            case .Narrow: return "Narrow";
-            case .Wide:   return "Wide";
+            case .normal: return "Normal";
+            case .narrow: return "Narrow";
+            case .wide:   return "Wide";
         }
     }
 }
 
 public enum FontWeight: UInt
 {
-    case ExtraLight = 100; // ExtraLight or UltraLight
-    case Light      = 200; // Light or Thin
-    case Book       = 300; // Book or Demi
-    case Normal     = 400; // Normal or Regular
-    case Medium     = 500; // Medium
-    case Semibold   = 600; // Semibold, Demibold
-    case Bold       = 700; // Bold
-    case Black      = 800; // Black, ExtraBold or Heavy
-    case ExtraBlack = 900; // ExtraBlack, Fat, Poster or UltraBlack
+    case extraLight = 100; // ExtraLight or UltraLight
+    case light      = 200; // Light or Thin
+    case book       = 300; // Book or Demi
+    case normal     = 400; // Normal or Regular
+    case medium     = 500; // Medium
+    case semibold   = 600; // Semibold, Demibold
+    case bold       = 700; // Bold
+    case black      = 800; // Black, ExtraBold or Heavy
+    case extraBlack = 900; // ExtraBlack, Fat, Poster or UltraBlack
     
     var description : String
     {
         switch self
         {
-            case .ExtraLight: return "ExtraLight";
-            case .Light:      return "Light";
-            case .Book:       return "Bool";
-            case .Normal:     return "Normal";
-            case .Medium:     return "Medium";
-            case .Semibold:   return "Semibold";
-            case .Bold:       return "Bold";
-            case .Black:      return "Black";
-            case .ExtraBlack: return "ExtraBlack";
+            case .extraLight: return "ExtraLight";
+            case .light:      return "Light";
+            case .book:       return "Bool";
+            case .normal:     return "Normal";
+            case .medium:     return "Medium";
+            case .semibold:   return "Semibold";
+            case .bold:       return "Bold";
+            case .black:      return "Black";
+            case .extraBlack: return "ExtraBlack";
         }
     }
 }
@@ -177,13 +177,13 @@ private var _weight_700 = Regex("Bold");
 private var _weight_800 = Regex("Black|ExtraBold|Heavy");
 private var _weight_900 = Regex("ExtraBlack|Fat|Poster|UltraBlack");
 
-public class FontMetrics
+open class FontMetrics
 {
     var _faceName: String;
     
-    var _slope = FontSlope.Roman;
-    var _width = FontWidth.Normal;
-    var _weight = FontWeight.Normal;
+    var _slope = FontSlope.roman;
+    var _width = FontWidth.normal;
+    var _weight = FontWeight.normal;
     
     // The function of this class is to parse the font properties (slope/weight/width) from the font names, as
     // that's really the only indication that iOS gives us about the font metrics.
@@ -194,24 +194,24 @@ public class FontMetrics
     
         if (_slope_italic.isMatch(_faceName))
         {
-            _slope = FontSlope.Italic;
+            _slope = FontSlope.italic;
         }
         else if (_slope_oblique.isMatch(_faceName))
         {
-            _slope = FontSlope.Oblique;
+            _slope = FontSlope.oblique;
         }
         else if (_slope_cursive.isMatch(_faceName))
         {
-            _slope = FontSlope.Cursive;
+            _slope = FontSlope.cursive;
         }
         
         if (_width_narrow.isMatch(_faceName))
         {
-            _width = FontWidth.Narrow;
+            _width = FontWidth.narrow;
         }
         else if (_width_wide.isMatch(_faceName))
         {
-            _width = FontWidth.Wide;
+            _width = FontWidth.wide;
         }
         
         // The ordering below might look a little strange, but it is important.  We have to be careful not to match Light, Bold, Black,
@@ -219,46 +219,46 @@ public class FontMetrics
         //
         if (_weight_100.isMatch(_faceName))
         {
-            _weight = FontWeight.ExtraLight;
+            _weight = FontWeight.extraLight;
         }
         else if (_weight_400.isMatch(_faceName))
         {
-            _weight = FontWeight.Normal;
+            _weight = FontWeight.normal;
         }
         else if (_weight_500.isMatch(_faceName))
         {
-            _weight = FontWeight.Medium;
+            _weight = FontWeight.medium;
         }
         else if (_weight_900.isMatch(_faceName))
         {
-            _weight = FontWeight.ExtraBlack;
+            _weight = FontWeight.extraBlack;
         }
         else if (_weight_800.isMatch(_faceName))
         {
-            _weight = FontWeight.Black;
+            _weight = FontWeight.black;
         }
         else if (_weight_600.isMatch(_faceName))
         {
-            _weight = FontWeight.Semibold;
+            _weight = FontWeight.semibold;
         }
         else if (_weight_700.isMatch(_faceName))
         {
-            _weight = FontWeight.Bold;
+            _weight = FontWeight.bold;
         }
         else if (_weight_200.isMatch(_faceName))
         {
-            _weight = FontWeight.Light;
+            _weight = FontWeight.light;
         }
         else if (_weight_300.isMatch(_faceName))
         {
-            _weight = FontWeight.Book;
+            _weight = FontWeight.book;
         }
     }
     
-    public var name: String { get { return _faceName; } }
-    public var slope: FontSlope { get { return _slope; } }
-    public var width: FontWidth { get { return _width; } }
-    public var weight: FontWeight { get { return _weight; } }
+    open var name: String { get { return _faceName; } }
+    open var slope: FontSlope { get { return _slope; } }
+    open var width: FontWidth { get { return _width; } }
+    open var weight: FontWeight { get { return _weight; } }
     
     // The math here works more or less as follows.  For each of the three criteria, a value of 1.0 is
     // given for a perfect match, a value of 0.8 is given for a "close" match, and a value of 0.5 is given
@@ -269,13 +269,13 @@ public class FontMetrics
     // font that is a close match (but not perfect) on all three criteria will score a 0.512 (it is considered
     // a better match).
     //
-    public func matchQuality(slope: FontSlope, weight: FontWeight, width: FontWidth) -> Float
+    open func matchQuality(_ slope: FontSlope, weight: FontWeight, width: FontWidth) -> Float
     {
         var matchQuality: Float = 1;
         
         if (slope != _slope)
         {
-            if ((slope != FontSlope.Roman) && (_slope != FontSlope.Roman))
+            if ((slope != FontSlope.roman) && (_slope != FontSlope.roman))
             {
                 // Slopes aren't equal, but are both non-Roman, which is kind of close...
                 matchQuality *= 0.8;
@@ -289,7 +289,7 @@ public class FontMetrics
         
         if (width != _width)
         {
-            if ((width == FontWidth.Normal) || (_width == FontWidth.Normal))
+            if ((width == FontWidth.normal) || (_width == FontWidth.normal))
             {
                 // Font widths are within one (either, but not both, are normal), which is kind of close...
                 matchQuality *= 0.8;
@@ -311,7 +311,7 @@ public class FontMetrics
         return matchQuality;
     }
 
-    public func description() -> String
+    open func description() -> String
     {
         return "FontMetrics - Face: \(_faceName), Weight: \(_weight), Slope: \(_slope), Width: \(_width)";
     }
@@ -319,10 +319,10 @@ public class FontMetrics
 
 protocol FontFamily
 {
-    func createFont(bold: Bool, italic: Bool, size: CGFloat) -> UIFont?;
+    func createFont(_ bold: Bool, italic: Bool, size: CGFloat) -> UIFont?;
 }
 
-public class FontFamilyFromName : FontFamily
+open class FontFamilyFromName : FontFamily
 {
     var _familyName: String;
     
@@ -335,19 +335,19 @@ public class FontFamilyFromName : FontFamily
     {
         _familyName = familyName;
         var fonts = [FontMetrics]();
-        let fontNames: Array = UIFont.fontNamesForFamilyName(_familyName);
-        for (_, value) in fontNames.enumerate()
+        let fontNames: Array = UIFont.fontNames(forFamilyName: _familyName);
+        for (_, value) in fontNames.enumerated()
         {
             fonts.append(FontMetrics(faceName: value));
         }
         
-        _plainFont = FontFamilyFromName.getBestMatch(fonts, slope: FontSlope.Roman, weight: FontWeight.Normal, width: FontWidth.Normal)!;
-        _boldFont = FontFamilyFromName.getBestMatch(fonts, slope: FontSlope.Roman, weight: FontWeight.Bold, width: FontWidth.Normal)!;
-        _italicFont = FontFamilyFromName.getBestMatch(fonts, slope: FontSlope.Italic, weight: FontWeight.Normal, width: FontWidth.Normal)!;
-        _boldItalicFont = FontFamilyFromName.getBestMatch(fonts, slope: FontSlope.Italic, weight: FontWeight.Bold, width: FontWidth.Normal)!;
+        _plainFont = FontFamilyFromName.getBestMatch(fonts, slope: FontSlope.roman, weight: FontWeight.normal, width: FontWidth.normal)!;
+        _boldFont = FontFamilyFromName.getBestMatch(fonts, slope: FontSlope.roman, weight: FontWeight.bold, width: FontWidth.normal)!;
+        _italicFont = FontFamilyFromName.getBestMatch(fonts, slope: FontSlope.italic, weight: FontWeight.normal, width: FontWidth.normal)!;
+        _boldItalicFont = FontFamilyFromName.getBestMatch(fonts, slope: FontSlope.italic, weight: FontWeight.bold, width: FontWidth.normal)!;
     }
     
-    class func getBestMatch(fonts: [FontMetrics], slope: FontSlope, weight: FontWeight, width: FontWidth) -> FontMetrics?
+    class func getBestMatch(_ fonts: [FontMetrics], slope: FontSlope, weight: FontWeight, width: FontWidth) -> FontMetrics?
     {
         var bestMatch: FontMetrics? = nil;
         var bestMatchScore: Float = -1;
@@ -370,7 +370,7 @@ public class FontFamilyFromName : FontFamily
         return bestMatch;
     }
     
-    public func createFont(bold: Bool, italic: Bool, size: CGFloat) -> UIFont?
+    open func createFont(_ bold: Bool, italic: Bool, size: CGFloat) -> UIFont?
     {
         if (bold && italic)
         {
@@ -391,24 +391,24 @@ public class FontFamilyFromName : FontFamily
     }
 }
 
-public class SystemFontFamily : FontFamily
+open class SystemFontFamily : FontFamily
 {
     public init()
     {
     }
     
-    public class func isSystemFont(font: UIFont) -> Bool
+    open class func isSystemFont(_ font: UIFont) -> Bool
     {
         let currSize = font.pointSize;
         
-        let systemFont = UIFont.systemFontOfSize(currSize);
-        let systemBoldFont = UIFont.boldSystemFontOfSize(currSize);
-        let systemItalicFont = UIFont.italicSystemFontOfSize(currSize);
+        let systemFont = UIFont.systemFont(ofSize: currSize);
+        let systemBoldFont = UIFont.boldSystemFont(ofSize: currSize);
+        let systemItalicFont = UIFont.italicSystemFont(ofSize: currSize);
         
         return ((font == systemFont) || (font == systemBoldFont) || (font == systemItalicFont));
     }
     
-    public func createFont(bold: Bool, italic: Bool, size: CGFloat) -> UIFont?
+    open func createFont(_ bold: Bool, italic: Bool, size: CGFloat) -> UIFont?
     {
         if (bold && italic)
         {
@@ -424,7 +424,7 @@ public class SystemFontFamily : FontFamily
             //
             //   ".HelveticaNeueUI-BoldItalic" - Works
             //
-            let boldFont = UIFont.boldSystemFontOfSize(size);
+            let boldFont = UIFont.boldSystemFont(ofSize: size);
             let boldItalicFont = UIFont(name: boldFont.fontName + "Italic", size: size);
             if (boldItalicFont != nil)
             {
@@ -438,20 +438,20 @@ public class SystemFontFamily : FontFamily
         }
         else if (bold)
         {
-            return UIFont.boldSystemFontOfSize(size);
+            return UIFont.boldSystemFont(ofSize: size);
         }
         else if (italic)
         {
-            return UIFont.italicSystemFontOfSize(size);
+            return UIFont.italicSystemFont(ofSize: size);
         }
         else
         {
-            return UIFont.systemFontOfSize(size);
+            return UIFont.systemFont(ofSize: size);
         }
     }
 }
 
-public class iOSFontSetter : FontSetter
+open class iOSFontSetter : FontSetter
 {
     var _family: FontFamily? = nil;
     var _bold = false;
@@ -472,7 +472,7 @@ public class iOSFontSetter : FontSetter
         _size = font.pointSize;
     }
     
-    public func setFont(font: UIFont)
+    open func setFont(_ font: UIFont)
     {
         // abstract
         fatalError("Must override");
@@ -489,7 +489,7 @@ public class iOSFontSetter : FontSetter
         }
     }
     
-    public func setFaceType(faceType: FontFaceType)
+    open func setFaceType(_ faceType: FontFaceType)
     {
         // See this for list of iOS fonts by version: http://iosfonts.com/
         //
@@ -498,32 +498,32 @@ public class iOSFontSetter : FontSetter
         //
         switch (faceType)
         {
-            case FontFaceType.FONT_DEFAULT:
+            case FontFaceType.font_DEFAULT:
                 _family = SystemFontFamily();
-            case FontFaceType.FONT_SANSERIF:
+            case FontFaceType.font_SANSERIF:
                 _family = FontFamilyFromName(familyName: "Helvetica Neue");
-            case FontFaceType.FONT_SERIF:
+            case FontFaceType.font_SERIF:
                 _family = FontFamilyFromName(familyName: "Times New Roman");
-            case FontFaceType.FONT_MONOSPACE:
+            case FontFaceType.font_MONOSPACE:
                 _family = FontFamilyFromName(familyName: "Courier New");
         }
         
         self.createAndSetFont();
     }
     
-    public func setSize(size: Double)
+    open func setSize(_ size: Double)
     {
         _size = CGFloat(size);
         self.createAndSetFont();
     }
     
-    public func setBold(bold: Bool)
+    open func setBold(_ bold: Bool)
     {
         _bold = bold;
         self.createAndSetFont();
     }
     
-    public func setItalic(italic: Bool)
+    open func setItalic(_ italic: Bool)
     {
         _italic = italic;
         self.createAndSetFont();
@@ -532,13 +532,13 @@ public class iOSFontSetter : FontSetter
 
 public protocol ThicknessSetter
 {
-    func setThicknessLeft(thickness: Double);
-    func setThicknessTop(thickness: Double);
-    func setThicknessRight(thickness: Double);
-    func setThicknessBottom(thickness: Double);
+    func setThicknessLeft(_ thickness: Double);
+    func setThicknessTop(_ thickness: Double);
+    func setThicknessRight(_ thickness: Double);
+    func setThicknessBottom(_ thickness: Double);
 }
 
-public class MarginThicknessSetter : ThicknessSetter
+open class MarginThicknessSetter : ThicknessSetter
 {
     var _controlWrapper: iOSControlWrapper;
 
@@ -547,44 +547,44 @@ public class MarginThicknessSetter : ThicknessSetter
         _controlWrapper = controlWrapper;
     }
 
-    public func setThicknessLeft(thickness: Double)
+    open func setThicknessLeft(_ thickness: Double)
     {
         _controlWrapper.marginLeft = thickness;
     }
     
-    public func setThicknessTop(thickness: Double)
+    open func setThicknessTop(_ thickness: Double)
     {
         _controlWrapper.marginTop = thickness;
     }
     
-    public func setThicknessRight(thickness: Double)
+    open func setThicknessRight(_ thickness: Double)
     {
         _controlWrapper.marginRight = thickness;
     }
     
-    public func setThicknessBottom(thickness: Double)
+    open func setThicknessBottom(_ thickness: Double)
     {
         _controlWrapper.marginBottom = thickness;
     }
 }
 
-public class iOSControlWrapper : ControlWrapper
+open class iOSControlWrapper : ControlWrapper
 {
     var _control: UIView?;
-    public var control: UIView? { get { return _control; } }
+    open var control: UIView? { get { return _control; } }
     
-    public var DEFAULT_MARGIN: Double { get { return 5; } }
+    open var DEFAULT_MARGIN: Double { get { return 5; } }
     
     var _pageView: iOSPageView;
-    public var pageView: iOSPageView { get { return _pageView; } }
+    open var pageView: iOSPageView { get { return _pageView; } }
 
     var _margin = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
 
-    public var frameProperties = FrameProperties();
+    open var frameProperties = FrameProperties();
 
     // !!! Allow black/white and/or size to be specified
     //
-    public class func getResourceNameFromIcon(icon: String) -> String
+    open class func getResourceNameFromIcon(_ icon: String) -> String
     {
         // Backward compat for Civics - convert the old ic_ icons to the new names...
         if (icon == "star-mini")
@@ -603,7 +603,7 @@ public class iOSControlWrapper : ControlWrapper
         return "ic_" + icon; // <-- Allow black/white and/or size to be specified, if prefixed with "ic_", leave alone.
     }
 
-    public class func loadImageFromIcon(icon: String) -> UIImage
+    open class func loadImageFromIcon(_ icon: String) -> UIImage
     {
         let iconResourceName = iOSControlWrapper.getResourceNameFromIcon(icon);
         var img = UIImage(named: iOSControlWrapper.getResourceNameFromIcon(iconResourceName));
@@ -617,8 +617,8 @@ public class iOSControlWrapper : ControlWrapper
         return img!;
     }
     
-    var _horizontalAlignment = HorizontalAlignment.Left;
-    public var horizontalAlignment: HorizontalAlignment
+    var _horizontalAlignment = HorizontalAlignment.left;
+    open var horizontalAlignment: HorizontalAlignment
     {
         get { return _horizontalAlignment; }
         set(value)
@@ -631,8 +631,8 @@ public class iOSControlWrapper : ControlWrapper
         }
     }
     
-    var _verticalAlignment = VerticalAlignment.Top;
-    public var verticalAlignment: VerticalAlignment
+    var _verticalAlignment = VerticalAlignment.top;
+    open var verticalAlignment: VerticalAlignment
     {
         get { return _verticalAlignment; }
         set(value)
@@ -645,7 +645,7 @@ public class iOSControlWrapper : ControlWrapper
         }
     }
     
-    public var margin: UIEdgeInsets
+    open var margin: UIEdgeInsets
     {
         get { return _margin; }
         set(value)
@@ -658,7 +658,7 @@ public class iOSControlWrapper : ControlWrapper
         }
     }
     
-    public var marginLeft: Double
+    open var marginLeft: Double
     {
         get { return Double(_margin.left); }
         set(value)
@@ -671,7 +671,7 @@ public class iOSControlWrapper : ControlWrapper
         }
     }
     
-    public var marginTop: Double
+    open var marginTop: Double
     {
         get { return Double(_margin.top); }
         set(value)
@@ -684,7 +684,7 @@ public class iOSControlWrapper : ControlWrapper
         }
     }
     
-    public var marginRight: Double
+    open var marginRight: Double
     {
         get { return Double(_margin.right); }
         set(value)
@@ -697,7 +697,7 @@ public class iOSControlWrapper : ControlWrapper
         }
     }
     
-    public var marginBottom: Double
+    open var marginBottom: Double
     {
         get { return Double(_margin.bottom); }
         set(value)
@@ -723,60 +723,60 @@ public class iOSControlWrapper : ControlWrapper
         super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
     }
     
-    public func toOrientation(value: JToken?, defaultOrientation: Orientation = Orientation.Horizontal) -> Orientation
+    open func toOrientation(_ value: JToken?, defaultOrientation: Orientation = Orientation.horizontal) -> Orientation
     {
         var orientation = defaultOrientation;
         let orientationValue = value?.asString();
         if (orientationValue == "Horizontal")
         {
-            orientation = Orientation.Horizontal;
+            orientation = Orientation.horizontal;
         }
         else if (orientationValue == "Vertical")
         {
-            orientation = Orientation.Vertical;
+            orientation = Orientation.vertical;
         }
         return orientation;
     }
     
-    public func toHorizontalAlignment(value: JToken?, defaultAlignment: HorizontalAlignment = HorizontalAlignment.Left) -> HorizontalAlignment
+    open func toHorizontalAlignment(_ value: JToken?, defaultAlignment: HorizontalAlignment = HorizontalAlignment.left) -> HorizontalAlignment
     {
         var alignment = defaultAlignment;
         let alignmentValue = value?.asString();
         if (alignmentValue == "Left")
         {
-            alignment = HorizontalAlignment.Left;
+            alignment = HorizontalAlignment.left;
         }
         if (alignmentValue == "Right")
         {
-            alignment = HorizontalAlignment.Right;
+            alignment = HorizontalAlignment.right;
         }
         else if (alignmentValue == "Center")
         {
-            alignment = HorizontalAlignment.Center;
+            alignment = HorizontalAlignment.center;
         }
         return alignment;
     }
     
-    public func toVerticalAlignment(value: JToken?, defaultAlignment: VerticalAlignment = VerticalAlignment.Top) -> VerticalAlignment
+    open func toVerticalAlignment(_ value: JToken?, defaultAlignment: VerticalAlignment = VerticalAlignment.top) -> VerticalAlignment
     {
         var alignment = defaultAlignment;
         let alignmentValue = value?.asString();
         if (alignmentValue == "Top")
         {
-            alignment = VerticalAlignment.Top;
+            alignment = VerticalAlignment.top;
         }
         if (alignmentValue == "Bottom")
         {
-            alignment = VerticalAlignment.Bottom;
+            alignment = VerticalAlignment.bottom;
         }
         else if (alignmentValue == "Center")
         {
-            alignment = VerticalAlignment.Center;
+            alignment = VerticalAlignment.center;
         }
         return alignment;
     }
     
-    func toColor(value: JToken?) -> UIColor?
+    func toColor(_ value: JToken?) -> UIColor?
     {
         if let colorString = value?.asString()
         {
@@ -788,7 +788,7 @@ public class iOSControlWrapper : ControlWrapper
         return nil;
     }
         
-    public func processThicknessProperty(controlSpec: JObject, attributeName: String, thicknessSetter: ThicknessSetter)
+    open func processThicknessProperty(_ controlSpec: JObject, attributeName: String, thicknessSetter: ThicknessSetter)
     {
         processElementProperty(controlSpec, attributeName: attributeName + ".left", altAttributeName: attributeName,
         setValue: { (value) in
@@ -820,7 +820,7 @@ public class iOSControlWrapper : ControlWrapper
         });
     }
     
-    func applyFrameworkElementDefaults(element: UIView, applyMargins: Bool = true)
+    func applyFrameworkElementDefaults(_ element: UIView, applyMargins: Bool = true)
     {
         if (applyMargins)
         {
@@ -831,27 +831,27 @@ public class iOSControlWrapper : ControlWrapper
         }
     }
     
-    func sizeThatFits(size: CGSize) -> CGSize
+    func sizeThatFits(_ size: CGSize) -> CGSize
     {
         var sizeThatFits = CGSize(width: size.width, height: size.height); // Default to size given ("fill parent")
 
         if let control = _control
         {
-            if ((self.frameProperties.heightSpec == SizeSpec.WrapContent) && (self.frameProperties.widthSpec == SizeSpec.WrapContent))
+            if ((self.frameProperties.heightSpec == SizeSpec.wrapContent) && (self.frameProperties.widthSpec == SizeSpec.wrapContent))
             {
                 // If both dimensions are WrapContent, then we want to make the control as small as possible in both dimensions, without
                 // respect to how big the client would like to make it.
                 //
                 sizeThatFits = control.sizeThatFits(CGSize(width: 0, height: 0)); // Compute height and width
             }
-            else if (self.frameProperties.heightSpec == SizeSpec.WrapContent)
+            else if (self.frameProperties.heightSpec == SizeSpec.wrapContent)
             {
                 // If only the height is WrapContent, then we obey the current width and attempt to compute the height.
                 //
                 sizeThatFits = control.sizeThatFits(CGSize(width: control.frame.size.width, height: 0)); // Compute height
                 sizeThatFits.width = control.frame.size.width; // Maintain width
             }
-            else if (self.frameProperties.widthSpec == SizeSpec.WrapContent)
+            else if (self.frameProperties.widthSpec == SizeSpec.wrapContent)
             {
                 // If only the width is WrapContent, then we obey the current hiights and attempt to compute the width.
                 //
@@ -860,11 +860,11 @@ public class iOSControlWrapper : ControlWrapper
             }
             else // No content wrapping in either dimension...
             {
-                if (self.frameProperties.heightSpec != SizeSpec.FillParent)
+                if (self.frameProperties.heightSpec != SizeSpec.fillParent)
                 {
                     sizeThatFits.height = control.frame.height;
                 }
-                if (self.frameProperties.widthSpec != SizeSpec.FillParent)
+                if (self.frameProperties.widthSpec != SizeSpec.fillParent)
                 {
                     sizeThatFits.width = control.frame.width;
                 }
@@ -885,7 +885,7 @@ public class iOSControlWrapper : ControlWrapper
         }
     }
     
-    func processElementDimensions(controlSpec: JObject, defaultWidth: Double = 0, defaultHeight: Double = 0) -> FrameProperties
+    func processElementDimensions(_ controlSpec: JObject, defaultWidth: Double = 0, defaultHeight: Double = 0) -> FrameProperties
     {
         var defaultWidth = CGFloat(defaultWidth);
         var defaultHeight = CGFloat(defaultHeight);
@@ -894,7 +894,7 @@ public class iOSControlWrapper : ControlWrapper
         {
             if (defaultWidth == 0)
             {
-                defaultWidth = control.intrinsicContentSize().width;
+                defaultWidth = control.intrinsicContentSize.width;
                 if (defaultWidth == -1)
                 {
                     defaultWidth = 0;
@@ -902,7 +902,7 @@ public class iOSControlWrapper : ControlWrapper
             }
             if (defaultHeight == 0)
             {
-                defaultHeight = control.intrinsicContentSize().height;
+                defaultHeight = control.intrinsicContentSize.height;
                 if (defaultHeight == -1)
                 {
                     defaultHeight = 0;
@@ -918,12 +918,12 @@ public class iOSControlWrapper : ControlWrapper
                     let heightStarCount = ControlWrapper.getStarCount(theValue.asString());
                     if (heightStarCount > 0)
                     {
-                        self.frameProperties.heightSpec = SizeSpec.FillParent;
+                        self.frameProperties.heightSpec = SizeSpec.fillParent;
                         self.frameProperties.starHeight = heightStarCount;
                     }
                     else
                     {
-                        self.frameProperties.heightSpec = SizeSpec.Explicit;
+                        self.frameProperties.heightSpec = SizeSpec.explicit;
 
                         var frame = control.frame;
                         var size = frame.size;
@@ -946,12 +946,12 @@ public class iOSControlWrapper : ControlWrapper
                     let widthStarCount = ControlWrapper.getStarCount(theValue.asString());
                     if (widthStarCount > 0)
                     {
-                        self.frameProperties.widthSpec = SizeSpec.FillParent;
+                        self.frameProperties.widthSpec = SizeSpec.fillParent;
                         self.frameProperties.starWidth = widthStarCount;
                     }
                     else
                     {
-                        self.frameProperties.widthSpec = SizeSpec.Explicit;
+                        self.frameProperties.widthSpec = SizeSpec.explicit;
                         
                         var frame = control.frame;
                         var size = frame.size;
@@ -971,7 +971,7 @@ public class iOSControlWrapper : ControlWrapper
         return self.frameProperties;
     }
     
-    func processCommonFrameworkElementProperies(controlSpec: JObject)
+    func processCommonFrameworkElementProperies(_ controlSpec: JObject)
     {
         logger.debug("Processing framework element properties");
     
@@ -988,7 +988,7 @@ public class iOSControlWrapper : ControlWrapper
         processElementProperty(controlSpec, attributeName: "background", setValue: { (value) in self.control!.backgroundColor = self.toColor(value) });
         processElementProperty(controlSpec, attributeName: "visibility",
         setValue: { (value) in
-            self.control!.hidden = !self.toBoolean(value);
+            self.control!.isHidden = !self.toBoolean(value);
             if (self.control?.superview != nil)
             {
                 self.control!.superview!.setNeedsLayout();
@@ -997,17 +997,17 @@ public class iOSControlWrapper : ControlWrapper
         
         if let uiControl = self.control as? UIControl
         {
-            processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in uiControl.enabled = self.toBoolean(value) });
+            processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in uiControl.isEnabled = self.toBoolean(value) });
         }
         else
         {
-            processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in self.control!.userInteractionEnabled = self.toBoolean(value) });
+            processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in self.control!.isUserInteractionEnabled = self.toBoolean(value) });
         }
         
         processThicknessProperty(controlSpec, attributeName: "margin", thicknessSetter: MarginThicknessSetter(controlWrapper: self));
     }
     
-    public func getChildControlWrapper(control: UIView) -> iOSControlWrapper?
+    open func getChildControlWrapper(_ control: UIView) -> iOSControlWrapper?
     {
         // Find the child control wrapper whose control matches the supplied value...
         for child in self.childControls
@@ -1024,12 +1024,12 @@ public class iOSControlWrapper : ControlWrapper
         return nil;
     }
     
-    public class func wrapControl(pageView: iOSPageView, stateManager: StateManager, viewModel: ViewModel, bindingContext: BindingContext, control: UIView) -> iOSControlWrapper
+    open class func wrapControl(_ pageView: iOSPageView, stateManager: StateManager, viewModel: ViewModel, bindingContext: BindingContext, control: UIView) -> iOSControlWrapper
     {
         return iOSControlWrapper(pageView: pageView, stateManager: stateManager, viewModel: viewModel, bindingContext: bindingContext, control: control);
     }
     
-    public class func createControl(parent: ControlWrapper, bindingContext: BindingContext, controlSpec: JObject) -> iOSControlWrapper?
+    open class func createControl(_ parent: ControlWrapper, bindingContext: BindingContext, controlSpec: JObject) -> iOSControlWrapper?
     {
         var controlWrapper: iOSControlWrapper?;
         
@@ -1105,7 +1105,7 @@ public class iOSControlWrapper : ControlWrapper
         return controlWrapper;
     }
     
-    public func createControls(controlList controlList: JArray, onCreateControl: ((JObject, iOSControlWrapper) -> (Void))? = nil)
+    open func createControls(controlList: JArray, onCreateControl: ((JObject, iOSControlWrapper) -> (Void))? = nil)
     {
         super.createControls(self.bindingContext, controlList: controlList,
         onCreateControl: { (controlContext, controlSpec) in

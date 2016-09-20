@@ -7,10 +7,39 @@
 //
 
 import Foundation
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
+fileprivate func <= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l <= r
+  default:
+    return !(rhs < lhs)
+  }
+}
+
 
 public extension Character
 {
-    public func isOneOf(chars: String) -> Bool
+    public func isOneOf(_ chars: String) -> Bool
     {
         for char in chars.characters
         {
@@ -26,7 +55,7 @@ public extension Character
 
 public extension String
 {
-    public func containsChars(chars: String) -> Bool
+    public func containsChars(_ chars: String) -> Bool
     {
         for strChar in self.characters
         {
@@ -48,10 +77,10 @@ public protocol TextReader
     func read() -> Character?
 }
 
-public class StringReader : TextReader
+open class StringReader : TextReader
 {
-    private var _str: String;
-    private var _currIndex: String.Index;
+    fileprivate var _str: String;
+    fileprivate var _currIndex: String.Index;
     
     public init(str: String)
     {
@@ -59,7 +88,7 @@ public class StringReader : TextReader
         _currIndex = _str.startIndex;
     }
     
-    public func peek() -> Character?
+    open func peek() -> Character?
     {
         if (_currIndex >= _str.endIndex)
         {
@@ -68,49 +97,49 @@ public class StringReader : TextReader
         return _str[_currIndex];
     }
     
-    public func read() -> Character?
+    open func read() -> Character?
     {
         let chr = peek();
         if (chr != nil)
         {
-            _currIndex = _currIndex.advancedBy(1);
+            _currIndex = <#T##Collection corresponding to your index##Collection#>.index(_currIndex, offsetBy: 1);
         }
         return chr;
      }
 }
 
-public class StringBuilder
+open class StringBuilder
 {
-    private var stringValue: String
+    fileprivate var stringValue: String
     
     public init(string: String = "")
     {
         self.stringValue = string
     }
     
-    public func toString() -> String
+    open func toString() -> String
     {
         return stringValue
     }
     
-    public func append(string: String) -> StringBuilder
+    open func append(_ string: String) -> StringBuilder
     {
         stringValue += string
         return self
     }
 
-    public func append(char: Character) -> StringBuilder
+    open func append(_ char: Character) -> StringBuilder
     {
         stringValue.append(char);
         return self
     }
 }
 
-var whitespace = NSCharacterSet.whitespaceAndNewlineCharacterSet();
+var whitespace = CharacterSet.whitespacesAndNewlines;
 
-public class JsonParser
+open class JsonParser
 {
-    class func isWhiteSpace(char: Character?) -> Bool
+    class func isWhiteSpace(_ char: Character?) -> Bool
     {
         if (char == nil)
         {
@@ -118,10 +147,10 @@ public class JsonParser
         }
         let uniStr = String(char!).unicodeScalars;
         let uniChar = uniStr[uniStr.startIndex];
-        return whitespace.longCharacterIsMember(uniChar.value);
+        return whitespace.contains(UnicodeScalar(uniChar.value)!);
     }
     
-    class func SkipWhitespace(reader: TextReader)
+    class func SkipWhitespace(_ reader: TextReader)
     {
         while (isWhiteSpace(reader.peek()) || (reader.peek() == "/"))
         {
@@ -168,7 +197,7 @@ public class JsonParser
         }
     }
 
-    class func ParseString(reader: TextReader) -> String
+    class func ParseString(_ reader: TextReader) -> String
     {
         var thisChar: Character?;
         let returnString = StringBuilder();
@@ -212,11 +241,11 @@ public class JsonParser
                         {
                             hexBuilder.append(reader.read()!);
                         }
-                        let scanner = NSScanner(string: hexBuilder.toString());
+                        let scanner = Scanner(string: hexBuilder.toString());
                         var result: UInt32 = 0;
-                        if (scanner.scanHexInt(&result))
+                        if (scanner.scanHexInt32(&result))
                         {
-                            thisChar = Character(UnicodeScalar(result));
+                            thisChar = Character(UnicodeScalar(result)!);
                         }
                     default: ()
                 }
@@ -232,7 +261,7 @@ public class JsonParser
         return returnString.toString();
     }
 
-    class func ParseNumber(reader: TextReader) -> JValue
+    class func ParseNumber(_ reader: TextReader) -> JValue
     {
         let numberBuilder = StringBuilder();
     
@@ -251,7 +280,7 @@ public class JsonParser
         
         if (numberData.containsChars("eE."))
         {
-            let scanner = NSScanner(string: numberData);
+            let scanner = Scanner(string: numberData);
             var result: Double = 0;
             if (!scanner.scanDouble(&result))
             {
@@ -265,7 +294,7 @@ public class JsonParser
         }
     }
 
-    class func ParseArray(reader: TextReader) -> JArray
+    class func ParseArray(_ reader: TextReader) -> JArray
     {
         let finalArray = JArray();
     
@@ -304,7 +333,7 @@ public class JsonParser
         return finalArray;
     }
 
-    class func ParseObject(reader: TextReader) -> JObject
+    class func ParseObject(_ reader: TextReader) -> JObject
     {
         let finalObject = JObject();
     
@@ -360,7 +389,7 @@ public class JsonParser
         return finalObject;
     }
 
-    class func ParseTrue(reader: TextReader) -> Bool
+    class func ParseTrue(_ reader: TextReader) -> Bool
     {
         // Skip 't', 'r', 'u', 'e'
     
@@ -372,7 +401,7 @@ public class JsonParser
         return true;
     }
 
-    class func ParseFalse(reader: TextReader) -> Bool
+    class func ParseFalse(_ reader: TextReader) -> Bool
     {
         // Skip 'f', 'a', 'l', 's', 'e'
     
@@ -385,7 +414,7 @@ public class JsonParser
         return false;
     }
 
-    class func ParseNull(reader: TextReader)
+    class func ParseNull(_ reader: TextReader)
     {
         // Skip 'n', 'u', 'l', 'l'
     
@@ -395,7 +424,7 @@ public class JsonParser
         reader.read();
     }
 
-    class func ParseValue(reader: TextReader) -> JToken
+    class func ParseValue(_ reader: TextReader) -> JToken
     {
         SkipWhitespace(reader);
     

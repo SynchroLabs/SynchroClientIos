@@ -57,12 +57,12 @@ class iOSControlWrapperTests: XCTestCase
             super.init(controller: controller);
         }
         
-        internal override func SynchroUnitsToDeviceUnits(synchroUnits: Double) -> Double
+        internal override func SynchroUnitsToDeviceUnits(_ synchroUnits: Double) -> Double
         {
             return synchroUnits;
         }
         
-        internal override func TypographicPointsToMaaasUnits(points: Double) -> Double
+        internal override func TypographicPointsToMaaasUnits(_ points: Double) -> Double
         {
             return points;
         }
@@ -80,7 +80,7 @@ class iOSControlWrapperTests: XCTestCase
         
         appManager.append(app);
         
-        let transport = TransportHttp(uri: NSURL(string: "http://\(app.endpoint)")!);
+        let transport = TransportHttp(uri: URL(string: "http://\(app.endpoint)")!);
         
         let v = UIViewController();
         
@@ -89,27 +89,27 @@ class iOSControlWrapperTests: XCTestCase
 
     class TestFontSetter : FontSetter
     {
-        var FaceType = FontFaceType.FONT_DEFAULT;
+        var FaceType = FontFaceType.font_DEFAULT;
         var Size = 12.0;
         var Bold = false;
         var Italic = false;
         
-        func setFaceType(faceType: FontFaceType)
+        func setFaceType(_ faceType: FontFaceType)
         {
             FaceType = faceType;
         }
         
-        func setSize(size: Double)
+        func setSize(_ size: Double)
         {
             Size = size;
         }
         
-        func setBold(bold: Bool)
+        func setBold(_ bold: Bool)
         {
             Bold = bold;
         }
         
-        func setItalic(italic: Bool)
+        func setItalic(_ italic: Bool)
         {
             Italic = italic;
         }
@@ -122,22 +122,22 @@ class iOSControlWrapperTests: XCTestCase
         var Right = 0.0;
         var Bottom = 0.0;
         
-        func setThicknessLeft(thickness: Double)
+        func setThicknessLeft(_ thickness: Double)
         {
             Left = thickness;
         }
         
-        func setThicknessTop(thickness: Double)
+        func setThicknessTop(_ thickness: Double)
         {
             Top = thickness;
         }
         
-        func setThicknessRight(thickness: Double)
+        func setThicknessRight(_ thickness: Double)
         {
             Right = thickness;
         }
         
-        func setThicknessBottom(thickness: Double)
+        func setThicknessBottom(_ thickness: Double)
         {
             Bottom = thickness;
         }
@@ -296,7 +296,7 @@ class iOSControlWrapperTests: XCTestCase
         XCTAssert(24 == testControl.fontSetter.Size);
         XCTAssert(true == testControl.fontSetter.Bold);
         XCTAssert(true == testControl.fontSetter.Italic);
-        XCTAssert(FontFaceType.FONT_SANSERIF == testControl.fontSetter.FaceType);
+        XCTAssert(FontFaceType.font_SANSERIF == testControl.fontSetter.FaceType);
     }
     
     func testStyleFontFromStylePriority()
@@ -309,7 +309,7 @@ class iOSControlWrapperTests: XCTestCase
         XCTAssert(26 == testControl.fontSetter.Size);
         XCTAssert(true == testControl.fontSetter.Bold);
         XCTAssert(true == testControl.fontSetter.Italic);
-        XCTAssert(FontFaceType.FONT_SANSERIF == testControl.fontSetter.FaceType);
+        XCTAssert(FontFaceType.font_SANSERIF == testControl.fontSetter.FaceType);
     }
     
     func testStyleFontFromStyleExplicitOverride()
@@ -322,6 +322,6 @@ class iOSControlWrapperTests: XCTestCase
         XCTAssert(28 == testControl.fontSetter.Size);
         XCTAssert(true == testControl.fontSetter.Bold);
         XCTAssert(false == testControl.fontSetter.Italic);
-        XCTAssert(FontFaceType.FONT_SANSERIF == testControl.fontSetter.FaceType);
+        XCTAssert(FontFaceType.font_SANSERIF == testControl.fontSetter.FaceType);
     }
 }

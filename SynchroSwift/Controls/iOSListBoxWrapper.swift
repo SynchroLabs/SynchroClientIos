@@ -15,61 +15,61 @@ public protocol TableSourceItem
 {
     var cellIdentifier: String { get }
     
-    func createCell(tableView: UITableView) -> UITableViewCell;
+    func createCell(_ tableView: UITableView) -> UITableViewCell;
     
-    func bindCell(tableView: UITableView, cell: UITableViewCell);
+    func bindCell(_ tableView: UITableView, cell: UITableViewCell);
     
     // Default implementation should return false
-    func setCheckedState(tableView: UITableView, cell: UITableViewCell, isChecked: Bool) -> Bool
+    func setCheckedState(_ tableView: UITableView, cell: UITableViewCell, isChecked: Bool) -> Bool
     
     // Default implementation should return -1
-    func getHeightForRow(tableView: UITableView) -> CGFloat
+    func getHeightForRow(_ tableView: UITableView) -> CGFloat
 }
 
 // We want to use the accessory checkmark to show "selection", and not the iOS selection
 // mechanism (with the blue or gray background).  That means we'll need to track our
 // own "checked" state and use that to drive prescence of checkbox.
 //
-public class CheckableTableSourceItem
+open class CheckableTableSourceItem
 {
     var _checked = false;
-    var _indexPath: NSIndexPath;
+    var _indexPath: IndexPath;
     var _tableSourceItem: TableSourceItem;
     
-    public var checked: Bool { get { return _checked; } }
+    open var checked: Bool { get { return _checked; } }
     
-    public init(tableSourceItem: TableSourceItem, indexPath: NSIndexPath)
+    public init(tableSourceItem: TableSourceItem, indexPath: IndexPath)
     {
         _tableSourceItem = tableSourceItem;
         _indexPath = indexPath;
     }
     
-    public var tableSourceItem: TableSourceItem { get { return _tableSourceItem; } }
+    open var tableSourceItem: TableSourceItem { get { return _tableSourceItem; } }
     
-    public func setChecked(tableView: UITableView, isChecked: Bool)
+    open func setChecked(_ tableView: UITableView, isChecked: Bool)
     {
         if (_checked != isChecked)
         {
             _checked = isChecked;
-            if let cell = tableView.cellForRowAtIndexPath(_indexPath)
+            if let cell = tableView.cellForRow(at: _indexPath)
             {
                 setCheckedState(tableView, cell: cell);
             }
         }
     }
     
-    public func setCheckedState(tableView: UITableView, cell: UITableViewCell)
+    open func setCheckedState(_ tableView: UITableView, cell: UITableViewCell)
     {
         if (!_tableSourceItem.setCheckedState(tableView, cell: cell, isChecked: self.checked))
         {
-            cell.accessoryType = _checked ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None;
+            cell.accessoryType = _checked ? UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none;
         }
     }
     
-    public func getCell(tableView: UITableView) -> UITableViewCell
+    open func getCell(_ tableView: UITableView) -> UITableViewCell
     {
         logger.debug("Getting cell for: \(_indexPath)");
-        var cell = tableView.dequeueReusableCellWithIdentifier(_tableSourceItem.cellIdentifier);
+        var cell = tableView.dequeueReusableCell(withIdentifier: _tableSourceItem.cellIdentifier);
         if (cell == nil)
         {
             cell = _tableSourceItem.createCell(tableView);
@@ -82,16 +82,16 @@ public class CheckableTableSourceItem
         return cell!;
     }
     
-    public func getHeightForRow(tableView: UITableView) -> CGFloat
+    open func getHeightForRow(_ tableView: UITableView) -> CGFloat
     {
         return _tableSourceItem.getHeightForRow(tableView);
     }
 }
 
-public typealias OnSelectionChanged = (item: TableSourceItem) -> (Void);
-public typealias OnItemClicked = (item: TableSourceItem) -> (Void);
+public typealias OnSelectionChanged = (_ item: TableSourceItem) -> (Void);
+public typealias OnItemClicked = (_ item: TableSourceItem) -> (Void);
 
-public class CheckableTableSource : NSObject, UITableViewDataSource, UITableViewDelegate // UITableViewSource
+open class CheckableTableSource : NSObject, UITableViewDataSource, UITableViewDelegate // UITableViewSource
 {
     var _tableItems = [CheckableTableSourceItem]();
     
@@ -104,7 +104,7 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
     //
     var _disclosure = false;
     
-    public init(selectionMode: ListSelectionMode, onSelectionChanged: OnSelectionChanged, onItemClicked: OnItemClicked, disclosure: Bool)
+    public init(selectionMode: ListSelectionMode, onSelectionChanged: @escaping OnSelectionChanged, onItemClicked: @escaping OnItemClicked, disclosure: Bool)
     {
         _selectionMode = selectionMode;
         super.init();
@@ -113,7 +113,7 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
         _disclosure = disclosure;
     }
 
-    public init(selectionMode: ListSelectionMode, onSelectionChanged: OnSelectionChanged, onItemClicked: OnItemClicked)
+    public init(selectionMode: ListSelectionMode, onSelectionChanged: @escaping OnSelectionChanged, onItemClicked: @escaping OnItemClicked)
     {
         _selectionMode = selectionMode;
         super.init();
@@ -121,12 +121,12 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
         _onItemClicked = onItemClicked;
     }
 
-    public var selectionMode: ListSelectionMode { get { return _selectionMode; } }
+    open var selectionMode: ListSelectionMode { get { return _selectionMode; } }
     
-    public var allItems: [CheckableTableSourceItem] { get { return _tableItems; } }
-    public func clearAllItems() { _tableItems.removeAll(); }
+    open var allItems: [CheckableTableSourceItem] { get { return _tableItems; } }
+    open func clearAllItems() { _tableItems.removeAll(); }
     
-    public var checkedItems: [CheckableTableSourceItem]
+    open var checkedItems: [CheckableTableSourceItem]
     {
         get
         {
@@ -143,51 +143,51 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
         }
     }
     
-    public func rowsInSection(tableview: UITableView, section: Int) -> Int
+    open func rowsInSection(_ tableview: UITableView, section: Int) -> Int
     {
         return _tableItems.count;
     }
     
     // From UITableViewDataSource
     //
-    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return self.rowsInSection(tableView, section: section);
     }
     
-    public func getCell(tableView: UITableView, indexPath: NSIndexPath) -> UITableViewCell
+    open func getCell(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     {
         logger.debug("Getting cell for path: \(indexPath)");
-        let item = _tableItems[indexPath.row];
+        let item = _tableItems[(indexPath as NSIndexPath).row];
         let cell = item.getCell(tableView);
 
         // This seems like it would work, but actually accomplishes jack shit.
         //
-        cell.separatorInset = UIEdgeInsetsZero;
+        cell.separatorInset = UIEdgeInsets.zero;
 
         // So instead we do this - from: http://stackoverflow.com/questions/18365049/is-there-a-way-to-make-uitableview-cells-in-ios-7-not-have-a-line-break-in-the-s/27626312#27626312
         
         // Remove seperator inset
-        if cell.respondsToSelector(Selector("setSeparatorInset:"))
+        if cell.responds(to: #selector(setter: UITableViewCell.separatorInset))
         {
-            cell.separatorInset = UIEdgeInsetsZero
+            cell.separatorInset = UIEdgeInsets.zero
         }
         
         // Prevent the cell from inheriting the Table View's margin settings
-        if cell.respondsToSelector(Selector("setPreservesSuperviewLayoutMargins:"))
+        if cell.responds(to: #selector(setter: UIView.preservesSuperviewLayoutMargins))
         {
             cell.preservesSuperviewLayoutMargins = false
         }
         
         // Explictly set your cell's layout margins
-        if cell.respondsToSelector(Selector("setLayoutMargins:"))
+        if cell.responds(to: #selector(setter: UIView.layoutMargins))
         {
-            cell.layoutMargins = UIEdgeInsetsZero
+            cell.layoutMargins = UIEdgeInsets.zero
         }
         
-        if ((_selectionMode == ListSelectionMode.None) && (_disclosure))
+        if ((_selectionMode == ListSelectionMode.none) && (_disclosure))
         {
-            cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator;
+            cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator;
         }
 
         return cell;
@@ -195,48 +195,48 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
     
     // From UITableViewDataSource
     //
-    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         return getCell(tableView, indexPath: indexPath);
     }
 
     // !!! See if anyone uses this (doesn't seem to be part of UITableViewDataSource or UITableViewDelegate, and no used explicitly by this module...
     //
-    public func getItemAtRow(indexPath: NSIndexPath) -> CheckableTableSourceItem?
+    open func getItemAtRow(_ indexPath: IndexPath) -> CheckableTableSourceItem?
     {
-        if (indexPath.section == 0)
+        if ((indexPath as NSIndexPath).section == 0)
         {
-            return _tableItems[indexPath.row];
+            return _tableItems[(indexPath as NSIndexPath).row];
         }
     
         return nil;
     }
     
-    public func getHeightForRow(tableView: UITableView, indexPath: NSIndexPath) -> CGFloat
+    open func getHeightForRow(_ tableView: UITableView, indexPath: IndexPath) -> CGFloat
     {
         logger.debug("Getting row height for: \(indexPath)");
-        let item = _tableItems[indexPath.row];
+        let item = _tableItems[(indexPath as NSIndexPath).row];
         return item.getHeightForRow(tableView);
     }
     
     // From UITableViewDelegate
     //
-    public func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return getHeightForRow(tableView, indexPath: indexPath);
     }
     
-    public func rowSelected(tableView: UITableView, indexPath: NSIndexPath)
+    open func rowSelected(_ tableView: UITableView, indexPath: IndexPath)
     {
         logger.debug("Row selected: \(indexPath)");
     
-        tableView.deselectRowAtIndexPath(indexPath, animated: true); // normal iOS behaviour is to remove the blue highlight
+        tableView.deselectRow(at: indexPath, animated: true); // normal iOS behaviour is to remove the blue highlight
     
-        let selectedItem = _tableItems[indexPath.row];
+        let selectedItem = _tableItems[(indexPath as NSIndexPath).row];
     
-        if ((_selectionMode == ListSelectionMode.Multiple) || ((_selectionMode == ListSelectionMode.Single) && !selectedItem.checked))
+        if ((_selectionMode == ListSelectionMode.multiple) || ((_selectionMode == ListSelectionMode.single) && !selectedItem.checked))
         {
-            if (_selectionMode == ListSelectionMode.Single)
+            if (_selectionMode == ListSelectionMode.single)
             {
                 // Uncheck any currently checked item(s) and check the item selected
                 //
@@ -258,30 +258,30 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
     
             if (_onSelectionChanged != nil)
             {
-                _onSelectionChanged!(item: selectedItem.tableSourceItem);
+                _onSelectionChanged!(selectedItem.tableSourceItem);
             }
         }
-        else if ((_selectionMode == ListSelectionMode.None) && (_onItemClicked != nil))
+        else if ((_selectionMode == ListSelectionMode.none) && (_onItemClicked != nil))
         {
-            _onItemClicked!(item: selectedItem.tableSourceItem);
+            _onItemClicked!(selectedItem.tableSourceItem);
         }
     }
     
     // From UITableViewDelegate
     //
-    public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         return rowSelected(tableView, indexPath: indexPath);
     }
     
-    public func rowDeselected(tableView: UITableView, indexPath: NSIndexPath)
+    open func rowDeselected(_ tableView: UITableView, indexPath: IndexPath)
     {
         logger.debug("Row deselected: \(indexPath)");
     }
     
     // From UITableViewDelegate
     //
-    public func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath)
+    open func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath)
     {
         return rowDeselected(tableView, indexPath: indexPath);
     }
@@ -311,9 +311,9 @@ public class CheckableTableSource : NSObject, UITableViewDataSource, UITableView
 
 private var _cellIdentifier = "StringTableCell";
 
-public class BindingContextAsStringTableSourceItem : TableSourceItem
+open class BindingContextAsStringTableSourceItem : TableSourceItem
 {
-    public var cellIdentifier: String { get { return _cellIdentifier; } }
+    open var cellIdentifier: String { get { return _cellIdentifier; } }
     
     var _bindingContext: BindingContext;
     var _itemContent: String;
@@ -324,56 +324,56 @@ public class BindingContextAsStringTableSourceItem : TableSourceItem
         _itemContent = itemContent;
     }
     
-    public var bindingContext: BindingContext { get { return _bindingContext; } }
+    open var bindingContext: BindingContext { get { return _bindingContext; } }
     
-    public func getValue() -> JToken?
+    open func getValue() -> JToken?
     {
         return _bindingContext.select("$data").getValue();
     }
     
-    public func getSelection(selectionItem: String) -> JToken?
+    open func getSelection(_ selectionItem: String) -> JToken?
     {
         return _bindingContext.select(selectionItem).getValue()?.deepClone();
     }
     
-    public func createCell(tableView: UITableView) -> UITableViewCell
+    open func createCell(_ tableView: UITableView) -> UITableViewCell
     {
-        return UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier);
+        return UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: cellIdentifier);
     }
     
-    public func bindCell(tableView: UITableView, cell: UITableViewCell)
+    open func bindCell(_ tableView: UITableView, cell: UITableViewCell)
     {
         cell.textLabel!.text = PropertyValue.expandAsString(_itemContent, bindingContext: _bindingContext);
     }
     
-    public func setCheckedState(tableView: UITableView, cell: UITableViewCell, isChecked: Bool) -> Bool
+    open func setCheckedState(_ tableView: UITableView, cell: UITableViewCell, isChecked: Bool) -> Bool
     {
         return false;
     }
     
-    public func getHeightForRow(tableView: UITableView) -> CGFloat
+    open func getHeightForRow(_ tableView: UITableView) -> CGFloat
     {
         return -1;
     }
 }
 
-public class BindingContextAsCheckableStringTableSource : CheckableTableSource
+open class BindingContextAsCheckableStringTableSource : CheckableTableSource
 {
-    public override init(selectionMode: ListSelectionMode, onSelectionChanged: OnSelectionChanged, onItemClicked: OnItemClicked)
+    public override init(selectionMode: ListSelectionMode, onSelectionChanged: @escaping OnSelectionChanged, onItemClicked: @escaping OnItemClicked)
     {
         super.init(selectionMode: selectionMode, onSelectionChanged: onSelectionChanged, onItemClicked: onItemClicked);
     }
     
-    public func addItem(bindingContext: BindingContext, itemContent: String, isChecked: Bool = false)
+    open func addItem(_ bindingContext: BindingContext, itemContent: String, isChecked: Bool = false)
     {
         let item = BindingContextAsStringTableSourceItem(bindingContext: bindingContext, itemContent: itemContent);
-        _tableItems.append(CheckableTableSourceItem(tableSourceItem: item, indexPath: NSIndexPath(forRow: _tableItems.count, inSection: 0)));
+        _tableItems.append(CheckableTableSourceItem(tableSourceItem: item, indexPath: IndexPath(row: _tableItems.count, section: 0)));
     }
 }
 
 private var commands = [CommandName.OnItemClick.Attribute, CommandName.OnSelectionChange.Attribute];
 
-public class iOSListBoxWrapper : iOSControlWrapper
+open class iOSListBoxWrapper : iOSControlWrapper
 {
     var _selectionChangingProgramatically = false;
     var _localSelection: JToken?;
@@ -428,12 +428,12 @@ public class iOSListBoxWrapper : iOSControlWrapper
         }
     }
     
-    public func getListboxContents(tableView: UITableView) -> JToken
+    open func getListboxContents(_ tableView: UITableView) -> JToken
     {
         fatalError("getListboxContents not implemented");
     }
     
-    public func setListboxContents(tableView: UITableView, bindingContext: BindingContext, itemContent: String)
+    open func setListboxContents(_ tableView: UITableView, bindingContext: BindingContext, itemContent: String)
     {
         logger.debug("Setting listbox contents");
     
@@ -452,14 +452,14 @@ public class iOSListBoxWrapper : iOSControlWrapper
     
         let newCount = tableSource.allItems.count;
     
-        var reloadRows = [NSIndexPath]();
-        var insertRows = [NSIndexPath]();
-        var deleteRows = [NSIndexPath]();
+        var reloadRows = [IndexPath]();
+        var insertRows = [IndexPath]();
+        var deleteRows = [IndexPath]();
     
         let maxCount = max(newCount, oldCount);
         for i in 0 ..< maxCount
         {
-            let row = NSIndexPath(forRow: i, inSection: 0);
+            let row = IndexPath(row: i, section: 0);
             if (i < min(newCount, oldCount))
             {
                 reloadRows.append(row);
@@ -477,15 +477,15 @@ public class iOSListBoxWrapper : iOSControlWrapper
         tableView.beginUpdates();
         if (reloadRows.count > 0)
         {
-            tableView.reloadRowsAtIndexPaths(reloadRows, withRowAnimation: UITableViewRowAnimation.Fade);
+            tableView.reloadRows(at: reloadRows, with: UITableViewRowAnimation.fade);
         }
         if (insertRows.count > 0)
         {
-            tableView.insertRowsAtIndexPaths(insertRows, withRowAnimation: UITableViewRowAnimation.Fade);
+            tableView.insertRows(at: insertRows, with: UITableViewRowAnimation.fade);
         }
         if (deleteRows.count > 0)
         {
-            tableView.deleteRowsAtIndexPaths(deleteRows, withRowAnimation: UITableViewRowAnimation.Fade);
+            tableView.deleteRows(at: deleteRows, with: UITableViewRowAnimation.fade);
         }
         tableView.endUpdates(); // applies the changes
     
@@ -504,13 +504,13 @@ public class iOSListBoxWrapper : iOSControlWrapper
         _selectionChangingProgramatically = false;
     }
     
-    public func getListboxSelection(tableView: UITableView, selectionItem: String) -> JToken
+    open func getListboxSelection(_ tableView: UITableView, selectionItem: String) -> JToken
     {
         let tableSource = tableView.dataSource as! BindingContextAsCheckableStringTableSource;
     
         var checkedItems = tableSource.checkedItems;
     
-        if (tableSource.selectionMode == ListSelectionMode.Multiple)
+        if (tableSource.selectionMode == ListSelectionMode.multiple)
         {
             let array = JArray();
             for item in checkedItems
@@ -535,7 +535,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
         }
     }
     
-    public func setListboxSelection(tableView: UITableView, selectionItem: String, selection: JToken?)
+    open func setListboxSelection(_ tableView: UITableView, selectionItem: String, selection: JToken?)
     {
         _selectionChangingProgramatically = true;
     
@@ -579,14 +579,14 @@ public class iOSListBoxWrapper : iOSControlWrapper
         _selectionChangingProgramatically = false;
     }
     
-    func listbox_ItemClicked(item: TableSourceItem)
+    func listbox_ItemClicked(_ item: TableSourceItem)
     {
         logger.debug("Listbox item clicked");
     
         let tableView: UITableView = self.control as! UITableView;
         let tableSource = tableView.dataSource! as! BindingContextAsCheckableStringTableSource;
     
-        if (tableSource.selectionMode == ListSelectionMode.None)
+        if (tableSource.selectionMode == ListSelectionMode.none)
         {
             if let listItem = item as? BindingContextAsStringTableSourceItem
             {
@@ -602,7 +602,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
         }
     }
     
-    func listbox_SelectionChanged(item: TableSourceItem)
+    func listbox_SelectionChanged(_ item: TableSourceItem)
     {
         logger.debug("Listbox selection changed");
     
@@ -618,13 +618,13 @@ public class iOSListBoxWrapper : iOSControlWrapper
             _localSelection = self.getListboxSelection(tableView, selectionItem: "$data");
         }
     
-        if ((!_selectionChangingProgramatically) && (tableSource.selectionMode != ListSelectionMode.None))
+        if ((!_selectionChangingProgramatically) && (tableSource.selectionMode != ListSelectionMode.none))
         {
             if let command = getCommand(CommandName.OnSelectionChange)
             {
                 logger.debug("ListView selection change with command: \(command)");
     
-                if (tableSource.selectionMode == ListSelectionMode.Single)
+                if (tableSource.selectionMode == ListSelectionMode.single)
                 {
                     if let listItem = item as? BindingContextAsStringTableSourceItem
                     {
@@ -633,7 +633,7 @@ public class iOSListBoxWrapper : iOSControlWrapper
                         stateManager.sendCommandRequestAsync(command.Command, parameters: command.getResolvedParameters(listItem.bindingContext));
                     }
                 }
-                else if (tableSource.selectionMode == ListSelectionMode.Multiple)
+                else if (tableSource.selectionMode == ListSelectionMode.multiple)
                 {
                     // The selection change command handler resolves its tokens relative to the list context when in multiple select mode.
                     //

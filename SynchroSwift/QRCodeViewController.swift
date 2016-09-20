@@ -10,12 +10,12 @@ import UIKit
 import AVFoundation
 
 extension UINavigationController {
-    public override func shouldAutorotate() -> Bool {
-        return visibleViewController!.shouldAutorotate()
+    open override var shouldAutorotate : Bool {
+        return visibleViewController!.shouldAutorotate
     }
     
-    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return (visibleViewController?.supportedInterfaceOrientations())!
+    open override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        return (visibleViewController?.supportedInterfaceOrientations)!
     }
 }
 
@@ -42,16 +42,16 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         fatalError("init(coder:) has not been implemented")
     }
     
-    @IBAction func tapRecognizer(sender: UITapGestureRecognizer)
+    @IBAction func tapRecognizer(_ sender: UITapGestureRecognizer)
     {
-        self.navigationController?.popViewControllerAnimated(true);
+        self.navigationController?.popViewController(animated: true);
     }
     
-    override func shouldAutorotate() -> Bool
+    override var shouldAutorotate : Bool
     {
-        if (UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait ||
-            UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown ||
-            UIDevice.currentDevice().orientation == UIDeviceOrientation.Unknown)
+        if (UIDevice.current.orientation == UIDeviceOrientation.portrait ||
+            UIDevice.current.orientation == UIDeviceOrientation.portraitUpsideDown ||
+            UIDevice.current.orientation == UIDeviceOrientation.unknown)
         {
                 return true
         }
@@ -61,8 +61,8 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         }
     }
 
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.Portrait
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
     }
     
     override func viewDidLoad()
@@ -71,7 +71,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         
         // Get an instance of the AVCaptureDevice class to initialize a device object and provide the video
         // as the media type parameter.
-        let captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         
         do
         {
@@ -88,7 +88,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
             captureSession?.addOutput(captureMetadataOutput)
             
             // Set delegate and use the default dispatch queue to execute the call back
-            captureMetadataOutput.setMetadataObjectsDelegate(self, queue: dispatch_get_main_queue())
+            captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             
             // Detect QR codes
             captureMetadataOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
@@ -103,17 +103,17 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
             captureSession?.startRunning()
             
             // Move the message label to the top view
-            view.bringSubviewToFront(messageLabel)
+            view.bringSubview(toFront: messageLabel)
             
             // Initialize QR Code Frame to highlight the QR code
             qrCodeFrameView = UIView()
             
             if let qrCodeFrameView = qrCodeFrameView
             {
-                qrCodeFrameView.layer.borderColor = UIColor.greenColor().CGColor
+                qrCodeFrameView.layer.borderColor = UIColor.green.cgColor
                 qrCodeFrameView.layer.borderWidth = 2
                 view.addSubview(qrCodeFrameView)
-                view.bringSubviewToFront(qrCodeFrameView)
+                view.bringSubview(toFront: qrCodeFrameView)
             }
         }
         catch
@@ -129,16 +129,16 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     {
         let bounds = self.view.layer.bounds
         videoPreviewLayer?.frame = bounds
-        videoPreviewLayer?.position = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds))
+        videoPreviewLayer?.position = CGPoint(x: bounds.midX, y: bounds.midY)
     }
     
 
-    func captureOutput(captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [AnyObject]!, fromConnection connection: AVCaptureConnection!) {
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
         
         // Check if the metadataObjects array is not nil and it contains at least one object.
         if metadataObjects == nil || metadataObjects.count == 0
         {
-            qrCodeFrameView?.frame = CGRectZero
+            qrCodeFrameView?.frame = CGRect.zero
             messageLabel.text = "No QR code is detected"
             return
         }
@@ -147,7 +147,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
         let metadataObj = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
         
         // If the found metadata is equal to the QR code metadata then update the status label's text and set the bounds
-        let barCodeObject = videoPreviewLayer?.transformedMetadataObjectForMetadataObject(metadataObj)
+        let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
         qrCodeFrameView?.frame = barCodeObject!.bounds
         
         if metadataObj.stringValue != nil

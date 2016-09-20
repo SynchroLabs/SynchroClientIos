@@ -24,7 +24,7 @@ class TextViewFontSetter : iOSFontSetter
         super.init(font: textView.font!);
     }
     
-    internal override func setFont(font: UIFont)
+    internal override func setFont(_ font: UIFont)
     {
         _textView.font = font;
         _controlWrapper.updateTextViewHeight(self._textView);
@@ -43,7 +43,7 @@ class TextFieldFontSetter : iOSFontSetter
         super.init(font: textField.font!);
     }
     
-    internal override func setFont(font: UIFont)
+    internal override func setFont(_ font: UIFont)
     {
         _textField.font = font;
         
@@ -51,9 +51,9 @@ class TextFieldFontSetter : iOSFontSetter
         // want to compute the height required by a custom font, you have to change the borderStyle
         // to any other value, compute the height, and change the borderStyle back.
         //
-        _textField.borderStyle = UITextBorderStyle.None;
+        _textField.borderStyle = UITextBorderStyle.none;
         _controlWrapper.updateTextFieldHeight(self._textField);
-        _textField.borderStyle = UITextBorderStyle.RoundedRect;
+        _textField.borderStyle = UITextBorderStyle.roundedRect;
     }
 }
 
@@ -64,12 +64,12 @@ class TextField: UITextField
 {
     var inset: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
     
-    override func textRectForBounds(bounds: CGRect) -> CGRect
+    override func textRect(forBounds bounds: CGRect) -> CGRect
     {
         return UIEdgeInsetsInsetRect(bounds, inset);
     }
     
-    override func placeholderRectForBounds(bounds: CGRect) -> CGRect
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect
     {
         return UIEdgeInsetsInsetRect(bounds, inset);
     }
@@ -95,13 +95,13 @@ class TextView : UITextView, UITextViewDelegate
         self.delegate = self;
         
         // Create a background TextField with clear (invisible) text and disabled
-        self.textField.borderStyle = UITextBorderStyle.RoundedRect;
-        self.textField.textColor = UIColor.clearColor();
-        self.textField.userInteractionEnabled = false;
+        self.textField.borderStyle = UITextBorderStyle.roundedRect;
+        self.textField.textColor = UIColor.clear;
+        self.textField.isUserInteractionEnabled = false;
 
         // Align the background TextView to where text appears in the TextField, so that any
         // placeholder will be in the correct position.
-        self.textField.contentVerticalAlignment = UIControlContentVerticalAlignment.Top;
+        self.textField.contentVerticalAlignment = UIControlContentVerticalAlignment.top;
         self.textField.inset = UIEdgeInsets(
             top: self.textContainerInset.top,
             left: self.textContainerInset.left + self.textContainer.lineFragmentPadding,
@@ -113,12 +113,12 @@ class TextView : UITextView, UITextViewDelegate
         self.textField.font = self.font;
         
         self.addSubview(textField);
-        self.sendSubviewToBack(textField);
+        self.sendSubview(toBack: textField);
     }
     
     convenience init()
     {
-        self.init(frame: CGRectZero, textContainer: nil)
+        self.init(frame: CGRect.zero, textContainer: nil)
     }
     
     override internal var text : String?
@@ -157,18 +157,18 @@ class TextView : UITextView, UITextViewDelegate
     {
         super.layoutSubviews()
         // Do not scroll the background textView
-        self.textField.frame = CGRectMake(0, self.contentOffset.y, self.frame.width, self.frame.height);
+        self.textField.frame = CGRect(x: 0, y: self.contentOffset.y, width: self.frame.width, height: self.frame.height);
     }
     
     // UITextViewDelegate - Note: If you replace delegate, your delegate must call this
-    func scrollViewDidScroll(scrollView: UIScrollView)
+    func scrollViewDidScroll(_ scrollView: UIScrollView)
     {
         // Do not scroll the background textView
-        self.textField.frame = CGRectMake(0, self.contentOffset.y, self.frame.width, self.frame.height);
+        self.textField.frame = CGRect(x: 0, y: self.contentOffset.y, width: self.frame.width, height: self.frame.height);
     }
     
     // UITextViewDelegate - Note: If you replace delegate, your delegate must call this
-    func textViewDidChange(textView: UITextView)
+    func textViewDidChange(_ textView: UITextView)
     {
         // Updating the text in the background textView will cause the placeholder to appear/disappear
         // (including any animations of that behavior - since the textView is doing this itself).
@@ -176,7 +176,7 @@ class TextView : UITextView, UITextViewDelegate
     }
 }
 
-public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
+open class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
 {
     var _updateOnChange = false;
     var _lines : Double = 1;
@@ -199,7 +199,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
             self._control = _textView;
             
             _textView.delegate = self;
-            _textView.selectable = true;
+            _textView.isSelectable = true;
             
             processElementDimensions(controlSpec, defaultWidth: 100); // Default width of 100
             
@@ -243,10 +243,10 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
             
             if (controlSpec["control"]?.asString() == "password")
             {
-                _textField.secureTextEntry = true;
+                _textField.isSecureTextEntry = true;
             }
             
-            _textField.borderStyle = UITextBorderStyle.RoundedRect;
+            _textField.borderStyle = UITextBorderStyle.roundedRect;
             
             processElementDimensions(controlSpec, defaultWidth: 100); // Default width of 100
             
@@ -270,13 +270,13 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
             
             processElementProperty(controlSpec, attributeName: "placeholder", setValue: { (value) in _textField.placeholder = self.toString(value) });
             
-            _textField.addTarget(self, action: #selector(editingChanged), forControlEvents: .EditingChanged);
+            _textField.addTarget(self, action: #selector(editingChanged), for: .editingChanged);
         }
     }
     
-    func updateTextViewHeight(textView: UITextView)
+    func updateTextViewHeight(_ textView: UITextView)
     {
-        if (self.frameProperties.heightSpec == SizeSpec.WrapContent)
+        if (self.frameProperties.heightSpec == SizeSpec.wrapContent)
         {
             if let font = textView.font
             {
@@ -285,18 +285,18 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
         }
     }
 
-    func updateTextFieldHeight(textField: UITextField)
+    func updateTextFieldHeight(_ textField: UITextField)
     {
-        if (self.frameProperties.heightSpec == SizeSpec.WrapContent)
+        if (self.frameProperties.heightSpec == SizeSpec.wrapContent)
         {
-            let sizeThatFits = textField.sizeThatFits(CGSize(width: textField.bounds.width, height: CGFloat.max));
+            let sizeThatFits = textField.sizeThatFits(CGSize(width: textField.bounds.width, height: CGFloat.greatestFiniteMagnitude));
             textField.bounds.height = sizeThatFits.height;
             logger.info("Set size to height: \(sizeThatFits.height)");
-            logger.info("Intrinsic content size: \(textField.intrinsicContentSize())")
+            logger.info("Intrinsic content size: \(textField.intrinsicContentSize)")
         }
     }
 
-    public func editingChanged(sender: AnyObject)
+    open func editingChanged(_ sender: AnyObject)
     {
         // This is basically the "onChange" event...
         //
@@ -308,7 +308,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
         // an update from the server), so we'll do some downstream delta checking as well, but this
         // check will cut down most of the chatter.
         //
-        if (_control!.isFirstResponder())
+        if (_control!.isFirstResponder)
         {
             updateValueBindingForAttribute("value");
             if (_updateOnChange)
@@ -318,7 +318,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
         }
     }
     
-    public func scrollViewDidScroll(scrollView: UIScrollView)
+    open func scrollViewDidScroll(_ scrollView: UIScrollView)
     {
         if let theTextView = scrollView as? TextView
         {
@@ -326,7 +326,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
         }
     }
     
-    public func textViewDidChange(textView: UITextView)
+    open func textViewDidChange(_ textView: UITextView)
     {
         if let theTextView = textView as? TextView
         {
@@ -335,7 +335,7 @@ public class iOSTextBoxWrapper : iOSControlWrapper, UITextViewDelegate
 
         // Same logic as editingChanged() above, but for UITextView (via delegate)
         //
-        if (_control!.isFirstResponder())
+        if (_control!.isFirstResponder)
         {
             updateValueBindingForAttribute("value");
             if (_updateOnChange)

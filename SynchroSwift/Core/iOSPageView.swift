@@ -34,7 +34,7 @@ class PageContentScrollView : UIScrollView
     
     internal override func layoutSubviews()
     {
-        if (!self.dragging && !self.decelerating)
+        if (!self.isDragging && !self.isDecelerating)
         {
             // Util.debug("Laying out sub view");
             if (_content != nil)
@@ -44,12 +44,12 @@ class PageContentScrollView : UIScrollView
                 var frame = _content!.control!.frame;
                 var frameSize = frame.size;
                 
-                if (_content!.frameProperties.heightSpec == SizeSpec.FillParent)
+                if (_content!.frameProperties.heightSpec == SizeSpec.fillParent)
                 {
                     frameSize.height = self.frame.height;
                 }
                 
-                if (_content!.frameProperties.widthSpec == SizeSpec.FillParent)
+                if (_content!.frameProperties.widthSpec == SizeSpec.fillParent)
                 {
                     frameSize.width = self.frame.width;
                 }
@@ -75,7 +75,7 @@ class PageContentScrollView : UIScrollView
     }
 }
 
-public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognizerDelegate
+open class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognizerDelegate
 {
     var _pageTitle = "";
     
@@ -98,8 +98,8 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
 
         self.setPageTitle = {(title) in self._pageTitle = title };
     
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onKeyboardShown), name: UIKeyboardDidShowNotification, object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(onKeyboardHidden), name: UIKeyboardDidHideNotification, object: nil);
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardShown), name: NSNotification.Name.UIKeyboardDidShow, object: nil);
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardHidden), name: NSNotification.Name.UIKeyboardDidHide, object: nil);
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap));
         tap.delegate = self;
@@ -109,24 +109,24 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
 
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self);
+        NotificationCenter.default.removeObserver(self);
     }
     
-    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool
+    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool
     {
         return !(touch.view is UIButton)
     }
 
-    @objc func handleTap(recognizer: UITapGestureRecognizer)
+    @objc func handleTap(_ recognizer: UITapGestureRecognizer)
     {
         _rootControlWrapper!.control!.endEditing(true);
     }
     
-    @objc func onKeyboardShown(notification: NSNotification)
+    @objc func onKeyboardShown(_ notification: Notification)
     {
         // May want animate this at some point - see: https://gist.github.com/redent/7263276
         //
-        let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue();
+        let keyboardFrame = ((notification as NSNotification).userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue;
         logger.debug("Keyboard shown - frame: \(keyboardFrame)");
 
         if let scrollView = _contentScrollView
@@ -139,21 +139,21 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         }
     }
     
-    @objc func onKeyboardHidden(notification: NSNotification)
+    @objc func onKeyboardHidden(_ notification: Notification)
     {
         logger.debug("Keyboard hidden");
         if let scrollView = _contentScrollView
         {
-            scrollView.contentInset = UIEdgeInsetsZero;
-            scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
+            scrollView.contentInset = UIEdgeInsets.zero;
+            scrollView.scrollIndicatorInsets = UIEdgeInsets.zero;
         }
     }
     
-    public class func findFirstResponder(view: UIView?) -> UIView?
+    open class func findFirstResponder(_ view: UIView?) -> UIView?
     {
         if let view = view
         {
-            if (view.isFirstResponder())
+            if (view.isFirstResponder)
             {
                 return view;
             }
@@ -171,13 +171,13 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
     
     // Center the scroll view on the active edit control.
     //
-    public func centerScrollView()
+    open func centerScrollView()
     {
         // We could use this any time the edit control focus changed, on the "return" in an edit control, etc.
         //
         if let activeView = iOSPageView.findFirstResponder(_contentScrollView)
         {
-            var activeViewRect = activeView.superview!.convertRect(activeView.frame, fromView: _contentScrollView);
+            var activeViewRect = activeView.superview!.convert(activeView.frame, from: _contentScrollView);
             let scrollAreaHeight = _contentScrollView!.frame.height - _contentScrollView!.contentInset.bottom;
             
             let offset = max(0, activeViewRect.y - (scrollAreaHeight - activeView.frame.height) / 2);
@@ -185,7 +185,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         }
     }
     
-    public override func createRootContainerControl(controlSpec: JObject) -> ControlWrapper?
+    open override func createRootContainerControl(_ controlSpec: JObject) -> ControlWrapper?
     {
         return iOSControlWrapper.createControl(_rootControlWrapper!, bindingContext: _viewModel.rootBindingContext, controlSpec: controlSpec);
     }
@@ -196,22 +196,22 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
     //     in our case.  I assume this is because we create our navbar on the fly, after the ViewController is
     //     created.
     //
-    public class var contentTop: CGFloat
+    open class var contentTop: CGFloat
     {
         get
         {
-            let statusBarSize = UIApplication.sharedApplication().statusBarFrame.size
+            let statusBarSize = UIApplication.shared.statusBarFrame.size
             return Swift.min(statusBarSize.width, statusBarSize.height)
         }
     }
     
-    public class func sizeNavBar(navBar: UINavigationBar)
+    open class func sizeNavBar(_ navBar: UINavigationBar)
     {
         navBar.sizeToFit();
         navBar.frame = CGRect(x: navBar.frame.x, y: contentTop, width: navBar.frame.width, height: navBar.frame.height);
     }
 
-    public func updateLayout()
+    open func updateLayout()
     {
         logger.debug("updateLayout starting...");
 
@@ -244,7 +244,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         logger.debug("updateLayout finished");
     }
 
-    public override func clearContent()
+    open override func clearContent()
     {
         logger.debug("clearing content");
         
@@ -252,7 +252,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         _navBarButton = nil;
         
         _toolBar = nil;
-        _toolBarButtons.removeAll(keepCapacity: false);
+        _toolBarButtons.removeAll(keepingCapacity: false);
         
         if let panel = _rootControlWrapper!.control
         {
@@ -273,7 +273,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         _contentScrollView = nil;
     }
 
-    public func setNavBarButton(button: UIBarButtonItem)
+    open func setNavBarButton(_ button: UIBarButtonItem)
     {
         _navBarButton = button;
         if (_navBar != nil)
@@ -287,30 +287,30 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         }
     }
 
-    public func addToolbarButton(button: UIBarButtonItem)
+    open func addToolbarButton(_ button: UIBarButtonItem)
     {
         _toolBarButtons.append(button);
     }
 
     // UINavigationBarDelegate
-    public func positionForBar(barPositioning: UIBarPositioning) -> UIBarPosition
+    open func position(for barPositioning: UIBarPositioning) -> UIBarPosition
     {
         // Per several recommendations, especially this one: http://blog.falafel.com/ios-7-bars-with-xamarinios/
         //
         // !!! This is supposed to fix the Navbar positioning on iOS7, but doesn't do anything for us...
         //
-        return UIBarPosition.TopAttached;
+        return UIBarPosition.topAttached;
     }
     
     // UINavigationBarDelegate
-    public func navigationBar(navigationBar: UINavigationBar, shouldPopItem: UINavigationItem) -> Bool
+    open func navigationBar(_ navigationBar: UINavigationBar, shouldPop shouldPopItem: UINavigationItem) -> Bool
     {
         logger.debug("Should pop item got called!");
         self.goBack();
         return false;
     }
 
-    public override func setContent(content: ControlWrapper?)
+    open override func setContent(_ content: ControlWrapper?)
     {
         logger.debug("Setting content");
         
@@ -342,14 +342,14 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
                 // Add a "Back" context and a delegate to handle the back command...
                 //
                 let navItemBack = UINavigationItem(title: "Back");
-                _navBar!.pushNavigationItem(navItemBack, animated: false);
+                _navBar!.pushItem(navItemBack, animated: false);
             }
             
             let navItem = UINavigationItem(title: _pageTitle);
             
             if (_navBarButton != nil)
             {
-                navItem.setRightBarButtonItem(_navBarButton!, animated: false);
+                navItem.setRightBarButton(_navBarButton!, animated: false);
             }
 
             // When starting in Landscape orientation, there was a bug where the initial vertical position of the back arrow was not correct (was
@@ -357,7 +357,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
             //
             _navBar?.layoutIfNeeded();
             
-            _navBar!.pushNavigationItem(navItem, animated: false);
+            _navBar!.pushItem(navItem, animated: false);
             panel.addSubview(_navBar!);
             
             // Adjust content rect based on navbar.
@@ -370,14 +370,14 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
                 // Create toolbar, position it at the bottom of the screen, adjust content rect to represent remaining space
                 //
                 _toolBar = UIToolbar();
-                _toolBar!.barStyle = UIBarStyle.Default;
+                _toolBar!.barStyle = UIBarStyle.default;
                 _toolBar!.sizeToFit();
                 _toolBar!.frame = CGRect(x: contentRect.x, y: contentRect.y + contentRect.height - _toolBar!.frame.height, width: contentRect.width, height: _toolBar!.frame.height);
                 contentRect = CGRect(x: contentRect.x, y: contentRect.y, width: contentRect.width, height: contentRect.height - _toolBar!.bounds.height);
                 
                 // Create a new colection of toolbar buttons with flexible space surrounding and between them, then add to toolbar
                 //
-                let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil);
+                let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil);
                 var formattedItems = [UIBarButtonItem]();
                 formattedItems.append(flexibleSpace);
                 for buttonItem in _toolBarButtons
@@ -409,7 +409,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
     // MessageBox stuff...
     //
 
-    public override func processMessageBox(messageBox: JObject, onCommand: CommandHandler)
+    open override func processMessageBox(_ messageBox: JObject, onCommand: @escaping CommandHandler)
     {
         var message = "";
         if (messageBox["message"] != nil)
@@ -424,7 +424,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
             title = PropertyValue.expandAsString(messageBox["title"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
         }
         
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         
         if let options = messageBox["options"] as? JArray
         {
@@ -439,7 +439,7 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
                         buttonCommand = PropertyValue.expandAsString(optionObject["command"]!.asString()!, bindingContext: _viewModel.rootBindingContext);
                     }
                     
-                    alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertActionStyle.Default, handler:
+                    alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertActionStyle.default, handler:
                     { (action: UIAlertAction) in
                         if (buttonCommand != nil)
                         {
@@ -451,34 +451,34 @@ public class iOSPageView : PageView, UINavigationBarDelegate, UIGestureRecognize
         }
         else
         {
-            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil));
+            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.cancel, handler: nil));
         }
         
-        _viewController.presentViewController(alert, animated: true, completion: nil)
+        _viewController.present(alert, animated: true, completion: nil)
     }
     
-    public override func processLaunchUrl(primaryUrl: String, secondaryUrl: String?)
+    open override func processLaunchUrl(_ primaryUrl: String, secondaryUrl: String?)
     {
         // You could use canOpenUrl to check, but there is a whole security shitshow associated with that (limits on the number of
         // schemes you can check over the lifetime of the app on iOS 8, and a requirement to whitelist any scheme that you might check
         // on iOS 9).  So for our purposes, just attempting to open and falling back if that returns false should work fine, while
         // avoiding all of the complexity of canOpenUrl.
         //
-        let primaryNsUrl = NSURL(string: primaryUrl);
+        let primaryNsUrl = URL(string: primaryUrl);
         if (primaryNsUrl != nil)
         {
-            if (!UIApplication.sharedApplication().openURL(primaryNsUrl!) && (secondaryUrl != nil))
+            if (!UIApplication.shared.openURL(primaryNsUrl!) && (secondaryUrl != nil))
             {
-                let secondaryNsUrl = NSURL(string: secondaryUrl!);
+                let secondaryNsUrl = URL(string: secondaryUrl!);
                 if (secondaryNsUrl != nil)
                 {
-                    UIApplication.sharedApplication().openURL(NSURL(string: secondaryUrl!)!);
+                    UIApplication.shared.openURL(URL(string: secondaryUrl!)!);
                 }
             }
         }
     }
     
-    public override func processChoosePhoto(request: JObject, onComplete: (JObject) -> Void)
+    open override func processChoosePhoto(_ request: JObject, onComplete: (JObject) -> Void)
     {
         // !!! TODO - Implement this
         //

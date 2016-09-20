@@ -423,10 +423,12 @@
 					C4AFA1641A33D71F00040A9D = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = LJNF82AZ4G;
+						LastSwiftMigration = 0800;
 					};
 					C4AFA1791A33D71F00040A9D = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = LJNF82AZ4G;
+						LastSwiftMigration = 0800;
 						TestTargetID = C4AFA1641A33D71F00040A9D;
 					};
 				};
@@ -701,6 +703,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				USR_BUNDLE_NAME = Synchro;
 			};
 			name = Debug;
@@ -718,6 +721,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.synchro.explorer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 				USR_BUNDLE_NAME = Synchro;
 			};
 			name = Release;
@@ -738,6 +742,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.synchro.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SynchroSwift.app/SynchroSwift";
 			};
 			name = Debug;
@@ -754,6 +759,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "io.synchro.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SynchroSwift.app/SynchroSwift";
 			};
 			name = Release;

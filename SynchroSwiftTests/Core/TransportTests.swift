@@ -23,7 +23,7 @@ class TransportTests: XCTestCase
 {
     func testGetAppDefinition()
     {
-        let expectation = self.expectationWithDescription("got definition")
+        let expectation = self.expectation(description: "got definition")
         let expected = JObject(
         [
             "name": JValue("synchro-samples"),
@@ -37,7 +37,7 @@ class TransportTests: XCTestCase
             "synchro": JObject(["clientVersion" : JValue(">=1.3.0")])
         ])
 
-        let transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
+        let transport = TransportHttp(uri: URL(string: testEndpoint)!);
         
         transport.getAppDefinition(
         { (definition) in
@@ -45,14 +45,14 @@ class TransportTests: XCTestCase
             expectation.fulfill();
         });
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     func testGetFirstPage()
     {
-        let expectation = self.expectationWithDescription("got response")
+        let expectation = self.expectation(description: "got response")
         
-        let transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
+        let transport = TransportHttp(uri: URL(string: testEndpoint)!);
 
         transport.sendMessage(
             nil,
@@ -72,14 +72,14 @@ class TransportTests: XCTestCase
             }
         );
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     func testNavigateToPageViaCommand()
     {
-        let expectation = self.expectationWithDescription("got response")
+        let expectation = self.expectation(description: "got response")
         
-        let transport = TransportHttp(uri: NSURL(string: testEndpoint)!);
+        let transport = TransportHttp(uri: URL(string: testEndpoint)!);
         
         transport.sendMessage(
             nil,
@@ -134,14 +134,14 @@ class TransportTests: XCTestCase
             }
         );
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testHttp404Failure()
     {
-        let expectation = self.expectationWithDescription("got response")
+        let expectation = self.expectation(description: "got response")
         
-        let transport = TransportHttp(uri: NSURL(string: "https://api.synchro.io")!);
+        let transport = TransportHttp(uri: URL(string: "https://api.synchro.io")!);
         
         transport.sendMessage(
             nil,
@@ -160,14 +160,14 @@ class TransportTests: XCTestCase
             }
         );
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     func testNetworkFailure()
     {
-        let expectation = self.expectationWithDescription("got response")
+        let expectation = self.expectation(description: "got response")
         
-        let transport = TransportHttp(uri: NSURL(string: "http://nohostcanbefoundhere")!);
+        let transport = TransportHttp(uri: URL(string: "http://nohostcanbefoundhere")!);
         
         transport.sendMessage(
             nil,
@@ -186,7 +186,7 @@ class TransportTests: XCTestCase
             }
         );
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     func testUriFromHostString()

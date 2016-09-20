@@ -10,10 +10,10 @@ import Foundation
 
 private var logger = Logger.getLogger("PageView");
 
-public class PageView : NSObject
+open class PageView : NSObject
 {
-    public var setPageTitle: ((String) -> Void)?;
-    public var setBackEnabled: ((Bool) -> Void)?; // Optional - set if you care about back enablement
+    open var setPageTitle: ((String) -> Void)?;
+    open var setBackEnabled: ((Bool) -> Void)?; // Optional - set if you care about back enablement
     
     var _stateManager: StateManager;
     var _viewModel: ViewModel;
@@ -40,7 +40,7 @@ public class PageView : NSObject
         super.init();
     }
     
-    public var hasBackCommand: Bool
+    open var hasBackCommand: Bool
     {
         get
         {
@@ -61,7 +61,7 @@ public class PageView : NSObject
         }
     }
     
-    public func goBack() -> Bool
+    open func goBack() -> Bool
     {
         if (_launchedFromMenu || _stateManager.isBackSupported())
         {
@@ -76,7 +76,7 @@ public class PageView : NSObject
         }
     }
     
-    public func processPageView(pageView: JObject)
+    open func processPageView(_ pageView: JObject)
     {
         if (_rootContainerControlWrapper != nil)
         {
@@ -127,33 +127,33 @@ public class PageView : NSObject
     // C# abstract method definitions...
     //
     
-    public func createRootContainerControl(controlSpec: JObject) -> ControlWrapper?
+    open func createRootContainerControl(_ controlSpec: JObject) -> ControlWrapper?
     {
         fatalError("Must be overridden in derived class");
     }
     
-    public func clearContent()
+    open func clearContent()
     {
         fatalError("Must be overridden in derived class");
     }
     
-    public func setContent(content: ControlWrapper)
+    open func setContent(_ content: ControlWrapper)
     {
         fatalError("Must be overridden in derived class");
     }
     
     
-    public func processMessageBox(messageBox: JObject, onCommand: CommandHandler)
+    open func processMessageBox(_ messageBox: JObject, onCommand: CommandHandler)
     {
         fatalError("Must be overridden in derived class");
     }
     
-    public func processLaunchUrl(primaryUrl: String, secondaryUrl: String?)
+    open func processLaunchUrl(_ primaryUrl: String, secondaryUrl: String?)
     {
         fatalError("Must be overridden in derived class");
     }
 
-    public func processChoosePhoto(request: JObject, onComplete: (JObject) -> Void)
+    open func processChoosePhoto(_ request: JObject, onComplete: (JObject) -> Void)
     {
         fatalError("Must be overridden in derived class");
     }

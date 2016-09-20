@@ -11,7 +11,7 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSGridViewWrapper");
 
-public class iOSGridViewWrapper : iOSControlWrapper
+open class iOSGridViewWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {

@@ -24,14 +24,14 @@ class ToggleButtonFontSetter : iOSFontSetter
         super.init(font: button.titleLabel!.font);
     }
     
-    internal override func setFont(font: UIFont)
+    internal override func setFont(_ font: UIFont)
     {
         _button.titleLabel!.font = font;
         _controlWrapper.sizeToFit();
     }
 }
 
-public class iOSToggleButtonWrapper : iOSControlWrapper
+open class iOSToggleButtonWrapper : iOSControlWrapper
 {
     var _isChecked = false;
     
@@ -62,26 +62,26 @@ public class iOSToggleButtonWrapper : iOSControlWrapper
     var _checkedColor: UIColor?;
     var _uncheckedColor: UIColor?;
     
-    func setCaption(caption: String)
+    func setCaption(_ caption: String)
     {
         let button = _control as! UIButton;
         UIView.performWithoutAnimation { () -> Void in
-            button.setTitle(caption, forState: .Normal);
+            button.setTitle(caption, for: UIControlState());
             button.layoutIfNeeded();
             self.sizeToFit();
         }
     }
     
-    func setIcon(image: UIImage)
+    func setIcon(_ image: UIImage)
     {
         let button = _control as! UIButton;
-        button.setImage(image, forState: .Normal);
-        button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        button.setImage(image, for: UIControlState());
+        button.imageView?.contentMode = UIViewContentMode.scaleAspectFit
         button.setImageInsets(self._hasCaption);
         self.sizeToFit();
     }
 
-    func setColor(color: UIColor)
+    func setColor(_ color: UIColor)
     {
         let button = _control as! UIButton;
         button.tintColor = color;
@@ -145,7 +145,7 @@ public class iOSToggleButtonWrapper : iOSControlWrapper
             {
                 // There was no explicit visual state specified, so we will use "gray" for unchecked
                 //
-                setColor(UIColor.lightGrayColor());
+                setColor(UIColor.lightGray);
             }
         }
         
@@ -156,7 +156,7 @@ public class iOSToggleButtonWrapper : iOSControlWrapper
         logger.debug("Creating toggle button element");
         super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
-        let button = UIButton(type: UIButtonType.System);
+        let button = UIButton(type: UIButtonType.system);
         self._control = button;
         
         processElementDimensions(controlSpec);
@@ -232,10 +232,10 @@ public class iOSToggleButtonWrapper : iOSControlWrapper
             processCommands(bindingSpec, commands: commands);
         }
         
-        button.addTarget(self, action: #selector(pressed), forControlEvents: .TouchUpInside);
+        button.addTarget(self, action: #selector(pressed), for: .touchUpInside);
     }
     
-    func pressed(sender: UIButton!)
+    func pressed(_ sender: UIButton!)
     {
         self.isChecked = !self.isChecked;
         

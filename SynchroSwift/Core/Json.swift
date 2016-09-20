@@ -10,14 +10,14 @@ import Foundation
 
 public enum JTokenType
 {
-    case Undefined
-    case Object
-    case Array
-    case Integer
-    case Float
-    case String
-    case Boolean
-    case Null
+    case undefined
+    case object
+    case array
+    case integer
+    case float
+    case string
+    case boolean
+    case null
 }
 
 // At global scope (as required by Swift to overload the equlaity operator and fulfill the Equatable protocol
@@ -27,21 +27,21 @@ public func ==(first: JToken, second: JToken) -> Bool
     return first.deepEquals(second);
 }
 
-public class JToken: Equatable
+open class JToken: Equatable
 {
     // Should be overrided by all derived classes...
-    public var Type: JTokenType { get { return JTokenType.Undefined; } }
+    open var Type: JTokenType { get { return JTokenType.undefined; } }
     
-    private init()
+    fileprivate init()
     {
     }
     
-    public func deepEquals(token: JToken?) -> Bool
+    open func deepEquals(_ token: JToken?) -> Bool
     {
         fatalError("This method must be overridden by the subclass");
     }
     
-    public func deepClone() -> JToken
+    open func deepClone() -> JToken
     {
         fatalError("This method must be overridden by the subclass");
     }
@@ -86,7 +86,7 @@ public class JToken: Equatable
         }
     }
     
-    private func getPath(useDotNotation: Bool = false) -> String
+    fileprivate func getPath(_ useDotNotation: Bool = false) -> String
     {
         var path = "";
         
@@ -133,7 +133,7 @@ public class JToken: Equatable
         return path;
     }
     
-    public var Path: String
+    open var Path: String
     {
         get
         {
@@ -143,12 +143,12 @@ public class JToken: Equatable
 
     var pathRegex = try? NSRegularExpression(pattern: "\\[(\\d+)\\]", options: []);
     
-    public func selectToken(path: String, errorWhenNoMatch: Bool = false) -> JToken?
+    open func selectToken(_ path: String, errorWhenNoMatch: Bool = false) -> JToken?
     {
         let thePath = NSMutableString(string: path);
-        pathRegex?.replaceMatchesInString(thePath, options: NSMatchingOptions(), range: NSMakeRange(0, thePath.length) , withTemplate: ".$1");
+        pathRegex?.replaceMatches(in: thePath, options: NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, thePath.length) , withTemplate: ".$1");
 
-        let pathElements = String(thePath).componentsSeparatedByString(".");
+        let pathElements = String(thePath).components(separatedBy: ".");
 
         var currentToken: JToken? = self;
         for element in pathElements
@@ -202,7 +202,7 @@ public class JToken: Equatable
 
     // Remove this token from its parent
     //
-    public func remove() -> Bool
+    open func remove() -> Bool
     {
         var bRemoved = false;
     
@@ -236,7 +236,7 @@ public class JToken: Equatable
     
     // Replace this token in its parent
     //
-    public func replace(token: JToken) -> Bool
+    open func replace(_ token: JToken) -> Bool
     {
         var bReplaced = false;
     
@@ -274,7 +274,7 @@ public class JToken: Equatable
     
     // Update a token to a new value, attempting to preserve the object graph to the extent possible
     //
-    public class func updateTokenValue(inout currentToken: JToken, newToken: JToken) -> Bool
+    open class func updateTokenValue(_ currentToken: inout JToken, newToken: JToken) -> Bool
     {
         if (currentToken != newToken)
         {
@@ -299,7 +299,7 @@ public class JToken: Equatable
         return false; // Value-only change, or no change
     }
     
-    public class func deepEquals(token1: JToken?, token2: JToken?) -> Bool
+    open class func deepEquals(_ token1: JToken?, token2: JToken?) -> Bool
     {
         if (token1 == nil)
         {
@@ -311,7 +311,7 @@ public class JToken: Equatable
         }
     }
     
-    public func asBool() -> Bool?
+    open func asBool() -> Bool?
     {
         if let value = self as? JValue
         {
@@ -320,7 +320,7 @@ public class JToken: Equatable
         return nil;
     }
     
-    public func asInt() -> Int?
+    open func asInt() -> Int?
     {
         if let value = self as? JValue
         {
@@ -329,7 +329,7 @@ public class JToken: Equatable
         return nil;
     }
     
-    public func asDouble() -> Double?
+    open func asDouble() -> Double?
     {
         if let value = self as? JValue
         {
@@ -338,7 +338,7 @@ public class JToken: Equatable
         return nil;
     }
     
-    public func asString() -> String?
+    open func asString() -> String?
     {
         if let value = self as? JValue
         {
@@ -347,12 +347,12 @@ public class JToken: Equatable
         return nil;
     }
     
-    public class func parse(str: String) -> JToken
+    open class func parse(_ str: String) -> JToken
     {
         return JsonParser.ParseValue(StringReader(str: str));
     }
     
-    public func toJson() -> String
+    open func toJson() -> String
     {
         let writer = StringBuilder();
         JsonWriter.WriteValue(writer, value: self);
@@ -360,14 +360,14 @@ public class JToken: Equatable
     }
 }
 
-public class JObject : JToken, SequenceType
+open class JObject : JToken, Sequence
 {
     // Because we need this to be an ordered dictionary, we need to keep a key array and a key,value dictionary
     //
     var _keys = Array<String>();
     var _tokens = Dictionary<String, JToken>();
     
-    public override var Type: JTokenType { get { return JTokenType.Object; } }
+    open override var Type: JTokenType { get { return JTokenType.object; } }
 
     public override init()
     {
@@ -385,7 +385,7 @@ public class JObject : JToken, SequenceType
         }
     }
     
-    public override func deepEquals(token: JToken?) -> Bool
+    open override func deepEquals(_ token: JToken?) -> Bool
     {
         if let other = token as? JObject
         {
@@ -419,7 +419,7 @@ public class JObject : JToken, SequenceType
         }
     }
     
-    public override func deepClone() -> JToken
+    open override func deepClone() -> JToken
     {
         let clone = JObject();
         for key in _keys
@@ -429,16 +429,16 @@ public class JObject : JToken, SequenceType
         return clone;
     }
 
-    public var count: Int { get { return _keys.count; } }
+    open var count: Int { get { return _keys.count; } }
     
     // Our generator will just produce the keys, unlike a dictionary generator, which would produce (key, value)
     //
-    public func generate() -> IndexingGenerator<Array<String>>
+    open func makeIterator() -> IndexingIterator<Array<String>>
     {
-        return _keys.generate();
+        return _keys.makeIterator();
     }
 
-    public subscript(key: String) -> JToken?
+    open subscript(key: String) -> JToken?
     {
         get
         {
@@ -452,7 +452,7 @@ public class JObject : JToken, SequenceType
                 {
                     oldValue.Parent = nil;
                 }
-                _tokens.removeValueForKey(key);
+                _tokens.removeValue(forKey: key);
                 _keys = _keys.filter { $0 != key };
                 return;
             }
@@ -470,7 +470,7 @@ public class JObject : JToken, SequenceType
         }
     }
     
-    func keyForValue(value: JToken) -> String?
+    func keyForValue(_ value: JToken) -> String?
     {
         for (key, val) in _tokens
         {
@@ -483,11 +483,11 @@ public class JObject : JToken, SequenceType
     }
 }
 
-public class JArray : JToken, SequenceType, CollectionType
+open class JArray : JToken, Sequence, Collection
 {
     var _tokens = Array<JToken>();
 
-    public override var Type: JTokenType { get { return JTokenType.Array; } }
+    open override var Type: JTokenType { get { return JTokenType.array; } }
 
     public override init()
     {
@@ -504,7 +504,7 @@ public class JArray : JToken, SequenceType, CollectionType
         }
     }
     
-    public override func deepEquals(token: JToken?) -> Bool
+    open override func deepEquals(_ token: JToken?) -> Bool
     {
         if let other = token as? JArray
         {
@@ -521,7 +521,7 @@ public class JArray : JToken, SequenceType, CollectionType
             else
             {
                 // Compare elements
-                for (index, token) in _tokens.enumerate()
+                for (index, token) in _tokens.enumerated()
                 {
                     if !token.deepEquals(other[index])
                     {
@@ -538,7 +538,7 @@ public class JArray : JToken, SequenceType, CollectionType
         }
     }
     
-    public override func deepClone() -> JToken
+    open override func deepClone() -> JToken
     {
         let clone = JArray();
         for element in _tokens
@@ -549,12 +549,12 @@ public class JArray : JToken, SequenceType, CollectionType
     }
     
     public typealias Index = Int
-    public var startIndex: Int { get { return _tokens.startIndex } }
-    public var endIndex: Int { get { return _tokens.endIndex } }
+    open var startIndex: Int { get { return _tokens.startIndex } }
+    open var endIndex: Int { get { return _tokens.endIndex } }
     
-    public var count: Int { get { return _tokens.count; } }
+    open var count: Int { get { return _tokens.count; } }
     
-    public func findChildIndex(child: JToken) -> Int?
+    open func findChildIndex(_ child: JToken) -> Int?
     {
         for i in 0..._tokens.count
         {
@@ -567,12 +567,12 @@ public class JArray : JToken, SequenceType, CollectionType
         return nil;
     }
 
-    public func generate() -> IndexingGenerator<Array<JToken>>
+    open func makeIterator() -> IndexingIterator<Array<JToken>>
     {
-        return _tokens.generate()
+        return _tokens.makeIterator()
     }
     
-    public subscript(index: Int) -> JToken
+    open subscript(index: Int) -> JToken
     {
         get
         {
@@ -587,17 +587,17 @@ public class JArray : JToken, SequenceType, CollectionType
         }
     }
 
-    public func append(object: JToken)
+    open func append(_ object: JToken)
     {
         object.Parent = self;
         _tokens.append(object);
     }
     
-    public func remove(object: JToken) -> Bool
+    open func remove(_ object: JToken) -> Bool
     {
         if let index = findChildIndex(object)
         {
-            let oldValue = _tokens.removeAtIndex(index)
+            let oldValue = _tokens.remove(at: index)
             oldValue.Parent = nil;
             return true
         }
@@ -609,46 +609,46 @@ public class JArray : JToken, SequenceType, CollectionType
 //
 private enum ValueType: Equatable
 {
-    case ValueNull
-    case ValueBool(Bool)
-    case ValueInt(Int)
-    case ValueFloat(Double)
-    case ValueString(String)
+    case valueNull
+    case valueBool(Bool)
+    case valueInt(Int)
+    case valueFloat(Double)
+    case valueString(String)
 }
 
 private func ==(a: ValueType, b: ValueType) -> Bool
 {
     switch (a, b)
     {
-        case (.ValueNull, .ValueNull): return true
-        case (.ValueBool(let a), .ValueBool(let b)) where a == b: return true
-        case (.ValueInt(let a), .ValueInt(let b)) where a == b: return true
-        case (.ValueFloat(let a), .ValueFloat(let b)) where a == b: return true
-        case (.ValueString(let a), .ValueString(let b)) where a == b: return true
+        case (.valueNull, .valueNull): return true
+        case (.valueBool(let a), .valueBool(let b)) where a == b: return true
+        case (.valueInt(let a), .valueInt(let b)) where a == b: return true
+        case (.valueFloat(let a), .valueFloat(let b)) where a == b: return true
+        case (.valueString(let a), .valueString(let b)) where a == b: return true
         default: return false
     }
 }
 
-public class JValue : JToken
+open class JValue : JToken
 {
-    private var valueOfType = ValueType.ValueNull;
+    fileprivate var valueOfType = ValueType.valueNull;
     
-    public override var Type: JTokenType
+    open override var Type: JTokenType
     {
         get
         {
             switch self.valueOfType
             {
-                case .ValueNull:
-                    return JTokenType.Null;
-                case .ValueBool:
-                    return JTokenType.Boolean;
-                case .ValueInt:
-                    return JTokenType.Integer;
-                case .ValueFloat:
-                    return JTokenType.Float;
-                case .ValueString:
-                    return JTokenType.String;
+                case .valueNull:
+                    return JTokenType.null;
+                case .valueBool:
+                    return JTokenType.boolean;
+                case .valueInt:
+                    return JTokenType.integer;
+                case .valueFloat:
+                    return JTokenType.float;
+                case .valueString:
+                    return JTokenType.string;
             }
         }
     }
@@ -668,33 +668,33 @@ public class JValue : JToken
     public convenience init(_ value: Bool)
     {
         self.init();
-        self.valueOfType = ValueType.ValueBool(value);
+        self.valueOfType = ValueType.valueBool(value);
     }
     
     public convenience init(_ value: Int)
     {
         self.init();
-        self.valueOfType = ValueType.ValueInt(value);
+        self.valueOfType = ValueType.valueInt(value);
     }
 
     public convenience init(_ value: Double)
     {
         self.init();
-        self.valueOfType = ValueType.ValueFloat(value);
+        self.valueOfType = ValueType.valueFloat(value);
     }
     
     public convenience init(_ value: String)
     {
         self.init();
-        self.valueOfType = ValueType.ValueString(value);
+        self.valueOfType = ValueType.valueString(value);
     }
     
-    public func copyValueFrom(value: JValue)
+    open func copyValueFrom(_ value: JValue)
     {
         self.valueOfType = value.valueOfType;
     }
     
-    public override func deepEquals(token: JToken?) -> Bool
+    open override func deepEquals(_ token: JToken?) -> Bool
     {
         if let other = token as? JValue
         {
@@ -712,51 +712,51 @@ public class JValue : JToken
         }
     }
     
-    public override func deepClone() -> JToken
+    open override func deepClone() -> JToken
     {
         return JValue(self);
     }
 
-    public override func asBool() -> Bool?
+    open override func asBool() -> Bool?
     {
         switch valueOfType
         {
-            case .ValueBool(let boolValue):
+            case .valueBool(let boolValue):
                 return boolValue;
             default:
                 return nil;
         }
     }
 
-    public override func asInt() -> Int?
+    open override func asInt() -> Int?
     {
         switch valueOfType
         {
-            case .ValueInt(let intValue):
+            case .valueInt(let intValue):
                 return intValue;
             default:
                 return nil;
         }
     }
 
-    public override func asDouble() -> Double?
+    open override func asDouble() -> Double?
     {
         switch valueOfType
         {
-            case .ValueFloat(let doubleValue):
+            case .valueFloat(let doubleValue):
                 return doubleValue;
-            case .ValueInt(let intValue):
+            case .valueInt(let intValue):
                 return Double(intValue);
             default:
                 return nil;
         }
     }
 
-    public override func asString() -> String?
+    open override func asString() -> String?
     {
         switch valueOfType
         {
-            case .ValueString(let strValue):
+            case .valueString(let strValue):
                 return strValue;
             default:
                 return nil;

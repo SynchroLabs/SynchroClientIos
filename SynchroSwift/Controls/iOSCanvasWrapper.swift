@@ -11,7 +11,7 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSCanvasWrapper");
 
-public class iOSCanvasWrapper : iOSControlWrapper
+open class iOSCanvasWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {

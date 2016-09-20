@@ -13,23 +13,23 @@ private var logger = Logger.getLogger("iOSImageWrapper");
 
 private var commands = [CommandName.OnTap.Attribute];
 
-public class iOSImageWrapper : iOSControlWrapper
+open class iOSImageWrapper : iOSControlWrapper
 {
-    public func toImageContentMode(value: JToken?, defaultMode: UIViewContentMode = UIViewContentMode.ScaleAspectFit) ->  UIViewContentMode
+    open func toImageContentMode(_ value: JToken?, defaultMode: UIViewContentMode = UIViewContentMode.scaleAspectFit) ->  UIViewContentMode
     {
         var mode = defaultMode;
         let modeValue = value?.asString();
         if (modeValue == "Stretch")
         {
-            mode = UIViewContentMode.ScaleToFill;
+            mode = UIViewContentMode.scaleToFill;
         }
         else if (modeValue == "Fit")
         {
-            mode = UIViewContentMode.ScaleAspectFit;
+            mode = UIViewContentMode.scaleAspectFit;
         }
         else if (modeValue == "Fill")
         {
-            mode = UIViewContentMode.ScaleAspectFill;
+            mode = UIViewContentMode.scaleAspectFill;
         }
         return mode;
     }
@@ -41,7 +41,7 @@ public class iOSImageWrapper : iOSControlWrapper
         
         let image = UIImageView();
         image.clipsToBounds = true;
-        image.contentMode = UIViewContentMode.ScaleAspectFit; // default
+        image.contentMode = UIViewContentMode.scaleAspectFit; // default
         
         self._control = image;
         
@@ -74,12 +74,12 @@ public class iOSImageWrapper : iOSControlWrapper
             }
             else
             {
-                let url = NSURL(string: self.toString(value));
+                let url = URL(string: self.toString(value));
                 if let validUrl = url
                 {
                     logger.info("Loading image for URL: \(validUrl)");
-                    let request: NSURLRequest = NSURLRequest(URL: validUrl);
-                    NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: {(response: NSURLResponse?, data: NSData?, error: NSError?) -> Void in
+                    let request: URLRequest = URLRequest(url: validUrl);
+                    NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response: URLResponse?, data: Data?, error: NSError?) -> Void in
                         if let err = error
                         {
                             logger.error("Failed to load image, reason: \(err.description)");
@@ -88,7 +88,7 @@ public class iOSImageWrapper : iOSControlWrapper
 
                         if (response != nil)
                         {
-                            let httpResponse = response as! NSHTTPURLResponse
+                            let httpResponse = response as! HTTPURLResponse
                             if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300)
                             {
                                 logger.info("Image loaded from URL: \(validUrl)");
@@ -97,7 +97,7 @@ public class iOSImageWrapper : iOSControlWrapper
 
                                 logger.info("Image size - height: \(image.image?.size.height), width: \(image.image?.size.width)");
                                 
-                                if ((self.frameProperties.heightSpec != SizeSpec.WrapContent) && (self.frameProperties.widthSpec == SizeSpec.WrapContent))
+                                if ((self.frameProperties.heightSpec != SizeSpec.wrapContent) && (self.frameProperties.widthSpec == SizeSpec.wrapContent))
                                 {
                                     // Only height specified, set width based on image aspect
                                     //
@@ -113,7 +113,7 @@ public class iOSImageWrapper : iOSControlWrapper
                                         image.superview!.setNeedsLayout();
                                     }
                                 }
-                                else if ((self.frameProperties.widthSpec != SizeSpec.WrapContent) && (self.frameProperties.heightSpec == SizeSpec.WrapContent))
+                                else if ((self.frameProperties.widthSpec != SizeSpec.wrapContent) && (self.frameProperties.heightSpec == SizeSpec.wrapContent))
                                 {
                                     // Only width specified, set height based on image aspect
                                     //
@@ -156,12 +156,12 @@ public class iOSImageWrapper : iOSControlWrapper
         if (getCommand(CommandName.OnTap) != nil)
         {
             let tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(imageTapped))
-            image.userInteractionEnabled = true
+            image.isUserInteractionEnabled = true
             image.addGestureRecognizer(tapGestureRecognizer)
         }
     }
     
-    func imageTapped(img: AnyObject)
+    func imageTapped(_ img: AnyObject)
     {
         if let command = getCommand(CommandName.OnTap)
         {

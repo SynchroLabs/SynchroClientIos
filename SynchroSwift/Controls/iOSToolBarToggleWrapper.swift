@@ -13,7 +13,7 @@ private var logger = Logger.getLogger("iOSToolBarToggleWrapper");
 
 private var commands = [CommandName.OnToggle.Attribute];
 
-public class iOSToolBarToggleWrapper : iOSControlWrapper
+open class iOSToolBarToggleWrapper : iOSControlWrapper
 {
     var _buttonItem: UIBarButtonItem!;
     
@@ -23,7 +23,7 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
     var _uncheckedIcon: String?;
     var _checkedIcon: String?;
     
-    func setText(value: String?)
+    func setText(_ value: String?)
     {
         if (value != nil)
         {
@@ -31,7 +31,7 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
         }
     }
     
-    func setImage(value: String?)
+    func setImage(_ value: String?)
     {
         if (value != nil)
         {
@@ -121,7 +121,7 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
      
         // Custom items, can specify text, icon, or both
         //
-        _buttonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(barButtonItemClicked));
+        _buttonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: self, action: #selector(barButtonItemClicked));
 
         if let bindingSpec = BindingHelper.getCanonicalBindingSpec(controlSpec, defaultBindingAttribute: CommandName.OnClick.Attribute, commandAttributes: commands)
         {
@@ -141,7 +141,7 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
         processElementProperty(controlSpec, attributeName: "uncheckedicon", setValue: { (value) in self.uncheckedIcon = self.toString(value) });
         processElementProperty(controlSpec, attributeName: "checkedicon", setValue: { (value) in self.checkedIcon = self.toString(value) });
         
-        processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in self._buttonItem.enabled = self.toBoolean(value) });
+        processElementProperty(controlSpec, attributeName: "enabled", setValue: { (value) in self._buttonItem.isEnabled = self.toBoolean(value) });
         
         if (controlSpec["control"]?.asString() == "navBar.toggle")
         {
@@ -160,7 +160,7 @@ public class iOSToolBarToggleWrapper : iOSControlWrapper
         _isVisualElement = false;
     }
     
-    func barButtonItemClicked(barButtonItem: UIBarButtonItem)
+    func barButtonItemClicked(_ barButtonItem: UIBarButtonItem)
     {
         self.isChecked = !self.isChecked;
         

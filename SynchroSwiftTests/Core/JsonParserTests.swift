@@ -15,7 +15,7 @@ import SynchroSwift
 
 class JsonParserTests: XCTestCase
 {
-    func validateRoundTrip(jsonInput: String, expected: JToken)
+    func validateRoundTrip(_ jsonInput: String, expected: JToken)
     {
         let token = JToken.parse(jsonInput);
         let jsonOutput = token.toJson();
@@ -157,8 +157,8 @@ class JsonParserTests: XCTestCase
             "\"baz\"  :  [  8  ,  \"dog\"  ]",
             "}",
             ""
-        ].joinWithSeparator(
-        "\r\n");
+        ].joined(
+        separator: "\r\n");
         
         let token = JToken.parse(jsonWithComments);
         XCTAssert(token.deepEquals(JObject(
@@ -187,8 +187,8 @@ class JsonParserTests: XCTestCase
                 "\"baz\"  :  [  8  ,  \"dog\"  ]",
                 "}",
                 ""
-            ].joinWithSeparator(
-            "\r\n");
+            ].joined(
+            separator: "\r\n");
         
         let token = JToken.parse(jsonWithComments);
         XCTAssert(token.deepEquals(JObject(
