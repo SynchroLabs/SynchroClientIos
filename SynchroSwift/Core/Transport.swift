@@ -8,20 +8,20 @@
 
 import Foundation
 
-public typealias ResponseHandler = (response: JObject) -> Void;
-public typealias RequestFailureHandler = (request: JObject, exception: NSError) -> Void;
+public typealias ResponseHandler = (_ response: JObject) -> Void;
+public typealias RequestFailureHandler = (_ request: JObject, _ exception: NSError) -> Void;
 
 public protocol Transport
 {
-    func setDefaultHandlers(responseHandler: ResponseHandler, requestFailureHandler: RequestFailureHandler)
+    func setDefaultHandlers(_ responseHandler: ResponseHandler, requestFailureHandler: RequestFailureHandler)
     
-    func sendMessage(sessionId: String?, requestObject: JObject)
-    func sendMessage(sessionId: String?, requestObject: JObject, responseHandler: ResponseHandler?, requestFailureHandler: RequestFailureHandler?)
+    func sendMessage(_ sessionId: String?, requestObject: JObject)
+    func sendMessage(_ sessionId: String?, requestObject: JObject, responseHandler: ResponseHandler?, requestFailureHandler: RequestFailureHandler?)
     
-    func getAppDefinition(onDefinition: (JObject?) -> Void)
+    func getAppDefinition(_ onDefinition: (JObject?) -> Void)
 }
 
-public class TransportBase
+open class TransportBase
 {
     var _responseHandler: ResponseHandler?;
     var _requestFailureHandler: RequestFailureHandler?;
@@ -30,15 +30,15 @@ public class TransportBase
     {
     }
     
-    public class var SessionIdHeader: String { get { return "synchro-api-session-id"; } }
+    open class var SessionIdHeader: String { get { return "synchro-api-session-id"; } }
     
-    public func setDefaultHandlers(responseHandler: ResponseHandler, requestFailureHandler: RequestFailureHandler)
+    open func setDefaultHandlers(_ responseHandler: @escaping ResponseHandler, requestFailureHandler: @escaping RequestFailureHandler)
     {
         _responseHandler = responseHandler;
         _requestFailureHandler = requestFailureHandler;
     }
 
-    func getAppDefinition(transport: Transport, onDefinition: (JObject?) -> Void)
+    func getAppDefinition(_ transport: Transport, onDefinition: @escaping (JObject?) -> Void)
     {
         let requestObject = JObject(
         [

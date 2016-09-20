@@ -20,7 +20,7 @@ private var logger = Logger.getLogger("iOSStackPanelWrapper");
 // of the total space (this mitigates rounding errors to some extent by at least guaranteeing
 // that the total space usage is correct).
 //
-public class StarSpaceManager
+open class StarSpaceManager
 {
     var _totalStars = 0;
     var _totalStarSpace: Double = 0.0;
@@ -31,7 +31,7 @@ public class StarSpaceManager
         _totalStarSpace = totalStarSpace;
     }
     
-    public func getStarSpace(numStars: Int) -> Double
+    open func getStarSpace(_ numStars: Int) -> Double
     {
         var starSpace: Double = 0.0;
         if ((_totalStarSpace > 0) && (_totalStars > 0))
@@ -47,7 +47,7 @@ public class StarSpaceManager
 class StackPanelView : PaddedView
 {
     var _controlWrapper: iOSControlWrapper;
-    var _orientation = Orientation.Vertical;
+    var _orientation = Orientation.vertical;
     
     internal init(controlWrapper: iOSControlWrapper)
     {
@@ -70,7 +70,7 @@ class StackPanelView : PaddedView
         }
     }
     
-    internal override func intrinsicContentSize() -> CGSize
+    internal override var intrinsicContentSize : CGSize
     {
         // Compute the "wrap contents" (minimum) size for our contents.  This will not include
         // any allocation for star-sized children, if any (whose minimum size is implicitly zero).
@@ -79,7 +79,7 @@ class StackPanelView : PaddedView
         
         for childView in self.subviews
         {
-            if (childView.hidden == true)
+            if (childView.isHidden == true)
             {
                 // Skip hidden children for layout purposes
                 continue;
@@ -95,7 +95,7 @@ class StackPanelView : PaddedView
                 
                 let margin = childControlWrapper.margin;
                 
-                if (_orientation == Orientation.Horizontal)
+                if (_orientation == Orientation.horizontal)
                 {
                     // Add to the width, update height as appropriate
                     intrinsicSize.width += countedChildWidth + (margin.left + margin.right);
@@ -114,7 +114,7 @@ class StackPanelView : PaddedView
         return intrinsicSize;
     }
     
-    internal override func addSubview(view: UIView)
+    internal override func addSubview(_ view: UIView)
     {
         super.addSubview(view);
     }
@@ -125,8 +125,8 @@ class StackPanelView : PaddedView
         
         super.layoutSubviews();
         
-        if (((_controlWrapper.frameProperties.heightSpec == SizeSpec.FillParent) && (self.frame.height == 0)) ||
-            ((_controlWrapper.frameProperties.widthSpec == SizeSpec.FillParent) && (self.frame.width == 0)))
+        if (((_controlWrapper.frameProperties.heightSpec == SizeSpec.fillParent) && (self.frame.height == 0)) ||
+            ((_controlWrapper.frameProperties.widthSpec == SizeSpec.fillParent) && (self.frame.width == 0)))
         {
             // If either dimension is star sized, and the current size in that dimension is zero, then we
             // can't layout our children (we have no space to lay them out in anyway).  So this is a noop.
@@ -139,11 +139,11 @@ class StackPanelView : PaddedView
         //
         var totalStars = 0;
         
-        var contentSize = self.intrinsicContentSize();
+        var contentSize = self.intrinsicContentSize;
         
         for childView in self.subviews
         {
-            if (childView.hidden == true)
+            if (childView.isHidden == true)
             {
                 // Skip hidden children for layout purposes
                 continue;
@@ -151,7 +151,7 @@ class StackPanelView : PaddedView
         
             let childControlWrapper = _controlWrapper.getChildControlWrapper(childView)!;
             
-            if (_orientation == Orientation.Horizontal)
+            if (_orientation == Orientation.horizontal)
             {
                 totalStars += childControlWrapper.frameProperties.starWidth;
             }
@@ -164,27 +164,27 @@ class StackPanelView : PaddedView
         // This is how much "extra" space we have in the orientation direction
         var totalStarSpace: Double = 0.0;
         
-        if (_orientation == Orientation.Horizontal)
+        if (_orientation == Orientation.horizontal)
         {
-            if (_controlWrapper.frameProperties.widthSpec != SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.widthSpec != SizeSpec.wrapContent)
             {
                 totalStarSpace = max(0, Double(self.frame.width - contentSize.width - (_padding.left + _padding.right)));
             }
             
-            if (_controlWrapper.frameProperties.heightSpec != SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.heightSpec != SizeSpec.wrapContent)
             {
                 contentSize.height = self.frame.height - (_padding.top + _padding.bottom);
             }
         }
         
-        if (_orientation == Orientation.Vertical)
+        if (_orientation == Orientation.vertical)
         {
-            if (_controlWrapper.frameProperties.heightSpec != SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.heightSpec != SizeSpec.wrapContent)
             {
                 totalStarSpace = max(0, Double(self.frame.height - contentSize.height - (_padding.top + _padding.bottom)));
             }
             
-            if (_controlWrapper.frameProperties.widthSpec != SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.widthSpec != SizeSpec.wrapContent)
             {
                 contentSize.width = self.frame.width - (_padding.left + _padding.right);
             }
@@ -203,7 +203,7 @@ class StackPanelView : PaddedView
         //
         for childView in self.subviews
         {
-            if (childView.hidden == true)
+            if (childView.isHidden == true)
             {
                 // Skip hidden children for layout purposes
                 continue;
@@ -214,7 +214,7 @@ class StackPanelView : PaddedView
             
             var childFrame = childView.frame;
             
-            if (_orientation == Orientation.Horizontal)
+            if (_orientation == Orientation.horizontal)
             {
                 if (childControlWrapper.frameProperties.starWidth > 0)
                 {
@@ -230,7 +230,7 @@ class StackPanelView : PaddedView
                 // Set the vertical position based on aligment (default Top)
                 childFrame.y = _currTop + margin.top;
                 
-                if (childControlWrapper.frameProperties.heightSpec == SizeSpec.FillParent)
+                if (childControlWrapper.frameProperties.heightSpec == SizeSpec.fillParent)
                 {
                     // Filling to parent height (already top aligned, so set width relative to parent,
                     // accounting for margins.
@@ -241,12 +241,12 @@ class StackPanelView : PaddedView
                 {
                     // Explicit height - align as needed.
                     //
-                    if (childControlWrapper.verticalAlignment == VerticalAlignment.Center)
+                    if (childControlWrapper.verticalAlignment == VerticalAlignment.center)
                     {
                         // Should we consider margin when centering?  For now, we don't.
                         childFrame.y = _currTop + ((contentSize.height - childFrame.height) / 2);
                     }
-                    else if (childControlWrapper.verticalAlignment == VerticalAlignment.Bottom)
+                    else if (childControlWrapper.verticalAlignment == VerticalAlignment.bottom)
                     {
                         childFrame.y = _currTop + (contentSize.height - childFrame.height) - margin.bottom;
                     }
@@ -279,7 +279,7 @@ class StackPanelView : PaddedView
                 // Set the horizontal position based on aligment (default Left)
                 childFrame.x = _currLeft + margin.left;
                 
-                if (childControlWrapper.frameProperties.widthSpec == SizeSpec.FillParent)
+                if (childControlWrapper.frameProperties.widthSpec == SizeSpec.fillParent)
                 {
                     // Filling to parent width (already left aligned, so set width relative to parent,
                     // accounting for margins.
@@ -290,12 +290,12 @@ class StackPanelView : PaddedView
                 {
                     // Explicit height - align as needed.
                     //
-                    if (childControlWrapper.horizontalAlignment == HorizontalAlignment.Center)
+                    if (childControlWrapper.horizontalAlignment == HorizontalAlignment.center)
                     {
                         // Should we consider margin when centering?  For now, we don't.
                         childFrame.x = _currLeft + ((contentSize.width - childFrame.width) / 2);
                     }
-                    else if (childControlWrapper.horizontalAlignment == HorizontalAlignment.Right)
+                    else if (childControlWrapper.horizontalAlignment == HorizontalAlignment.right)
                     {
                         childFrame.x = _currLeft + (contentSize.width - childFrame.width) - margin.right;
                     }
@@ -332,14 +332,14 @@ class StackPanelView : PaddedView
         
         // See if the stack panel might have changed size (based on content)
         //
-        if ((_controlWrapper.frameProperties.widthSpec == SizeSpec.WrapContent) || (_controlWrapper.frameProperties.heightSpec == SizeSpec.WrapContent))
+        if ((_controlWrapper.frameProperties.widthSpec == SizeSpec.wrapContent) || (_controlWrapper.frameProperties.heightSpec == SizeSpec.wrapContent))
         {
             var panelSize = self.frame.size;
-            if (_controlWrapper.frameProperties.heightSpec == SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.heightSpec == SizeSpec.wrapContent)
             {
                 panelSize.height = newPanelSize.height;
             }
-            if (_controlWrapper.frameProperties.widthSpec == SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.widthSpec == SizeSpec.wrapContent)
             {
                 panelSize.width = newPanelSize.width;
             }
@@ -362,7 +362,7 @@ class StackPanelView : PaddedView
     }
 }
 
-public class iOSStackPanelWrapper : iOSControlWrapper
+open class iOSStackPanelWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
@@ -375,7 +375,7 @@ public class iOSStackPanelWrapper : iOSControlWrapper
         processElementDimensions(controlSpec);
         applyFrameworkElementDefaults(stackPanel, applyMargins: false);
         
-        processElementProperty(controlSpec, attributeName: "orientation", setValue: { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.Vertical) });
+        processElementProperty(controlSpec, attributeName: "orientation", setValue: { (value) in stackPanel.orientation = self.toOrientation(value, defaultOrientation: Orientation.vertical) });
         
         processThicknessProperty(controlSpec, attributeName: "padding", thicknessSetter: PaddedViewThicknessSetter(paddedView: stackPanel));
         

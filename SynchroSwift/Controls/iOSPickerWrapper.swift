@@ -11,7 +11,7 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSPickerWrapper");
 
-public class BindingContextPickerModel : NSObject, UIPickerViewDataSource, UIPickerViewDelegate
+open class BindingContextPickerModel : NSObject, UIPickerViewDataSource, UIPickerViewDelegate
 {
     var _bindingContexts: [BindingContext]!;
     var _itemContent: String!;
@@ -21,21 +21,21 @@ public class BindingContextPickerModel : NSObject, UIPickerViewDataSource, UIPic
         super.init();
     }
     
-    public func setContents(bindingContext: BindingContext, itemContent: String)
+    open func setContents(_ bindingContext: BindingContext, itemContent: String)
     {
         _bindingContexts = bindingContext.selectEach("$data");
         _itemContent = itemContent;
     }
     
     // UIPickerViewDataSource
-    public func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int
+    open func numberOfComponents(in pickerView: UIPickerView) -> Int
     {
         logger.debug("Returning number of components: 1");
         return 1;
     }
     
     // UIPickerViewDataSource
-    public func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
+    open func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
     {
         let rows = (_bindingContexts != nil) ? _bindingContexts.count : 0;
         logger.debug("Returning number of rows in component \(component): \(rows)");
@@ -43,37 +43,37 @@ public class BindingContextPickerModel : NSObject, UIPickerViewDataSource, UIPic
     }
     
     // UIPickerViewDelegate
-    public func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
+    open func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
     {
         let title = PropertyValue.expandAsString(_itemContent, bindingContext: _bindingContexts[row]);
         logger.debug("returning title for row \(row): \(title)");
         return title;
     }
     
-    public func getValue(row: Int) -> JToken?
+    open func getValue(_ row: Int) -> JToken?
     {
         return _bindingContexts[row].select("$data").getValue();
     }
     
-    public func getSelection(row: Int, selectionItem: String) -> JToken?
+    open func getSelection(_ row: Int, selectionItem: String) -> JToken?
     {
         return _bindingContexts[row].select(selectionItem).getValue()?.deepClone();
     }
     
-    public func getBindingContext(row: Int) -> BindingContext
+    open func getBindingContext(_ row: Int) -> BindingContext
     {
         return _bindingContexts[row];
     }
     
     // UIPickerViewDelegate
-    public func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat
+    open func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat
     {
         logger.debug("Returning row height of 40 for component: \(component)");
         return CGFloat(40.0);
     }
 
     // UIPickerViewDelegate
-    public func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    open func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
         // This fires whenever an item is selected in the picker view (meaning that the item has been
         // scrolled to and highlighted, not that the user as necessarily "chosen" the value in the sense
@@ -82,11 +82,11 @@ public class BindingContextPickerModel : NSObject, UIPickerViewDataSource, UIPic
     }
 }
 
-public class PickerTextField : UITextField
+open class PickerTextField : UITextField
 {
     // This gets rid of the blinking caret when "editing" (which in our case, means having the picker input view up).
     //
-    public override func caretRectForPosition(position: UITextPosition) -> CGRect
+    open override func caretRect(for position: UITextPosition) -> CGRect
     {
         return CGRect.null;
     }
@@ -94,7 +94,7 @@ public class PickerTextField : UITextField
 
 private var commands = [CommandName.OnSelectionChange.Attribute];
 
-public class iOSPickerWrapper : iOSControlWrapper
+open class iOSPickerWrapper : iOSControlWrapper
 {
     // On phones, we have a picker "input view" at the bottom of the screen when "editing", similar to the way the keyboard
     // pops up there for a regular text field.  This is modelled after:
@@ -129,7 +129,7 @@ public class iOSPickerWrapper : iOSControlWrapper
         _picker.showsSelectionIndicator = true;
 
         _textBox = PickerTextField();
-        _textBox.borderStyle = UITextBorderStyle.RoundedRect;
+        _textBox.borderStyle = UITextBorderStyle.roundedRect;
         
         super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
 
@@ -140,11 +140,11 @@ public class iOSPickerWrapper : iOSControlWrapper
         applyFrameworkElementDefaults(_textBox);
         
         let toolbar = UIToolbar();
-        toolbar.barStyle = UIBarStyle.Black;
-        toolbar.translucent = true;
+        toolbar.barStyle = UIBarStyle.black;
+        toolbar.isTranslucent = true;
         toolbar.sizeToFit();
         
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Done, target: self, action: #selector(doneButtonPressed));
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(doneButtonPressed));
         toolbar.setItems([doneButton], animated: true);
         
         _textBox.inputView = _picker;
@@ -180,25 +180,25 @@ public class iOSPickerWrapper : iOSControlWrapper
         }
     }
     
-    func doneButtonPressed(sender: UIBarButtonItem)
+    func doneButtonPressed(_ sender: UIBarButtonItem)
     {
-        if (_textBox.isFirstResponder())
+        if (_textBox.isFirstResponder)
         {
             let model = _picker.dataSource as! BindingContextPickerModel;
 
-            let row = _picker.selectedRowInComponent(0);
+            let row = _picker.selectedRow(inComponent: 0);
             _textBox.text = model.pickerView(_picker, titleForRow: row, forComponent: 0);
             _textBox.resignFirstResponder();
             self.picker_ItemSelected(_picker, row: row);
         }
     }
     
-    public func getPickerContents(picker: UIPickerView) -> JToken
+    open func getPickerContents(_ picker: UIPickerView) -> JToken
     {
         fatalError("getPickerContents not implemented");
     }
     
-    public func setPickerContents(picker: UIPickerView, bindingContext: BindingContext, itemContent: String)
+    open func setPickerContents(_ picker: UIPickerView, bindingContext: BindingContext, itemContent: String)
     {
         logger.debug("Setting picker contents");
     
@@ -222,18 +222,18 @@ public class iOSPickerWrapper : iOSControlWrapper
         _selectionChangingProgramatically = false;
     }
     
-    public func getPickerSelection(picker: UIPickerView, selectionItem: String) -> JToken
+    open func getPickerSelection(_ picker: UIPickerView, selectionItem: String) -> JToken
     {
         let model = picker.dataSource as! BindingContextPickerModel;
         
-        if (picker.selectedRowInComponent(0) >= 0)
+        if (picker.selectedRow(inComponent: 0) >= 0)
         {
-            return model.getSelection(picker.selectedRowInComponent(0), selectionItem: selectionItem) ?? JValue(false);
+            return model.getSelection(picker.selectedRow(inComponent: 0), selectionItem: selectionItem) ?? JValue(false);
         }
         return JValue(false); // This is a "null" selection
     }
     
-    public func setPickerSelection(picker: UIPickerView, selectionItem: String, selection: JToken)
+    open func setPickerSelection(_ picker: UIPickerView, selectionItem: String, selection: JToken)
     {
         _selectionChangingProgramatically = true;
 
@@ -243,7 +243,7 @@ public class iOSPickerWrapper : iOSControlWrapper
         {
             if (JToken.deepEquals(selection, token2: model.getSelection(i, selectionItem: selectionItem)))
             {
-                picker.selectedRowInComponent(0);
+                picker.selectedRow(inComponent: 0);
                 _textBox.text = model.pickerView(picker, titleForRow: i, forComponent: 0);
                 _lastSelectedPosition = i;
                 picker.selectRow(i, inComponent: 0, animated: true);
@@ -254,7 +254,7 @@ public class iOSPickerWrapper : iOSControlWrapper
         _selectionChangingProgramatically = false;
     }
     
-    func picker_ItemSelected(picker: UIPickerView, row: Int)
+    func picker_ItemSelected(_ picker: UIPickerView, row: Int)
     {
         logger.debug("Picker selection changed");
     

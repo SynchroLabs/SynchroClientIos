@@ -11,12 +11,12 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSProgressBarWrapper");
 
-public class iOSProgressBarWrapper : iOSControlWrapper
+open class iOSProgressBarWrapper : iOSControlWrapper
 {
     var _min: Double = 0.0;
     var _max: Double = 1.0;
     
-    func getProgress(progress: Double) -> Double
+    func getProgress(_ progress: Double) -> Double
     {
         if ((_max <= _min) || (progress <= _min))
         {

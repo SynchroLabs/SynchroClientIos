@@ -11,11 +11,11 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSListViewWrapper");
 
-public class BindingContextTableViewCell : UITableViewCell
+open class BindingContextTableViewCell : UITableViewCell
 {
     var _controlWrapper: iOSControlWrapper?;
     
-    public var controlWrapper: iOSControlWrapper?
+    open var controlWrapper: iOSControlWrapper?
     {
         get { return _controlWrapper; }
         set(value)
@@ -48,7 +48,7 @@ public class BindingContextTableViewCell : UITableViewCell
     
     public init(cellIdentifier: String)
     {
-        super.init(style: UITableViewCellStyle.Default, reuseIdentifier: cellIdentifier)
+        super.init(style: UITableViewCellStyle.default, reuseIdentifier: cellIdentifier)
     }
 
     required public init?(coder aDecoder: NSCoder)
@@ -56,12 +56,12 @@ public class BindingContextTableViewCell : UITableViewCell
         fatalError("init(coder:) has not been implemented")
     }
     
-    public class func updateControlWidth(wrapper: iOSControlWrapper, cellWidth: CGFloat)
+    open class func updateControlWidth(_ wrapper: iOSControlWrapper, cellWidth: CGFloat)
     {
         // If this control is "fill" width and the width provided is different than the current width, set
         // the new width and layout any subviews.
         //
-        if (wrapper.frameProperties.widthSpec == SizeSpec.FillParent)
+        if (wrapper.frameProperties.widthSpec == SizeSpec.fillParent)
         {
             if (wrapper.control!.frame.width != cellWidth)
             {
@@ -73,7 +73,7 @@ public class BindingContextTableViewCell : UITableViewCell
         }
     }
     
-    public override func layoutSubviews()
+    open override func layoutSubviews()
     {
         BindingContextTableViewCell.updateControlWidth(_controlWrapper!, cellWidth: self.frame.width);
         super.layoutSubviews();
@@ -82,16 +82,16 @@ public class BindingContextTableViewCell : UITableViewCell
 
 private var _cellIdentifier = "ListViewCell";
 
-public class BindingContextTableSourceItem : TableSourceItem
+open class BindingContextTableSourceItem : TableSourceItem
 {
-    public var cellIdentifier: String { get { return _cellIdentifier; } }
+    open var cellIdentifier: String { get { return _cellIdentifier; } }
     
     var _parentControlWrapper: iOSControlWrapper;
     var _contentControlWrapper: iOSControlWrapper;
     var _itemTemplate: JObject;
     
     var _bindingContext: BindingContext;
-    public var bindingContext: BindingContext { get { return _bindingContext; } }
+    open var bindingContext: BindingContext { get { return _bindingContext; } }
     
     public init(parentControl: iOSControlWrapper, itemTemplate: JObject, bindingContext: BindingContext)
     {
@@ -125,7 +125,7 @@ public class BindingContextTableSourceItem : TableSourceItem
         _contentControlWrapper = iOSControlWrapper.createControl(_parentControlWrapper, bindingContext: _bindingContext, controlSpec: _itemTemplate)!;
     }
     
-    public func createCell(tableView: UITableView) -> UITableViewCell
+    open func createCell(_ tableView: UITableView) -> UITableViewCell
     {
         return BindingContextTableViewCell(cellIdentifier: cellIdentifier);
     }
@@ -133,7 +133,7 @@ public class BindingContextTableSourceItem : TableSourceItem
     // Note that it is not uncommon to get a request to bind this item to a cell to which it has already been
     // most recently bound.  Check for and handle this case as appropriate.
     //
-    public func bindCell(tableView: UITableView, cell: UITableViewCell)
+    open func bindCell(_ tableView: UITableView, cell: UITableViewCell)
     {
         let tableViewCell = cell as! BindingContextTableViewCell;
     
@@ -146,7 +146,7 @@ public class BindingContextTableSourceItem : TableSourceItem
         tableViewCell.controlWrapper = _contentControlWrapper;
     }
     
-    public func getHeightForRow(tableView: UITableView) -> CGFloat
+    open func getHeightForRow(_ tableView: UITableView) -> CGFloat
     {
         // If the cell contents is set to fill width ("*") and wrap height, then we have to set the actual width
         // before we can compute the height, which we need here in order to avoid returning a zero (which causes
@@ -158,13 +158,13 @@ public class BindingContextTableSourceItem : TableSourceItem
         return _contentControlWrapper.control!.frame.height;
     }
     
-    public func setCheckedState(tableView: UITableView, cell: UITableViewCell, isChecked: Bool) -> Bool
+    open func setCheckedState(_ tableView: UITableView, cell: UITableViewCell, isChecked: Bool) -> Bool
     {
         return false;
     }
 }
 
-public class CheckableBindingContextTableSource : CheckableTableSource
+open class CheckableBindingContextTableSource : CheckableTableSource
 {
     var _parentControl: iOSControlWrapper;
     var _itemTemplate: JObject;
@@ -176,24 +176,24 @@ public class CheckableBindingContextTableSource : CheckableTableSource
         super.init(selectionMode: selectionMode, onSelectionChanged: onSelectionChanged, onItemClicked: onItemClicked, disclosure: disclosure);
     }
     
-    public func setContents(bindingContext: BindingContext, itemSelector: String)
+    open func setContents(_ bindingContext: BindingContext, itemSelector: String)
     {
         _tableItems.removeAll();
         for itemBindingContext in bindingContext.selectEach(itemSelector)
         {
             let item = BindingContextTableSourceItem(parentControl: _parentControl, itemTemplate: _itemTemplate, bindingContext: itemBindingContext);
-            _tableItems.append(CheckableTableSourceItem(tableSourceItem: item, indexPath: NSIndexPath(forRow: _tableItems.count, inSection: 0)));
+            _tableItems.append(CheckableTableSourceItem(tableSourceItem: item, indexPath: IndexPath(row: _tableItems.count, section: 0)));
         }
     }
     
-    public func addItem(bindingContext: BindingContext, isChecked: Bool = false)
+    open func addItem(_ bindingContext: BindingContext, isChecked: Bool = false)
     {
         let item = BindingContextTableSourceItem(parentControl: _parentControl, itemTemplate: _itemTemplate, bindingContext: bindingContext);
-        _tableItems.append(CheckableTableSourceItem(tableSourceItem: item, indexPath: NSIndexPath(forRow: _tableItems.count, inSection: 0)));
+        _tableItems.append(CheckableTableSourceItem(tableSourceItem: item, indexPath: IndexPath(row: _tableItems.count, section: 0)));
     }
 }
 
-public class TableContainerView : UIView
+open class TableContainerView : UIView
 {
     var _tableView: UITableView;
     var _controlWrapper: iOSControlWrapper;
@@ -211,11 +211,11 @@ public class TableContainerView : UIView
         var panelSize = self.frame.size;
         let margin = _controlWrapper.margin;
         
-        if (_controlWrapper.frameProperties.widthSpec == SizeSpec.Explicit)
+        if (_controlWrapper.frameProperties.widthSpec == SizeSpec.explicit)
         {
             panelSize.width = _controlWrapper.control!.frame.width + margin.left + margin.right;
         }
-        if (_controlWrapper.frameProperties.heightSpec == SizeSpec.Explicit)
+        if (_controlWrapper.frameProperties.heightSpec == SizeSpec.explicit)
         {
             panelSize.height = _controlWrapper.control!.frame.height + margin.top + margin.bottom;
         }
@@ -235,19 +235,19 @@ public class TableContainerView : UIView
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func updateSize()
+    open func updateSize()
     {
         fatalError("This method must be overridden by the subclass");
     }
     
-    public override func layoutSubviews()
+    open override func layoutSubviews()
     {
         // logger.info("LayoutSubviews");
         
         var panelSize = self.frame.size;
     
         let childView = _controlWrapper.control!;
-        if (childView.hidden)
+        if (childView.isHidden)
         {
             panelSize.height = 0;
         }
@@ -256,7 +256,7 @@ public class TableContainerView : UIView
             var childFrame = childView.frame;
             let margin = _controlWrapper.margin;
     
-            if (_controlWrapper.frameProperties.widthSpec == SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.widthSpec == SizeSpec.wrapContent)
             {
                 // Panel width will size to content
                 //
@@ -269,7 +269,7 @@ public class TableContainerView : UIView
                 //
                 childFrame.x = margin.left;
     
-                if (_controlWrapper.frameProperties.widthSpec == SizeSpec.FillParent)
+                if (_controlWrapper.frameProperties.widthSpec == SizeSpec.fillParent)
                 {
                     // Child will fill parent (less margins)
                     //
@@ -279,32 +279,32 @@ public class TableContainerView : UIView
                 {
                     // Align child in parent
                     //
-                    if (_controlWrapper.horizontalAlignment == HorizontalAlignment.Center)
+                    if (_controlWrapper.horizontalAlignment == HorizontalAlignment.center)
                     {
                         // Ignoring margins on center for now.
                         childFrame.x = (panelSize.width - childFrame.width) / 2;
                     }
-                    else if (_controlWrapper.horizontalAlignment == HorizontalAlignment.Right)
+                    else if (_controlWrapper.horizontalAlignment == HorizontalAlignment.right)
                     {
                         childFrame.x = (panelSize.width - childFrame.width - margin.right);
                     }
                 }
             }
     
-            if (_controlWrapper.frameProperties.heightSpec == SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.heightSpec == SizeSpec.wrapContent)
             {
                 // Panel height will size to content
                 //
                 childFrame.y = margin.top;
                 panelSize.height = childFrame.y + childFrame.height + margin.bottom;
             }
-            else if (_controlWrapper.frameProperties.heightSpec == SizeSpec.Explicit)
+            else if (_controlWrapper.frameProperties.heightSpec == SizeSpec.explicit)
             {
                 // Panel height is explicit, so align content using the content vertical alignment (along with margin)
                 //
                 childFrame.y = margin.top;
     
-                if (_controlWrapper.frameProperties.heightSpec == SizeSpec.FillParent)
+                if (_controlWrapper.frameProperties.heightSpec == SizeSpec.fillParent)
                 {
                     // Child will fill parent (less margin)
                     //
@@ -314,12 +314,12 @@ public class TableContainerView : UIView
                 {
                     // Align child in parent
                     //
-                    if (_controlWrapper.verticalAlignment == VerticalAlignment.Center)
+                    if (_controlWrapper.verticalAlignment == VerticalAlignment.center)
                     {
                         // Ignoring margins on center for now.
                         childFrame.y = (panelSize.height - childFrame.height) / 2;
                     }
-                    else if (_controlWrapper.verticalAlignment == VerticalAlignment.Bottom)
+                    else if (_controlWrapper.verticalAlignment == VerticalAlignment.bottom)
                     {
                         childFrame.y = (panelSize.height - childFrame.height - margin.bottom);
                     }
@@ -350,7 +350,7 @@ public class TableContainerView : UIView
     }
 }
 
-public class TableHeaderView : TableContainerView
+open class TableHeaderView : TableContainerView
 {
     public override init(tableView: UITableView, controlWrapper: iOSControlWrapper)
     {
@@ -362,7 +362,7 @@ public class TableHeaderView : TableContainerView
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func updateSize()
+    open override func updateSize()
     {
         // Apparently, The UITableView doesn't really expect its header/footer to change in size after
         // it is set.  Because ours can (due to layout changes based on binding), we have to poke the
@@ -375,7 +375,7 @@ public class TableHeaderView : TableContainerView
     }
 }
 
-public class TableFooterView : TableContainerView
+open class TableFooterView : TableContainerView
 {
     public override init(tableView: UITableView, controlWrapper: iOSControlWrapper)
     {
@@ -387,7 +387,7 @@ public class TableFooterView : TableContainerView
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func updateSize()
+    open override func updateSize()
     {
         // See comment in TableHeaderView:UpdateSize() above...
         //
@@ -397,7 +397,7 @@ public class TableFooterView : TableContainerView
 
 private var commands = [CommandName.OnItemClick.Attribute, CommandName.OnSelectionChange.Attribute];
 
-public class iOSListViewWrapper : iOSControlWrapper
+open class iOSListViewWrapper : iOSControlWrapper
 {
     var _selectionChangingProgramatically = false;
     var _localSelection: JToken?;
@@ -412,7 +412,7 @@ public class iOSListViewWrapper : iOSControlWrapper
         let table = UITableView();
         self._control = table;
         
-        table.separatorInset = UIEdgeInsetsZero;
+        table.separatorInset = UIEdgeInsets.zero;
         
         // This is better performance, but only works if all the rows are the same height and you know the height ahead of time...
         //
@@ -452,7 +452,7 @@ public class iOSListViewWrapper : iOSControlWrapper
             // the specific case of a non-select list where there is an onItemClick handler and you don't want the disclosure accessory, you may specify
             // disclosure: false to suppress it.
             //
-            if ((selectionMode == ListSelectionMode.None) && (controlSpec[CommandName.OnItemClick.Attribute] != nil))
+            if ((selectionMode == ListSelectionMode.none) && (controlSpec[CommandName.OnItemClick.Attribute] != nil))
             {
                 disclosure = true;
                 if (controlSpec["disclosure"] != nil)
@@ -490,12 +490,12 @@ public class iOSListViewWrapper : iOSControlWrapper
         }
     }
     
-    public func getListViewContents(tableView: UITableView) -> JToken
+    open func getListViewContents(_ tableView: UITableView) -> JToken
     {
         fatalError("getListViewContents not implemented");
     }
     
-    public func setListViewContents(tableView: UITableView, bindingContext: BindingContext)
+    open func setListViewContents(_ tableView: UITableView, bindingContext: BindingContext)
     {
         logger.debug("Setting listview contents");
     
@@ -507,14 +507,14 @@ public class iOSListViewWrapper : iOSControlWrapper
         tableSource.setContents(bindingContext, itemSelector: "$data");
         let newCount = tableSource.allItems.count;
         
-        var reloadRows = [NSIndexPath]();
-        var insertRows = [NSIndexPath]();
-        var deleteRows = [NSIndexPath]();
+        var reloadRows = [IndexPath]();
+        var insertRows = [IndexPath]();
+        var deleteRows = [IndexPath]();
         
         let maxCount = max(newCount, oldCount);
         for i in 0 ..< maxCount
         {
-            let row = NSIndexPath(forRow: i, inSection: 0);
+            let row = IndexPath(row: i, section: 0);
             if (i < min(newCount, oldCount))
             {
                 reloadRows.append(row);
@@ -562,15 +562,15 @@ public class iOSListViewWrapper : iOSControlWrapper
         tableView.beginUpdates();
         if (reloadRows.count > 0)
         {
-            tableView.reloadRowsAtIndexPaths(reloadRows, withRowAnimation: UITableViewRowAnimation.None);
+            tableView.reloadRows(at: reloadRows, with: UITableViewRowAnimation.none);
         }
         if (insertRows.count > 0)
         {
-            tableView.insertRowsAtIndexPaths(insertRows, withRowAnimation: UITableViewRowAnimation.None);
+            tableView.insertRows(at: insertRows, with: UITableViewRowAnimation.none);
         }
         if (deleteRows.count > 0)
         {
-            tableView.deleteRowsAtIndexPaths(deleteRows, withRowAnimation: UITableViewRowAnimation.None);
+            tableView.deleteRows(at: deleteRows, with: UITableViewRowAnimation.none);
         }
         tableView.endUpdates();
         
@@ -600,10 +600,9 @@ public class iOSListViewWrapper : iOSControlWrapper
         // If our height is WrapContent, then we need to adjust the frame size after the content is set, and we need to do
         // this on the main thread.
         //
-        if (self.frameProperties.heightSpec == SizeSpec.WrapContent)
+        if (self.frameProperties.heightSpec == SizeSpec.wrapContent)
         {
-            dispatch_async(dispatch_get_main_queue(),
-            {
+            DispatchQueue.main.async(execute: {
                 tableView.invalidateIntrinsicContentSize();
                 var frame = tableView.frame;
                 frame.size.height = tableView.contentSize.height;
@@ -612,13 +611,13 @@ public class iOSListViewWrapper : iOSControlWrapper
         }
     }
     
-    public func getListViewSelection(tableView: UITableView, selectionItem: String) -> JToken
+    open func getListViewSelection(_ tableView: UITableView, selectionItem: String) -> JToken
     {
         let tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
         var checkedItems = tableSource.checkedItems;
         
-        if (tableSource.selectionMode == ListSelectionMode.Multiple)
+        if (tableSource.selectionMode == ListSelectionMode.multiple)
         {
             let array = JArray();
             for item in checkedItems
@@ -654,7 +653,7 @@ public class iOSListViewWrapper : iOSControlWrapper
     // to detect the "both" case (without exposing a lot more information here).  We're going to go ahead and live with the
     // multiple calls.  It shouldn't hurt anything (they should produce the same result), it's just slightly inefficient.
     //
-    public func setListViewSelection(tableView: UITableView, selectionItem: String, selection: JToken?)
+    open func setListViewSelection(_ tableView: UITableView, selectionItem: String, selection: JToken?)
     {
         _selectionChangingProgramatically = true;
         
@@ -693,14 +692,14 @@ public class iOSListViewWrapper : iOSControlWrapper
         _selectionChangingProgramatically = false;
     }
     
-    func listview_ItemClicked(itemClicked: TableSourceItem)
+    func listview_ItemClicked(_ itemClicked: TableSourceItem)
     {
         logger.debug("Listview item clicked: \(itemClicked)");
     
         let tableView: UITableView = self.control as! UITableView;
         let tableSource = tableView.dataSource! as! CheckableBindingContextTableSource;
         
-        if (tableSource.selectionMode == ListSelectionMode.None)
+        if (tableSource.selectionMode == ListSelectionMode.none)
         {
             if let listItem = itemClicked as? BindingContextTableSourceItem
             {
@@ -716,7 +715,7 @@ public class iOSListViewWrapper : iOSControlWrapper
         }
     }
     
-    func listview_SelectionChanged(itemClicked: TableSourceItem)
+    func listview_SelectionChanged(_ itemClicked: TableSourceItem)
     {
         logger.debug("Listview selection changed");
     
@@ -732,13 +731,13 @@ public class iOSListViewWrapper : iOSControlWrapper
             _localSelection = self.getListViewSelection(tableView, selectionItem: "$data");
         }
         
-        if ((!_selectionChangingProgramatically) && (tableSource.selectionMode != ListSelectionMode.None))
+        if ((!_selectionChangingProgramatically) && (tableSource.selectionMode != ListSelectionMode.none))
         {
             if let command = getCommand(CommandName.OnSelectionChange)
             {
                 logger.debug("ListView selection change with command: \(command)");
                 
-                if (tableSource.selectionMode == ListSelectionMode.Single)
+                if (tableSource.selectionMode == ListSelectionMode.single)
                 {
                     if let item = itemClicked as? BindingContextTableSourceItem
                     {
@@ -747,7 +746,7 @@ public class iOSListViewWrapper : iOSControlWrapper
                         stateManager.sendCommandRequestAsync(command.Command, parameters: command.getResolvedParameters(item.bindingContext));
                     }
                 }
-                else if (tableSource.selectionMode == ListSelectionMode.Multiple)
+                else if (tableSource.selectionMode == ListSelectionMode.multiple)
                 {
                     // The selection change command handler resolves its tokens relative to the list context when in multiple select mode.
                     //

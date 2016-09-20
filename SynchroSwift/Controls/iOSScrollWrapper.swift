@@ -31,7 +31,7 @@ class AutoSizingScrollView : UIScrollView
     internal override func layoutSubviews()
     {
         // this.Superview
-        if (!self.dragging && !self.decelerating)
+        if (!self.isDragging && !self.isDecelerating)
         {
             logger.debug("Laying out sub view");
         
@@ -43,11 +43,11 @@ class AutoSizingScrollView : UIScrollView
                 {
                     var childFrame = childView.frame;
         
-                    if (_orientation == Orientation.Vertical)
+                    if (_orientation == Orientation.vertical)
                     {
                         // Vertical scroll, child width is FillParent
                         //
-                        if (childControlWrapper!.frameProperties.widthSpec == SizeSpec.FillParent)
+                        if (childControlWrapper!.frameProperties.widthSpec == SizeSpec.fillParent)
                         {
                             childFrame.width = self.frame.width;
                         }
@@ -63,7 +63,7 @@ class AutoSizingScrollView : UIScrollView
                     {
                         // Horizontal scroll, child height is FillParent
                         //
-                        if (childControlWrapper!.frameProperties.heightSpec == SizeSpec.FillParent)
+                        if (childControlWrapper!.frameProperties.heightSpec == SizeSpec.fillParent)
                         {
                             childFrame.height = self.frame.height;
                         }
@@ -93,14 +93,14 @@ class AutoSizingScrollView : UIScrollView
     }
 }
 
-public class iOSScrollWrapper : iOSControlWrapper
+open class iOSScrollWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating scroll element");
         super.init(parent: parent, bindingContext: bindingContext, controlSpec: controlSpec);
         
-        let orientation = self.toOrientation(controlSpec["orientation"], defaultOrientation: Orientation.Vertical);
+        let orientation = self.toOrientation(controlSpec["orientation"], defaultOrientation: Orientation.vertical);
         
         // https://developer.apple.com/library/ios/documentation/WindowsViews/Conceptual/UIScrollView_pg/Introduction/Introduction.html
         //

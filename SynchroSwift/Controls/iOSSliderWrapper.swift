@@ -11,7 +11,7 @@ import UIKit
 
 private var logger = Logger.getLogger("iOSSliderWrapper");
 
-public class iOSSliderWrapper : iOSControlWrapper
+open class iOSSliderWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
@@ -36,10 +36,10 @@ public class iOSSliderWrapper : iOSControlWrapper
         processElementProperty(controlSpec, attributeName: "minimum", setValue: { (value) in self.setMin(Float(self.toDouble(value))) });
         processElementProperty(controlSpec, attributeName: "maximum", setValue: { (value) in self.setMax(Float(self.toDouble(value))) });
         
-        slider.addTarget(self, action: #selector(valueChanged), forControlEvents: .ValueChanged);
+        slider.addTarget(self, action: #selector(valueChanged), for: .valueChanged);
     }
     
-    func valueChanged(slider: UISlider)
+    func valueChanged(_ slider: UISlider)
     {
         updateValueBindingForAttribute("value");
     }
@@ -51,7 +51,7 @@ public class iOSSliderWrapper : iOSControlWrapper
     //
     var _value: Float = 0;
     
-    func setMin(min: Float)
+    func setMin(_ min: Float)
     {
         let slider = self._control as! UISlider;
         let needsValueUpdate = _value < slider.minimumValue;
@@ -62,7 +62,7 @@ public class iOSSliderWrapper : iOSControlWrapper
         }
     }
     
-    func setMax(max: Float)
+    func setMax(_ max: Float)
     {
         let slider = self._control as! UISlider;
         let needsValueUpdate = _value > slider.maximumValue;
@@ -73,7 +73,7 @@ public class iOSSliderWrapper : iOSControlWrapper
         }
     }
     
-    func setValue(value: Float)
+    func setValue(_ value: Float)
     {
         let slider = self._control as! UISlider;
         _value = value;

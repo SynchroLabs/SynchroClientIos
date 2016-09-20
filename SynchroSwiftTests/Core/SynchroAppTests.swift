@@ -19,8 +19,8 @@ class SynchroAppTests: XCTestCase
     {
         // Force fresh load from the bundled seed...
         //
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.removeObjectForKey("seed.json");
+        let userDefaults = UserDefaults.standard
+        userDefaults.removeObject(forKey: "seed.json");
         userDefaults.synchronize()
 
         let appManager = SynchroAppManager();

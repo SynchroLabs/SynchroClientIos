@@ -16,7 +16,7 @@ private var _bindingTokensRE = Regex("[$]([^.]*)[.]?"); // Break on dot or open 
 
 // Corresponds to a specific location in a JSON oject (which may or may not exist at the time the BindingContext is created).
 //
-public class BindingContext
+open class BindingContext
 {
     var _bindingRoot: JObject;
     
@@ -24,7 +24,7 @@ public class BindingContext
     var _boundToken: JToken?;
     var _isIndex = false;
     
-    public var BindingRoot: JObject
+    open var BindingRoot: JObject
     {
         get { return _bindingRoot; }
         set (value)
@@ -45,7 +45,7 @@ public class BindingContext
         _boundToken = _bindingRoot;
     }
     
-    private func attemptToBindTokenIfNeeded()
+    fileprivate func attemptToBindTokenIfNeeded()
     {
         if (_boundToken == nil)
         {
@@ -53,7 +53,7 @@ public class BindingContext
         }
     }
     
-    private func resolveBinding(parentPathParam: String, bindingPath: String) -> String
+    fileprivate func resolveBinding(_ parentPathParam: String, bindingPath: String) -> String
     {
         var parentPath = parentPathParam; // was var param - thank for nothing Swift team
         
@@ -93,10 +93,10 @@ public class BindingContext
             {
                 if (!parentPath.isEmpty)
                 {
-                    if let rangeOfLastSep = parentPath.rangeOfCharacterFromSet(NSCharacterSet(charactersInString: ".["), options: .BackwardsSearch)
+                    if let rangeOfLastSep = parentPath.rangeOfCharacter(from: CharacterSet(charactersIn: ".["), options: .backwards)
                     {
                         // Remove the last (rightmost) path segment
-                        parentPath = parentPath.substringToIndex(rangeOfLastSep.startIndex);
+                        parentPath = parentPath.substring(to: rangeOfLastSep.lowerBound);
                     }
                     else
                     {
@@ -152,14 +152,14 @@ public class BindingContext
         return finalBindingPath;
     }
     
-    private init(_ context: BindingContext, bindingPath: String)
+    fileprivate init(_ context: BindingContext, bindingPath: String)
     {
         _bindingRoot = context._bindingRoot;
         _bindingPath = resolveBinding(context._bindingPath, bindingPath: bindingPath);
         self.attemptToBindTokenIfNeeded();
     }
     
-    private init(_ context: BindingContext, index: Int, bindingPath: String)
+    fileprivate init(_ context: BindingContext, index: Int, bindingPath: String)
     {
         _bindingRoot = context._bindingRoot;
         _bindingPath = resolveBinding("\(context._bindingPath)[\(index)]", bindingPath: bindingPath);
@@ -172,7 +172,7 @@ public class BindingContext
     
     // Given a path to a changed element, determine if the binding is impacted.
     //
-    public func isBindingUpdated(updatedElementPath: String, objectChange: Bool) -> Bool
+    open func isBindingUpdated(_ updatedElementPath: String, objectChange: Bool) -> Bool
     {
         if (objectChange && (_bindingPath.hasPrefix(updatedElementPath)))
         {
@@ -193,16 +193,16 @@ public class BindingContext
         return false;
     }
     
-    public func select(bindingPath: String) -> BindingContext
+    open func select(_ bindingPath: String) -> BindingContext
     {
         return BindingContext(self, bindingPath: bindingPath);
     }
     
-    public func selectEach(bindingPath: String) -> Array<BindingContext>
+    open func selectEach(_ bindingPath: String) -> Array<BindingContext>
     {
         var bindingContexts = Array<BindingContext>();
     
-        if (JTokenType.Array == _boundToken?.Type)
+        if (JTokenType.array == _boundToken?.Type)
         {
             var index = 0;
             for _ in _boundToken as! JArray
@@ -215,9 +215,9 @@ public class BindingContext
         return bindingContexts;
     }
     
-    public var BindingPath: String { get { return _bindingPath; } }
+    open var BindingPath: String { get { return _bindingPath; } }
     
-    public func getValue() -> JToken?
+    open func getValue() -> JToken?
     {
         self.attemptToBindTokenIfNeeded();
         if (_boundToken != nil)
@@ -233,7 +233,7 @@ public class BindingContext
                 {
                     if let parentArray = parent as? JArray
                     {
-                        let pos = parentArray.indexOf({$0 === child!});
+                        let pos = parentArray.index(where: {$0 === child!});
                         return JValue(pos! as Int);
                     }
                     else
@@ -255,7 +255,7 @@ public class BindingContext
     
     // Return boolean indicating whether the bound token was changed (and rebinding needs to be triggered)
     //
-    public func setValue(value: JToken) -> Bool
+    open func setValue(_ value: JToken) -> Bool
     {
         self.attemptToBindTokenIfNeeded();
         if (_boundToken != nil)
@@ -270,7 +270,7 @@ public class BindingContext
         return false;
     }
     
-    public func rebind()
+    open func rebind()
     {
         _boundToken = _bindingRoot.selectToken(_bindingPath);
     }

@@ -13,7 +13,7 @@ private var logger = Logger.getLogger("iOSBorderWrapper");
 
 private var commands = [CommandName.OnTap.Attribute];
 
-public class PaddedView : UIView
+open class PaddedView : UIView
 {
     var _padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0);
     
@@ -27,7 +27,7 @@ public class PaddedView : UIView
         fatalError("init(coder:) has not been implemented");
     }
     
-    public var padding: UIEdgeInsets
+    open var padding: UIEdgeInsets
     {
         get { return _padding; }
         set(value)
@@ -37,7 +37,7 @@ public class PaddedView : UIView
         }
     }
     
-    public var paddingLeft: CGFloat
+    open var paddingLeft: CGFloat
     {
         get { return _padding.left; }
         set(value)
@@ -47,7 +47,7 @@ public class PaddedView : UIView
         }
     }
     
-    public var paddingTop: CGFloat
+    open var paddingTop: CGFloat
     {
         get { return _padding.top; }
         set(value)
@@ -57,7 +57,7 @@ public class PaddedView : UIView
         }
     }
     
-    public var paddingRight: CGFloat
+    open var paddingRight: CGFloat
     {
         get { return _padding.right; }
         set(value)
@@ -67,7 +67,7 @@ public class PaddedView : UIView
         }
     }
     
-    public var paddingBottom: CGFloat
+    open var paddingBottom: CGFloat
     {
         get { return _padding.bottom; }
         set(value)
@@ -78,7 +78,7 @@ public class PaddedView : UIView
     }
 }
 
-public class PaddedViewThicknessSetter : ThicknessSetter
+open class PaddedViewThicknessSetter : ThicknessSetter
 {
     var _paddedView: PaddedView;
     
@@ -87,7 +87,7 @@ public class PaddedViewThicknessSetter : ThicknessSetter
         _paddedView = paddedView;
     }
     
-    public func setThickness(thickness: Double)
+    open func setThickness(_ thickness: Double)
     {
         self.setThicknessTop(thickness);
         self.setThicknessLeft(thickness);
@@ -95,22 +95,22 @@ public class PaddedViewThicknessSetter : ThicknessSetter
         self.setThicknessRight(thickness);
     }
     
-    public func setThicknessLeft(thickness: Double)
+    open func setThicknessLeft(_ thickness: Double)
     {
         _paddedView.paddingLeft = CGFloat(thickness);
     }
     
-    public func setThicknessTop(thickness: Double)
+    open func setThicknessTop(_ thickness: Double)
     {
         _paddedView.paddingTop = CGFloat(thickness);
     }
     
-    public func setThicknessRight(thickness: Double)
+    open func setThicknessRight(_ thickness: Double)
     {
         _paddedView.paddingRight = CGFloat(thickness);
     }
     
-    public func setThicknessBottom(thickness: Double)
+    open func setThicknessBottom(_ thickness: Double)
     {
         _paddedView.paddingBottom = CGFloat(thickness);
     }
@@ -142,7 +142,7 @@ class BorderView : PaddedView
         }
     }
     
-    internal override func addSubview(view: UIView)
+    internal override func addSubview(_ view: UIView)
     {
         _childView = view;
         super.addSubview(view);
@@ -169,7 +169,7 @@ class BorderView : PaddedView
             {
                 margin = childControlWrapper.margin;
             
-                if (_controlWrapper.frameProperties.widthSpec == SizeSpec.WrapContent)
+                if (_controlWrapper.frameProperties.widthSpec == SizeSpec.wrapContent)
                 {
                     // Panel width will size to content
                     //
@@ -182,7 +182,7 @@ class BorderView : PaddedView
                     //
                     childFrame.x = insets.left + margin.left;
                     
-                    if (childControlWrapper.frameProperties.widthSpec == SizeSpec.FillParent)
+                    if (childControlWrapper.frameProperties.widthSpec == SizeSpec.fillParent)
                     {
                         // Child will fill parent (less margins/padding)
                         //
@@ -192,19 +192,19 @@ class BorderView : PaddedView
                     {
                         // Align child in parent
                         //
-                        if (childControlWrapper.horizontalAlignment == HorizontalAlignment.Center)
+                        if (childControlWrapper.horizontalAlignment == HorizontalAlignment.center)
                         {
                             // Ignoring margins on center for now.
                             childFrame.x = (panelSize.width - childFrame.width) / 2;
                         }
-                        else if (childControlWrapper.horizontalAlignment == HorizontalAlignment.Right)
+                        else if (childControlWrapper.horizontalAlignment == HorizontalAlignment.right)
                         {
                             childFrame.x = (panelSize.width - childFrame.width - insets.right - margin.right);
                         }
                     }
                 }
                 
-                if (_controlWrapper.frameProperties.heightSpec == SizeSpec.WrapContent)
+                if (_controlWrapper.frameProperties.heightSpec == SizeSpec.wrapContent)
                 {
                     // Panel height will size to content
                     //
@@ -217,7 +217,7 @@ class BorderView : PaddedView
                     //
                     childFrame.y = insets.top + margin.top;
                     
-                    if (childControlWrapper.frameProperties.heightSpec == SizeSpec.FillParent)
+                    if (childControlWrapper.frameProperties.heightSpec == SizeSpec.fillParent)
                     {
                         // Child will fill parent (less margins/padding)
                         //
@@ -227,12 +227,12 @@ class BorderView : PaddedView
                     {
                         // Align child in parent
                         //
-                        if (childControlWrapper.verticalAlignment == VerticalAlignment.Center)
+                        if (childControlWrapper.verticalAlignment == VerticalAlignment.center)
                         {
                             // Ignoring margins on center for now.
                             childFrame.y = (panelSize.height - childFrame.height) / 2;
                         }
-                        else if (childControlWrapper.verticalAlignment == VerticalAlignment.Bottom)
+                        else if (childControlWrapper.verticalAlignment == VerticalAlignment.bottom)
                         {
                             childFrame.y = (panelSize.height - childFrame.height - insets.bottom - margin.bottom);
                         }
@@ -246,7 +246,7 @@ class BorderView : PaddedView
             
             // See if the border panel might have changed size (based on content)
             //
-            if ((_controlWrapper.frameProperties.widthSpec == SizeSpec.WrapContent) || (_controlWrapper.frameProperties.heightSpec == SizeSpec.WrapContent))
+            if ((_controlWrapper.frameProperties.widthSpec == SizeSpec.wrapContent) || (_controlWrapper.frameProperties.heightSpec == SizeSpec.wrapContent))
             {
                 // See if the border panel actually did change size
                 //
@@ -272,7 +272,7 @@ class BorderView : PaddedView
     }
 }
 
-public class iOSBorderWrapper : iOSControlWrapper
+open class iOSBorderWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
@@ -287,7 +287,7 @@ public class iOSBorderWrapper : iOSControlWrapper
         
         // If border thickness or padding change, need to resize view to child...
         //
-        processElementProperty(controlSpec, attributeName: "border", setValue: { (value) in border.layer.borderColor = self.toColor(value)?.CGColor });
+        processElementProperty(controlSpec, attributeName: "border", setValue: { (value) in border.layer.borderColor = self.toColor(value)?.cgColor });
         processElementProperty(controlSpec, attributeName: "borderThickness", setValue: { (value) in
             if let theValue = value
             {
@@ -312,7 +312,7 @@ public class iOSBorderWrapper : iOSControlWrapper
         if (getCommand(CommandName.OnTap) != nil)
         {
             let tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(borderTapped))
-            border.userInteractionEnabled = true
+            border.isUserInteractionEnabled = true
             border.addGestureRecognizer(tapGestureRecognizer)
         }
         
@@ -330,7 +330,7 @@ public class iOSBorderWrapper : iOSControlWrapper
         border.layoutSubviews();
     }
     
-    func borderTapped(img: AnyObject)
+    func borderTapped(_ img: AnyObject)
     {
         if let command = getCommand(CommandName.OnTap)
         {

@@ -29,7 +29,7 @@ class ToggleSwitchView : PaddedView
         fatalError("init(coder:) has not been implemented");
     }
     
-    override func intrinsicContentSize() -> CGSize
+    override var intrinsicContentSize : CGSize
     {
         // Compute the "wrap contents" (minimum) size for our contents.
         //
@@ -55,7 +55,7 @@ class ToggleSwitchView : PaddedView
         return intrinsicSize;
     }
     
-    override func addSubview(view: UIView)
+    override func addSubview(_ view: UIView)
     {
         if (view is UILabel)
         {
@@ -80,8 +80,8 @@ class ToggleSwitchView : PaddedView
     
         super.layoutSubviews();
     
-        if (((_controlWrapper.frameProperties.heightSpec == SizeSpec.FillParent) && (self.frame.height == 0)) ||
-            ((_controlWrapper.frameProperties.widthSpec == SizeSpec.FillParent) && (self.frame.width == 0)))
+        if (((_controlWrapper.frameProperties.heightSpec == SizeSpec.fillParent) && (self.frame.height == 0)) ||
+            ((_controlWrapper.frameProperties.widthSpec == SizeSpec.fillParent) && (self.frame.width == 0)))
         {
             // If either dimension is star sized, and the current size in that dimension is zero, then we
             // can't layout our children (we have no space to lay them out in anyway).  So this is a noop.
@@ -89,12 +89,12 @@ class ToggleSwitchView : PaddedView
             return;
         }
         
-        var contentSize = self.intrinsicContentSize();
-        if (_controlWrapper.frameProperties.heightSpec != SizeSpec.WrapContent)
+        var contentSize = self.intrinsicContentSize;
+        if (_controlWrapper.frameProperties.heightSpec != SizeSpec.wrapContent)
         {
             contentSize.height = self.frame.height;
         }
-        if (_controlWrapper.frameProperties.widthSpec != SizeSpec.WrapContent)
+        if (_controlWrapper.frameProperties.widthSpec != SizeSpec.wrapContent)
         {
             contentSize.width = self.frame.width;
         }
@@ -144,14 +144,14 @@ class ToggleSwitchView : PaddedView
         
         // See if the panel might have changed size (based on content)
         //
-        if ((_controlWrapper.frameProperties.widthSpec == SizeSpec.WrapContent) || (_controlWrapper.frameProperties.heightSpec == SizeSpec.WrapContent))
+        if ((_controlWrapper.frameProperties.widthSpec == SizeSpec.wrapContent) || (_controlWrapper.frameProperties.heightSpec == SizeSpec.wrapContent))
         {
             var panelSize = self.frame.size;
-            if (_controlWrapper.frameProperties.heightSpec == SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.heightSpec == SizeSpec.wrapContent)
             {
                 panelSize.height = newPanelSize.height;
             }
-            if (_controlWrapper.frameProperties.widthSpec == SizeSpec.WrapContent)
+            if (_controlWrapper.frameProperties.widthSpec == SizeSpec.wrapContent)
             {
                 panelSize.width = newPanelSize.width;
             }
@@ -182,7 +182,7 @@ class ToggleLabelFontSetter : iOSFontSetter
         super.init(font: label.font);
     }
     
-    override func setFont(font: UIFont)
+    override func setFont(_ font: UIFont)
     {
         _label.font = font;
         if (_label.superview != nil)
@@ -194,7 +194,7 @@ class ToggleLabelFontSetter : iOSFontSetter
 
 private var commands = [CommandName.OnToggle.Attribute];
 
-public class iOSToggleSwitchWrapper : iOSControlWrapper
+open class iOSToggleSwitchWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
@@ -220,9 +220,9 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
             
             // Switch
             //
-            if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(toggleSwitch.on); }, setValue: { (value) in toggleSwitch.on = self.toBoolean(value) }))
+            if (!processElementBoundValue("value", attributeValue: bindingSpec["value"], getValue: { () in return JValue(toggleSwitch.isOn); }, setValue: { (value) in toggleSwitch.isOn = self.toBoolean(value) }))
             {
-                processElementProperty(controlSpec, attributeName: "value", setValue: { (value) in toggleSwitch.on = self.toBoolean(value) });
+                processElementProperty(controlSpec, attributeName: "value", setValue: { (value) in toggleSwitch.isOn = self.toBoolean(value) });
             }
         }
         
@@ -243,12 +243,12 @@ public class iOSToggleSwitchWrapper : iOSControlWrapper
         
         processFontAttribute(controlSpec, fontSetter: ToggleLabelFontSetter(label: label));
         
-        toggleSwitch.addTarget(self, action: #selector(stateChanged), forControlEvents: .ValueChanged);
+        toggleSwitch.addTarget(self, action: #selector(stateChanged), for: .valueChanged);
         
         view.layoutSubviews();
     }
     
-    func stateChanged(switchState: UISwitch)
+    func stateChanged(_ switchState: UISwitch)
     {
         updateValueBindingForAttribute("value");
         

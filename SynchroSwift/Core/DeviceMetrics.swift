@@ -13,34 +13,34 @@ private var logger = Logger.getLogger("DeviceMetrics");
 
 public enum SynchroDeviceClass : Int
 {
-    case Phone      = 0;
-    case Phablet    = 1;
-    case MiniTablet = 2;
-    case Tablet     = 3;
+    case phone      = 0;
+    case phablet    = 1;
+    case miniTablet = 2;
+    case tablet     = 3;
     
     var description : String
     {
         switch self
         {
-            case .Phone:      return "Phone";
-            case .Phablet:    return "Phablet";
-            case .MiniTablet: return "MiniTablet";
-            case .Tablet:     return "Tablet";
+            case .phone:      return "Phone";
+            case .phablet:    return "Phablet";
+            case .miniTablet: return "MiniTablet";
+            case .tablet:     return "Tablet";
         }
     }
 }
 
 public enum SynchroDeviceType : Int
 {
-    case Phone  = 0; // SynchroDeviceClass.Phone
-    case Tablet = 3; // SynchroDeviceClass.Tablet
+    case phone  = 0; // SynchroDeviceClass.Phone
+    case tablet = 3; // SynchroDeviceClass.Tablet
     
     var description : String
     {
         switch self
         {
-            case .Phone:  return "Phone";
-            case .Tablet: return "Tablet";
+            case .phone:  return "Phone";
+            case .tablet: return "Tablet";
         }
     }
 
@@ -48,71 +48,71 @@ public enum SynchroDeviceType : Int
 
 public enum SynchroOrientation
 {
-    case Portrait;
-    case Landscape;
+    case portrait;
+    case landscape;
     
     var description : String
     {
         switch self
         {
-            case .Portrait:  return "Portrait";
-            case .Landscape: return "Landscape";
+            case .portrait:  return "Portrait";
+            case .landscape: return "Landscape";
         }
     }
 }
 
-public class DeviceMetrics
+open class DeviceMetrics
 {
-    private var _clientName = NSBundle.mainBundle().infoDictionary?["CFBundleName"] as! String;
-    private var _clientVersion = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as! String;
+    fileprivate var _clientName = Bundle.main.infoDictionary?["CFBundleName"] as! String;
+    fileprivate var _clientVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String;
     
-    private var _deviceClass = SynchroDeviceClass.Phone;
+    fileprivate var _deviceClass = SynchroDeviceClass.phone;
     
-    private var _naturalOrientation = SynchroOrientation.Portrait;
+    fileprivate var _naturalOrientation = SynchroOrientation.portrait;
     
-    private var _os = "Unknown"; // Short name for filtering, ie: Windows, WinPhone, iOS, Android
-    private var _osName = "Unknown";
+    fileprivate var _os = "Unknown"; // Short name for filtering, ie: Windows, WinPhone, iOS, Android
+    fileprivate var _osName = "Unknown";
     // !!! OS version would be nice
     
-    private var _deviceName: String;// = "Unknown";
+    fileprivate var _deviceName: String;// = "Unknown";
     
-    private var _widthInches: Double = 0;
-    private var _heightInches: Double = 0;
+    fileprivate var _widthInches: Double = 0;
+    fileprivate var _heightInches: Double = 0;
     
-    private var _widthDeviceUnits: Double = 0;
-    private var _heightDeviceUnits: Double = 0;
-    private var _deviceScalingFactor: Double = 1;
+    fileprivate var _widthDeviceUnits: Double = 0;
+    fileprivate var _heightDeviceUnits: Double = 0;
+    fileprivate var _deviceScalingFactor: Double = 1;
     
-    private var _scalingFactor: Double = 1;
+    fileprivate var _scalingFactor: Double = 1;
     
     // Client details
     //
-    public var ClientName: String { get { return _clientName; } }
-    public var ClientVersion: String { get { return _clientVersion; } }
+    open var ClientName: String { get { return _clientName; } }
+    open var ClientVersion: String { get { return _clientVersion; } }
     
     // Device details
     //
-    public var OS: String { get { return _os; } }
-    public var OSName: String { get { return _osName; } }
-    public var DeviceName: String { get { return _deviceName; } }
+    open var OS: String { get { return _os; } }
+    open var OSName: String { get { return _osName; } }
+    open var DeviceName: String { get { return _deviceName; } }
     
     // Device type
     //
-    public var DeviceClass: SynchroDeviceClass { get { return _deviceClass; } }
-    public var DeviceType: SynchroDeviceType
+    open var DeviceClass: SynchroDeviceClass { get { return _deviceClass; } }
+    open var DeviceType: SynchroDeviceType
     {
         get
         {
-            return ((_deviceClass == SynchroDeviceClass.Phone) || (_deviceClass == SynchroDeviceClass.Phablet)) ? SynchroDeviceType.Phone : SynchroDeviceType.Tablet;
+            return ((_deviceClass == SynchroDeviceClass.phone) || (_deviceClass == SynchroDeviceClass.phablet)) ? SynchroDeviceType.phone : SynchroDeviceType.tablet;
         }
     }
     
-    public var NaturalOrientation: SynchroOrientation { get { return _naturalOrientation; } }
+    open var NaturalOrientation: SynchroOrientation { get { return _naturalOrientation; } }
     
     // Physical dimensions of device
     //
-    public var WidthInches: Double { get { return _widthInches; } }
-    public var HeightInches: Double { get { return _heightInches; } }
+    open var WidthInches: Double { get { return _widthInches; } }
+    open var HeightInches: Double { get { return _heightInches; } }
     
     // Logical dimensions of device
     //
@@ -120,22 +120,22 @@ public class DeviceMetrics
     // In iOS this unit is the "point" (a term Apple uses, not to be confused with a typographic point).  In Android, this unit is
     // actually the physical pixel value.  In WinPhone this is the "view pixels" value (a virtual coordinate space).
     //
-    public var WidthDeviceUnits: Double { get { return _widthDeviceUnits; } }
-    public var HeightDeviceUnits: Double { get { return _heightDeviceUnits; } }
+    open var WidthDeviceUnits: Double { get { return _widthDeviceUnits; } }
+    open var HeightDeviceUnits: Double { get { return _heightDeviceUnits; } }
     
     // Device scaling factor is the ratio of device units to physical pixels.  This can be used to determine an appropriately sized
     // image resource, for example.
     //
-    public var DeviceScalingFactor: Double { get { return _deviceScalingFactor; } }
+    open var DeviceScalingFactor: Double { get { return _deviceScalingFactor; } }
     
     // Dimensions of device
     //
-    public var WidthUnits: Double { get { return _widthDeviceUnits / _scalingFactor; } }
-    public var HeightUnits: Double { get { return _heightDeviceUnits / _scalingFactor; } }
+    open var WidthUnits: Double { get { return _widthDeviceUnits / _scalingFactor; } }
+    open var HeightUnits: Double { get { return _heightDeviceUnits / _scalingFactor; } }
     
     // Scaling factor is the ratio of logic units to device units.
     //
-    public var ScalingFactor: Double { get { return _scalingFactor; } }
+    open var ScalingFactor: Double { get { return _scalingFactor; } }
     
     // Coordinate space mapping
     //
@@ -157,9 +157,9 @@ public class DeviceMetrics
     //
     // Note: Every device currently in existence has square pixels, so we don't need to track h/v scale independently.
     //
-    private func updateScalingFactor() // Call from constructor after device units set
+    fileprivate func updateScalingFactor() // Call from constructor after device units set
     {
-        if (DeviceType == SynchroDeviceType.Phone)
+        if (DeviceType == SynchroDeviceType.phone)
         {
             _scalingFactor = _widthDeviceUnits / 480;
         }
@@ -169,7 +169,7 @@ public class DeviceMetrics
         }
     }
     
-    public func SynchroUnitsToDeviceUnits(synchroUnits: Double) -> Double
+    open func SynchroUnitsToDeviceUnits(_ synchroUnits: Double) -> Double
     {
         return synchroUnits * _scalingFactor;
     }
@@ -188,7 +188,7 @@ public class DeviceMetrics
     //     we're just going to use a factor of 3x to convert from typographic points to Maaas units (this will also
     //     make it easy for Maaas UX designers to understand the relationship of typographic points to Maaas units).
     //
-    public func TypographicPointsToMaaasUnits(points: Double) -> Double
+    open func TypographicPointsToMaaasUnits(_ points: Double) -> Double
     {
         // Convert typographic point values (72pt/inch) to Maaas units (219.52units/inch on model phone)
         //
@@ -197,7 +197,7 @@ public class DeviceMetrics
     
     // iOS - Specific logic
     
-    private var _controller: UIViewController;
+    fileprivate var _controller: UIViewController;
     
     public init (controller: UIViewController)
     {
@@ -205,13 +205,13 @@ public class DeviceMetrics
         _os = "iOS";
         _osName = "iOS";
         
-        let currentDevice = UIDevice.currentDevice();
-        let mainScreen = UIScreen.mainScreen();
+        let currentDevice = UIDevice.current;
+        let mainScreen = UIScreen.main;
         
         // The reason we use nativeBounds below is that it is not dependent on the current device orientation (it is always
         // based on "portrait up" orientation).  Because it is in pixels instead of points, we have to divide by scale.
         //
-        if (_naturalOrientation == SynchroOrientation.Portrait)
+        if (_naturalOrientation == SynchroOrientation.portrait)
         {
             _widthDeviceUnits = Double(mainScreen.nativeBounds.size.width/mainScreen.scale);
             _heightDeviceUnits = Double(mainScreen.nativeBounds.size.height/mainScreen.scale);
@@ -234,11 +234,11 @@ public class DeviceMetrics
         // Screen size in inches is logical resolution divided by logical ppi
         // Physical ppi is logical ppi times scale
         
-        if (currentDevice.userInterfaceIdiom == UIUserInterfaceIdiom.Phone)  // iPhone or iPod devices
+        if (currentDevice.userInterfaceIdiom == UIUserInterfaceIdiom.phone)  // iPhone or iPod devices
         {
             _deviceName = currentDevice.modelName ?? "iPhone/iPod";
-            _deviceClass = SynchroDeviceClass.Phone;
-            _naturalOrientation = SynchroOrientation.Portrait;
+            _deviceClass = SynchroDeviceClass.phone;
+            _naturalOrientation = SynchroOrientation.portrait;
             
             let pointsHeight = Int(round(_heightDeviceUnits));
             
@@ -263,18 +263,18 @@ public class DeviceMetrics
         else // iPad devices (including mini)
         {
             _deviceName = currentDevice.modelName ?? "iPad";
-            _naturalOrientation = SynchroOrientation.Landscape;
+            _naturalOrientation = SynchroOrientation.landscape;
             
             if (_deviceName.hasPrefix("iPad Mini"))
             {
-                _deviceClass = SynchroDeviceClass.MiniTablet;
+                _deviceClass = SynchroDeviceClass.miniTablet;
                 
                 _widthInches = 6.282;
                 _heightInches = 4.712;
             }
             else
             {
-                _deviceClass = SynchroDeviceClass.Tablet;
+                _deviceClass = SynchroDeviceClass.tablet;
                 
                 _widthInches = 7.758;
                 _heightInches = 5.818;
@@ -289,17 +289,17 @@ public class DeviceMetrics
         
     }
     
-    public var CurrentOrientation: SynchroOrientation
+    open var CurrentOrientation: SynchroOrientation
     {
         get
         {
-            if (UIScreen.mainScreen().bounds.width < UIScreen.mainScreen().bounds.height)
+            if (UIScreen.main.bounds.width < UIScreen.main.bounds.height)
             {
-                return SynchroOrientation.Portrait;
+                return SynchroOrientation.portrait;
             }
             else
             {
-                return SynchroOrientation.Landscape;
+                return SynchroOrientation.landscape;
             }
         }
     }
@@ -322,7 +322,7 @@ public extension UIDevice {
         
         let machineMirror = Mirror(reflecting: systemInfo.machine)
         let identifier = machineMirror.children.reduce("") { identifier, element in
-            guard let value = element.value as? Int8 where value != 0 else { return identifier }
+            guard let value = element.value as? Int8 , value != 0 else { return identifier }
             return identifier + String(UnicodeScalar(UInt8(value)))
         }
         return identifier

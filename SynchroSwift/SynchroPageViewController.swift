@@ -11,7 +11,7 @@ import UIKit
 
 private var logger = Logger.getLogger("SynchroPageViewController");
 
-public class SynchroPageViewController : UIViewController{
+open class SynchroPageViewController : UIViewController{
     var _appManager: SynchroAppManager;
     var _app: SynchroApp;
     
@@ -30,15 +30,15 @@ public class SynchroPageViewController : UIViewController{
         fatalError("init(coder:) has not been implemented");
     }
     
-    public override func viewDidLoad()
+    open override func viewDidLoad()
     {
         super.viewDidLoad();
     
         // Current orientation: this.InterfaceOrientation
         
-        self.view.frame = UIScreen.mainScreen().bounds;
-        self.view.backgroundColor = UIColor.whiteColor();
-        self.view.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight];
+        self.view.frame = UIScreen.main.bounds;
+        self.view.backgroundColor = UIColor.white;
+        self.view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight];
         
         let deviceMetrics = DeviceMetrics(controller: self);
         
@@ -60,7 +60,7 @@ public class SynchroPageViewController : UIViewController{
                 // this page from its top level page.
                 //
                 logger.debug("Going back...");
-                self.navigationController!.popViewControllerAnimated(true);
+                self.navigationController!.popViewController(animated: true);
                 
                 // Detach StateManager
                 self._stateManager = nil;
@@ -82,28 +82,28 @@ public class SynchroPageViewController : UIViewController{
         logger.debug("Completed viewDidLoad");
     }
         
-    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator)
+    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
     {
         logger.info("App bounds changed (new world order)");
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator);
+        super.viewWillTransition(to: size, with: coordinator);
         
-        logger.info("Transition from size - \(UIScreen.mainScreen().bounds) to size - \(size)");
+        logger.info("Transition from size - \(UIScreen.main.bounds) to size - \(size)");
         
-        coordinator.animateAlongsideTransition(nil, completion: {context in
-            logger.info("Transition to size complete - \(UIScreen.mainScreen().bounds)");
+        coordinator.animate(alongsideTransition: nil, completion: {context in
+            logger.info("Transition to size complete - \(UIScreen.main.bounds)");
             // !!! Need some kind of viewUpdateAsync (like above).  
             
             if (self._stateManager != nil)
             {
-                if (UIScreen.mainScreen().bounds.width < UIScreen.mainScreen().bounds.height)
+                if (UIScreen.main.bounds.width < UIScreen.main.bounds.height)
                 {
                     logger.debug("Screen oriented to Portrait");
-                    self._stateManager.sendViewUpdateAsync(SynchroOrientation.Portrait);
+                    self._stateManager.sendViewUpdateAsync(SynchroOrientation.portrait);
                 }
                 else
                 {
                     logger.debug("Screen oriented to Landscape");
-                    self._stateManager.sendViewUpdateAsync(SynchroOrientation.Landscape);
+                    self._stateManager.sendViewUpdateAsync(SynchroOrientation.landscape);
                 }                
             }
 

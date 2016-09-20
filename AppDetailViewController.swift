@@ -12,12 +12,12 @@ private var logger = Logger.getLogger("AppDetailViewController");
 
 enum DisplayMode
 {
-    case Find
-    case Add
-    case View
+    case find
+    case add
+    case view
 };
 
-public class AppDetailViewController: UIViewController
+open class AppDetailViewController: UIViewController
 {
     @IBOutlet weak var appEndpointLabel: UILabel!
     @IBOutlet weak var appEndpointEdit: UITextField!
@@ -59,22 +59,22 @@ public class AppDetailViewController: UIViewController
         }
     }
     
-    func updateVisibility(mode: DisplayMode)
+    func updateVisibility(_ mode: DisplayMode)
     {
-        appEndpointEdit.hidden = mode != DisplayMode.Find;
-        appFindButton.hidden = mode != DisplayMode.Find;
+        appEndpointEdit.isHidden = mode != DisplayMode.find;
+        appFindButton.isHidden = mode != DisplayMode.find;
         
         // Show/hide toolbar button
-        scanButton?.enabled = mode == DisplayMode.Find;
-        scanButton?.tintColor = mode == DisplayMode.Find ? nil : UIColor.clearColor();
+        scanButton?.isEnabled = mode == DisplayMode.find;
+        scanButton?.tintColor = mode == DisplayMode.find ? nil : UIColor.clear;
         
-        appEndpointLabel.hidden = mode == DisplayMode.Find;
-        appNameCaption.hidden = mode == DisplayMode.Find;
-        appNameLabel.hidden = mode == DisplayMode.Find;
-        appDescriptionCaption.hidden = mode == DisplayMode.Find;
-        appDescriptionLabel.hidden = mode == DisplayMode.Find;
+        appEndpointLabel.isHidden = mode == DisplayMode.find;
+        appNameCaption.isHidden = mode == DisplayMode.find;
+        appNameLabel.isHidden = mode == DisplayMode.find;
+        appDescriptionCaption.isHidden = mode == DisplayMode.find;
+        appDescriptionLabel.isHidden = mode == DisplayMode.find;
         
-        appSaveButton.hidden = mode != DisplayMode.Add;
+        appSaveButton.isHidden = mode != DisplayMode.add;
     }
     
     required public init?(coder aDecoder: NSCoder)
@@ -82,25 +82,25 @@ public class AppDetailViewController: UIViewController
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func viewDidLoad()
+    override open func viewDidLoad()
     {
         super.viewDidLoad()
         
-        scanButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Camera, target: self, action: #selector(scanClicked))
+        scanButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.camera, target: self, action: #selector(scanClicked))
         self.navigationItem.rightBarButtonItem = scanButton;
 
         if (_app != nil)
         {
             populate();
-            updateVisibility(DisplayMode.View);
+            updateVisibility(DisplayMode.view);
         }
         else
         {
-            updateVisibility(DisplayMode.Find);
+            updateVisibility(DisplayMode.find);
         }
     }
     
-    func scanClicked(sender: UIBarButtonItem)
+    func scanClicked(_ sender: UIBarButtonItem)
     {
         logger.info("Scan pushed");
         self.scannedUrl = nil;
@@ -108,7 +108,7 @@ public class AppDetailViewController: UIViewController
         self.navigationController?.pushViewController(qrVC, animated: true);
     }
     
-    override public func viewDidAppear(animated: Bool)
+    override open func viewDidAppear(_ animated: Bool)
     {
         if (scannedUrl != nil)
         {
@@ -117,11 +117,11 @@ public class AppDetailViewController: UIViewController
         }
     }
     
-    func alert(title: String, message: String)
+    func alert(_ title: String, message: String)
     {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.Cancel, handler: nil));
-        self.presentViewController(alert, animated: true, completion: nil)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.cancel, handler: nil));
+        self.present(alert, animated: true, completion: nil)
     }
 
     func doFind()
@@ -152,7 +152,7 @@ public class AppDetailViewController: UIViewController
                             {
                                 self._app = SynchroApp(endpoint: endpoint, appDefinition: appDefinition!);
                                 self.populate();
-                                self.updateVisibility(DisplayMode.Add);
+                                self.updateVisibility(DisplayMode.add);
                             }
                     });
                 }
@@ -165,21 +165,21 @@ public class AppDetailViewController: UIViewController
         }
     }
     
-    @IBAction func onFind(sender: AnyObject)
+    @IBAction func onFind(_ sender: AnyObject)
     {
         logger.info("Find pushed");
         doFind();
     }
 
-    @IBAction func onSave(sender: AnyObject)
+    @IBAction func onSave(_ sender: AnyObject)
     {
         logger.info("Save pushed");
         _appManager.append(_app!);
         _appManager.saveState();
-        self.navigationController!.popViewControllerAnimated(true);
+        self.navigationController!.popViewController(animated: true);
     }
     
-    override public func didReceiveMemoryWarning()
+    override open func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()
     }

@@ -23,26 +23,26 @@ private var staticCommandNames =
     "onTap": CommandName(attribute: "onTap")
 ]
 
-public class CommandName
+open class CommandName
 {
-    private init(attribute: String) { _attribute = attribute; }
+    fileprivate init(attribute: String) { _attribute = attribute; }
     
-    private var _attribute: String;
-    public var Attribute: String { get { return _attribute } }
+    fileprivate var _attribute: String;
+    open var Attribute: String { get { return _attribute } }
     
-    public var description: String { get { return Attribute; } } // ported from ToString
+    open var description: String { get { return Attribute; } } // ported from ToString
     
-    public class var OnClick: CommandName { get { return staticCommandNames["onClick"]!; } }
-    public class var OnItemClick: CommandName { get { return staticCommandNames["onItemClick"]!; } }
-    public class var OnSelectionChange: CommandName { get { return staticCommandNames["onSelectionChange"]!; } }
-    public class var OnToggle: CommandName { get { return staticCommandNames["onToggle"]!; } }
-    public class var OnUpdate: CommandName { get { return staticCommandNames["onUpdate"]!; } }
-    public class var OnTap: CommandName { get { return staticCommandNames["onTap"]!; } }
+    open class var OnClick: CommandName { get { return staticCommandNames["onClick"]!; } }
+    open class var OnItemClick: CommandName { get { return staticCommandNames["onItemClick"]!; } }
+    open class var OnSelectionChange: CommandName { get { return staticCommandNames["onSelectionChange"]!; } }
+    open class var OnToggle: CommandName { get { return staticCommandNames["onToggle"]!; } }
+    open class var OnUpdate: CommandName { get { return staticCommandNames["onUpdate"]!; } }
+    open class var OnTap: CommandName { get { return staticCommandNames["onTap"]!; } }
 }
 
 // This class corresponds to an instance of a command in a view
 //
-public class CommandInstance
+open class CommandInstance
 {
     var _command: String;
     var _parameters = Dictionary<String, JToken>();
@@ -52,12 +52,12 @@ public class CommandInstance
         _command = command;
     }
     
-    public func setParameter(parameterName: String, parameterValue: JToken)
+    open func setParameter(_ parameterName: String, parameterValue: JToken)
     {
         _parameters[parameterName] = parameterValue;
     }
     
-    public var Command: String { get { return _command; } }
+    open var Command: String { get { return _command; } }
     
     // If a parameter is not a string type, then that parameter is passed directly.  This allows for parameters to
     // be boolean, numeric, or even objects.  If a parameter is a string, it will be evaluated to see if it has
@@ -65,13 +65,13 @@ public class CommandInstance
     // based on the current context, for example, and also allows for complex values (such as property bindings
     // that refer to a single value of a type other than string, such as an object).
     //
-    public func getResolvedParameters(bindingContext: BindingContext) -> JObject
+    open func getResolvedParameters(_ bindingContext: BindingContext) -> JObject
     {
         let obj = JObject();
         for (parameterKey, parameterValue) in _parameters
         {
             var value: JToken? = parameterValue;
-            if (parameterValue.Type == JTokenType.String)
+            if (parameterValue.Type == JTokenType.string)
             {
                 value = PropertyValue.expand(parameterValue.asString()!, bindingContext: bindingContext);
             }

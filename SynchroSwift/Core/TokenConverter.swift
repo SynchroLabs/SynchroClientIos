@@ -29,9 +29,9 @@ import Foundation
 // binding containing the binding token that references the list token, that when rendered as a string would get converted
 // to the number of items in the list (in the underlying array).
 //
-public class TokenConverter
+open class TokenConverter
 {
-    public class func toString(token: JToken?, defaultValue: String = "") -> String
+    open class func toString(_ token: JToken?, defaultValue: String = "") -> String
     {
         var result = defaultValue;
     
@@ -39,16 +39,16 @@ public class TokenConverter
         {
             switch (theToken.Type)
             {
-                case JTokenType.Array:
+                case JTokenType.array:
                     let array = theToken as! JArray;
                     result = "\(array.count)";
-                case JTokenType.String:
+                case JTokenType.string:
                     result = theToken.asString()!;
-                case JTokenType.Integer:
+                case JTokenType.integer:
                     result = "\(theToken.asInt()!)";
-                case JTokenType.Float:
+                case JTokenType.float:
                     result = "\(theToken.asDouble()!)";
-                case JTokenType.Boolean:
+                case JTokenType.boolean:
                     result = theToken.asBool()! ? "true" : "false";
                 default:
                     result = theToken.asString() ?? defaultValue;
@@ -58,7 +58,7 @@ public class TokenConverter
         return result;
     }
     
-    public class func toBoolean(token: JToken?, defaultValue: Bool = false) -> Bool
+    open class func toBoolean(_ token: JToken?, defaultValue: Bool = false) -> Bool
     {
         var result = defaultValue;
     
@@ -66,19 +66,19 @@ public class TokenConverter
         {
             switch (theToken.Type)
             {
-                case JTokenType.Boolean:
+                case JTokenType.boolean:
                     result = theToken.asBool()!;
-                case JTokenType.String:
+                case JTokenType.string:
                     let str = theToken.asString()!;
                     result = str.characters.count > 0;
-                case JTokenType.Float:
+                case JTokenType.float:
                     result = theToken.asDouble()! != 0;
-                case JTokenType.Integer:
+                case JTokenType.integer:
                     result = theToken.asInt() != 0;
-                case JTokenType.Array:
+                case JTokenType.array:
                     let array = theToken as! JArray;
                     result = array.count > 0;
-                case JTokenType.Object:
+                case JTokenType.object:
                     result = true;
                 default: ()
             }
@@ -87,7 +87,7 @@ public class TokenConverter
         return result;
     }
     
-    public class func toDouble(token: JToken?, defaultValue: Double? = nil) -> Double?
+    open class func toDouble(_ token: JToken?, defaultValue: Double? = nil) -> Double?
     {
         var result = defaultValue;
     
@@ -95,17 +95,17 @@ public class TokenConverter
         {
             switch (theToken.Type)
             {
-                case JTokenType.String:
+                case JTokenType.string:
                     var scannedResult: Double = 0;
-                    let scanner = NSScanner(string: theToken.asString()!);
+                    let scanner = Scanner(string: theToken.asString()!);
                     if (scanner.scanDouble(&scannedResult))
                     {
                         result = scannedResult;
                     }
                 
-                case JTokenType.Float, JTokenType.Integer:
+                case JTokenType.float, JTokenType.integer:
                     result = theToken.asDouble()!;
-                case JTokenType.Array:
+                case JTokenType.array:
                     let array = theToken as! JArray
                     result = Double(array.count);
                 default: ()

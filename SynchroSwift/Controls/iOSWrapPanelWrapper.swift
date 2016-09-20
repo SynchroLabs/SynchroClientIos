@@ -20,7 +20,7 @@ private var logger = Logger.getLogger("iOSWrapPanelWrapper");
 
 private var wrapPanelCellID = String("WrapPanelCell");
 
-public class WrapPanelCell : UICollectionViewCell
+open class WrapPanelCell : UICollectionViewCell
 {
     public override init(frame: CGRect)
     {
@@ -41,7 +41,7 @@ public class WrapPanelCell : UICollectionViewCell
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func updateView(controlWrapper: iOSControlWrapper)
+    open func updateView(_ controlWrapper: iOSControlWrapper)
     {
         if (self.contentView.subviews.count > 0)
         {
@@ -51,15 +51,15 @@ public class WrapPanelCell : UICollectionViewCell
     }
 }
 
-public class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
+open class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 {
     var controlWrappers = [iOSControlWrapper]();
 
     var _itemHeight: CGFloat = 0;
-    public var itemHeight: CGFloat { get { return _itemHeight; } set(value) { _itemHeight = value; } }
+    open var itemHeight: CGFloat { get { return _itemHeight; } set(value) { _itemHeight = value; } }
     
     var _itemWidth: CGFloat = 0;
-    public var itemWidth: CGFloat { get { return _itemWidth; } set(value) { _itemWidth = value; } }
+    open var itemWidth: CGFloat { get { return _itemWidth; } set(value) { _itemWidth = value; } }
 
     public override init()
     {
@@ -67,45 +67,45 @@ public class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSourc
     }
     
     // UICollectionViewDataSource method
-    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int
+    open func numberOfSections(in collectionView: UICollectionView) -> Int
     {
         return 1;
     }
     
     // UICollectionViewDataSource method
-    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int
+    open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection: Int) -> Int
     {
         return controlWrappers.count;
     }
     
     // UICollectionViewDataSource method
-    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell
+    open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(wrapPanelCellID, forIndexPath: indexPath) as! WrapPanelCell;
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: wrapPanelCellID!, for: indexPath) as! WrapPanelCell;
     
         // logger.Info("Updating cell {0} with frame: {1}", indexPath.Item, cell.Frame);
     
-        let controlWrapper = controlWrappers[indexPath.row];
+        let controlWrapper = controlWrappers[(indexPath as NSIndexPath).row];
         cell.updateView(controlWrapper);
     
         return cell;
     }
     
-    public func shouldHighlightItem(collectionView: UICollectionView, indexPath: NSIndexPath) -> Bool
+    open func shouldHighlightItem(_ collectionView: UICollectionView, indexPath: IndexPath) -> Bool
     {
         return false;
     }
     
     // UICollectionViewDelegateFlowLayout
-    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
+    open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
     {
         return self.sizeForItemAtIndexPath(indexPath);
     }
 
     
-    public func sizeForItemAtIndexPath(indexPath: NSIndexPath) -> CGSize
+    open func sizeForItemAtIndexPath(_ indexPath: IndexPath) -> CGSize
     {
-        let controlWrapper = controlWrappers[indexPath.row];
+        let controlWrapper = controlWrappers[(indexPath as NSIndexPath).row];
         var controlSize = controlWrapper.control!.frame.size;
         if (_itemHeight > 0)
         {
@@ -126,13 +126,13 @@ public class WrapPanelCollectionViewSource : NSObject, UICollectionViewDataSourc
         return controlSize;
     }
     
-    public func itemAtIndexPath(indexPath: NSIndexPath) -> iOSControlWrapper
+    open func itemAtIndexPath(_ indexPath: IndexPath) -> iOSControlWrapper
     {
-        return controlWrappers[indexPath.row];
+        return controlWrappers[(indexPath as NSIndexPath).row];
     }
 }
 
-public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
+open class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
 {
     var _source: WrapPanelCollectionViewSource;
     
@@ -147,7 +147,7 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
         fatalError("init(coder:) has not been implemented")
     }
     
-    public var itemHeight: CGFloat
+    open var itemHeight: CGFloat
     {
         get { return _source.itemHeight; }
         set(value)
@@ -157,7 +157,7 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
         }
     }
     
-    public var itemWidth: CGFloat
+    open var itemWidth: CGFloat
     {
         get { return _source.itemWidth; }
         set(value)
@@ -167,7 +167,7 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
         }
     }
     
-    func positionLineElements(lineContents: [UICollectionViewLayoutAttributes], linePosition: CGFloat, lineThickness: CGFloat)
+    func positionLineElements(_ lineContents: [UICollectionViewLayoutAttributes], linePosition: CGFloat, lineThickness: CGFloat)
     {
         logger.debug("Positioning line with \(lineContents.count) elements, position: \(linePosition), thickness: \(lineThickness)");
         var lineLength: CGFloat = 0;
@@ -181,15 +181,15 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
             var x: CGFloat;
             var y: CGFloat;
             
-            if (self.scrollDirection == UICollectionViewScrollDirection.Vertical)
+            if (self.scrollDirection == UICollectionViewScrollDirection.vertical)
             {
                 // Vertical scroll means horizontal layout...
                 //
-                if (controlWrapper.horizontalAlignment == HorizontalAlignment.Left)
+                if (controlWrapper.horizontalAlignment == HorizontalAlignment.left)
                 {
                     x = lineLength + CGFloat(controlWrapper.marginLeft);
                 }
-                else if (controlWrapper.horizontalAlignment == HorizontalAlignment.Right)
+                else if (controlWrapper.horizontalAlignment == HorizontalAlignment.right)
                 {
                     x = lineLength + allocatedSize.width - (actualSize.width + CGFloat(controlWrapper.marginRight));
                 }
@@ -199,11 +199,11 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
                 }
                 lineLength += allocatedSize.width;
         
-                if (controlWrapper.verticalAlignment == VerticalAlignment.Top)
+                if (controlWrapper.verticalAlignment == VerticalAlignment.top)
                 {
                     y = linePosition + CGFloat(controlWrapper.marginTop);
                 }
-                else if (controlWrapper.verticalAlignment == VerticalAlignment.Bottom)
+                else if (controlWrapper.verticalAlignment == VerticalAlignment.bottom)
                 {
                     y = linePosition + lineThickness - (actualSize.height + CGFloat(controlWrapper.marginBottom));
                 }
@@ -216,11 +216,11 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
             {
                 // Horizontal scroll means vertical layout...
                 //
-                if (controlWrapper.horizontalAlignment == HorizontalAlignment.Left)
+                if (controlWrapper.horizontalAlignment == HorizontalAlignment.left)
                 {
                     x = linePosition + CGFloat(controlWrapper.marginLeft);
                 }
-                else if (controlWrapper.horizontalAlignment == HorizontalAlignment.Right)
+                else if (controlWrapper.horizontalAlignment == HorizontalAlignment.right)
                 {
                     x = linePosition + lineThickness - (actualSize.width + CGFloat(controlWrapper.marginRight));
                 }
@@ -229,11 +229,11 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
                     x = linePosition + ((lineThickness - actualSize.width) / 2);
                 }
         
-                if (controlWrapper.verticalAlignment == VerticalAlignment.Top)
+                if (controlWrapper.verticalAlignment == VerticalAlignment.top)
                 {
                     y = lineLength + CGFloat(controlWrapper.marginTop);
                 }
-                else if (controlWrapper.verticalAlignment == VerticalAlignment.Bottom)
+                else if (controlWrapper.verticalAlignment == VerticalAlignment.bottom)
                 {
                     y = lineLength + allocatedSize.height - (actualSize.height + CGFloat(controlWrapper.marginBottom));
                 }
@@ -257,10 +257,10 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
     // the items into "lines" (rows/columns as appropriate).  We then just process and lay out the line elements
     // to position each element appropriately given its margins and alignment.
     //
-    public override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? // [UICollectionViewLayoutAttributes]
+    open override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? // [UICollectionViewLayoutAttributes]
     {
         logger.debug("LayoutAttributesForElementsInRect: \(rect)");
-        let attributesArray = super.layoutAttributesForElementsInRect(rect)!;
+        let attributesArray = super.layoutAttributesForElements(in: rect)!;
         
         var lineContents = [UICollectionViewLayoutAttributes]();
         
@@ -272,9 +272,9 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
         {
             if (attributes.representedElementKind == nil)
             {
-                attributes.frame = self.layoutAttributesForItemAtIndexPath(attributes.indexPath)!.frame;
+                attributes.frame = self.layoutAttributesForItem(at: attributes.indexPath)!.frame;
                 
-                if (self.scrollDirection == UICollectionViewScrollDirection.Vertical)
+                if (self.scrollDirection == UICollectionViewScrollDirection.vertical)
                 {
                     // Vertical scroll means horizontal layout...
                     //
@@ -340,7 +340,7 @@ public class WrapPanelCollectionViewLayout : UICollectionViewFlowLayout
     }
 }
 
-public class PaddingThicknessSetter : ThicknessSetter
+open class PaddingThicknessSetter : ThicknessSetter
 {
     var _layout: UICollectionViewFlowLayout;
     
@@ -349,7 +349,7 @@ public class PaddingThicknessSetter : ThicknessSetter
         _layout = layout;
     }
     
-    public func setThickness(thickness: Double)
+    open func setThickness(_ thickness: Double)
     {
         var insets = _layout.sectionInset;
         insets.left = CGFloat(thickness);
@@ -359,28 +359,28 @@ public class PaddingThicknessSetter : ThicknessSetter
         _layout.sectionInset = insets;
     }
 
-    public func setThicknessLeft(thickness: Double)
+    open func setThicknessLeft(_ thickness: Double)
     {
         var insets = _layout.sectionInset;
         insets.left = CGFloat(thickness);
         _layout.sectionInset = insets;
     }
     
-    public func setThicknessTop(thickness: Double)
+    open func setThicknessTop(_ thickness: Double)
     {
         var insets = _layout.sectionInset;
         insets.top = CGFloat(thickness);
         _layout.sectionInset = insets;
     }
     
-    public func setThicknessRight(thickness: Double)
+    open func setThicknessRight(_ thickness: Double)
     {
         var insets = _layout.sectionInset;
         insets.right = CGFloat(thickness);
         _layout.sectionInset = insets;
     }
     
-    public func setThicknessBottom(thickness: Double)
+    open func setThicknessBottom(_ thickness: Double)
     {
         var insets = _layout.sectionInset;
         insets.bottom = CGFloat(thickness);
@@ -388,7 +388,7 @@ public class PaddingThicknessSetter : ThicknessSetter
     }
 }
 
-public class WrapPanelCollectionView : UICollectionView
+open class WrapPanelCollectionView : UICollectionView
 {
     var _controlWrapper: iOSControlWrapper;
     
@@ -396,7 +396,7 @@ public class WrapPanelCollectionView : UICollectionView
     {
         _controlWrapper = controlWrapper;
         super.init(frame: CGRect(), collectionViewLayout: layout);
-        self.backgroundColor = UIColor.clearColor(); // UICollectionView background defaults to Black
+        self.backgroundColor = UIColor.clear; // UICollectionView background defaults to Black
     }
 
     required public init?(coder aDecoder: NSCoder)
@@ -404,7 +404,7 @@ public class WrapPanelCollectionView : UICollectionView
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func layoutSubviews()
+    open override func layoutSubviews()
     {
         super.layoutSubviews();
         
@@ -414,11 +414,11 @@ public class WrapPanelCollectionView : UICollectionView
             
             var frameSize = self.frame.size;
             
-            if (layout.scrollDirection == UICollectionViewScrollDirection.Horizontal)
+            if (layout.scrollDirection == UICollectionViewScrollDirection.horizontal)
             {
                 // Vertical wrapping (width may vary based on contents, height must be explicit)
                 //
-                if (_controlWrapper.frameProperties.widthSpec == SizeSpec.WrapContent)
+                if (_controlWrapper.frameProperties.widthSpec == SizeSpec.wrapContent)
                 {
                     frameSize.width = self.contentSize.width;
                 }
@@ -427,7 +427,7 @@ public class WrapPanelCollectionView : UICollectionView
             {
                 // Horizontal wrapping (height may vary based on contents, width must be explicit)
                 //
-                if (_controlWrapper.frameProperties.heightSpec == SizeSpec.WrapContent)
+                if (_controlWrapper.frameProperties.heightSpec == SizeSpec.wrapContent)
                 {
                     frameSize.height = self.contentSize.height;
                 }
@@ -449,7 +449,7 @@ public class WrapPanelCollectionView : UICollectionView
     }
 }
 
-public class iOSWrapPanelWrapper : iOSControlWrapper
+open class iOSWrapPanelWrapper : iOSControlWrapper
 {
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
@@ -471,14 +471,14 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
         layout.minimumLineSpacing = 0;
         
         processElementProperty(controlSpec, attributeName: "orientation", setValue: { (value) in
-            let orientation = self.toOrientation(value, defaultOrientation: Orientation.Horizontal);
-            if (orientation == Orientation.Horizontal)
+            let orientation = self.toOrientation(value, defaultOrientation: Orientation.horizontal);
+            if (orientation == Orientation.horizontal)
             {
-                layout.scrollDirection = UICollectionViewScrollDirection.Vertical;
+                layout.scrollDirection = UICollectionViewScrollDirection.vertical;
             }
             else
             {
-                layout.scrollDirection = UICollectionViewScrollDirection.Horizontal;
+                layout.scrollDirection = UICollectionViewScrollDirection.horizontal;
             }
         });
         
@@ -506,7 +506,7 @@ public class iOSWrapPanelWrapper : iOSControlWrapper
             });
         }
 
-        view.registerClass(WrapPanelCell.self, forCellWithReuseIdentifier: wrapPanelCellID);
+        view.register(WrapPanelCell.self, forCellWithReuseIdentifier: wrapPanelCellID!);
         view.dataSource = source;
         
         view.layoutSubviews();

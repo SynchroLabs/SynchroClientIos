@@ -23,8 +23,8 @@ class StateManagerTests: XCTestCase
     {
         // Force fresh load of AppManager from the bundled seed...
         //
-        var userDefaults = NSUserDefaults.standardUserDefaults()
-        userDefaults.removeObjectForKey("seed.json");
+        var userDefaults = UserDefaults.standard
+        userDefaults.removeObject(forKey: "seed.json");
         userDefaults.synchronize()
 
         var appManager = SynchroAppManager();
@@ -37,18 +37,18 @@ class StateManagerTests: XCTestCase
         
         appManager.append(app);
         
-        var transport = TransportHttp(uri: NSURL(string: app.endpoint)!);
+        var transport = TransportHttp(uri: URL(string: app.endpoint)!);
         
         let v = UIViewController();
         
         var stateManager = StateManager(appManager: appManager, app: app, transport: transport, deviceMetrics: DeviceMetrics(controller: v));
         
-        var expectationMenu = self.expectationWithDescription("got menu page response")
-        var expectationHello = self.expectationWithDescription("got hello page response")
+        var expectationMenu = self.expectation(description: "got menu page response")
+        var expectationHello = self.expectation(description: "got hello page response")
 
         var responseNumber = 0;
         
-        func processPageView(pageView: JObject) -> Void
+        func processPageView(_ pageView: JObject) -> Void
         {
             responseNumber += 1;
             print("processPageView response: \(responseNumber)");
@@ -71,17 +71,17 @@ class StateManagerTests: XCTestCase
             XCTAssert(false, "Unexpected app exit in test");            
         }
         
-        func processMessageBox(messageBox: JObject, commandHandler: CommandHandler) -> Void
+        func processMessageBox(_ messageBox: JObject, commandHandler: CommandHandler) -> Void
         {
             XCTAssert(false, "Unexpected message box call in test");
         }
         
-        func processLaunchUrl(primaryUrl: String, secondaryUrl: String?) -> Void
+        func processLaunchUrl(_ primaryUrl: String, secondaryUrl: String?) -> Void
         {
             XCTAssert(false, "Unexpected launch url call in test");
         }
         
-        func processChoosePhoto(request: JObject, onComplete: (JObject) -> Void) -> Void
+        func processChoosePhoto(_ request: JObject, onComplete: (JObject) -> Void) -> Void
         {
             XCTAssert(false, "Unexpected choose photo call in test");
         }
@@ -89,6 +89,6 @@ class StateManagerTests: XCTestCase
         stateManager.setProcessingHandlers(processPageView, onProcessAppExit: processAppExit, onProcessMessageBox: processMessageBox, onProcessLaunchUrl: processLaunchUrl, onProcessChoosePhoto: processChoosePhoto)
         stateManager.startApplicationAsync();
         
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectations(timeout: 5.0, handler: nil)
     }
 }

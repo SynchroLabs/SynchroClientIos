@@ -12,17 +12,17 @@ private var logger = Logger.getLogger("TransportHttp");
 
 private var _schemeRegex = Regex("^https?://.*");
 
-public class TransportHttp : TransportBase, Transport
+open class TransportHttp : TransportBase, Transport
 {
-    var _uri: NSURL;
+    var _uri: URL;
     
-    public init(uri: NSURL)
+    public init(uri: URL)
     {
         _uri = uri;
         super.init();
     }
     
-    public class func uriFromHostString(host: String, scheme: String = "http") -> NSURL?
+    open class func uriFromHostString(_ host: String, scheme: String = "http") -> URL?
     {
         var uri = host;
         if (!_schemeRegex.isMatch(host))
@@ -30,25 +30,25 @@ public class TransportHttp : TransportBase, Transport
             uri = scheme + "://" + host;
         }
         
-        return NSURL(string: uri);
+        return URL(string: uri);
     }
     
-    private func isSuccessStatusCode(response: NSHTTPURLResponse) -> Bool
+    fileprivate func isSuccessStatusCode(_ response: HTTPURLResponse) -> Bool
     {
         // This is what EnsureSuccessStatusCode does on .NET (for better or worse)
         //
         return response.statusCode >= 200 && response.statusCode < 300;
     }
     
-    public func sendMessage(sessionId: String?, requestObject: JObject, responseHandler: ResponseHandler?, requestFailureHandler: RequestFailureHandler?)
+    open func sendMessage(_ sessionId: String?, requestObject: JObject, responseHandler: ResponseHandler?, requestFailureHandler: RequestFailureHandler?)
     {
         let theResponseHandler = (responseHandler ?? _responseHandler);
         let theRequestFailureHandler = (requestFailureHandler ?? _requestFailureHandler);
 
-        let request = NSMutableURLRequest(URL: _uri);
-        let session = NSURLSession.sharedSession();
-        request.HTTPMethod = "POST"
-        request.HTTPBody = requestObject.toJson().dataUsingEncoding(NSUTF8StringEncoding);
+        let request = NSMutableURLRequest(url: _uri);
+        let session = URLSession.shared;
+        request.httpMethod = "POST"
+        request.httpBody = requestObject.toJson().data(using: String.Encoding.utf8);
 
         logger.debug("Request: \(requestObject.toJson())");
         
@@ -58,7 +58,7 @@ public class TransportHttp : TransportBase, Transport
             request.addValue(sessionId!, forHTTPHeaderField: TransportBase.SessionIdHeader);
         }
         
-        let task = session.dataTaskWithRequest(request, completionHandler: { data, response, error -> Void in
+        let task = session.dataTask(with: request, completionHandler: { data, response, error -> Void in
             // completionHandler: (NSData!, NSUrlResponse!, NSError!)
             logger.debug("Response: \(response)");
             
@@ -66,31 +66,29 @@ public class TransportHttp : TransportBase, Transport
             {
                 if let failureHandler = theRequestFailureHandler
                 {
-                    dispatch_async(dispatch_get_main_queue(),
-                    {
+                    DispatchQueue.main.async(execute: {
                         failureHandler(request: requestObject, exception: err);
                     });
                 }
             }
-            else if !self.isSuccessStatusCode(response as! NSHTTPURLResponse)
+            else if !self.isSuccessStatusCode(response as! HTTPURLResponse)
             {
                 // We consider non-2XX to be an error, even though from the HTTP standpoint they're really just
                 // fine.  So we create our own NSError and call the failure handler (if any) in this case.
                 //
-                let httpResponse = response as! NSHTTPURLResponse;
+                let httpResponse = response as! HTTPURLResponse;
                 let nonSuccessError = NSError(domain: NSURLErrorDomain, code: httpResponse.statusCode, userInfo: httpResponse.allHeaderFields);
 
                 if let failureHandler = theRequestFailureHandler
                 {
-                    dispatch_async(dispatch_get_main_queue(),
-                    {
+                    DispatchQueue.main.async(execute: {
                         failureHandler(request: requestObject, exception: nonSuccessError);
                     });
                 }
             }
             else
             {
-                var strData = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                var strData = NSString(data: data!, encoding: String.Encoding.utf8)
                 if strData == nil
                 {
                     // In the event that the UTF8 decode fails, we'll go ahead and let the string encoder try to find an
@@ -98,7 +96,7 @@ public class TransportHttp : TransportBase, Transport
                     // when it shouldn't, and the code below correctly decodes (as USASCII, which is a subset of the UF8
                     // that it failed on above - go figure).
                     //
-                    let encoding = NSString.stringEncodingForData(data!, encodingOptions: nil, convertedString: &strData, usedLossyConversion: nil)
+                    let encoding = NSString.stringEncoding(for: data!, encodingOptions: nil, convertedString: &strData, usedLossyConversion: nil)
                     logger.error("Failed to decode response data as UTF-8, tried generic decode, which produced and encoding of: \(encoding)");
                 }
                 
@@ -111,8 +109,7 @@ public class TransportHttp : TransportBase, Transport
                     
                     if (theResponseHandler != nil)
                     {
-                        dispatch_async(dispatch_get_main_queue(),
-                        {
+                        DispatchQueue.main.async(execute: {
                             theResponseHandler!(response: responseObject as! JObject);
                         });
                     }
@@ -123,12 +120,12 @@ public class TransportHttp : TransportBase, Transport
         task.resume()
     }
     
-    public func sendMessage(sessionId: String?, requestObject: JObject)
+    open func sendMessage(_ sessionId: String?, requestObject: JObject)
     {
         self.sendMessage(sessionId, requestObject: requestObject, responseHandler: nil, requestFailureHandler: nil);
     }
     
-    public func getAppDefinition(onDefinition: (JObject?) -> Void )
+    open func getAppDefinition(_ onDefinition: (JObject?) -> Void )
     {
         return super.getAppDefinition(self, onDefinition: onDefinition);
     }

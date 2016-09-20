@@ -22,9 +22,9 @@ private var charSubstitutions: Dictionary<Character, String> =
     "\r\n": "\\r\\n"
 ]
 
-public class JsonWriter
+open class JsonWriter
 {
-    private class func WriteString(writer: StringBuilder, str: String)
+    fileprivate class func WriteString(_ writer: StringBuilder, str: String)
     {
         writer.append("\"");
         for _codePoint in str.unicodeScalars
@@ -34,7 +34,7 @@ public class JsonWriter
             {
                 writer.append(subString);
             }
-            else if ((_char < " ") || (!_codePoint.isASCII()))
+            else if ((_char < " ") || (!_codePoint.isASCII))
             {
                 writer.append(String(format: "\\u%04x", _codePoint.value));
             }
@@ -46,17 +46,17 @@ public class JsonWriter
         writer.append("\"");
     }
 
-    private class func WriteNumber(writer: StringBuilder, i: Int)
+    fileprivate class func WriteNumber(_ writer: StringBuilder, i: Int)
     {
         writer.append(String(i));
     }
 
-    private class func WriteNumber(writer: StringBuilder, d: Double)
+    fileprivate class func WriteNumber(_ writer: StringBuilder, d: Double)
     {
         writer.append(String(format: "%G", d)); // !!! Find correct format
     }
 
-    private class func WriteArray(writer: StringBuilder, array: JArray)
+    fileprivate class func WriteArray(_ writer: StringBuilder, array: JArray)
     {
         var firstElement = true;
         
@@ -77,40 +77,40 @@ public class JsonWriter
         writer.append("]");
     }
 
-    private class func WriteBoolean(writer: StringBuilder, b: Bool)
+    fileprivate class func WriteBoolean(_ writer: StringBuilder, b: Bool)
     {
         writer.append(b ? "true" : "false");
     }
 
-    private class func WriteNull(writer: StringBuilder)
+    fileprivate class func WriteNull(_ writer: StringBuilder)
     {
         writer.append("null");
     }
     
-    public class func WriteValue(writer: StringBuilder, value: JToken)
+    open class func WriteValue(_ writer: StringBuilder, value: JToken)
     {
         switch value.Type
         {
-            case JTokenType.Null:
+            case JTokenType.null:
                 WriteNull(writer);
-            case JTokenType.Object:
+            case JTokenType.object:
                 WriteObject(writer, obj: value as! JObject);
-            case JTokenType.Array:
+            case JTokenType.array:
                 WriteArray(writer, array: value as! JArray);
-            case JTokenType.String:
+            case JTokenType.string:
                 WriteString(writer, str: value.asString()!);
-            case JTokenType.Integer:
+            case JTokenType.integer:
                 WriteNumber(writer, i: value.asInt()!);
-            case JTokenType.Float:
+            case JTokenType.float:
                 WriteNumber(writer, d: value.asDouble()!);
-            case JTokenType.Boolean:
+            case JTokenType.boolean:
                 WriteBoolean(writer, b: value.asBool()!);
             default:
                 fatalError("Unknown object type \(value.Type)");
         }
     }
 
-    private class func WriteObject(writer: StringBuilder, obj: JObject)
+    fileprivate class func WriteObject(_ writer: StringBuilder, obj: JObject)
     {
         var firstKey = true;
         

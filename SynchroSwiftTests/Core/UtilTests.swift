@@ -19,7 +19,7 @@ class UtilTests: XCTestCase
     {
         let theFormat = "Value %1$@ - str: %2$@";
         
-        var theArgs = [CVarArgType]();
+        var theArgs = [CVarArg]();
         theArgs.append("foo");
         theArgs.append("bar\u{20ac}");
         
