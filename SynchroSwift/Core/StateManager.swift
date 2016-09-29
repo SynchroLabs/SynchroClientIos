@@ -471,8 +471,7 @@ open class StateManager
         {
             logger.info("Launching photo chooser...");
             let jsonChoosePhoto = responseAsJSON["ChoosePhoto"] as! JObject;
-            _onProcessChoosePhoto!(request: jsonChoosePhoto, onComplete:
-            {
+            _onProcessChoosePhoto!(jsonChoosePhoto, {
                 (response) in
                 
                 logger.info("Photo chooser completed");

@@ -139,7 +139,7 @@ open class iOSImageWrapper : iOSControlWrapper
                         {
                             logger.error("Image load failed without returning error or response (should be impossible)");
                         }
-                    })
+                    } as! (URLResponse?, Data?, Error?) -> Void)
                 }
                 else
                 {

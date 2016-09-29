@@ -13,12 +13,12 @@ public typealias RequestFailureHandler = (_ request: JObject, _ exception: NSErr
 
 public protocol Transport
 {
-    func setDefaultHandlers(_ responseHandler: ResponseHandler, requestFailureHandler: RequestFailureHandler)
+    func setDefaultHandlers(_ responseHandler: @escaping ResponseHandler, requestFailureHandler: @escaping RequestFailureHandler)
     
     func sendMessage(_ sessionId: String?, requestObject: JObject)
     func sendMessage(_ sessionId: String?, requestObject: JObject, responseHandler: ResponseHandler?, requestFailureHandler: RequestFailureHandler?)
     
-    func getAppDefinition(_ onDefinition: (JObject?) -> Void)
+    func getAppDefinition(_ onDefinition: @escaping (JObject?) -> Void)
 }
 
 open class TransportBase

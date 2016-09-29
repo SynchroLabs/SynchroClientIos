@@ -102,7 +102,7 @@ open class StringReader : TextReader
         let chr = peek();
         if (chr != nil)
         {
-            _currIndex = <#T##Collection corresponding to your index##Collection#>.index(_currIndex, offsetBy: 1);
+            _currIndex = _str.index(_currIndex, offsetBy: 1);
         }
         return chr;
      }

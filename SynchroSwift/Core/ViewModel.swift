@@ -31,7 +31,7 @@ open class ViewModel
     
     open var rootObject: JObject { get { return _rootObject; } } // Only used by BindingContext - "internal"?
     
-    open func createAndRegisterValueBinding(_ bindingContext: BindingContext, getValue: GetViewValue, setValue: SetViewValue?) -> ValueBinding
+    open func createAndRegisterValueBinding(_ bindingContext: BindingContext, getValue: @escaping GetViewValue, setValue: SetViewValue?) -> ValueBinding
     {
         let valueBinding = ValueBinding(viewModel: self, bindingContext: bindingContext, getViewValue: getValue, setViewValue: setValue);
         _valueBindings.append(valueBinding);
@@ -210,7 +210,7 @@ open class ViewModel
         var bindingUpdates = [BindingUpdate]();
     
         logger.debug("Processing view model updates: \(viewModelDeltas)");
-        if (viewModelDeltas.Type == JTokenType.array)
+        if (viewModelDeltas.TokenType == JTokenType.array)
         {
             // Removals are generally reported as removals from the end of the list with increasing indexes.  If
             // we process them in this way, the first removal will change the list positions of remaining items
@@ -289,7 +289,7 @@ open class ViewModel
                                 // This is an object property...
                                 let dotPos = path.lastIndexOf(".");
                                 let parentPath = path.substring(to: dotPos!);
-                                let attributeName = path.substring(from: <#T##String.CharacterView corresponding to your index##String.CharacterView#>.index((dotPos!), offsetBy: 1));
+                                let attributeName = path.substring(from: path.index((dotPos!), offsetBy: 1));
                                 let parentToken = _rootObject.selectToken(parentPath);
                                 if ((parentToken != nil) && (parentToken is JObject))
                                 {

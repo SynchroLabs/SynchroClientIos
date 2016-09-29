@@ -202,7 +202,7 @@ open class BindingContext
     {
         var bindingContexts = Array<BindingContext>();
     
-        if (JTokenType.array == _boundToken?.Type)
+        if (JTokenType.array == _boundToken?.TokenType)
         {
             var index = 0;
             for _ in _boundToken as! JArray

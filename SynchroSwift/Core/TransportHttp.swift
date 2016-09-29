@@ -58,7 +58,7 @@ open class TransportHttp : TransportBase, Transport
             request.addValue(sessionId!, forHTTPHeaderField: TransportBase.SessionIdHeader);
         }
         
-        let task = session.dataTask(with: request, completionHandler: { data, response, error -> Void in
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error -> Void in
             // completionHandler: (NSData!, NSUrlResponse!, NSError!)
             logger.debug("Response: \(response)");
             
@@ -67,7 +67,7 @@ open class TransportHttp : TransportBase, Transport
                 if let failureHandler = theRequestFailureHandler
                 {
                     DispatchQueue.main.async(execute: {
-                        failureHandler(request: requestObject, exception: err);
+                        failureHandler(requestObject, err as NSError);
                     });
                 }
             }
@@ -82,13 +82,13 @@ open class TransportHttp : TransportBase, Transport
                 if let failureHandler = theRequestFailureHandler
                 {
                     DispatchQueue.main.async(execute: {
-                        failureHandler(request: requestObject, exception: nonSuccessError);
+                        failureHandler(requestObject, nonSuccessError);
                     });
                 }
             }
             else
             {
-                var strData = NSString(data: data!, encoding: String.Encoding.utf8)
+                var strData = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
                 if strData == nil
                 {
                     // In the event that the UTF8 decode fails, we'll go ahead and let the string encoder try to find an
@@ -110,7 +110,7 @@ open class TransportHttp : TransportBase, Transport
                     if (theResponseHandler != nil)
                     {
                         DispatchQueue.main.async(execute: {
-                            theResponseHandler!(response: responseObject as! JObject);
+                            theResponseHandler!(responseObject as! JObject);
                         });
                     }
                 }
@@ -125,7 +125,7 @@ open class TransportHttp : TransportBase, Transport
         self.sendMessage(sessionId, requestObject: requestObject, responseHandler: nil, requestFailureHandler: nil);
     }
     
-    open func getAppDefinition(_ onDefinition: (JObject?) -> Void )
+    open func getAppDefinition(_ onDefinition: @escaping (JObject?) -> Void )
     {
         return super.getAppDefinition(self, onDefinition: onDefinition);
     }

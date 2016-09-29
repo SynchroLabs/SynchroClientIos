@@ -543,7 +543,7 @@ open class ControlWrapper: NSObject
     
     // Process a value binding on an element.  If a value is supplied, a value binding to that binding context will be created.
     //
-    func processElementBoundValue(_ attributeName: String, attributeValue: JToken?, getValue: GetViewValue, setValue: SetViewValue? = nil) -> Bool
+    func processElementBoundValue(_ attributeName: String, attributeValue: JToken?, getValue: @escaping GetViewValue, setValue: SetViewValue? = nil) -> Bool
     {
         if let value = attributeValue?.asString()
         {
@@ -567,7 +567,7 @@ open class ControlWrapper: NSObject
         let styleBinding = style + "." + attributeName;
         let styleBindingContext = _viewModel.rootBindingContext.select(styleBinding);
         let value = styleBindingContext.getValue();
-        if ((value != nil) && (value?.Type != JTokenType.object))
+        if ((value != nil) && (value?.TokenType != JTokenType.object))
         {
             let binding = viewModel.createAndRegisterPropertyBinding(_bindingContext, value: "{$root." + styleBinding + "}", setValue: setValue);
             if (setValue == nil)
@@ -607,7 +607,7 @@ open class ControlWrapper: NSObject
         if ((value == nil) && (altAttributeName != nil))
         {
             value = controlSpec.selectToken(altAttributeName!);
-            if ((value != nil) && (value?.Type == JTokenType.object))
+            if ((value != nil) && (value?.TokenType == JTokenType.object))
             {
                 value = nil;
             }
@@ -635,7 +635,7 @@ open class ControlWrapper: NSObject
                 }
             }
         }
-        else if ((value!.Type == JTokenType.string) && PropertyValue.containsBindingTokens(value!.asString()!))
+        else if ((value!.TokenType == JTokenType.string) && PropertyValue.containsBindingTokens(value!.asString()!))
         {
             // If value contains a binding, create a Binding and add it to metadata
             let binding = viewModel.createAndRegisterPropertyBinding(self.bindingContext, value: value!.asString()!, setValue: setValue);
@@ -739,7 +739,7 @@ open class ControlWrapper: NSObject
                 var controlBindingContext = bindingContext;
                 var controlCreated = false;
                 
-                if ((element["binding"] != nil) && (element["binding"]!.Type == JTokenType.object))
+                if ((element["binding"] != nil) && (element["binding"]!.TokenType == JTokenType.object))
                 {
                     logger.debug("Found binding object");
                     let bindingSpec = element["binding"] as! JObject;

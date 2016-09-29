@@ -65,7 +65,7 @@ open class BindingHelper
         
         if let bindingSpec = controlSpec["binding"]
         {
-            if (bindingSpec.Type == JTokenType.object)
+            if (bindingSpec.TokenType == JTokenType.object)
             {
                 // Encountered an object spec, return that (subject to further processing below)
                 //
@@ -234,7 +234,7 @@ open class BoundAndPossiblyResolvedToken
                             {
                                 formatter.minimumIntegerDigits = formatPrecision!
                             }
-                            if let result = formatter.string(from: intVal)
+                            if let result = formatter.string(from: intVal as NSNumber)
                             {
                                 return result;
                             }
@@ -250,7 +250,7 @@ open class BoundAndPossiblyResolvedToken
                             formatter.maximumSignificantDigits += 1; // Apparently, on .NET this is the number of digits after the decimal point, so we correct for that
                             formatter.minimumSignificantDigits = formatter.maximumSignificantDigits;
                             formatter.exponentSymbol = formatSpecifier;
-                            if let result = formatter.string(from: numericValue)
+                            if let result = formatter.string(from: numericValue as NSNumber)
                             {
                                 return result;
                             }
@@ -267,7 +267,7 @@ open class BoundAndPossiblyResolvedToken
                             formatter.roundingMode = NumberFormatter.RoundingMode.halfUp;
                             formatter.minimumFractionDigits = decimalPlaces;
                             formatter.maximumFractionDigits = decimalPlaces;
-                            if let result = formatter.string(from: numericValue)
+                            if let result = formatter.string(from: numericValue as NSNumber)
                             {
                                 return result;
                             }
@@ -286,7 +286,7 @@ open class BoundAndPossiblyResolvedToken
                             formatter.roundingMode = NumberFormatter.RoundingMode.halfUp;
                             formatter.minimumFractionDigits = decimalPlaces;
                             formatter.maximumFractionDigits = decimalPlaces;
-                            if let result = formatter.string(from: numericValue)
+                            if let result = formatter.string(from: numericValue as NSNumber)
                             {
                                 return result;
                             }
@@ -302,7 +302,7 @@ open class BoundAndPossiblyResolvedToken
                             formatter.roundingMode = NumberFormatter.RoundingMode.halfUp;
                             formatter.maximumFractionDigits = decimalPlaces;
                             formatter.minimumFractionDigits = decimalPlaces;
-                            if let result = formatter.string(from: numericValue)
+                            if let result = formatter.string(from: numericValue as NSNumber)
                             {
                                 return result;
                             }
@@ -501,19 +501,19 @@ open class PropertyValue
             for boundToken in _boundTokens
             {
                 let resolvedValue = boundToken.resolvedValue;
-                if (resolvedValue?.Type == JTokenType.boolean)
+                if (resolvedValue?.TokenType == JTokenType.boolean)
                 {
                     context?.setObject(resolvedValue?.asBool(), forKeyedSubscript: "var\(index)" as (NSCopying & NSObjectProtocol)!);
                 }
-                else if (resolvedValue?.Type == JTokenType.integer)
+                else if (resolvedValue?.TokenType == JTokenType.integer)
                 {
                     context?.setObject(resolvedValue?.asInt(), forKeyedSubscript: "var\(index)" as (NSCopying & NSObjectProtocol)!);
                 }
-                else if (resolvedValue?.Type == JTokenType.float)
+                else if (resolvedValue?.TokenType == JTokenType.float)
                 {
                     context?.setObject(resolvedValue?.asDouble(), forKeyedSubscript: "var\(index)" as (NSCopying & NSObjectProtocol)!);
                 }
-                else if (resolvedValue?.Type == JTokenType.null)
+                else if (resolvedValue?.TokenType == JTokenType.null)
                 {
                     context?.setObject(JSValue.init(nullIn: context), forKeyedSubscript: "var\(index)" as (NSCopying & NSObjectProtocol)!);
                 }
