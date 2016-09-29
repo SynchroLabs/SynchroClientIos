@@ -71,7 +71,7 @@ open class CommandInstance
         for (parameterKey, parameterValue) in _parameters
         {
             var value: JToken? = parameterValue;
-            if (parameterValue.Type == JTokenType.string)
+            if (parameterValue.TokenType == JTokenType.string)
             {
                 value = PropertyValue.expand(parameterValue.asString()!, bindingContext: bindingContext);
             }

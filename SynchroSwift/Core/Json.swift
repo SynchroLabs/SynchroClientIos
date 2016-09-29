@@ -30,7 +30,7 @@ public func ==(first: JToken, second: JToken) -> Bool
 open class JToken: Equatable
 {
     // Should be overrided by all derived classes...
-    open var Type: JTokenType { get { return JTokenType.undefined; } }
+    open var TokenType: JTokenType { get { return JTokenType.undefined; } }
     
     fileprivate init()
     {
@@ -367,7 +367,7 @@ open class JObject : JToken, Sequence
     var _keys = Array<String>();
     var _tokens = Dictionary<String, JToken>();
     
-    open override var Type: JTokenType { get { return JTokenType.object; } }
+    open override var TokenType: JTokenType { get { return JTokenType.object; } }
 
     public override init()
     {
@@ -487,7 +487,7 @@ open class JArray : JToken, Sequence, Collection
 {
     var _tokens = Array<JToken>();
 
-    open override var Type: JTokenType { get { return JTokenType.array; } }
+    open override var TokenType: JTokenType { get { return JTokenType.array; } }
 
     public override init()
     {
@@ -603,6 +603,11 @@ open class JArray : JToken, Sequence, Collection
         }
         return false
     }
+
+    open func index(after: Int) -> Int
+    {
+        return _tokens.index(after: after);
+    }
 }
 
 // This is how we do a union in Swift...
@@ -633,7 +638,7 @@ open class JValue : JToken
 {
     fileprivate var valueOfType = ValueType.valueNull;
     
-    open override var Type: JTokenType
+    open override var TokenType: JTokenType
     {
         get
         {

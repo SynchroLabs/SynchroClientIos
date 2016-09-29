@@ -37,7 +37,7 @@ open class TokenConverter
     
         if let theToken = token
         {
-            switch (theToken.Type)
+            switch (theToken.TokenType)
             {
                 case JTokenType.array:
                     let array = theToken as! JArray;
@@ -64,7 +64,7 @@ open class TokenConverter
     
         if let theToken = token
         {
-            switch (theToken.Type)
+            switch (theToken.TokenType)
             {
                 case JTokenType.boolean:
                     result = theToken.asBool()!;
@@ -93,7 +93,7 @@ open class TokenConverter
     
         if let theToken = token
         {
-            switch (theToken.Type)
+            switch (theToken.TokenType)
             {
                 case JTokenType.string:
                     var scannedResult: Double = 0;

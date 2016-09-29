@@ -89,7 +89,7 @@ open class JsonWriter
     
     open class func WriteValue(_ writer: StringBuilder, value: JToken)
     {
-        switch value.Type
+        switch value.TokenType
         {
             case JTokenType.null:
                 WriteNull(writer);
@@ -106,7 +106,7 @@ open class JsonWriter
             case JTokenType.boolean:
                 WriteBoolean(writer, b: value.asBool()!);
             default:
-                fatalError("Unknown object type \(value.Type)");
+                fatalError("Unknown object type \(value.TokenType)");
         }
     }
 

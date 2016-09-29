@@ -143,7 +143,7 @@ open class PageView : NSObject
     }
     
     
-    open func processMessageBox(_ messageBox: JObject, onCommand: CommandHandler)
+    open func processMessageBox(_ messageBox: JObject, onCommand: @escaping CommandHandler)
     {
         fatalError("Must be overridden in derived class");
     }

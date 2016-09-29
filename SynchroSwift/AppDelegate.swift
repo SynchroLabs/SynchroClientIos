@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         
         let rootNavigationController = SynchroUINavigationController();
         
-        rootNavigationController.supportedInterfaceOrientations()
+        rootNavigationController.supportedInterfaceOrientations
         
         window = UIWindow(frame: UIScreen.main.bounds);
         

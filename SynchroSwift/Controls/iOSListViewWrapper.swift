@@ -169,7 +169,7 @@ open class CheckableBindingContextTableSource : CheckableTableSource
     var _parentControl: iOSControlWrapper;
     var _itemTemplate: JObject;
     
-    public init(parentControl:iOSControlWrapper, itemTemplate: JObject, selectionMode: ListSelectionMode, onSelectionChanged: OnSelectionChanged, onItemClicked: OnItemClicked, disclosure: Bool)
+    public init(parentControl:iOSControlWrapper, itemTemplate: JObject, selectionMode: ListSelectionMode, onSelectionChanged: @escaping OnSelectionChanged, onItemClicked: @escaping OnItemClicked, disclosure: Bool)
     {
         _parentControl = parentControl;
         _itemTemplate = itemTemplate;

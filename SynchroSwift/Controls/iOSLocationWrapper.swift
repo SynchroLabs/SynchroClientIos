@@ -144,7 +144,7 @@ open class iOSLocationWrapper : iOSControlWrapper, CLLocationManagerDelegate
     {
         _location = nil;
         
-        if CLError.Code.locationUnknown == CLError.Code(rawValue: error.code)
+        if CLError.Code.locationUnknown == CLError.Code(rawValue: error._code)
         {
             // "Location unknown" is not really an error.  It just indicates that the location couldn't be determined
             // immediately (it's going to keep trying), per...
