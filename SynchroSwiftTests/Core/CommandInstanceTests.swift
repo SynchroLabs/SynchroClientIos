@@ -55,8 +55,8 @@ class CommandInstanceTests: XCTestCase
         XCTAssertEqual("The Title", resolvedParams["Title"]?.asString());
         XCTAssertEqual("", resolvedParams["Empty"]?.asString());
         XCTAssert(resolvedParams["Obj"]!.deepEquals(viewModel["board"]!.selectToken("0")!.selectToken("1")));
-        XCTAssertEqual(JTokenType.null, resolvedParams["NULL"]?.Type);
-        XCTAssertEqual(JTokenType.null, resolvedParams["Parent"]?.Type);
-        XCTAssertEqual(JTokenType.null, resolvedParams["Nonsense"]?.Type);
+        XCTAssertEqual(JTokenType.null, resolvedParams["NULL"]?.TokenType);
+        XCTAssertEqual(JTokenType.null, resolvedParams["Parent"]?.TokenType);
+        XCTAssertEqual(JTokenType.null, resolvedParams["Nonsense"]?.TokenType);
     }
 }
