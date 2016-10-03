@@ -73,7 +73,7 @@ open class SynchroPageViewController : UIViewController{
         _stateManager.setProcessingHandlers(
             _pageView.processPageView,
             onProcessAppExit: processAppExit,
-            onProcessMessageBox: _pageView.processMessageBox as! ProcessMessageBox,
+            onProcessMessageBox: _pageView.processMessageBox,
             onProcessLaunchUrl: _pageView.processLaunchUrl,
             onProcessChoosePhoto: _pageView.processChoosePhoto
             );

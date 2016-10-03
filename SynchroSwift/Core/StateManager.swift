@@ -25,7 +25,7 @@ public typealias CommandHandler = (String) -> Void;
 
 public typealias ProcessPageView = (_ pageView: JObject) -> Void;
 public typealias ProcessAppExit = () -> Void;
-public typealias ProcessMessageBox = (_ messageBox: JObject, _ commandHandler: CommandHandler) -> Void;
+public typealias ProcessMessageBox = (_ messageBox: JObject, _ commandHandler: @escaping CommandHandler) -> Void;
 public typealias ProcessLaunchUrl = (_ primaryUrl: String, _ secondaryUrl: String?) -> Void;
 public typealias ProcessChoosePhoto = (_ request: JObject, _ onComplete: (JObject) -> Void) -> Void;
 
