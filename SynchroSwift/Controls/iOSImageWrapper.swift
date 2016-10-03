@@ -79,10 +79,10 @@ open class iOSImageWrapper : iOSControlWrapper
                 {
                     logger.info("Loading image for URL: \(validUrl)");
                     let request: URLRequest = URLRequest(url: validUrl);
-                    NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response: URLResponse?, data: Data?, error: NSError?) -> Void in
+                    NSURLConnection.sendAsynchronousRequest(request, queue: OperationQueue.main, completionHandler: {(response: URLResponse?, data: Data?, error: Error?) -> Void in
                         if let err = error
                         {
-                            logger.error("Failed to load image, reason: \(err.description)");
+                            logger.error("Failed to load image, reason: \(err.localizedDescription)");
                             return;
                         }
 
@@ -139,7 +139,7 @@ open class iOSImageWrapper : iOSControlWrapper
                         {
                             logger.error("Image load failed without returning error or response (should be impossible)");
                         }
-                    } as! (URLResponse?, Data?, Error?) -> Void)
+                    })
                 }
                 else
                 {
