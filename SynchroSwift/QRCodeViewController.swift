@@ -44,7 +44,7 @@ class QRCodeViewController: UIViewController, AVCaptureMetadataOutputObjectsDele
     
     @IBAction func tapRecognizer(_ sender: UITapGestureRecognizer)
     {
-        self.navigationController?.popViewController(animated: true);
+        _ = self.navigationController?.popViewController(animated: true);
     }
     
     override var shouldAutorotate : Bool

@@ -593,6 +593,7 @@ open class JArray : JToken, Sequence, Collection
         _tokens.append(object);
     }
     
+    @discardableResult
     open func remove(_ object: JToken) -> Bool
     {
         if let index = findChildIndex(object)

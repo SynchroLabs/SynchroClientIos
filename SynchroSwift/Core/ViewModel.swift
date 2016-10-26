@@ -338,7 +338,7 @@ open class ViewModel
             // Remove all tokens indicated as removed
             for vmItemValue in removals
             {
-                vmItemValue.remove();
+                _ = vmItemValue.remove();
             }
     
             logger.debug("View model after processing updates: \(_rootObject)");

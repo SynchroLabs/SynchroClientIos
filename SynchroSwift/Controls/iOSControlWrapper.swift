@@ -885,6 +885,7 @@ open class iOSControlWrapper : ControlWrapper
         }
     }
     
+    @discardableResult
     func processElementDimensions(_ controlSpec: JObject, defaultWidth: Double = 0, defaultHeight: Double = 0) -> FrameProperties
     {
         var defaultWidth = CGFloat(defaultWidth);

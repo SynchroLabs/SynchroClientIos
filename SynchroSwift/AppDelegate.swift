@@ -32,9 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         logger.info("Application started...");
         
         let rootNavigationController = SynchroUINavigationController();
-        
-        rootNavigationController.supportedInterfaceOrientations
-        
+                
         window = UIWindow(frame: UIScreen.main.bounds);
         
         let appManager = SynchroAppManager();

@@ -544,6 +544,7 @@ open class StateManager
         _transport.sendMessage(_app.sessionId, requestObject: requestObject);
     }
     
+    @discardableResult
     fileprivate func addDeltasToRequestObject(_ requestObject: JObject) -> Bool
     {
         let vmDeltas = self._viewModel.collectChangedValues();

@@ -27,14 +27,14 @@ class TransportTests: XCTestCase
         let expected = JObject(
         [
             "name": JValue("synchro-samples"),
-            "version": JValue("1.3.5"),
+            "version": JValue("1.5.0"),
             "description": JValue("Synchro API Samples"),
             "main": JValue("menu"),
             "author": JValue("Bob Dickinson <bob@synchro.io> (http://synchro.io/)"),
             "private": JValue(true),
-            "engines": JObject(["synchro" : JValue(">= 1.3.3")]),
+            "engines": JObject(["synchro" : JValue(">= 1.5.0")]),
             "synchroArchiveUrl": JValue("https://github.com/SynchroLabs/SynchroSamples/archive/master.zip"),
-            "synchro": JObject(["clientVersion" : JValue(">=1.3.0")])
+            "synchro": JObject(["clientVersion" : JValue(">= 1.4.0")])
         ])
 
         let transport = TransportHttp(uri: URL(string: testEndpoint)!);
@@ -88,7 +88,7 @@ class TransportTests: XCTestCase
                     "Mode": JValue("Page"),
                     "Path": JValue("menu"),
                     "TransactionId": JValue(1),
-                    "DeviceMetrics": JObject(["clientVersion": JValue("1.3.0")])
+                    "DeviceMetrics": JObject(["clientVersion": JValue("1.4.0")])
                 ]),
             responseHandler: { (response) in
                 XCTAssert("menu" == response["Path"]?.asString());

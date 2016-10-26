@@ -255,6 +255,7 @@ open class BindingContext
     
     // Return boolean indicating whether the bound token was changed (and rebinding needs to be triggered)
     //
+    @discardableResult
     open func setValue(_ value: JToken) -> Bool
     {
         self.attemptToBindTokenIfNeeded();

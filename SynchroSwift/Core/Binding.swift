@@ -614,6 +614,7 @@ open class PropertyBinding
         _setViewValue = setViewValue;
     }
     
+    @discardableResult
     open func updateViewFromViewModel() -> JToken?
     {
         let value = _propertyValue.expand();
