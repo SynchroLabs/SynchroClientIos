@@ -205,7 +205,7 @@ open class BoundAndPossiblyResolvedToken
                 //
                 // If formatting succeeds, return formatted, else fall through to general (non-formatted) result
                 //
-                if let numericValue = TokenConverter.toDouble(_bindingContext.getValue())
+                if let numericValue = TokenConverter.toDouble(resolvedValue)
                 {
                     let formatSpecifier = formatSpec[0];
                     var formatPrecision: Int? = nil;
