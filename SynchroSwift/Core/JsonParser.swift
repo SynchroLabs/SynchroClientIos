@@ -73,7 +73,9 @@ public extension String
 
 public protocol TextReader
 {
+    @discardableResult
     func peek() -> Character?
+    @discardableResult
     func read() -> Character?
 }
 
@@ -88,6 +90,7 @@ open class StringReader : TextReader
         _currIndex = _str.startIndex;
     }
     
+    @discardableResult
     open func peek() -> Character?
     {
         if (_currIndex >= _str.endIndex)
@@ -97,6 +100,7 @@ open class StringReader : TextReader
         return _str[_currIndex];
     }
     
+    @discardableResult
     open func read() -> Character?
     {
         let chr = peek();
@@ -122,12 +126,14 @@ open class StringBuilder
         return stringValue
     }
     
+    @discardableResult
     open func append(_ string: String) -> StringBuilder
     {
         stringValue += string
         return self
     }
 
+    @discardableResult
     open func append(_ char: Character) -> StringBuilder
     {
         stringValue.append(char);

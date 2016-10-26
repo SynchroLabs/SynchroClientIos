@@ -94,6 +94,7 @@ open class SynchroAppManager
         _apps.append(app);
     }
     
+    @discardableResult
     open func remove(_ app: SynchroApp) -> Bool
     {
         return _apps.removeObject(app);
@@ -195,6 +196,7 @@ open class SynchroAppManager
         return userDefaults.synchronize()
     }
     
+    @discardableResult
     open func loadState() -> Bool
     {
         // Load the local state
@@ -205,7 +207,7 @@ open class SynchroAppManager
             // If there is no local state, initialize the local state from the bundled state and serialize
             //
             localState = loadBundledState()!;
-            saveLocalState(localState!);
+            _ = saveLocalState(localState!);
         }
         
         let parsedLocalState = JToken.parse(localState!) as! JObject;
@@ -214,6 +216,7 @@ open class SynchroAppManager
         return true;
     }
     
+    @discardableResult
     open func saveState() -> Bool
     {
         let json = serializeToJson();

@@ -170,6 +170,7 @@ extension Array
         return false
     }
     
+    @discardableResult
     mutating func removeObject<T:AnyObject>(_ item:T) -> Bool
     {
         var index: Int?;

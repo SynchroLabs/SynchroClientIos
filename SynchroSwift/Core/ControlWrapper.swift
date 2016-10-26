@@ -543,6 +543,7 @@ open class ControlWrapper: NSObject
     
     // Process a value binding on an element.  If a value is supplied, a value binding to that binding context will be created.
     //
+    @discardableResult
     func processElementBoundValue(_ attributeName: String, attributeValue: JToken?, getValue: @escaping GetViewValue, setValue: SetViewValue? = nil) -> Bool
     {
         if let value = attributeValue?.asString()
@@ -601,6 +602,7 @@ open class ControlWrapper: NSObject
     // nil value may be passed for setValue, which will avoid creating and managing bindings (which should not be necessary since there
     // is no setter), but will still return a resolved value if once can be determined.
     //
+    @discardableResult
     open func processElementProperty(_ controlSpec: JObject, attributeName: String, altAttributeName: String?, setValue: SetViewValue?) -> JToken?
     {
         var value = controlSpec.selectToken(attributeName);
@@ -663,7 +665,8 @@ open class ControlWrapper: NSObject
         
         return nil;
     }
-
+    
+    @discardableResult
     open func processElementProperty(_ controlSpec: JObject, attributeName: String, setValue: SetViewValue?) -> JToken?
     {
         return processElementProperty(controlSpec, attributeName: attributeName, altAttributeName: nil, setValue: setValue);

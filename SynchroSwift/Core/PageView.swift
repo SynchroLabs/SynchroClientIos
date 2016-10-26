@@ -61,6 +61,7 @@ open class PageView : NSObject
         }
     }
     
+    @discardableResult
     open func goBack() -> Bool
     {
         if (_launchedFromMenu || _stateManager.isBackSupported())
