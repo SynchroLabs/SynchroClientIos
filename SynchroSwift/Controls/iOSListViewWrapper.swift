@@ -403,6 +403,20 @@ open class iOSListViewWrapper : iOSControlWrapper
     var _localSelection: JToken?;
     var _dataSource: CheckableBindingContextTableSource!;
 
+    // The original implenentation of header/footer/itemTemplate had the contents as an object in the attribute.  The new world order requires
+    // an atttibute with an array containing one element, which is the contents (consistent with all other "contents" attributes and how the
+    // Studio editing UX needs containers to work).  This function gets the contents for either mode (object, or array of one object).
+    //
+    fileprivate func getContents(controlSpec: JObject, attribute: String) -> JToken?
+    {
+        var contents = controlSpec[attribute];
+        if let contentsArray = contents as? JArray
+        {
+            contents = (contentsArray.count > 0) ? contentsArray[0] : nil;
+        }
+        return contents;
+    }
+    
     public override init(parent: ControlWrapper, bindingContext: BindingContext, controlSpec:  JObject)
     {
         logger.debug("Creating listview element");
@@ -429,14 +443,14 @@ open class iOSListViewWrapper : iOSControlWrapper
         
         if (controlSpec["header"] != nil)
         {
-            self.createControls(controlList: JArray([controlSpec["header"]!.deepClone()]), onCreateControl: { (childControlSpec, childControlWrapper) in
+            self.createControls(controlList: JArray([getContents(controlSpec: controlSpec, attribute: "header")!.deepClone()]), onCreateControl: { (childControlSpec, childControlWrapper) in
                 table.tableHeaderView = TableHeaderView(tableView: table, controlWrapper: childControlWrapper);
             });
         }
         
         if (controlSpec["footer"] != nil)
         {
-            self.createControls(controlList: JArray([controlSpec["footer"]!.deepClone()]), onCreateControl: { (childControlSpec, childControlWrapper) in
+            self.createControls(controlList: JArray([getContents(controlSpec: controlSpec, attribute: "footer")!.deepClone()]), onCreateControl: { (childControlSpec, childControlWrapper) in
                 table.tableFooterView = TableFooterView(tableView: table, controlWrapper: childControlWrapper);
             });
         }
@@ -462,7 +476,7 @@ open class iOSListViewWrapper : iOSControlWrapper
             }
             
             let itemContent = (bindingSpec["itemContent"] != nil) ? bindingSpec["itemContent"]?.deepClone() : JValue("{$data}");
-            let itemTemplate = controlSpec["itemTemplate"] ?? JObject(["control": JValue("text"), "value": itemContent!, "margin": JValue(self.DEFAULT_MARGIN) ]);
+            let itemTemplate = getContents(controlSpec: controlSpec, attribute: "itemTemplate") ?? JObject(["control": JValue("text"), "value": itemContent!, "margin": JValue(self.DEFAULT_MARGIN) ]);
 
             _dataSource = CheckableBindingContextTableSource(parentControl: self, itemTemplate: itemTemplate as! JObject, selectionMode: selectionMode, onSelectionChanged: listview_SelectionChanged, onItemClicked: listview_ItemClicked, disclosure: disclosure);
             table.dataSource = _dataSource;
